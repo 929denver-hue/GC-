@@ -10,6 +10,9 @@
     form { background:white; padding:20px; border-radius:12px; max-width:800px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     label { display:block; margin-top:12px; font-weight:bold; }
     input, select, textarea { width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-top:4px; }
+    .checkbox-group { display:flex; flex-wrap:wrap; gap:16px; margin-top:8px; }
+    .checkbox-group label { font-weight:normal; display:flex; align-items:center; gap:4px; }
+    .inline-checkbox { display:flex; align-items:center; gap:8px; margin-top:8px; }
     button { margin-top:20px; padding:10px 20px; background:#2c7a7b; color:white; border:none; border-radius:6px; cursor:pointer; }
     button:hover { background:#285e61; }
     #status { text-align:center; margin-top:20px; font-weight:bold; }
@@ -64,10 +67,57 @@
     <button type="submit">儲存／更新到試算表</button>
   </form>
 
+  <h1 style="margin-top:32px; text-align:center; color:#2c7a7b;">查詢者更新區（需寄出提醒）</h1>
+  <form id="queryForm">
+    <label>託運單號（與上方相同）</label>
+    <input type="text" id="q_waybill" required>
+
+    <label>查詢日期（GC物流窗口 → 郵局）</label>
+    <input type="date" id="query_date">
+
+    <label>查詢結果（可複選）</label>
+    <div class="checkbox-group">
+      <label><input type="checkbox" class="q_query_result" value="通知郵局窗口"> 通知郵局窗口</label>
+      <label><input type="checkbox" class="q_query_result" value="提供查單"> 提供查單</label>
+      <label><input type="checkbox" class="q_query_result" value="郵局致電確認"> 郵局致電確認</label>
+    </div>
+
+    <label>狀態更新日期（更新後系統會通知客服）</label>
+    <input type="date" id="status_date">
+
+    <div class="inline-checkbox">
+      <input type="checkbox" id="need_follow">
+      <label for="need_follow">需持續追蹤（會在提醒日 09:00 寄信）</label>
+    </div>
+
+    <label>提醒日期（follow_date）</label>
+    <input type="date" id="follow_date">
+
+    <label>通知信箱（可逗號分隔多人；留空用預設）</label>
+    <input type="email" id="notify_email" placeholder="shin@give-circle.com">
+
+    <label>最終結果</label>
+    <select id="final_result">
+      <option value="">（未選）</option>
+      <option value="已確認可以退點">已確認可以退點</option>
+      <option value="已成功送達">已成功送達</option>
+      <option value="遺失理賠">遺失理賠</option>
+      <option value="其他">其他</option>
+    </select>
+
+    <label>補償或後續處理說明</label>
+    <textarea id="after_note"></textarea>
+
+    <label>結案日期（填入後將不再寄出未來提醒）</label>
+    <input type="date" id="close_date">
+
+    <button type="submit">儲存／更新（查詢者）</button>
+  </form>
+
   <div id="status"></div>
 
   <script>
-    const API_BASE = "https://script.google.com/macros/s/AKfycby-xPCHOmByRXB9lxsxnFrHYiO6DKx2ZRCp5AF0bDzWxfv7o6o2h_BpHeQukoR6I1Pz/exec";
+    const API_BASE = "https://script.google.com/macros/s/AKfycbwD6TWuDmswXDvxh1mEXYazs29gxfHWR06_zSCfQiUa-eiWaXubq4zzRdtkRccEmL4U/exec";
 
     document.getElementById('reportForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -90,7 +140,7 @@
       try {
         const res = await fetch(API_BASE, {
           method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // 關鍵：避免 CORS preflight
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(data)
         });
 
@@ -99,6 +149,49 @@
           document.getElementById('status').textContent = '✅ 已成功寫入試算表！';
         } else {
           document.getElementById('status').textContent = '⚠️ 錯誤：' + result.message;
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById('status').textContent = '❌ 連線失敗，請稍後再試。';
+      }
+    });
+
+    function collectCheckedValues(cls) {
+      return Array.from(document.querySelectorAll('.' + cls + ':checked')).map(el => el.value);
+    }
+
+    document.getElementById('queryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        waybill: document.getElementById('q_waybill').value.trim(),
+        query_date: document.getElementById('query_date').value,
+        query_result: collectCheckedValues('q_query_result'),
+        status_date: document.getElementById('status_date').value,
+        need_follow: document.getElementById('need_follow').checked,
+        follow_date: document.getElementById('follow_date').value,
+        notify_email: document.getElementById('notify_email').value.trim(),
+        final_result: document.getElementById('final_result').value,
+        after_note: document.getElementById('after_note').value.trim(),
+        close_date: document.getElementById('close_date').value
+      };
+
+      if (!payload.waybill) {
+        document.getElementById('status').textContent = '❌ 請輸入託運單號';
+        return;
+      }
+
+      document.getElementById('status').textContent = '資料送出中…';
+      try {
+        const res = await fetch(API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.ok) {
+          document.getElementById('status').textContent = '✅ 查詢者資料已更新（如勾選需追蹤，將於提醒日 09:00 寄信）';
+        } else {
+          document.getElementById('status').textContent = '⚠️ 錯誤：' + (result.message || '未知錯誤');
         }
       } catch (err) {
         console.error(err);
