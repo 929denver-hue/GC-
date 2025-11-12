@@ -10,6 +10,11 @@
     form { background:white; padding:20px; border-radius:12px; max-width:800px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     label { display:block; margin-top:12px; font-weight:bold; }
     input, select, textarea { width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-top:4px; }
+    /* 修正：讓 checkbox 不受全域 input{width:100%} 影響 */
+    input[type="checkbox"] { width:auto; margin:0; }
+    .checkbox-group { display:flex; align-items:center; gap:16px; flex-wrap:nowrap; overflow-x:auto; padding:4px 0; }
+    .checkbox-group label { white-space:nowrap; font-weight:normal; display:flex; align-items:center; gap:6px; }
+    .inline-checkbox { display:flex; align-items:center; gap:8px; margin-top:8px; }
     .checkbox-group { display:flex; flex-wrap:wrap; gap:16px; margin-top:8px; }
     .checkbox-group label { font-weight:normal; display:flex; align-items:center; gap:4px; }
     .inline-checkbox { display:flex; align-items:center; gap:8px; margin-top:8px; }
@@ -259,7 +264,6 @@
         <div><b>查詢日期</b>${d.query_date||''}</div>
         <div><b>查詢結果</b><div class="chips">${chips}</div></div>
         <div><b>狀態更新</b>${d.status_date||''}</div>
-        <div><b>提醒設定</b>${need?'需追蹤':'未追蹤'} ／ ${d.follow_date||'(無)'} ／ ${d.notify_email||'(預設寄送)'}</div>
         <div><b>最終結果</b>${d.final_result||''}</div>
         <div><b>後續說明</b>${d.after_note||''}</div>
         <div><b>結案日期</b>${d.close_date||''}</div>
