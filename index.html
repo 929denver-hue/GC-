@@ -16,13 +16,36 @@
     button { margin-top:20px; padding:10px 20px; background:#2c7a7b; color:white; border:none; border-radius:6px; cursor:pointer; }
     button:hover { background:#285e61; }
     #status { text-align:center; margin-top:20px; font-weight:bold; }
+  .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:16px; max-width:800px; margin:16px auto; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    .card h2 { margin:0 0 8px; font-size:18px; color:#1f2937; }
+    .meta { display:grid; grid-template-columns:1fr; gap:8px; font-size:14px; color:#374151; }
+    @media (min-width: 720px) { .meta { grid-template-columns:1fr 1fr; } }
+    .meta div { background:#f9fafb; border:1px solid #eef2f7; border-radius:8px; padding:8px 10px; }
+    .meta b { display:block; font-weight:600; color:#111827; margin-bottom:2px; }
+    .chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .chip { background:#e6f4ff; border:1px solid #bfdbfe; color:#0f172a; padding:2px 8px; border-radius:999px; font-size:12px; }
+    .badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; }
+    .badge.ok { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+    .badge.warn { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }
+    .badge.close { background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; }
   </style>
 </head>
 <body>
   <h1>GC贈物網｜包裹異常通報表單</h1>
+
+  <!-- 只讀展示區：載入單號後顯示摘要 -->
+  <section id="overviewCard" class="card" aria-live="polite">
+    <h2>案件摘要</h2>
+    <div id="overviewStatus"><span class="badge warn">尚未載入單號</span></div>
+    <div class="meta" id="overviewMeta" style="display:none"></div>
+  </section>
+
   <form id="reportForm">
     <label>託運單號</label>
-    <input type="text" id="waybill" required>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <input type="text" id="waybill" required style="flex:1;">
+      <button type="button" id="load_report_waybill" style="white-space:nowrap;">載入此單號資料</button>
+    </div>
 
     <label>贈物名稱</label>
     <input type="text" id="item_name">
@@ -70,7 +93,10 @@
   <h1 style="margin-top:32px; text-align:center; color:#2c7a7b;">查詢者更新區（需寄出提醒）</h1>
   <form id="queryForm">
     <label>託運單號（與上方相同）</label>
-    <input type="text" id="q_waybill" required>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <input type="text" id="q_waybill" required style="flex:1;">
+      <button type="button" id="load_query_waybill" style="white-space:nowrap;">載入此單號資料</button>
+    </div>
 
     <label>查詢日期（GC物流窗口 → 郵局）</label>
     <input type="date" id="query_date">
@@ -147,6 +173,8 @@
         const result = await res.json();
         if (result.ok) {
           document.getElementById('status').textContent = '✅ 已成功寫入試算表！';
+          // 重新載入一次，更新上方摘要
+          loadByWaybill(data.waybill);
         } else {
           document.getElementById('status').textContent = '⚠️ 錯誤：' + result.message;
         }
@@ -190,6 +218,8 @@
         const result = await res.json();
         if (result.ok) {
           document.getElementById('status').textContent = '✅ 查詢者資料已更新（如勾選需追蹤，將於提醒日 09:00 寄信）';
+          // 重新載入一次，更新上方摘要
+          loadByWaybill(payload.waybill);
         } else {
           document.getElementById('status').textContent = '⚠️ 錯誤：' + (result.message || '未知錯誤');
         }
@@ -197,6 +227,100 @@
         console.error(err);
         document.getElementById('status').textContent = '❌ 連線失敗，請稍後再試。';
       }
+    });
+  // --- 只讀展示區：渲染摘要 ---
+    function renderOverview(d){
+      const statusBox = document.getElementById('overviewStatus');
+      const metaBox = document.getElementById('overviewMeta');
+      if(!d){ statusBox.innerHTML = '<span class="badge warn">尚未載入單號</span>'; metaBox.style.display='none'; metaBox.innerHTML=''; return; }
+
+      const closed = !!d.close_date;
+      const need = String(d.need_follow).toLowerCase()==='true';
+      let badge = '<span class="badge ok">追蹤中</span>';
+      if (closed) badge = '<span class="badge close">已結案</span>';
+      else if (need) badge = '<span class="badge ok">需追蹤</span>';
+      else badge = '<span class="badge warn">未設定追蹤</span>';
+
+      const qr = Array.isArray(d.query_result) ? d.query_result : (d.query_result ? String(d.query_result).split(',').map(s=>s.trim()) : []);
+      const chips = qr.length ? qr.map(s=>`<span class="chip">${s}</span>`).join('') : '<span style="color:#6b7280">（無）</span>';
+
+      statusBox.innerHTML = `${badge}　<b>託運單號：</b>${d.waybill || ''}`;
+
+      const itemLink = d.item_url ? `<a href="${d.item_url}" target="_blank" rel="noopener">${d.item_name||'(未填)'} ↗</a>` : (d.item_name||'(未填)');
+
+      metaBox.style.display='grid';
+      metaBox.innerHTML = `
+        <div><b>贈物</b>${itemLink}</div>
+        <div><b>寄件方式／日期</b>${d.ship_method||''} ／ ${d.ship_date||''}</div>
+        <div><b>收件人</b>${d.recv_name||''}／${d.recv_phone||''}</div>
+        <div><b>據點</b>${d.recv_addr||''}</div>
+        <div><b>問題類型</b>${d.issue_type||''}</div>
+        <div><b>異常簡述</b>${d.brief||''}</div>
+        <div><b>查詢日期</b>${d.query_date||''}</div>
+        <div><b>查詢結果</b><div class="chips">${chips}</div></div>
+        <div><b>狀態更新</b>${d.status_date||''}</div>
+        <div><b>提醒設定</b>${need?'需追蹤':'未追蹤'} ／ ${d.follow_date||'(無)'} ／ ${d.notify_email||'(預設寄送)'}</div>
+        <div><b>最終結果</b>${d.final_result||''}</div>
+        <div><b>後續說明</b>${d.after_note||''}</div>
+        <div><b>結案日期</b>${d.close_date||''}</div>
+      `;
+    }
+
+    function clearOverview(){ renderOverview(null); }
+
+    // --- 載入：依託運單號查詢並帶入表單欄位 ---
+    async function loadByWaybill(wb){
+      const statusEl = document.getElementById('status');
+      const waybill = (wb || '').trim();
+      if(!waybill){ statusEl.textContent='❌ 請輸入託運單號'; return; }
+      statusEl.textContent = '查詢中…';
+      try{
+        const res = await fetch(`${API_BASE}?waybill=${encodeURIComponent(waybill)}`);
+        const json = await res.json();
+        if(!json || json.ok !== true){ throw new Error('API 回傳非 ok'); }
+        const d = json.data;
+        if(!d){ statusEl.textContent = '🔎 查無此單號的記錄'; clearOverview(); return; }
+        // 同步兩個單號欄位
+        document.getElementById('waybill').value = waybill;
+        document.getElementById('q_waybill').value = waybill;
+        // 基本表單（贈送者）
+        setIf('item_name', d.item_name);
+        setIf('item_url', d.item_url);
+        setIf('ship_date', d.ship_date);
+        setIf('ship_method', d.ship_method);
+        setIf('recv_name', d.recv_name);
+        setIf('recv_phone', d.recv_phone);
+        setIf('recv_addr', d.recv_addr);
+        setIf('issue_type', d.issue_type);
+        setIf('brief', d.brief);
+        setIf('report_date', d.report_date);
+        // 查詢者更新區
+        setIf('query_date', d.query_date);
+        setIf('status_date', d.status_date);
+        // 勾選：query_result 可能是字串或陣列
+        const qrs = Array.isArray(d.query_result) ? d.query_result : (d.query_result ? String(d.query_result).split(',').map(s=>s.trim()) : []);
+        document.querySelectorAll('.q_query_result').forEach(el=>{ el.checked = qrs.includes(el.value); });
+        // 需持續追蹤 + 提醒日期
+        document.getElementById('need_follow').checked = String(d.need_follow).toLowerCase()==='true';
+        setIf('follow_date', d.follow_date);
+        setIf('notify_email', d.notify_email);
+        setIf('final_result', d.final_result);
+        setIf('after_note', d.after_note);
+        setIf('close_date', d.close_date);
+        renderOverview(d);
+        statusEl.textContent = '✅ 已載入資料';
+      }catch(err){
+        console.error(err);
+        statusEl.textContent = '❌ 查詢失敗，請稍後再試';
+      }
+    }
+    function setIf(id, val){ if(val!=null && document.getElementById(id)) document.getElementById(id).value = val; }
+
+    document.getElementById('load_report_waybill').addEventListener('click',()=>{
+      loadByWaybill(document.getElementById('waybill').value);
+    });
+    document.getElementById('load_query_waybill').addEventListener('click',()=>{
+      loadByWaybill(document.getElementById('q_waybill').value);
     });
   </script>
 </body>
