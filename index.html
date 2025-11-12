@@ -95,7 +95,7 @@
     <button type="submit">儲存／更新到試算表</button>
   </form>
 
-  <h1 style="margin-top:32px; text-align:center; color:#2c7a7b;">查詢者更新區（需寄出提醒）</h1>
+  <h1 style="margin-top:32px; text-align:center; color:#2c7a7b;">查詢者更新區</h1>
   <form id="queryForm">
     <label>託運單號（與上方相同）</label>
     <div style="display:flex; gap:8px; align-items:center;">
@@ -103,7 +103,7 @@
       <button type="button" id="load_query_waybill" style="white-space:nowrap;">載入此單號資料</button>
     </div>
 
-    <label>查詢日期（GC物流窗口 → 郵局）</label>
+    <label>查詢日期（GC窗口詢問→郵局）</label>
     <input type="date" id="query_date">
 
     <label>查詢結果（可複選）</label>
@@ -113,12 +113,12 @@
       <label><input type="checkbox" class="q_query_result" value="郵局致電確認"> 郵局致電確認</label>
     </div>
 
-    <label>狀態更新日期（更新後系統會通知客服）</label>
+    <label>狀態更新日期（更新後，mail主動通知info）</label>
     <input type="date" id="status_date">
 
     <div class="inline-checkbox">
       <input type="checkbox" id="need_follow">
-      <label for="need_follow">需持續追蹤（會在提醒日 09:00 寄信）</label>
+      <label for="need_follow">需持續追蹤（mail提醒 09:00 ）</label>
     </div>
 
     <label>提醒日期（follow_date）</label>
