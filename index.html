@@ -1,534 +1,110 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GC贈物網｜包裹異常通報表單（含離線 Mock 與測試）</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GC贈物網｜包裹異常通報</title>
   <style>
-    :root{
-      --bg:#f7f8fa;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#16a34a;--primary-600:#15803d;--border:#e5e7eb;--focus:#93c5fd;--danger:#dc2626;--warn:#ca8a04
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);font:16px/1.6 "Noto Sans TC",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji";color:var(--text)}
-    .container{max-width:980px;margin:32px auto;padding:0 16px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:0 10px 24px rgba(0,0,0,.04);overflow:hidden}
-    header{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;gap:16px;align-items:center;justify-content:space-between}
-    h1{font-size:22px;margin:0}
-    .sub{color:var(--muted);font-size:14px;margin:4px 0 0}
-    .pill{background:#eaf7ef;color:#0f7a34;border:1px solid #cbecd7;padding:6px 10px;border-radius:999px;font-size:12px}
-    form{padding:24px 28px}
-    .grid{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-    .row-1{grid-column:1/-1}
-    .field{display:flex;flex-direction:column;gap:8px}
-    label{font-weight:600}
-    .hint{color:var(--muted);font-size:12px}
-    input[type="text"],input[type="url"],input[type="date"],textarea,select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fff;transition:border .2s, box-shadow .2s}
-    textarea{min-height:96px;resize:vertical}
-    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px rgba(147,197,253,.35)}
-    .choices,.checks{display:flex;flex-wrap:wrap;gap:10px}
-    .choices label,.checks label{font-weight:500}
-    .inline{display:flex;align-items:center;gap:8px}
-    .section{padding:8px 0 2px;margin-top:8px;border-top:1px dashed var(--border);color:var(--muted);font-size:13px}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .toolbar .badge{font-size:12px;color:#fff;background:#111827;border-radius:8px;padding:4px 8px}
-    .footer{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:flex-end;border-top:1px solid var(--border);padding:18px 28px;background:#fafafa}
-    button{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-primary:hover{background:var(--primary-600)}
-    .btn-secondary{background:#eef2ff;color:#3730a3}
-    .btn-warn{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
-    .error{color:var(--danger);font-size:12px;margin-top:-4px}
-    .warn{color:var(--warn)}
-    .output{white-space:pre-wrap;background:#0b1020;color:#e2e8f0;border-radius:12px;padding:16px;border:1px solid #0f172a;max-height:320px;overflow:auto}
-    .log{white-space:pre-wrap;background:#111827;color:#d1d5db;border-radius:12px;padding:12px;border:1px solid #1f2937;max-height:220px;overflow:auto}
-    .sr{position:absolute;left:-9999px}
+    body { font-family: Arial, sans-serif; background:#f8f9fa; padding:20px; }
+    h1 { color:#2c7a7b; text-align:center; }
+    form { background:white; padding:20px; border-radius:12px; max-width:800px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    label { display:block; margin-top:12px; font-weight:bold; }
+    input, select, textarea { width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-top:4px; }
+    button { margin-top:20px; padding:10px 20px; background:#2c7a7b; color:white; border:none; border-radius:6px; cursor:pointer; }
+    button:hover { background:#285e61; }
+    #status { text-align:center; margin-top:20px; font-weight:bold; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <header>
-        <div>
-          <h1>GC贈物網｜包裹異常通報</h1>
-          <p class="sub">請填寫包裹異常資訊，以便 GC 物流窗口（阿洵）與郵局窗口查詢與追蹤。</p>
-        </div>
-        <span class="pill">一頁式表單</span>
-      </header>
+  <h1>GC贈物網｜包裹異常通報表單</h1>
+  <form id="reportForm">
+    <label>託運單號</label>
+    <input type="text" id="waybill" required>
 
-      <form id="incidentForm" novalidate>
-        <div class="section">工具列 / 偵錯</div>
-        <div class="grid">
-          <div class="field row-1">
-            <div class="toolbar">
-              <label class="inline"><input type="checkbox" id="toggleMock"> 啟用離線測試（Mock，使用 localStorage）</label>
-              <button type="button" class="btn-secondary" id="btnPing">Ping API</button>
-              <button type="button" class="btn-warn" id="btnRunTests">執行內建測試</button>
-              <span class="badge" id="envBadge">環境：未知</span>
-            </div>
-            <div class="hint">※ 若在沙盒或阻擋外連的環境出現「TypeError: Failed to fetch」，請打開「離線測試（Mock）」。部署正式環境時再關閉。</div>
-          </div>
-        </div>
+    <label>贈物名稱</label>
+    <input type="text" id="item_name">
 
-        <div class="section">填寫身份</div>
-        <div class="grid">
-          <div class="field row-1"><label>填寫身份</label>
-            <div class="choices">
-              <label class="inline"><input type="radio" name="role" value="通報者" checked> 通報者（贈送者/客服）</label>
-              <label class="inline"><input type="radio" name="role" value="查詢者"> 查詢者（GC 物流窗口）</label>
-            </div>
-            <div class="hint">選「查詢者」會顯示追蹤與結案欄位；也可在網址加上 <code>?role=tracker</code> 直接開啟。</div>
-          </div>
-        </div>
+    <label>贈物連結</label>
+    <input type="url" id="item_url">
 
-        <div class="section">基本資訊</div>
-        <div class="grid">
-          <div class="field"><label for="waybill">託運單號<span class="sr">必填</span></label>
-            <input id="waybill" name="waybill" type="text" required placeholder="例如：15842010129178300004" />
-            <div class="hint">請輸入完整 17~20 碼託運單號</div>
-          </div>
-          <div class="field"><label for="item_name">贈物名稱<span class="sr">必填</span></label>
-            <input id="item_name" name="item_name" type="text" required placeholder="例如：折傘" />
-          </div>
+    <label>贈送日期</label>
+    <input type="date" id="ship_date">
 
-          <div class="field row-1"><label for="item_url">贈物連結</label>
-            <input id="item_url" name="item_url" type="url" placeholder="https://www.give-circle.com/give/1030683" pattern="https?://.*" />
-            <div class="hint">貼上 GC 贈物網該贈物的網址</div>
-          </div>
+    <label>寄件方式</label>
+    <select id="ship_method">
+      <option value="i郵箱">i郵箱</option>
+      <option value="萊爾富">萊爾富</option>
+      <option value="7-11">7-11</option>
+      <option value="全家">全家</option>
+    </select>
 
-          <div class="field"><label for="ship_date">贈送日期</label>
-            <input id="ship_date" name="ship_date" type="date" />
-          </div>
+    <label>收件人姓名</label>
+    <input type="text" id="recv_name">
 
-          <div class="field"><label for="ship_method">寄件方式</label>
-            <select id="ship_method" name="ship_method">
-              <option value="">請選擇</option>
-              <option>i 郵箱</option>
-              <option>萊爾富</option>
-              <option>7-11</option>
-              <option>全家</option>
-            </select>
-          </div>
+    <label>收件人電話</label>
+    <input type="text" id="recv_phone">
 
-          <div class="field row-1"><label for="giver_url">贈送者姓名／帳號（個人頁網址）</label>
-            <input id="giver_url" name="giver_url" type="url" placeholder="https://www.give-circle.com/user/708" pattern="https?://.*" />
-            <div class="hint">貼上贈送者在 GC 贈物網的個人頁網址</div>
-          </div>
+    <label>收件地址或據點名稱</label>
+    <textarea id="recv_addr"></textarea>
 
-          <div class="field"><label for="recv_name">收件人姓名</label>
-            <input id="recv_name" name="recv_name" type="text" />
-          </div>
+    <label>問題類型</label>
+    <select id="issue_type">
+      <option value="包裹停滯未更新">包裹停滯未更新</option>
+      <option value="操作有誤，包裹未投入">操作有誤，包裹未投入</option>
+      <option value="收件人未收到">收件人未收到</option>
+      <option value="其他">其他</option>
+    </select>
 
-          <div class="field"><label for="recv_phone">收件人電話</label>
-            <input id="recv_phone" name="recv_phone" type="text" inputmode="numeric" placeholder="例如：0972156930" pattern="^0\d{8,9}$" />
-            <div class="hint">建議格式：09xxxxxxxx 或 0x-xxxxxxx</div>
-          </div>
+    <label>異常簡述</label>
+    <textarea id="brief"></textarea>
 
-          <div class="field row-1"><label for="recv_addr">收件地址或據點名稱</label>
-            <textarea id="recv_addr" name="recv_addr" placeholder="新竹南大路郵局 i 郵箱（新竹市東區南大路621號）"></textarea>
-          </div>
-        </div>
+    <label>反應時間</label>
+    <input type="date" id="report_date">
 
-        <div class="section">異常內容</div>
-        <div class="grid">
-          <div class="field row-1"><label>問題類型</label>
-            <div class="choices">
-              <label class="inline"><input type="radio" name="issue_type" value="包裹停滯未更新" required> 包裹停滯未更新</label>
-              <label class="inline"><input type="radio" name="issue_type" value="操作有誤，包裹未投入"> 操作有誤，包裹未投入</label>
-              <label class="inline"><input type="radio" name="issue_type" value="收件人未收到"> 收件人未收到</label>
-              <label class="inline"><input type="radio" name="issue_type" value="其他"> 其他</label>
-            </div>
-          </div>
+    <button type="submit">儲存／更新到試算表</button>
+  </form>
 
-          <div class="field row-1"><label for="brief">異常簡述</label>
-            <textarea id="brief" name="brief" placeholder="包裹停滯於 9/10 郵件轉運中"></textarea>
-          </div>
-
-          <div class="field row-1"><label>發現來源</label>
-            <div class="choices">
-              <label class="inline"><input type="radio" name="source" value="獲贈者反映" required> 獲贈者反映</label>
-              <label class="inline"><input type="radio" name="source" value="贈送者通報"> 贈送者通報</label>
-              <label class="inline"><input type="radio" name="source" value="系統偵測"> 系統偵測</label>
-              <label class="inline"><input type="radio" name="source" value="其他"> 其他</label>
-            </div>
-          </div>
-        </div>
-
-        <div id="trackerSection" data-role="tracker" hidden>
-          <div class="section">查詢與追蹤（查詢者）</div>
-          <div class="grid">
-            <div class="field"><label for="report_date">反應時間（給 GC 物流窗口）</label>
-              <input id="report_date" name="report_date" type="date" />
-              <div class="hint">回報給 GC 物流窗口（阿洵）的日期</div>
-            </div>
-            <div class="field"><label for="query_date">查詢日期（轉郵局）</label>
-              <input id="query_date" name="query_date" type="date" />
-              <div class="hint">GC 物流窗口（阿洵）反映給郵局的日期</div>
-            </div>
-
-            <div class="field row-1"><label>查詢結果</label>
-              <div class="checks">
-                <label class="inline"><input type="checkbox" name="query_result" value="通知郵局窗口"> 通知郵局窗口</label>
-                <label class="inline"><input type="checkbox" name="query_result" value="提供查單"> 提供查單</label>
-                <label class="inline"><input type="checkbox" name="query_result" value="郵局致電確認"> 郵局致電確認</label>
-              </div>
-            </div>
-
-            <div class="field"><label for="status_date">狀態更新日期</label>
-              <input id="status_date" name="status_date" type="date" />
-              <div class="hint" id="status_hint">當更新狀態日期，系統將主動通知客服</div>
-            </div>
-
-            <div class="field"><label class="inline" for="need_follow">
-              <input id="need_follow" name="need_follow" type="checkbox" /> 處理進度：需持續追蹤
-            </label>
-              <div class="hint">勾選後，系統將於「查詢日期 + 7 天」自動通知，不需手動輸入日期。</div>
-              <div class="inline" aria-live="polite" style="gap:6px">
-                <span class="hint">（系統）下一次提醒日：</span>
-                <strong id="follow_date_text" class="warn"></strong>
-              </div>
-              <input id="follow_date" name="follow_date" type="hidden" aria-hidden="true" />
-            </div>
-
-            <div class="field"><label for="notify_email">通知 Email（可多筆，逗號分隔）</label>
-              <input id="notify_email" name="notify_email" type="text" placeholder="ops@give-circle.com, support@give-circle.com" />
-              <div class="hint">系統將於追蹤到期時寄送提醒到這些信箱</div>
-            </div>
-
-            <div class="field"><label for="final_result">最終結果</label>
-              <select id="final_result" name="final_result">
-                <option value="">請選擇</option>
-                <option>已確認可以退點</option>
-                <option>已成功送達</option>
-                <option>遺失理賠</option>
-                <option>其他</option>
-              </select>
-            </div>
-
-            <div class="field row-1"><label for="after_note">補償或後續處理說明</label>
-              <textarea id="after_note" name="after_note" placeholder="若有退點或理賠，請簡述處理方式與金額…"></textarea>
-            </div>
-
-            <div class="field"><label for="close_date">結案日期</label>
-              <input id="close_date" name="close_date" type="date" />
-            </div>
-          </div>
-        </div>
-
-        <div class="section">提交</div>
-        <div class="grid">
-          <div class="field row-1">
-            <div class="hint">送出後會在頁面下方產生 JSON，以利串接表單產生器或 API。</div>
-          </div>
-        </div>
-
-        <div class="footer">
-          <button type="button" class="btn-secondary" id="fill-demo">載入範例資料</button>
-          <div style="flex:1"></div>
-          <button type="button" class="btn-secondary" id="loadByWaybill">載入單號資料</button>
-          <button type="button" class="btn-primary" id="saveToSheet">儲存/更新到試算表</button>
-          <button type="submit" class="btn-primary">送出並產生 JSON</button>
-        </div>
-      </form>
-
-      <div style="padding:0 28px 28px">
-        <div id="output" class="output" aria-live="polite" hidden></div>
-        <div style="display:flex;gap:8px;margin-top:12px" id="copyRow" hidden>
-          <button id="copyBtn" class="btn-secondary" type="button">複製 JSON</button>
-          <span class="hint" id="copyHint">已可複製到表單產生器</span>
-        </div>
-        <div style="margin-top:12px">
-          <div class="log" id="log"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div id="status"></div>
 
   <script>
-    // === 設定：填入你部署後的 Google Apps Script Web App URL ===
-    // 若在沙盒/本地環境受限導致 fetch 失敗，可改用 Mock（localStorage）
-    const API_BASE = "https://script.google.com/macros/s/AKfycbwD6TWuDmswXDvxh1mEXYazs29gxfHWR06_zSCfQiUa-eiWaXubq4zzRdtkRccEmL4U/exec";
+    const API_BASE = "https://script.google.com/macros/s/AKfycby-xPCHOmByRXB9lxsxnFrHYiO6DKx2ZRCp5AF0bDzWxfv7o6o2h_BpHeQukoR6I1Pz/exec";
 
-    const $ = (s, p=document) => p.querySelector(s);
-    const $$ = (s, p=document) => [...p.querySelectorAll(s)];
-
-    // ===== Mock/偵錯基礎 =====
-    const logEl = $('#log');
-    function log(...args){
-      const line = args.map(a=> typeof a==='string'? a : JSON.stringify(a)).join(' ');
-      logEl.textContent += (line + "\n");
-      logEl.scrollTop = logEl.scrollHeight;
-      console.log(...args);
-    }
-
-    const envBadge = $('#envBadge');
-    const toggleMock = $('#toggleMock');
-    // 預設：若偵測到非 https/http（例如 sandbox://）或跨網域阻擋，建議啟用 Mock
-    const suggestedMock = !(/^https?:/i).test(location.protocol);
-    toggleMock.checked = suggestedMock; // 初次載入自動開啟 Mock（可手動關閉）
-    envBadge.textContent = `環境：${location.protocol.replace(':','') || 'unknown'}${toggleMock.checked? '（Mock已開）':''}`;
-
-    // localStorage 模擬資料庫
-    const DB_KEY = 'gc_incidents_v1';
-    function dbRead(){ try{ return JSON.parse(localStorage.getItem(DB_KEY)||'{}'); }catch(e){ return {}; } }
-    function dbWrite(obj){ localStorage.setItem(DB_KEY, JSON.stringify(obj)); }
-
-    async function fetchAPI(url, options){
-      // 若啟用 Mock：直接走本地模擬
-      if(toggleMock.checked){
-        return mockFetch(url, options);
-      }
-      try{
-        const res = await fetch(url, options);
-        return res;
-      }catch(err){
-        // 常見：TypeError: Failed to fetch（環境阻擋/ CORS）→ 自動回退 mock
-        log('警告：fetch 失敗，改用 Mock。錯誤：', String(err));
-        toggleMock.checked = true;
-        envBadge.textContent = `環境：${location.protocol.replace(':','')}（已自動切換 Mock）`;
-        return mockFetch(url, options);
-      }
-    }
-
-    // 模擬 GAS API：
-    // GET  ?waybill=xxxxx  → {ok:true, data: {...} | null}
-    // GET  ?ping=1         → {ok:true, message:'pong'}
-    // POST { ...payload }  → {ok:true, message:'OK'}
-    async function mockFetch(url, options={}){
-      const u = new URL(url, location.origin);
-      const method = (options.method||'GET').toUpperCase();
-      const db = dbRead();
-
-      // PING 測試
-      if(u.searchParams.get('ping')){
-        return new Response(JSON.stringify({ok:true, mock:true, message:'pong'}), {status:200, headers:{'Content-Type':'application/json'}});
-      }
-
-      if(method === 'GET'){
-        const waybill = (u.searchParams.get('waybill')||'').trim();
-        const data = db[waybill] || null;
-        return new Response(JSON.stringify({ok:true, data}), {status:200, headers:{'Content-Type':'application/json'}});
-      }
-      if(method === 'POST'){
-        let body={};
-        try{ body = JSON.parse(options.body||'{}'); }catch(e){ body={}; }
-        if(!body.waybill){
-          return new Response(JSON.stringify({ok:false,message:'waybill is required'}),{status:400,headers:{'Content-Type':'application/json'}});
-        }
-        db[body.waybill] = body; // upsert by waybill
-        dbWrite(db);
-        return new Response(JSON.stringify({ok:true, message:'OK', mock:true}), {status:200, headers:{'Content-Type':'application/json'}});
-      }
-      return new Response(JSON.stringify({ok:false,message:'unsupported method'}),{status:405,headers:{'Content-Type':'application/json'}});
-    }
-
-    // ===== 表單互動 =====
-    const statusDate = $('#status_date');
-    const statusHint = $('#status_hint');
-    statusDate?.addEventListener('change', () => {
-      if(statusDate.value){ statusHint.textContent = '已設定狀態更新日期，系統將主動通知客服。'; }
-      else{ statusHint.textContent = '當更新狀態日期，系統將主動通知客服'; }
-    });
-
-    const needFollow = $('#need_follow');
-    const queryDate = $('#query_date');
-    function plusDays(dateStr, days){ if(!dateStr) return ''; const d = new Date(dateStr); d.setDate(d.getDate()+days); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${d.getFullYear()}-${m}-${day}`; }
-    function updateFollowDate(){
-      const next = needFollow.checked ? plusDays(queryDate.value,7) : '';
-      document.getElementById('follow_date').value = next; // 隱藏欄位提供後端排程用
-      const txt = document.getElementById('follow_date_text');
-      if(txt) txt.textContent = next || '（未設定，請先選查詢日期並勾選需追蹤）';
-    }
-    needFollow.addEventListener('change', updateFollowDate);
-    queryDate.addEventListener('change', updateFollowDate);
-
-    // 從後端載入資料（以託運單號查詢）
-    async function loadRecord(waybill){
-      if(!API_BASE){ alert('請先設定 API_BASE'); return; }
-      if(!waybill){ alert('請先輸入託運單號'); return; }
-      try{
-        const res = await fetchAPI(`${API_BASE}?waybill=${encodeURIComponent(waybill)}`);
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const payload = await res.json();
-        if(!payload || !payload.data){ alert('查無資料'); return; }
-        fillForm(payload.data);
-        alert('已載入資料');
-      }catch(err){
-        log('載入失敗：', String(err));
-        alert('載入失敗，請檢查 API / 權限，或啟用 Mock 後再試');
-      }
-    }
-
-    // 儲存/更新一筆紀錄（依託運單號 upsert）
-    async function saveRecord(data){
-      if(!API_BASE){ alert('請先設定 API_BASE'); return; }
-      try{
-        const res = await fetchAPI(API_BASE, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const payload = await res.json();
-        alert((payload && payload.message) || '已儲存');
-      }catch(err){
-        log('儲存失敗：', String(err));
-        alert('儲存失敗，請檢查 API / 權限，或啟用 Mock 後再試');
-      }
-    }
-
-    // 依物件填回表單欄位
-    function fillForm(obj){
-      const form = document.getElementById('incidentForm');
-      for(const [k,v] of Object.entries(obj||{})){
-        const el = form.elements[k]; if(!el) continue;
-        if(el instanceof RadioNodeList){ const radio = form.querySelector(`[name="${k}"][value="${CSS.escape(String(v))}"]`); if(radio) radio.checked = true; }
-        else if(el.type === 'checkbox'){
-          if(Array.isArray(v)) v.forEach(val=>{ const box = form.querySelector(`input[name="${k}"][value="${CSS.escape(String(val))}"]`); if(box) box.checked = true; });
-          else el.checked = !!v;
-        }else{ el.value = (typeof v === 'string') ? v : (v ?? ''); }
-      }
-      if(Array.isArray(obj?.query_result)){
-        $$(`input[name='query_result']`).forEach(b=>{ b.checked = obj.query_result.includes(b.value); });
-      }
-      applyRoleUI();
-      updateFollowDate();
-    }
-
-    // 表單送出 → 產生 JSON
-    const form = $('#incidentForm');
-    const out = $('#output');
-    const copyRow = $('#copyRow');
-    const copyBtn = $('#copyBtn');
-    const waybillInput = $('#waybill');
-
-    form.addEventListener('submit', (e) => {
+    document.getElementById('reportForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const phone = $('#recv_phone').value.trim();
-      const phoneOk = !phone || /^0\d{8,9}$/.test(phone);
-      if(!phoneOk){ alert('收件人電話格式不正確，請確認。'); return; }
-      const data = collectFormData();
-      out.hidden = false; copyRow.hidden = false; out.textContent = JSON.stringify(data, null, 2); out.scrollIntoView({behavior:'smooth', block:'start'});
-    });
+      const data = {
+        waybill: document.getElementById('waybill').value.trim(),
+        item_name: document.getElementById('item_name').value.trim(),
+        item_url: document.getElementById('item_url').value.trim(),
+        ship_date: document.getElementById('ship_date').value,
+        ship_method: document.getElementById('ship_method').value,
+        recv_name: document.getElementById('recv_name').value.trim(),
+        recv_phone: document.getElementById('recv_phone').value.trim(),
+        recv_addr: document.getElementById('recv_addr').value.trim(),
+        issue_type: document.getElementById('issue_type').value,
+        brief: document.getElementById('brief').value.trim(),
+        report_date: document.getElementById('report_date').value
+      };
 
-    // 複製 JSON
-    copyBtn.addEventListener('click', async () => {
-      try{ await navigator.clipboard.writeText($('#output').textContent); const hint = $('#copyHint'); const old = hint.textContent; hint.textContent = '已複製到剪貼簿！'; setTimeout(()=> hint.textContent = old, 1600); }
-      catch(err){ alert('無法複製，請手動選取文字。'); }
-    });
+      document.getElementById('status').textContent = '資料送出中…';
 
-    // 依單號載入資料按鈕
-    $('#loadByWaybill').addEventListener('click', ()=>{ loadRecord(waybillInput.value.trim()); });
+      try {
+        const res = await fetch(API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // 關鍵：避免 CORS preflight
+          body: JSON.stringify(data)
+        });
 
-    // 儲存/更新按鈕
-    $('#saveToSheet').addEventListener('click', ()=>{
-      const data = collectFormData(); if(!data.waybill){ alert('請先填寫託運單號'); return; } saveRecord(data);
-    });
-
-    // 收集表單為物件（供儲存）
-    function collectFormData(){
-      const d = Object.fromEntries(new FormData(form).entries());
-      d.query_result = $("input[name=\"query_result\"]:checked") ? $$("input[name=\"query_result\"]:checked").map(i=>i.value) : [];
-      d.issue_type = (form.querySelector('input[name="issue_type"]:checked')||{}).value || '';
-      d.source = (form.querySelector('input[name="source"]:checked')||{}).value || '';
-      d.need_follow = !!document.getElementById('need_follow').checked;
-      d.follow_date = document.getElementById('follow_date').value || '';
-      d.notify_email = (document.getElementById('notify_email')?.value||'').trim();
-      return d;
-    }
-
-    // 載入範例資料，方便測試
-    $('#fill-demo').addEventListener('click', ()=>{
-      $('#waybill').value = '15842010129178300004';
-      $('#item_name').value = '折傘';
-      $('#item_url').value = 'https://www.give-circle.com/give/1030683';
-      $('#ship_date').valueAsDate = new Date();
-      $('#ship_method').value = 'i 郵箱';
-      $('#giver_url').value = 'https://www.give-circle.com/user/708';
-      $('#recv_name').value = '蔡依蓉';
-      $('#recv_phone').value = '0972156930';
-      $('#recv_addr').value = '新竹南大路郵局 i 郵箱（新竹市東區南大路621號）';
-      form.querySelector('input[name="issue_type"][value="包裹停滯未更新"]').checked = true;
-      $('#brief').value = '包裹停滯於 9/10 郵件轉運中';
-      form.querySelector('input[name="source"][value="獲贈者反映"]').checked = true;
-      $('#report_date').valueAsDate = new Date();
-      $('#query_date').valueAsDate = new Date();
-      $('#need_follow').checked = true; updateFollowDate();
-    });
-
-    // 角色切換：通報者 / 查詢者
-    const roleRadios = $$('input[name="role"]');
-    const trackerSection = $('#trackerSection');
-    function applyRoleUI(){
-      const role = (form.querySelector('input[name="role"]:checked')||{}).value;
-      const isTracker = role === '查詢者';
-      trackerSection.hidden = !isTracker;
-      $$('input, select, textarea', trackerSection).forEach(el=>{ el.disabled = !isTracker; });
-      $('#query_date').required = isTracker;
-    }
-    roleRadios.forEach(r=> r.addEventListener('change', applyRoleUI));
-    const params = new URLSearchParams(location.search);
-    if(params.get('role') === 'tracker'){ form.querySelector('input[name="role"][value="查詢者"]').checked = true; }
-    applyRoleUI();
-
-    // ===== 偵錯工具：Ping 與測試 =====
-    $('#btnPing').addEventListener('click', async ()=>{
-      try{
-        const res = await fetchAPI(`${API_BASE}?ping=1`);
-        const data = await res.json();
-        log('Ping 結果：', data);
-        alert(`Ping：${data && data.message ? data.message : 'OK'}${toggleMock.checked?'（Mock）':''}`);
-      }catch(err){ log('Ping 失敗：', String(err)); alert('Ping 失敗'); }
-    });
-
-    // 內建測試案例
-    function assertEqual(name, a, b){ if(JSON.stringify(a)!==JSON.stringify(b)) throw new Error(`${name} 不相等\n得到：${JSON.stringify(a)}\n預期：${JSON.stringify(b)}`); }
-
-    async function runTests(){
-      log('--- 開始執行測試 ---');
-      // 測試 1：collectFormData 輸出
-      $('#fill-demo').click();
-      const sample = collectFormData();
-      if(!sample.waybill) throw new Error('測試1：waybill 應有值');
-      log('測試1：collectFormData OK');
-
-      // 測試 2：儲存/載入（Mock 或 API）
-      await saveRecord(sample);
-      const before = JSON.parse(JSON.stringify(sample));
-      // 清空表單後再載入
-      form.reset(); applyRoleUI();
-      await loadRecord(before.waybill);
-      const after = collectFormData();
-      // 僅比對關鍵欄位（避免日期物件差異）
-      const pick = k=>({
-        waybill:k.waybill,item_name:k.item_name,item_url:k.item_url,ship_method:k.ship_method,
-        giver_url:k.giver_url,recv_name:k.recv_name,recv_phone:k.recv_phone,recv_addr:k.recv_addr,
-        issue_type:k.issue_type,brief:k.brief,source:k.source
-      });
-      assertEqual('測試2：save/load', pick(after), pick(before));
-      log('測試2：save/load OK');
-
-      // 測試 3：追蹤日期自動 +7 天
-      $('#query_date').value = '2025-01-10'; $('#need_follow').checked = true; updateFollowDate();
-      assertEqual('測試3-1：隱藏欄 follow_date +7', document.getElementById('follow_date').value, '2025-01-17');
-      assertEqual('測試3-2：顯示文字 +7', document.getElementById('follow_date_text').textContent, '2025-01-17');
-      log('測試3：追蹤 +7 OK');
-
-      log('✅ 全部測試通過');
-      alert('✅ 內建測試全部通過');
-    }
-
-    $('#btnRunTests').addEventListener('click', ()=>{
-      runTests().catch(err=>{ log('❌ 測試失敗：', String(err)); alert('❌ 測試失敗：'+ err.message); });
+        const result = await res.json();
+        if (result.ok) {
+          document.getElementById('status').textContent = '✅ 已成功寫入試算表！';
+        } else {
+          document.getElementById('status').textContent = '⚠️ 錯誤：' + result.message;
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById('status').textContent = '❌ 連線失敗，請稍後再試。';
+      }
     });
   </script>
-  <!-- --- 以下為 Apps Script 後端（請貼到 Code.gs） ---------------- -->
-  <!--
-  需求：
-  - 更新後重新排程（以託運單號為 key），到期 09:00（Asia/Taipei）寄信。
-  - 結案（close_date 有值）→ 自動取消未來提醒。
-  - 避免重複提醒：同一個「託運單號 + follow_date」只寄一次；若更新為新的 follow_date，允許再寄一次。
-  - 新增 doOptions 與 ?ping=1，方便前端偵測與 CORS Preflight。
-
-  
 </body>
 </html>
-
-
