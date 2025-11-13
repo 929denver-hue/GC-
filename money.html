@@ -1,1 +1,78 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { ArrowRight } from "lucide-react";
 
+export default function GCFlowModel() {
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-800 p-10 flex flex-col items-center">
+      <h1 className="text-3xl font-bold text-[#6DBE45] mb-2">💰 GC贈物網金流X物流收益分析</h1>
+
+      {/* 金流流程圖 */}
+      <div className="flex items-center justify-center gap-4 text-base font-medium mb-10">
+        <span>會員</span>
+        <ArrowRight className="text-[#6DBE45]" />
+        <span>儲值金額（300 元）</span>
+        <ArrowRight className="text-[#6DBE45]" />
+        <span>贈物網平台</span>
+        <ArrowRight className="text-[#6DBE45]" />
+        <span>物流寄送（5 次）</span>
+        <ArrowRight className="text-[#6DBE45]" />
+        <span>物流差價（12 元/次）</span>
+      </div>
+
+      {/* 補充說明 */}
+      <div className="text-center mb-12">
+        <p>🔹 儲值方式：虛擬帳號</p>
+        <p>🔹 贈物網吸收：虛擬帳號手續費、電子發票、稅金</p>
+      </div>
+
+      {/* 明細表 */}
+      <Card className="w-full max-w-2xl mb-10">
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>項目</TableHead>
+                <TableHead className="text-right">金額</TableHead>
+                <TableHead>備註</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow><TableCell>儲值金額</TableCell><TableCell className="text-right">300 元</TableCell><TableCell>會員一次付款</TableCell></TableRow>
+              <TableRow><TableCell>每次寄送運費</TableCell><TableCell className="text-right">60 元／次</TableCell><TableCell>共 5 次</TableCell></TableRow>
+              <TableRow><TableCell>物流差價</TableCell><TableCell className="text-right">12 元／次</TableCell><TableCell>共 60 元</TableCell></TableRow>
+              <TableRow><TableCell>虛擬帳號手續費</TableCell><TableCell className="text-right text-gray-600">−5 元</TableCell><TableCell>贈物網支付</TableCell></TableRow>
+              <TableRow><TableCell>電子發票攤提</TableCell><TableCell className="text-right text-gray-600">−1 元</TableCell><TableCell>每筆攤提</TableCell></TableRow>
+              <TableRow><TableCell>稅金</TableCell><TableCell className="text-right text-gray-600">−15 元</TableCell><TableCell>5%</TableCell></TableRow>
+              <TableRow className="font-bold bg-green-50"><TableCell>淨收益總額</TableCell><TableCell className="text-right text-green-600">+39 元</TableCell><TableCell>平均 7.8 元／筆</TableCell></TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* 三大重點 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl mb-10">
+        <Card className="text-center p-6">
+          <CardContent>
+            <p>1️⃣ 贈物網吸收所有平台成本（虛擬帳號、發票、稅金）</p>
+          </CardContent>
+        </Card>
+        <Card className="text-center p-6">
+          <CardContent>
+            <p>2️⃣ 每次寄送平均淨收益約 <span className="text-[#6DBE45] font-semibold">7.8 元</span></p>
+          </CardContent>
+        </Card>
+        <Card className="text-center p-6">
+          <CardContent>
+            <p>3️⃣ 試算表網址：<a href="https://docs.google.com/spreadsheets/d/11x0JhIDdIPOX1IUyMEWoRmBnANoxIKb3/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">點此開啟</a></p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 會議講點 */}
+      <div className="text-center text-sm text-gray-600 max-w-3xl border-t pt-6">
+        「以 300 元儲值為例，會員可寄送 5 次。贈物網從物流差價中平均每筆淨收益約 7.8 元。所有手續費與稅金由平台吸收，確保會員體驗一致且金流透明。」
+      </div>
+    </div>
+  );
+}
