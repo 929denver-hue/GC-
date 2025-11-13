@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GC贈物網｜物流金流模型試算</title>
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --panel:#ffffff;
+      --muted:#64748b;
+      --text:#0f172a;
+      --accent:#16a34a;
+      --danger:#dc2626;
+      --ring:#e2e8f0;
+      --highlight:#dcfce7;
+    }
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;}
+    .wrap{max-width:900px;margin:32px auto;padding:0 16px}
+    h1{font-size:20px;font-weight:700;margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{background:var(--panel);border:1px solid var(--ring);border-radius:16px;box-shadow:0 4px 12px rgba(15,23,42,.05)}
+    .body{padding:16px}
+    .input-area{border:2px solid var(--ring);border-radius:12px;padding:16px;background:#f9fafb;margin-bottom:12px}
+    .input{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    label{font-size:13px;color:var(--muted)}
+    input[type="number"]{padding:10px 12px;border-radius:10px;border:1px solid var(--ring);font-size:15px;color:var(--text)}
+    input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+    .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .item{background:#fff;border:1px solid var(--ring);border-radius:10px;padding:12px}
+    .label{font-size:13px;color:var(--muted)}
+    .value{font-size:18px;font-weight:700;margin-top:2px;color:var(--text)}
+    .pos{color:var(--accent)}
+    .neg{color:var(--danger)}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:10px;border-bottom:1px solid var(--ring);font-size:14px}
+    th{text-align:left;color:var(--muted)}
+    #rowTotal{color:#065f46;font-weight:700;background:var(--highlight)}
+    .footer-btn{margin-top:20px;text-align:center}
+    .footer-btn a{display:inline-block;background:#16a34a;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;box-shadow:0 3px 6px rgba(22,163,74,.2)}
+    .footer-btn a:hover{background:#15803d}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>💰 GC贈物網｜物流金流模型試算</h1>
+
+    <div class="grid">
+      <section class="card">
+        <div class="body input-area">
+          <div class="input">
+            <label for="topup">儲值金額（元）</label>
+            <input id="topup" type="number" min="0" step="1" value="300" />
+          </div>
+          <div class="input">
+            <label for="spread">物流差價（元／次）</label>
+            <input id="spread" type="number" min="0" step="1" value="12" />
+          </div>
+          <div class="input">
+            <label for="shipments">寄件數量（次）</label>
+            <input id="shipments" type="number" min="0" step="1" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="body">
+          <div class="kpi">
+            <div class="item"><div class="label">可使用次數</div><div class="value" id="kpiN">—</div></div>
+            <div class="item"><div class="label">淨收益</div><div class="value" id="kpiNet">—</div></div>
+            <div class="item"><div class="label">每次平均淨收益</div><div class="value" id="kpiAvg">—</div></div>
+            <div class="item"><div class="label">物流總淨利</div><div class="value" id="kpiTotal">—</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:16px">
+      <div class="body">
+        <table>
+          <thead><tr><th>項目</th><th>說明</th><th>金額／數值</th></tr></thead>
+          <tbody>
+            <tr><td>平台收入</td><td>物流差價 × 可使用次數</td><td id="rowRevenue">—</td></tr>
+            <tr><td>稅金</td><td>儲值金額 × 5%</td><td id="rowTax">—</td></tr>
+            <tr><td>平台支出</td><td>金流 5 + 發票 1 + 稅金</td><td id="rowCost">—</td></tr>
+            <tr><td>淨收益</td><td>平台收入 − 平台支出</td><td id="rowNet">—</td></tr>
+            <tr><td>每次平均淨收益</td><td>淨收益 ÷ 可使用次數</td><td id="rowAvg">—</td></tr>
+            <tr style="background:var(--highlight);font-weight:700;color:#065f46;"><td>物流總淨利</td><td>寄件數量 × 每次平均淨收益</td><td id="rowTotal">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="footer-btn">
+      <a href="https://929denver-hue.github.io/GC-/money.html" target="_blank">前往說明</a>
+    </div>
+  </div>
+
+  <script>
+    const $ = s=>document.querySelector(s);
+    const fmt=n=>isFinite(n)?n.toLocaleString('zh-Hant',{style:'currency',currency:'TWD',minimumFractionDigits:2}):'—';
+    const FEE=60,TAX=0.05,FIXED=5,INV=1;
+    const round2=x=>Math.round((x+Number.EPSILON)*100)/100;
+
+    function compute(){
+      const topup=+$('#topup').value||0;
+      const spread=+$('#spread').value||0;
+      let ship=+$('#shipments').value;
+      const N=Math.floor(topup/FEE);
+      if(!ship||ship<=0) ship=N;
+      const revenue=spread*N;
+      const tax=topup*TAX;
+      const cost=FIXED+INV+tax;
+      const net=revenue-cost;
+      const avg=N>0?net/N:NaN;
+      const total=isNaN(avg)?NaN:ship*avg;
+      $('#kpiN').textContent=N;
+      $('#kpiNet').textContent=fmt(round2(net));
+      $('#kpiAvg').textContent=isNaN(avg)?'—':fmt(round2(avg));
+      $('#kpiTotal').textContent=isNaN(total)?'—':fmt(round2(total));
+      $('#rowRevenue').textContent=fmt(round2(revenue));
+      $('#rowTax').textContent=fmt(round2(tax));
+      $('#rowCost').textContent=fmt(round2(cost));
+      $('#rowNet').textContent=fmt(round2(net));
+      $('#rowAvg').textContent=isNaN(avg)?'—':fmt(round2(avg));
+      $('#rowTotal').textContent=isNaN(total)?'—':fmt(round2(total));
+    }
+    ['topup','spread','shipments'].forEach(id=>$('#'+id).addEventListener('input',compute));
+    compute();
+  </script>
+</body>
+</html>
