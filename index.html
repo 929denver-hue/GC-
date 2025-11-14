@@ -428,6 +428,20 @@
     document.getElementById('load_query_waybill').addEventListener('click',()=>{
       loadByWaybill(document.getElementById('q_waybill').value);
     });
+
+    // --- 讀網址參數 ?waybill=xxx，自動載入案件 ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const wb = (params.get('waybill') || '').trim();
+      if (!wb) return;
+
+      const wbInput1 = document.getElementById('waybill');
+      const wbInput2 = document.getElementById('q_waybill');
+      if (wbInput1) wbInput1.value = wb;
+      if (wbInput2) wbInput2.value = wb;
+
+      loadByWaybill(wb);
+    });
   </script>
 </body>
 </html>
