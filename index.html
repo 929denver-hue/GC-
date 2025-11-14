@@ -7,23 +7,88 @@
   <style>
     body { font-family: Arial, sans-serif; background:#f8f9fa; padding:20px; }
     h1 { color:#2c7a7b; text-align:center; }
-    form { background:white; padding:20px; border-radius:12px; max-width:800px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+
+    form {
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      max-width:800px;
+      margin:16px auto;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+
     label { display:block; margin-top:12px; font-weight:bold; }
-    input, select, textarea { width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-top:4px; }
 
-    /* 讓 checkbox 不受全域 input{width:100%} 影響 */
-    input[type="checkbox"] { width:auto; margin:0; }
+    input, select, textarea {
+      width:100%;
+      padding:8px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      margin-top:4px;
+      box-sizing:border-box;
+    }
 
-    .checkbox-group { display:flex; flex-wrap:wrap; gap:16px; margin-top:8px; }
-    .checkbox-group label { font-weight:normal; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+    /* 修正 checkbox 的寬度與排版 */
+    input[type="checkbox"] {
+      width:auto;
+      margin:0;
+    }
 
-    .inline-checkbox { display:flex; align-items:center; gap:8px; margin-top:8px; }
+    .checkbox-group {
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      margin-top:8px;
+    }
 
-    button { margin-top:20px; padding:10px 20px; background:#2c7a7b; color:white; border:none; border-radius:6px; cursor:pointer; }
-    button:hover { background:#285e61; }
+    .checkbox-group label {
+      font-weight:normal;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      white-space:nowrap;
+    }
 
-    #status { text-align:center; margin-top:20px; font-weight:bold; }
+    .inline-checkbox {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:8px;
+    }
 
+    button {
+      margin-top:20px;
+      padding:10px 20px;
+      background:#2c7a7b;
+      color:white;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    button:hover {
+      background:#285e61;
+    }
+
+    /* 頂部狀態列 */
+    #status {
+      max-width:800px;
+      margin:12px auto 0;
+      padding:12px;
+      border-radius:8px;
+      font-size:16px;
+      font-weight:600;
+      text-align:center;
+      display:none;      /* 沒訊息時不顯示 */
+      box-sizing:border-box;
+    }
+
+    .status-success { background:#e6fffa; color:#047857; border:1px solid #99f6e4; }
+    .status-error   { background:#fee2e2; color:#991b1b; border:1px solid #fecaca; }
+    .status-warning { background:#fef9c3; color:#854d0e; border:1px solid #fde047; }
+    .status-info    { background:#dbeafe; color:#1e3a8a; border:1px solid #bfdbfe; }
+
+    /* 案件摘要卡片樣式 */
     .card {
       background:#fff;
       border:1px solid #e5e7eb;
@@ -33,6 +98,7 @@
       margin:16px auto;
       box-shadow:0 1px 4px rgba(0,0,0,0.06);
     }
+
     .card h2 { margin:0 0 8px; font-size:18px; color:#1f2937; }
 
     .meta {
@@ -42,15 +108,18 @@
       font-size:14px;
       color:#374151;
     }
+
     @media (min-width: 720px) {
       .meta { grid-template-columns:1fr 1fr; }
     }
+
     .meta div {
       background:#f9fafb;
       border:1px solid #eef2f7;
       border-radius:8px;
       padding:8px 10px;
     }
+
     .meta b {
       display:block;
       font-weight:600;
@@ -58,7 +127,12 @@
       margin-bottom:2px;
     }
 
-    .chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .chips {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
     .chip {
       background:#e6f4ff;
       border:1px solid #bfdbfe;
@@ -75,25 +149,17 @@
       font-size:12px;
       font-weight:600;
     }
-    .badge.ok {
-      background:#ecfdf5;
-      color:#065f46;
-      border:1px solid #a7f3d0;
-    }
-    .badge.warn {
-      background:#fff7ed;
-      color:#9a3412;
-      border:1px solid #fed7aa;
-    }
-    .badge.close {
-      background:#f1f5f9;
-      color:#0f172a;
-      border:1px solid #cbd5e1;
-    }
+
+    .badge.ok    { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+    .badge.warn  { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }
+    .badge.close { background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; }
   </style>
 </head>
 <body>
   <h1>GC贈物網｜包裹異常通報表單</h1>
+
+  <!-- ✅ 顯示在最上方的狀態列 -->
+  <div id="status"></div>
 
   <!-- 只讀展示區：載入單號後顯示摘要 -->
   <section id="overviewCard" class="card" aria-live="polite">
@@ -150,12 +216,12 @@
     <label>反應時間</label>
     <input type="date" id="report_date">
 
-    <button type="submit">儲存／更新到試算表</button>
+    <button type="submit">儲存／更新到試算表（通報者）</button>
   </form>
 
   <h1 style="margin-top:32px; text-align:center; color:#2c7a7b;">查詢者更新區</h1>
 
-  <!-- 查詢者更新區 -->
+  <!-- 查詢者更新區表單 -->
   <form id="queryForm">
     <label>託運單號（與上方相同）</label>
     <div style="display:flex; gap:8px; align-items:center;">
@@ -173,12 +239,12 @@
       <label><input type="checkbox" class="q_query_result" value="郵局致電確認"> 郵局致電確認</label>
     </div>
 
-    <label>狀態更新日期（更新後，mail主動通知info）</label>
+    <label>狀態更新日期（更新後，mail主動通知 info）</label>
     <input type="date" id="status_date">
 
     <div class="inline-checkbox">
       <input type="checkbox" id="need_follow">
-      <label for="need_follow">需持續追蹤（mail提醒 09:00 ）</label>
+      <label for="need_follow">需持續追蹤（mail 提醒 09:00）</label>
     </div>
 
     <label>提醒日期（follow_date）</label>
@@ -205,99 +271,108 @@
     <button type="submit">儲存／更新（查詢者）</button>
   </form>
 
-  <div id="status"></div>
-
   <script>
     const API_BASE = "https://script.google.com/macros/s/AKfycbwD6TWuDmswXDvxh1mEXYazs29gxfHWR06_zSCfQiUa-eiWaXubq4zzRdtkRccEmL4U/exec";
-    const statusEl = document.getElementById('status');
 
-    // ✅ 共用：fire-and-forget 呼叫 API，避免 CORS 導致 Failed to fetch
-    async function saveToSheet(data, okMessage) {
-      statusEl.textContent = '資料送出中…';
-
-      try {
-        // mode: 'no-cors' 讓瀏覽器不要檢查 CORS，當成「送出就好」
-        await fetch(API_BASE, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(data)
-        });
-
-        // 無法讀取回應內容，但後端確實有收到（你已在試算表驗證）
-        statusEl.textContent = okMessage || '✅ 已送出，系統將資料寫入試算表';
-        console.log('✅ 已送出 payload：', data);
-      } catch (err) {
-        console.error('❌ saveToSheet 發生錯誤：', err);
-        statusEl.textContent = '❌ 連線失敗或瀏覽器阻擋，請稍後再試。\n' + err.message;
-        throw err;
-      }
+    // 共用：頂部狀態列顯示工具
+    function showStatus(msg, type = 'info') {
+      const el = document.getElementById('status');
+      if (!el) return;
+      el.className = ''; // 清空舊的 class
+      el.classList.add(`status-${type}`);
+      el.textContent = msg;
+      el.style.display = 'block';
     }
 
-    // 通報者送出
+    // 通報者表單送出
     document.getElementById('reportForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = {
-        role: 'report',
-        waybill: document.getElementById('waybill').value.trim(),
+        waybill:   document.getElementById('waybill').value.trim(),
         item_name: document.getElementById('item_name').value.trim(),
-        item_url: document.getElementById('item_url').value.trim(),
+        item_url:  document.getElementById('item_url').value.trim(),
         ship_date: document.getElementById('ship_date').value,
         ship_method: document.getElementById('ship_method').value,
         recv_name: document.getElementById('recv_name').value.trim(),
         recv_phone: document.getElementById('recv_phone').value.trim(),
-        recv_addr: document.getElementById('recv_addr').value.trim(),
+        recv_addr:  document.getElementById('recv_addr').value.trim(),
         issue_type: document.getElementById('issue_type').value,
-        brief: document.getElementById('brief').value.trim(),
+        brief:      document.getElementById('brief').value.trim(),
         report_date: document.getElementById('report_date').value
       };
 
       if (!data.waybill) {
-        statusEl.textContent = '❌ 請輸入託運單號';
+        showStatus('❌ 請輸入託運單號', 'error');
         return;
       }
 
+      showStatus('📤 資料送出中…', 'info');
+
       try {
-        await saveToSheet(data, '✅ 通報資料已成功寫入試算表！');
-        // 成功後重新載入摘要（注意：因為 GET 仍受 CORS 約束，若有問題可以略過）
-        loadByWaybill(data.waybill);
+        const res = await fetch(API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        if (result.ok) {
+          showStatus('✅ 已成功寫入試算表！（通報者資料）', 'success');
+          // 重新載入一次，更新上方摘要
+          loadByWaybill(data.waybill);
+        } else {
+          showStatus('⚠️ 錯誤：' + (result.message || '未知錯誤'), 'warning');
+        }
       } catch (err) {
-        // 錯誤已在 saveToSheet 處理
+        console.error(err);
+        showStatus('❌ 連線失敗，請稍後再試。', 'error');
       }
     });
 
-    // 工具：收集查詢結果 checkbox
     function collectCheckedValues(cls) {
       return Array.from(document.querySelectorAll('.' + cls + ':checked')).map(el => el.value);
     }
 
-    // 查詢者送出
+    // 查詢者更新區表單送出
     document.getElementById('queryForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
-        role: 'query',
-        waybill: document.getElementById('q_waybill').value.trim(),
-        query_date: document.getElementById('query_date').value,
+        waybill:      document.getElementById('q_waybill').value.trim(),
+        query_date:   document.getElementById('query_date').value,
         query_result: collectCheckedValues('q_query_result'),
-        status_date: document.getElementById('status_date').value,
-        need_follow: document.getElementById('need_follow').checked,
-        follow_date: document.getElementById('follow_date').value,
+        status_date:  document.getElementById('status_date').value,
+        need_follow:  document.getElementById('need_follow').checked,
+        follow_date:  document.getElementById('follow_date').value,
         notify_email: document.getElementById('notify_email').value.trim(),
         final_result: document.getElementById('final_result').value,
-        after_note: document.getElementById('after_note').value.trim(),
-        close_date: document.getElementById('close_date').value
+        after_note:   document.getElementById('after_note').value.trim(),
+        close_date:   document.getElementById('close_date').value
       };
 
       if (!payload.waybill) {
-        statusEl.textContent = '❌ 請輸入託運單號';
+        showStatus('❌ 請輸入託運單號', 'error');
         return;
       }
 
+      showStatus('📤 資料送出中…', 'info');
+
       try {
-        await saveToSheet(payload, '✅ 查詢者資料已更新（如勾選需追蹤，將於提醒日 09:00 寄信）');
-        loadByWaybill(payload.waybill);
+        const res = await fetch(API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.ok) {
+          showStatus('✅ 查詢者資料已更新（如勾選需追蹤，將於提醒日 09:00 寄信）', 'success');
+          // 重新載入一次，更新上方摘要
+          loadByWaybill(payload.waybill);
+        } else {
+          showStatus('⚠️ 錯誤：' + (result.message || '未知錯誤'), 'warning');
+        }
       } catch (err) {
-        // 錯誤已在 saveToSheet 處理
+        console.error(err);
+        showStatus('❌ 連線失敗，請稍後再試。', 'error');
       }
     });
 
@@ -305,7 +380,6 @@
     function renderOverview(d){
       const statusBox = document.getElementById('overviewStatus');
       const metaBox = document.getElementById('overviewMeta');
-
       if(!d){
         statusBox.innerHTML = '<span class="badge warn">尚未載入單號</span>';
         metaBox.style.display='none';
@@ -356,10 +430,11 @@
     async function loadByWaybill(wb){
       const waybill = (wb || '').trim();
       if(!waybill){
-        statusEl.textContent='❌ 請輸入託運單號';
+        showStatus('❌ 請輸入託運單號', 'error');
         return;
       }
-      statusEl.textContent = '查詢中…';
+      showStatus('🔍 查詢中…', 'info');
+
       try{
         const res = await fetch(`${API_BASE}?waybill=${encodeURIComponent(waybill)}`);
         const json = await res.json();
@@ -368,7 +443,7 @@
         }
         const d = json.data;
         if(!d){
-          statusEl.textContent = '🔎 查無此單號的記錄';
+          showStatus('🔍 查無此單號的記錄', 'warning');
           clearOverview();
           return;
         }
@@ -392,6 +467,7 @@
         setIf('query_date', d.query_date);
         setIf('status_date', d.status_date);
 
+        // 勾選：query_result 可能是字串或陣列
         const qrs = Array.isArray(d.query_result)
           ? d.query_result
           : (d.query_result ? String(d.query_result).split(',').map(s=>s.trim()) : []);
@@ -399,6 +475,7 @@
           el.checked = qrs.includes(el.value);
         });
 
+        // 需持續追蹤 + 提醒日期
         document.getElementById('need_follow').checked =
           String(d.need_follow).toLowerCase()==='true';
         setIf('follow_date', d.follow_date);
@@ -408,10 +485,10 @@
         setIf('close_date', d.close_date);
 
         renderOverview(d);
-        statusEl.textContent = '✅ 已載入資料';
+        showStatus('✅ 已載入資料', 'success');
       }catch(err){
         console.error(err);
-        statusEl.textContent = '❌ 查詢失敗，請稍後再試';
+        showStatus('❌ 查詢失敗，請稍後再試', 'error');
       }
     }
 
@@ -421,7 +498,6 @@
       }
     }
 
-    // 按鈕事件：載入此單號資料
     document.getElementById('load_report_waybill').addEventListener('click',()=>{
       loadByWaybill(document.getElementById('waybill').value);
     });
