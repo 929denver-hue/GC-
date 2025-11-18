@@ -557,6 +557,74 @@
 
         return result;
     }
+    unction downloadCSV() {
+    // 先取得目前表格資料
+    const rows = collectRows();
+    if (rows.length === 0) {
+        alert('目前沒有資料可以下載。');
+        return;
+    }
+
+    // CSV 標題列（對應你試算表的欄位）
+    const header = [
+        '客戶名稱',
+        '年營收',
+        '合作愉快程度',
+        '付款速度',
+        '重複營收可能性',
+        '溝通品質',
+        '是否可持續合作',
+        '推薦力',
+        '歷史關係',
+        '填寫人',
+        '法則2',
+        '法則3',
+        '分數',
+        '最終評等'
+    ];
+
+    // 將資料轉成 CSV 字串
+    let csv = header.join(',') + '\n';
+
+    rows.forEach(function (r) {
+        const line = [
+            r.name || '',
+            r.revenue || '',
+            r.coop || '',
+            r.pay || '',
+            r.repeat || '',
+            r.comm || '',
+            r.sustain || '',
+            r.refer || '',
+            r.history || '',
+            r.law1 || '',
+            r.law2 || '',
+            r.law3 || '',
+            r.score || '',
+            r.finalGrade || ''
+        ].map(function (value) {
+            // 避免逗號、換行搞亂 CSV，使用 " 包起來並把 " 轉成 ""
+            const v = String(value).replace(/"/g, '""');
+            return `"${v}"`;
+        }).join(',');
+
+        csv += line + '\n';
+    });
+
+    // 產生下載用 Blob
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // 建立隱藏的 <a> 觸發下載
+    const a = document.createElement('a');
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    a.href = url;
+    a.download = `pumpkin-clients-${today}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
 
 async function sendToSheet() {
     // 先重新計算一次，確保分數與等級最新
