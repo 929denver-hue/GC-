@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>客戶評估表（南瓜計畫）</title>
+
+<style>
+    body {
+        font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f5f7f6;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        padding: 20px;
+        background: #0E8A57;
+        color: white;
+        margin: 0;
+        font-size: 24px;
+        letter-spacing: 1px;
+    }
+
+    .container {
+        width: 95%;
+        max-width: 1200px;
+        margin: 20px auto 40px;
+    }
+
+    .card {
+        background: #ffffff;
+        padding: 16px 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 18px;
+    }
+
+    .card h2 {
+        margin-top: 0;
+        font-size: 18px;
+        color: #0E8A57;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .dash-item {
+        background: #f4faf6;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        border-left: 4px solid #0E8A57;
+    }
+
+    .dash-label {
+        font-size: 13px;
+        color: #666;
+    }
+
+    .dash-value {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 2px;
+    }
+
+    .grade-bars {
+        margin-top: 10px;
+    }
+
+    .grade-row {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        margin: 2px 0;
+    }
+
+    .grade-row span {
+        width: 30px;
+    }
+
+    .bar {
+        flex: 1;
+        height: 10px;
+        border-radius: 5px;
+        background: #e3ece7;
+        overflow: hidden;
+        margin-left: 5px;
+    }
+
+    .bar-inner {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s;
+    }
+
+    .bar-Ap  { background: #0E8A57; }
+    .bar-A   { background: #1aaf6d; }
+    .bar-B   { background: #2f80ed; }
+    .bar-C   { background: #f2c94c; }
+    .bar-D   { background: #f2994a; }
+    .bar-F   { background: #eb5757; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 13px;
+    }
+
+    th {
+        background: #e9f6f0;
+        border: 1px solid #d1d9d4;
+        padding: 8px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    td {
+        border: 1px solid #e0e4e1;
+        padding: 6px;
+        text-align: center;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 4px 6px;
+        border: 1px solid #c3c8c5;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+    input[type="number"] {
+        text-align: right;
+    }
+
+    .score-cell {
+        font-weight: 600;
+        color: #0E8A57;
+    }
+
+    .final-grade-cell {
+        font-weight: 700;
+    }
+
+    .final-grade-cell.Ap { color: #0E8A57; }
+    .final-grade-cell.A  { color: #1aaf6d; }
+    .final-grade-cell.B  { color: #2f80ed; }
+    .final-grade-cell.C  { color: #f2a600; }
+    .final-grade-cell.D  { color: #e66b18; }
+    .final-grade-cell.F  { color: #d62828; }
+
+    .note {
+        margin-top: 10px;
+        padding: 10px 12px;
+        background: #f4faf6;
+        border-left: 4px solid #0E8A57;
+        border-radius: 6px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .btn-row {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    button {
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        margin-left: 8px;
+    }
+
+    .btn-primary {
+        background: #0E8A57;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #e9f1ee;
+        color: #333;
+    }
+
+    @media (max-width: 768px) {
+        table {
+            font-size: 12px;
+        }
+        th, td {
+            padding: 4px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<h1>客戶評估表（南瓜計畫）</h1>
+
+<div class="container">
+
+    <!-- 儀表板 -->
+    <div class="card" id="dashboard">
+        <h2>儀表板總覽</h2>
+        <div class="dashboard-grid">
+            <div class="dash-item">
+                <div class="dash-label">總客戶數</div>
+                <div class="dash-value" id="totalClients">0</div>
+            </div>
+            <div class="dash-item">
+                <div class="dash-label">平均分數</div>
+                <div class="dash-value" id="avgScore">0</div>
+            </div>
+            <div class="dash-item">
+                <div class="dash-label">TOP 客戶 1</div>
+                <div class="dash-value" id="top1">—</div>
+            </div>
+            <div class="dash-item">
+                <div class="dash-label">TOP 客戶 2</div>
+                <div class="dash-value" id="top2">—</div>
+            </div>
+            <div class="dash-item">
+                <div class="dash-label">TOP 客戶 3</div>
+                <div class="dash-value" id="top3">—</div>
+            </div>
+        </div>
+
+        <div class="grade-bars">
+            <div class="grade-row">
+                <span>A+</span>
+                <div class="bar"><div class="bar-inner bar-Ap" id="barAp"></div></div>
+            </div>
+            <div class="grade-row">
+                <span>A</span>
+                <div class="bar"><div class="bar-inner bar-A" id="barA"></div></div>
+            </div>
+            <div class="grade-row">
+                <span>B</span>
+                <div class="bar"><div class="bar-inner bar-B" id="barB"></div></div>
+            </div>
+            <div class="grade-row">
+                <span>C</span>
+                <div class="bar"><div class="bar-inner bar-C" id="barC"></div></div>
+            </div>
+            <div class="grade-row">
+                <span>D</span>
+                <div class="bar"><div class="bar-inner bar-D" id="barD"></div></div>
+            </div>
+            <div class="grade-row">
+                <span>F</span>
+                <div class="bar"><div class="bar-inner bar-F" id="barF"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要表格 -->
+    <div class="card">
+        <h2>客戶列表與評分</h2>
+        <div class="btn-row">
+    <button class="btn-secondary" onclick="addRow()">＋ 增加一列</button>
+    <button class="btn-secondary" onclick="calculateAll()">重新計算</button>
+    <button class="btn-primary" onclick="sendToSheet()">送出到試算表</button>
+</div>
+
+
+        <table id="clientTable">
+            <thead>
+            <tr>
+                <th>客戶名稱</th>
+                <th>年營收（NT$）</th>
+                <th>合作愉快程度<br>(A–F)</th>
+                <th>付款速度<br>(A–F)</th>
+                <th>重複營收<br>可能性</th>
+                <th>溝通品質</th>
+                <th>是否可持續<br>合作</th>
+                <th>推薦力</th>
+                <th>歷史關係</th>
+                <th>法則一致性1</th>
+                <th>法則一致性2</th>
+                <th>法則一致性3</th>
+                <th>分數</th>
+                <th>最終評等</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 預設幾列 -->
+            </tbody>
+        </table>
+
+        <div class="note">
+            📌 <b>計分邏輯（可依你之後需要再調整）：</b><br>
+            ・合作愉快程度、付款速度：A=4, B=3, C=2, D=1, F=0<br>
+            ・重複營收可能性（高/中/低）：高=2, 中=1, 低=0<br>
+            ・溝通品質（好/普通/差）：好=2, 普通=1, 差=0<br>
+            ・是否可持續合作（是/否）：是=2, 否=0<br>
+            ・推薦力（高/中/低）：高=2, 中=1, 低=0<br>
+            ・歷史關係（新/中等/長期）：新=0, 中等=1, 長期=2<br>
+            ・每個法則一致性（是/否）：是=1, 否=0<br>
+            ➜ 總分最高 21 分。<br>
+            ➜ 等級：18+ = A+；16–17 = A；13–15 = B；10–12 = C；7–9 = D；≤6 = F。
+        </div>
+    </div>
+
+</div>
+
+<script>
+  // 這裡換成你自己的 Apps Script Web App URL：
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyO8Kh2oApdcY-zJM003RaH2IgpJfF-aoNxRwANm3roGMwFDZdJZIuO7U9WLzA9DUWYDA/exec';
+    // 建立選單 HTML 片段
+    function createSelect(options) {
+        var html = '<select>';
+        options.forEach(function (opt) {
+            html += '<option value="' + opt + '">' + opt + '</option>';
+        });
+        html += '</select>';
+        return html;
+    }
+
+    function addRow() {
+        var tbody = document.querySelector("#clientTable tbody");
+        var tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td><input type="text" placeholder="客戶名稱"></td>
+            <td><input type="number" min="0" step="1000" placeholder="0"></td>
+            <td>${createSelect(["A","B","C","D","F"])}</td>
+            <td>${createSelect(["A","B","C","D","F"])}</td>
+            <td>${createSelect(["高","中","低"])}</td>
+            <td>${createSelect(["好","普通","差"])}</td>
+            <td>${createSelect(["是","否"])}</td>
+            <td>${createSelect(["高","中","低"])}</td>
+            <td>${createSelect(["新","中等","長期"])}</td>
+            <td>${createSelect(["是","否"])}</td>
+            <td>${createSelect(["是","否"])}</td>
+            <td>${createSelect(["是","否"])}</td>
+            <td class="score-cell">0</td>
+            <td class="final-grade-cell">—</td>
+        `;
+
+        tbody.appendChild(tr);
+
+        // 即時監聽變更就自動重算
+        tr.querySelectorAll("input, select").forEach(function (el) {
+            el.addEventListener("change", calculateAll);
+        });
+    }
+
+    // 初始先加 5 列
+    for (var i = 0; i < 5; i++) {
+        addRow();
+    }
+
+    function scoreLetter(letter) {
+        switch (letter) {
+            case "A": return 4;
+            case "B": return 3;
+            case "C": return 2;
+            case "D": return 1;
+            case "F": return 0;
+            default: return 0;
+        }
+    }
+
+    function scoreHighMidLow(val) {
+        if (val === "高") return 2;
+        if (val === "中") return 1;
+        return 0; // 低 或 未選
+    }
+
+    function scoreGoodNormalBad(val) {
+        if (val === "好") return 2;
+        if (val === "普通") return 1;
+        return 0; // 差 或 未選
+    }
+
+    function scoreYesNo(val, yesValue) {
+        if (yesValue === undefined) yesValue = 2;
+        return val === "是" ? yesValue : 0;
+    }
+
+    function scoreHistory(val) {
+        if (val === "長期") return 2;
+        if (val === "中等") return 1;
+        return 0; // 新 或 未選
+    }
+
+    function scoreLaw(val) {
+        return val === "是" ? 1 : 0;
+    }
+
+    function gradeFromScore(score) {
+        if (score >= 18) return "A+";
+        if (score >= 16) return "A";
+        if (score >= 13) return "B";
+        if (score >= 10) return "C";
+        if (score >= 7)  return "D";
+        return "F";
+    }
+
+    function calculateAll() {
+        var tbody = document.querySelector("#clientTable tbody");
+        var rows = Array.from(tbody.querySelectorAll("tr"));
+
+        var totalClients = 0;
+        var totalScoreSum = 0;
+        var gradeCounts = { "A+":0, "A":0, "B":0, "C":0, "D":0, "F":0 };
+        var clientScores = [];
+
+        rows.forEach(function (tr) {
+            var tds = tr.querySelectorAll("td");
+            if (tds.length === 0) return;
+
+            var name = tds[0].querySelector("input")?.value.trim() || "未命名客戶";
+
+            var coop   = tds[2].querySelector("select").value;
+            var pay    = tds[3].querySelector("select").value;
+            var repeat = tds[4].querySelector("select").value;
+            var comm   = tds[5].querySelector("select").value;
+            var sustain= tds[6].querySelector("select").value;
+            var refer  = tds[7].querySelector("select").value;
+            var hist   = tds[8].querySelector("select").value;
+            var law1   = tds[9].querySelector("select").value;
+            var law2   = tds[10].querySelector("select").value;
+            var law3   = tds[11].querySelector("select").value;
+
+            // 若整列完全沒填，就跳過
+            var isEmptyRow = !name || name === "未命名客戶";
+            if (isEmptyRow &&
+                coop==="" && pay==="" && repeat==="" && comm==="" &&
+                sustain==="" && refer==="" && hist==="" && law1==="" && law2==="" && law3==="") {
+                tds[12].textContent = "0";
+                tds[13].textContent = "—";
+                tds[13].className = "final-grade-cell";
+                return;
+            }
+
+            var score = 0;
+            score += scoreLetter(coop);
+            score += scoreLetter(pay);
+            score += scoreHighMidLow(repeat);
+            score += scoreGoodNormalBad(comm);
+            score += scoreYesNo(sustain, 2);
+            score += scoreHighMidLow(refer);
+            score += scoreHistory(hist);
+            score += scoreLaw(law1);
+            score += scoreLaw(law2);
+            score += scoreLaw(law3);
+
+            var grade = gradeFromScore(score);
+
+            tds[12].textContent = score;
+            tds[13].textContent = grade;
+
+            tds[13].className = "final-grade-cell";
+            if (grade === "A+") tds[13].classList.add("Ap");
+            else tds[13].classList.add(grade);
+
+            totalClients++;
+            totalScoreSum += score;
+            if (gradeCounts[grade] !== undefined) {
+                gradeCounts[grade]++;
+            }
+
+            clientScores.push({ name: name, score: score });
+
+              function collectRows() {
+        var tbody = document.querySelector("#clientTable tbody");
+        var rows = Array.from(tbody.querySelectorAll("tr"));
+        var result = [];
+
+        rows.forEach(function (tr) {
+            var tds = tr.querySelectorAll("td");
+            if (tds.length === 0) return;
+
+            var nameInput = tds[0].querySelector("input");
+            var name = (nameInput?.value || "").trim();
+            var revenue = tds[1].querySelector("input")?.value || "";
+
+            // 若客戶名稱與營收都空白，就不送這列
+            if (!name && !revenue) return;
+
+            var coop   = tds[2].querySelector("select").value;
+            var pay    = tds[3].querySelector("select").value;
+            var repeat = tds[4].querySelector("select").value;
+            var comm   = tds[5].querySelector("select").value;
+            var sustain= tds[6].querySelector("select").value;
+            var refer  = tds[7].querySelector("select").value;
+            var hist   = tds[8].querySelector("select").value;
+            var law1   = tds[9].querySelector("select").value;
+            var law2   = tds[10].querySelector("select").value;
+            var law3   = tds[11].querySelector("select").value;
+            var score  = tds[12].textContent || "";
+            var final  = tds[13].textContent || "";
+
+            result.push({
+                name: name,
+                revenue: revenue,
+                coop: coop,
+                pay: pay,
+                repeat: repeat,
+                comm: comm,
+                sustain: sustain,
+                refer: refer,
+                history: hist,
+                law1: law1,
+                law2: law2,
+                law3: law3,
+                score: score,
+                finalGrade: final
+            });
+        });
+
+        return result;
+    }
+
+    async function sendToSheet() {
+        // 先重新計算一次，確保分數與等級最新
+        calculateAll();
+
+        const rows = collectRows();
+        if (rows.length === 0) {
+            alert('目前沒有可送出的客戶資料。');
+            return;
+        }
+
+        if (!SCRIPT_URL || SCRIPT_URL.indexOf('你的網址') !== -1) {
+            alert('https://script.google.com/macros/s/AKfycbyO8Kh2oApdcY-zJM003RaH2IgpJfF-aoNxRwANm3roGMwFDZdJZIuO7U9WLzA9DUWYDA/exec');
+            return;
+        }
+
+        const payload = { rows: rows };
+
+        try {
+            const res = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            if (data.ok) {
+                alert('已成功送出 ' + data.received + ' 筆資料到試算表！');
+            } else {
+                alert('送出失敗：' + (data.error || '未知錯誤'));
+            }
+        } catch (err) {
+            alert('送出時發生錯誤：' + err.message);
+        }
+    }
+
+    // 初次載入先算一次
+    window.addEventListener("load", calculateAll);
+</script>
+
+        });
+
+        // 儀表板更新
+        document.getElementById("totalClients").textContent = totalClients;
+
+        if (totalClients > 0) {
+            document.getElementById("avgScore").textContent =
+                (totalScoreSum / totalClients).toFixed(1);
+        } else {
+            document.getElementById("avgScore").textContent = "0";
+        }
+
+        // 依分數排序找 TOP 3
+        clientScores.sort(function (a, b) { return b.score - a.score; });
+        document.getElementById("top1").textContent = clientScores[0]?.name || "—";
+        document.getElementById("top2").textContent = clientScores[1]?.name || "—";
+        document.getElementById("top3").textContent = clientScores[2]?.name || "—";
+
+        // 長條圖寬度
+        var maxCount = Math.max(
+            gradeCounts["A+"], gradeCounts["A"], gradeCounts["B"],
+            gradeCounts["C"], gradeCounts["D"], gradeCounts["F"], 1
+        );
+
+        document.getElementById("barAp").style.width = (gradeCounts["A+"] / maxCount * 100) + "%";
+        document.getElementById("barA").style.width  = (gradeCounts["A"]  / maxCount * 100) + "%";
+        document.getElementById("barB").style.width  = (gradeCounts["B"]  / maxCount * 100) + "%";
+        document.getElementById("barC").style.width  = (gradeCounts["C"]  / maxCount * 100) + "%";
+        document.getElementById("barD").style.width  = (gradeCounts["D"]  / maxCount * 100) + "%";
+        document.getElementById("barF").style.width  = (gradeCounts["F"]  / maxCount * 100) + "%";
+    }
+
+    // 初次載入先算一次
+    window.addEventListener("load", calculateAll);
+</script>
+
+</body>
+</html>
