@@ -268,11 +268,10 @@
     <div class="card">
         <h2>客戶列表與評分</h2>
         <div class="btn-row">
-    <button class="btn-secondary" onclick="addRow()">＋ 增加一列</button>
-    <button class="btn-secondary" onclick="calculateAll()">重新計算</button>
-    <button class="btn-primary" onclick="sendToSheet()">送出到試算表</button>
-</div>
-
+            <button class="btn-secondary" onclick="addRow()">＋ 增加一列</button>
+            <button class="btn-secondary" onclick="calculateAll()">重新計算</button>
+            <button class="btn-primary" onclick="sendToSheet()">送出到試算表</button>
+        </div>
 
         <table id="clientTable">
             <thead>
@@ -294,7 +293,7 @@
             </tr>
             </thead>
             <tbody>
-            <!-- 預設幾列 -->
+            <!-- JS 會自動加預設列 -->
             </tbody>
         </table>
 
@@ -315,8 +314,9 @@
 </div>
 
 <script>
-  // 這裡換成你自己的 Apps Script Web App URL：
+    // 這裡換成你自己的 Apps Script Web App URL（你已經貼上了）
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyO8Kh2oApdcY-zJM003RaH2IgpJfF-aoNxRwANm3roGMwFDZdJZIuO7U9WLzA9DUWYDA/exec';
+
     // 建立選單 HTML 片段
     function createSelect(options) {
         var html = '<select>';
@@ -435,7 +435,8 @@
             var law3   = tds[11].querySelector("select").value;
 
             // 若整列完全沒填，就跳過
-            var isEmptyRow = !name || name === "未命名客戶";
+            var isEmptyRow = (!tds[0].querySelector("input").value.trim()) &&
+                             (!tds[1].querySelector("input").value);
             if (isEmptyRow &&
                 coop==="" && pay==="" && repeat==="" && comm==="" &&
                 sustain==="" && refer==="" && hist==="" && law1==="" && law2==="" && law3==="") {
@@ -473,8 +474,40 @@
             }
 
             clientScores.push({ name: name, score: score });
+        });
 
-              function collectRows() {
+        // 儀表板更新
+        document.getElementById("totalClients").textContent = totalClients;
+
+        if (totalClients > 0) {
+            document.getElementById("avgScore").textContent =
+                (totalScoreSum / totalClients).toFixed(1);
+        } else {
+            document.getElementById("avgScore").textContent = "0";
+        }
+
+        // 依分數排序找 TOP 3
+        clientScores.sort(function (a, b) { return b.score - a.score; });
+        document.getElementById("top1").textContent = clientScores[0]?.name || "—";
+        document.getElementById("top2").textContent = clientScores[1]?.name || "—";
+        document.getElementById("top3").textContent = clientScores[2]?.name || "—";
+
+        // 長條圖寬度
+        var maxCount = Math.max(
+            gradeCounts["A+"], gradeCounts["A"], gradeCounts["B"],
+            gradeCounts["C"], gradeCounts["D"], gradeCounts["F"], 1
+        );
+
+        document.getElementById("barAp").style.width = (gradeCounts["A+"] / maxCount * 100) + "%";
+        document.getElementById("barA").style.width  = (gradeCounts["A"]  / maxCount * 100) + "%";
+        document.getElementById("barB").style.width  = (gradeCounts["B"]  / maxCount * 100) + "%";
+        document.getElementById("barC").style.width  = (gradeCounts["C"]  / maxCount * 100) + "%";
+        document.getElementById("barD").style.width  = (gradeCounts["D"]  / maxCount * 100) + "%";
+        document.getElementById("barF").style.width  = (gradeCounts["F"]  / maxCount * 100) + "%";
+    }
+
+    // 把表格內容整理成要送出的 rows 陣列
+    function collectRows() {
         var tbody = document.querySelector("#clientTable tbody");
         var rows = Array.from(tbody.querySelectorAll("tr"));
         var result = [];
@@ -534,8 +567,8 @@
             return;
         }
 
-        if (!SCRIPT_URL || SCRIPT_URL.indexOf('你的網址') !== -1) {
-            alert('https://script.google.com/macros/s/AKfycbyO8Kh2oApdcY-zJM003RaH2IgpJfF-aoNxRwANm3roGMwFDZdJZIuO7U9WLzA9DUWYDA/exec');
+        if (!SCRIPT_URL) {
+            alert('尚未設定 SCRIPT_URL。');
             return;
         }
 
@@ -557,42 +590,6 @@
         } catch (err) {
             alert('送出時發生錯誤：' + err.message);
         }
-    }
-
-    // 初次載入先算一次
-    window.addEventListener("load", calculateAll);
-</script>
-
-        });
-
-        // 儀表板更新
-        document.getElementById("totalClients").textContent = totalClients;
-
-        if (totalClients > 0) {
-            document.getElementById("avgScore").textContent =
-                (totalScoreSum / totalClients).toFixed(1);
-        } else {
-            document.getElementById("avgScore").textContent = "0";
-        }
-
-        // 依分數排序找 TOP 3
-        clientScores.sort(function (a, b) { return b.score - a.score; });
-        document.getElementById("top1").textContent = clientScores[0]?.name || "—";
-        document.getElementById("top2").textContent = clientScores[1]?.name || "—";
-        document.getElementById("top3").textContent = clientScores[2]?.name || "—";
-
-        // 長條圖寬度
-        var maxCount = Math.max(
-            gradeCounts["A+"], gradeCounts["A"], gradeCounts["B"],
-            gradeCounts["C"], gradeCounts["D"], gradeCounts["F"], 1
-        );
-
-        document.getElementById("barAp").style.width = (gradeCounts["A+"] / maxCount * 100) + "%";
-        document.getElementById("barA").style.width  = (gradeCounts["A"]  / maxCount * 100) + "%";
-        document.getElementById("barB").style.width  = (gradeCounts["B"]  / maxCount * 100) + "%";
-        document.getElementById("barC").style.width  = (gradeCounts["C"]  / maxCount * 100) + "%";
-        document.getElementById("barD").style.width  = (gradeCounts["D"]  / maxCount * 100) + "%";
-        document.getElementById("barF").style.width  = (gradeCounts["F"]  / maxCount * 100) + "%";
     }
 
     // 初次載入先算一次
