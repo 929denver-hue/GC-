@@ -557,40 +557,37 @@
         return result;
     }
 
-    async function sendToSheet() {
-        // 先重新計算一次，確保分數與等級最新
-        calculateAll();
+async function sendToSheet() {
+    // 先重新計算一次，確保分數與等級最新
+    calculateAll();
 
-        const rows = collectRows();
-        if (rows.length === 0) {
-            alert('目前沒有可送出的客戶資料。');
-            return;
-        }
-
-        if (!SCRIPT_URL) {
-            alert('尚未設定 SCRIPT_URL。');
-            return;
-        }
-
-        const payload = { rows: rows };
-
-        try {
-            const res = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await res.json();
-            if (data.ok) {
-                alert('已成功送出 ' + data.received + ' 筆資料到試算表！');
-            } else {
-                alert('送出失敗：' + (data.error || '未知錯誤'));
-            }
-        } catch (err) {
-            alert('送出時發生錯誤：' + err.message);
-        }
+    const rows = collectRows();
+    if (rows.length === 0) {
+        alert('目前沒有可送出的客戶資料。');
+        return;
     }
+
+    if (!SCRIPT_URL) {
+        alert('尚未設定 SCRIPT_URL。');
+        return;
+    }
+
+    const payload = { rows: rows };
+
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // 🔸關鍵：不做 CORS 檢查
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        // no-cors 模式不能讀回應內容，所以直接請你到試算表確認
+        alert('已送出，請到 Google 試算表確認是否有新增資料。');
+    } catch (err) {
+        alert('送出時發生錯誤：' + err.message);
+    }
+}
 
     // 初次載入先算一次
     window.addEventListener("load", calculateAll);
