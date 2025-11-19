@@ -298,7 +298,7 @@
         const gift  = r.giftCount   == null ? null : Number(r.giftCount   || 0);
         const dem   = r.demandCount == null ? null : Number(r.demandCount || 0);
 
-        tdMonth.textContent = r.month || '';
+        tdMonth.textContent = formatMonthLabel(r.month);
         tdTotal.textContent = total.toLocaleString();
         tdShare.textContent  = share == null  ? '' : share.toLocaleString();
         tdFlash.textContent  = flash == null  ? '' : flash.toLocaleString();
@@ -316,12 +316,12 @@
     }
 
     // 解析「月份」字串 → {year, month}
-    // 支援：2024/01、2024-1、2024年1月、2024.01 等，只要有「4位年份 + 1~2位月份」
-   function parseYearMonth(label) {
+// 把任何「月份字串」解析成年份＋月份
+function parseYearMonth(label) {
   const text = String(label || '').trim();
   if (!text) return { year: null, month: null };
 
-  // 1) 先抓常見格式：2020-10 / 2020/10 / 2020年10月
+  // 先抓最常見格式：2020-10 / 2020/10 / 2020年10月
   let m = text.match(/(20\d{2})[^\d]{1,3}(\d{1,2})/);
   if (m) {
     const year = parseInt(m[1], 10);
@@ -331,7 +331,7 @@
     }
   }
 
-  // 2) 如果是一整串日期字串，交給 Date 解析
+  // 如果是整串日期字串，交給 Date 處理
   const d = new Date(text);
   if (!isNaN(d.getTime())) {
     return { year: d.getFullYear(), month: d.getMonth() + 1 };
@@ -339,6 +339,17 @@
 
   return { year: null, month: null };
 }
+
+// 統一顯示成 "YYYY-MM"；如果解析失敗就原樣顯示
+function formatMonthLabel(raw) {
+  const ym = parseYearMonth(raw);
+  if (ym.year && ym.month) {
+    const mm = String(ym.month).padStart(2, '0');
+    return `${ym.year}-${mm}`;
+  }
+  return String(raw || '');
+}
+
 
     // 顯示範圍下拉選單：全部 / 最近12個月 / 各年度
     function buildRangeOptions(rows) {
@@ -416,9 +427,8 @@
 
     // 依目前範圍重畫 A & B 圖 + 更新 summary
     function redrawCharts() {
-      const filteredRows = getFilteredRowsForCharts();
-      const labels = filteredRows.map(r => r.month);
-      const totals = filteredRows.map(r => Number(r.totalCount || 0));
+      const labels = filteredRows.map(r => formatMonthLabel(r.month));
+
 
       renderTotalChart(labels, totals);
       renderMomChart(labels, totals);
