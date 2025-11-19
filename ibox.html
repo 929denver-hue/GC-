@@ -52,11 +52,11 @@
     .chart-box { flex:1; min-width:350px; height:260px; }
 
     /* MoM / YoY 顏色：成長紅、減少綠、持平灰 */
-    .growth { 
+    .growth {
       color: #d91e18;
       font-weight:600;
     }
-    .decline { 
+    .decline {
       color: #0f8b4b;
       font-weight:600;
     }
@@ -81,34 +81,29 @@ const API_URL = "https://script.google.com/macros/s/AKfycbx9eVJpOxflNXwrMmTFFQsR
 let globalRows = [];
 let totalChart, momChart, pieChart;
 
-/* 解析月份：永遠回傳 'YYYY-MM' */
-function parseMonth(text) {
-  if (!text) return "";
-  const s = String(text).trim();
+/* 解析「月份」為 'YYYY-MM'，先交給 Date 處理，防止 2025-00 這種情況 */
+function parseMonth(raw) {
+  if (raw == null) return "";
+  const s = String(raw).trim();
 
-  // 已經是 YYYY-MM 或 YYYY/MM
-  let m = s.match(/^(\d{4})[-/](\d{1,2})$/);
-  if (m) {
-    return `${m[1]}-${m[2].padStart(2,"0")}`;
-  }
-
-  // 例如 2024年11月
-  m = s.match(/(20\d{2})\D+(\d{1,2})\D*月?/);
-  if (m) {
-    return `${m[1]}-${m[2].padStart(2,"0")}`;
-  }
-
-  // 一般日期字串：Fri Nov 01 2024 ...
+  // 1) 優先用 Date 解析（處理 Fri Nov 01 2024 00:00:00 GMT+0800 這種）
   const d = new Date(s);
   if (!isNaN(d.getTime())) {
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    return `${y}-${m}`;
   }
 
-  // 最後保險：抓第一個年 + 後面一個數字當月
+  // 2) 已經是 YYYY-MM / YYYY/M / YYYY年MM月
+  let m = s.match(/^(\d{4})[-/](\d{1,2})$/);
+  if (m) return `${m[1]}-${m[2].padStart(2,"0")}`;
+
+  m = s.match(/(20\d{2})\D+(\d{1,2})\D*月?/);
+  if (m) return `${m[1]}-${m[2].padStart(2,"0")}`;
+
+  // 3) 最後保險：抓第一個年份與一個數字
   m = s.match(/(20\d{2}).*?(\d{1,2})/);
-  if (m) {
-    return `${m[1]}-${m[2].padStart(2,"0")}`;
-  }
+  if (m) return `${m[1]}-${m[2].padStart(2,"0")}`;
 
   return s;
 }
@@ -171,21 +166,21 @@ function renderTable(rows) {
   tbody.innerHTML = "";
 
   rows.forEach((r, idx) => {
-    const monthKey = parseMonth(r.month);   // '2025-03'
+    const monthKey = parseMonth(r.month);            // '2025-03'
     const displayMonth = `${monthKey.slice(0,4)} / ${monthKey.slice(5,7)}`; // '2025 / 03'
     const total = Number(r.totalCount || 0);
 
-    // MoM：與上一列比較
+    // MoM：與上一列比較（同篩選範圍內）
     let mom = null;
     if (idx > 0) {
       mom = total - Number(rows[idx - 1].totalCount || 0);
     }
 
-    // YoY：找去年同月
+    // YoY：從「所有歷史 globalRows」中找去年同月
     let yoy = null;
     const year  = parseInt(monthKey.slice(0,4), 10);
     const month = monthKey.slice(5,7);
-    const lastYearRow = rows.find(row => parseMonth(row.month) === `${year-1}-${month}`);
+    const lastYearRow = globalRows.find(row => parseMonth(row.month) === `${year-1}-${month}`);
     if (lastYearRow) {
       yoy = total - Number(lastYearRow.totalCount || 0);
     }
