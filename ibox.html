@@ -292,7 +292,7 @@ window.onload = loadData;
 <!-- ====================== UI ====================== -->
 
 <div class="panel">
-  <h2>📦 寄件統計表</h2>
+  <h2>📦i郵箱寄件統計表</h2>
   <div style="margin-bottom:10px;">
     顯示方式：
     <select id="tableFilter"></select>
@@ -307,8 +307,8 @@ window.onload = loadData;
         <th>閃送區</th>
         <th>禮物池</th>
         <th>需求池</th>
-        <th>MoM</th>
-        <th>YoY</th>
+        <th>與上個月比較</th>
+        <th>與去年同期比較</th>
       </tr>
     </thead>
     <tbody id="dataBody"></tbody>
@@ -321,7 +321,7 @@ window.onload = loadData;
     <canvas id="totalChart"></canvas>
   </div>
   <div class="panel chart-box">
-    <h3>📊 月增減變化（成長紅、減少綠）</h3>
+    <h3>📊 寄件數月度變化</h3>
     <canvas id="momChart"></canvas>
   </div>
 </div>
