@@ -317,18 +317,28 @@
 
     // 解析「月份」字串 → {year, month}
     // 支援：2024/01、2024-1、2024年1月、2024.01 等，只要有「4位年份 + 1~2位月份」
-    function parseYearMonth(label) {
-      const text = String(label || '');
-      const match = text.match(/(20\d{2})\D{0,2}(\d{1,2})/);
-      if (match) {
-        const year = parseInt(match[1], 10);
-        const month = parseInt(match[2], 10);
-        if (!isNaN(year) && !isNaN(month)) {
-          return { year, month };
-        }
-      }
-      return { year: null, month: null };
+   function parseYearMonth(label) {
+  const text = String(label || '').trim();
+  if (!text) return { year: null, month: null };
+
+  // 1) 先抓常見格式：2020-10 / 2020/10 / 2020年10月
+  let m = text.match(/(20\d{2})[^\d]{1,3}(\d{1,2})/);
+  if (m) {
+    const year = parseInt(m[1], 10);
+    const month = parseInt(m[2], 10);
+    if (!isNaN(year) && !isNaN(month) && month >= 1 && month <= 12) {
+      return { year, month };
     }
+  }
+
+  // 2) 如果是一整串日期字串，交給 Date 解析
+  const d = new Date(text);
+  if (!isNaN(d.getTime())) {
+    return { year: d.getFullYear(), month: d.getMonth() + 1 };
+  }
+
+  return { year: null, month: null };
+}
 
     // 顯示範圍下拉選單：全部 / 最近12個月 / 各年度
     function buildRangeOptions(rows) {
