@@ -52,17 +52,9 @@
     .chart-box { flex:1; min-width:350px; height:260px; }
 
     /* MoM / YoY 顏色：成長紅、減少綠、持平灰 */
-    .growth {
-      color: #d91e18;
-      font-weight:600;
-    }
-    .decline {
-      color: #0f8b4b;
-      font-weight:600;
-    }
-    .neutral {
-      color:#7c7c7c;
-    }
+    .growth { color: #d91e18; font-weight:600; }
+    .decline { color: #0f8b4b; font-weight:600; }
+    .neutral { color:#7c7c7c; }
 
     /* RWD */
     @media(max-width:768px){
@@ -128,6 +120,7 @@ async function loadData() {
 
     drawCharts();
     drawPie();
+    updateMonthlyReport();   // ⬅️ 當月報告
   } catch (e) {
     console.error(e);
   }
@@ -285,6 +278,100 @@ function drawPie() {
   });
 }
 
+/* ========== 當月報告 ========== */
+function updateMonthlyReport() {
+  const box = document.getElementById("monthlyReportText");
+  if (!box) return;
+
+  if (!globalRows.length) {
+    box.textContent = "目前尚未有任何月份資料。";
+    return;
+  }
+
+  const latest = globalRows[globalRows.length - 1];
+  const latestKey = parseMonth(latest.month);
+  const monthLabel = `${latestKey.slice(0,4)} / ${latestKey.slice(5,7)}`;
+  const total = Number(latest.totalCount || 0);
+
+  // MoM
+  let momSentence = "尚無上個月資料可比較。";
+  if (globalRows.length >= 2) {
+    const prev = globalRows[globalRows.length - 2];
+    const prevTotal = Number(prev.totalCount || 0);
+    const diff = total - prevTotal;
+    const rate = prevTotal > 0 ? (diff / prevTotal) * 100 : 0;
+    const word = diff > 0 ? "成長" : (diff < 0 ? "減少" : "持平");
+    if (diff === 0 || prevTotal === 0) {
+      momSentence = `相較上月，寄件量${word}，皆為 ${total.toLocaleString()} 件。`;
+    } else {
+      momSentence =
+        `相較上月，寄件量${word} ${Math.abs(diff).toLocaleString()} 件（約 ${rate.toFixed(1)}%）。`;
+    }
+  }
+
+  // YoY
+  let yoySentence = "";
+  const year = parseInt(latestKey.slice(0,4), 10);
+  const month = latestKey.slice(5,7);
+  const lastYearRow = globalRows.find(r => parseMonth(r.month) === `${year-1}-${month}`);
+  if (lastYearRow) {
+    const lastYearTotal = Number(lastYearRow.totalCount || 0);
+    const diff = total - lastYearTotal;
+    const rate = lastYearTotal > 0 ? (diff / lastYearTotal) * 100 : 0;
+    const word = diff > 0 ? "成長" : (diff < 0 ? "減少" : "持平");
+    if (diff === 0 || lastYearTotal === 0) {
+      yoySentence =
+        `與去年同期相比，寄件量${word}，皆為 ${total.toLocaleString()} 件。`;
+    } else {
+      yoySentence =
+        `與去年同期相比，寄件量${word} ${Math.abs(diff).toLocaleString()} 件（約 ${rate.toFixed(1)}%）。`;
+    }
+  } else {
+    yoySentence = "目前尚無去年同期資料可供比較。";
+  }
+
+  // 通路占比
+  const share = Number(latest.shareCount || 0);
+  const flash = Number(latest.flashCount || 0);
+  const gift  = Number(latest.giftCount  || 0);
+  const dem   = Number(latest.demandCount|| 0);
+  const channelTotal = share + flash + gift + dem;
+
+  let channelSentence = "本月尚未有分享通 / 閃送區 / 禮物池 / 需求池的細項資料。";
+  if (channelTotal > 0) {
+    const pct = v => (v / channelTotal * 100).toFixed(1) + "%";
+    const parts = [];
+    if (share > 0) parts.push(`分享通約 ${pct(share)}`);
+    if (flash > 0) parts.push(`閃送區約 ${pct(flash)}`);
+    if (gift  > 0) parts.push(`禮物池約 ${pct(gift)}`);
+    if (dem   > 0) parts.push(`需求池約 ${pct(dem)}`);
+    channelSentence = "各通路占比約為：" + parts.join("、") + "。";
+  }
+
+  // 最近三個月趨勢
+  let trendSentence = "";
+  if (globalRows.length >= 3) {
+    const a = Number(globalRows[globalRows.length-3].totalCount || 0);
+    const b = Number(globalRows[globalRows.length-2].totalCount || 0);
+    const c = total;
+    if (a <= b && b <= c && !(a === b && b === c)) {
+      trendSentence = "最近三個月呈現穩定成長的趨勢，適合持續放大有效的推廣做法。";
+    } else if (a >= b && b >= c && !(a === b && b === c)) {
+      trendSentence = "最近三個月寄件量連續下降，建議檢視行銷節奏與使用者引導流程。";
+    } else {
+      trendSentence = "最近三個月變化較為波動，可能與活動檔期或外部事件有關，建議搭配活動日曆一起觀察。";
+    }
+  }
+
+  box.innerHTML =
+    `📦 <b>${monthLabel} GC IBOX 當月報告</b><br>` +
+    `本月寄件量：<b>${total.toLocaleString()} 件</b>。<br>` +
+    `・${momSentence}<br>` +
+    `・${yoySentence}<br>` +
+    `・${channelSentence}` +
+    (trendSentence ? `<br>・${trendSentence}` : "");
+}
+
 window.onload = loadData;
 </script>
 
@@ -292,7 +379,7 @@ window.onload = loadData;
 <!-- ====================== UI ====================== -->
 
 <div class="panel">
-  <h2>📦i郵箱寄件統計表</h2>
+  <h2>📦 寄件統計表</h2>
   <div style="margin-bottom:10px;">
     顯示方式：
     <select id="tableFilter"></select>
@@ -307,8 +394,8 @@ window.onload = loadData;
         <th>閃送區</th>
         <th>禮物池</th>
         <th>需求池</th>
-        <th>與上個月比較</th>
-        <th>與去年同期比較</th>
+        <th>MoM</th>
+        <th>YoY</th>
       </tr>
     </thead>
     <tbody id="dataBody"></tbody>
@@ -321,9 +408,15 @@ window.onload = loadData;
     <canvas id="totalChart"></canvas>
   </div>
   <div class="panel chart-box">
-    <h3>📊 寄件數月度變化</h3>
+    <h3>📊 月增減變化（成長紅、減少綠）</h3>
     <canvas id="momChart"></canvas>
   </div>
+</div>
+
+<!-- 📝 當月報告：放在圖表下面 -->
+<div class="panel" id="monthlyReportPanel">
+  <h3>📝 當月報告</h3>
+  <div id="monthlyReportText" style="line-height:1.7; font-size:14px;"></div>
 </div>
 
 <div class="panel chart-box">
