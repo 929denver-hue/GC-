@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>GC IBOX 數據儀表板</title>
+  <title>GC贈物網 IBOX數據儀表板</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -345,26 +345,12 @@ function updateMonthlyReport() {
     if (flash > 0) parts.push(`閃送區約 ${pct(flash)}`);
     if (gift  > 0) parts.push(`禮物池約 ${pct(gift)}`);
     if (dem   > 0) parts.push(`需求池約 ${pct(dem)}`);
-    channelSentence = "各通路占比約為：" + parts.join("、") + "。";
+    channelSentence = "寄件方式佔比為：" + parts.join("、") + "。";
   }
 
-  // 最近三個月趨勢
-  let trendSentence = "";
-  if (globalRows.length >= 3) {
-    const a = Number(globalRows[globalRows.length-3].totalCount || 0);
-    const b = Number(globalRows[globalRows.length-2].totalCount || 0);
-    const c = total;
-    if (a <= b && b <= c && !(a === b && b === c)) {
-      trendSentence = "最近三個月呈現穩定成長的趨勢，適合持續放大有效的推廣做法。";
-    } else if (a >= b && b >= c && !(a === b && b === c)) {
-      trendSentence = "最近三個月寄件量連續下降，建議檢視行銷節奏與使用者引導流程。";
-    } else {
-      trendSentence = "最近三個月變化較為波動，可能與活動檔期或外部事件有關，建議搭配活動日曆一起觀察。";
-    }
-  }
 
   box.innerHTML =
-    `📦 <b>${monthLabel} GC IBOX 當月報告</b><br>` +
+    `📦 <b>${monthLabel} GC贈物網 IBOX 當月報告</b><br>` +
     `本月寄件量：<b>${total.toLocaleString()} 件</b>。<br>` +
     `・${momSentence}<br>` +
     `・${yoySentence}<br>` +
@@ -394,8 +380,8 @@ window.onload = loadData;
         <th>閃送區</th>
         <th>禮物池</th>
         <th>需求池</th>
-        <th>MoM</th>
-        <th>YoY</th>
+        <th>與上個月比較</th>
+        <th>與去年同期比較</th>
       </tr>
     </thead>
     <tbody id="dataBody"></tbody>
@@ -408,7 +394,7 @@ window.onload = loadData;
     <canvas id="totalChart"></canvas>
   </div>
   <div class="panel chart-box">
-    <h3>📊 月增減變化（成長紅、減少綠）</h3>
+    <h3>📊 寄件數月度變化</h3>
     <canvas id="momChart"></canvas>
   </div>
 </div>
