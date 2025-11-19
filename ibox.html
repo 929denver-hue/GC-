@@ -1,322 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>GC IBOX 數據月報</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: "Helvetica", "Microsoft JhengHei"; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+    th { background: #f4f4f4; }
+    h2 { margin-bottom: 6px; }
+    .flex { display:flex; gap:20px; margin-top:20px; }
+    .panel { border:1px solid #ddd; padding:10px; border-radius:6px; }
+  </style>
+</head>
+
+<body>
+
 <script>
-// ★★★ 把這裡換成你「目前可正常回傳 JSON」的 exec URL ★★★
+/* ---- 只改這一段 URL ---- */
 const API_URL = "https://script.google.com/macros/s/AKfycbx9eVJpOxflNXwrMmTFFQsR74f74Vr9RYlOXi5NU7DKDVQE_05VDTraZ6TRtl-t8A6nXg/exec";
 
-let totalChart = null;
-let momChart = null;
-let channelPieChart = null;
 let globalRows = [];
+let totalChart, momChart, channelPieChart;
 
-/* 解析月份字串 -> { year, month } */
-function parseYearMonth(label) {
-  const text = String(label || "").trim();
-  if (!text) return { year: null, month: null };
-
-  // 2020-10 / 2020/10 / 2020年10月
-  let m = text.match(/(20\d{2})[^\d]{0,2}(\d{1,2})/);
-  if (m) {
-    const y = parseInt(m[1], 10);
-    const mm = parseInt(m[2], 10);
-    if (!isNaN(y) && !isNaN(mm) && mm >= 1 && mm <= 12) {
-      return { year: y, month: mm };
-    }
-  }
-
-  // Date 字串
-  const d = new Date(text);
-  if (!isNaN(d.getTime())) {
-    return { year: d.getFullYear(), month: d.getMonth() + 1 };
-  }
-
-  return { year: null, month: null };
+/* 📌 工具：解析月份 */
+function parseMonth(text){
+  if(!text) return null;
+  const m=text.match(/(20\d{2}).*?(\d{1,2})/);
+  return m?`${m[1]}-${String(m[2]).padStart(2,"0")}`:String(text);
 }
 
-/* 統一顯示為 YYYY-MM */
-function formatMonthLabel(raw) {
-  const ym = parseYearMonth(raw);
-  if (ym.year && ym.month) {
-    const mm = String(ym.month).padStart(2, "0");
-    return `${ym.year}-${mm}`;
-  }
-  return String(raw || "");
-}
-
-/* 讀取資料 */
-async function loadData() {
-  try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || "API 回傳錯誤");
-
-    globalRows = data.rows || [];
-
-    renderTable(globalRows);
-    buildRangeOptions(globalRows);
-    buildYearMonthOptions(globalRows);
-    redrawCharts();
-    renderChannelPieBySelection();
-    updateInsight(globalRows);
-  } catch (e) {
-    console.error("載入資料錯誤：", e);
+/* 📌 主流程 */
+async function loadData(){
+  try{
+    const res=await fetch(API_URL);
+    const json=await res.json();
+    globalRows=json.rows||[];
+    renderTable();
+    buildFilters();
+    drawCharts();
+    drawPie();
+    writeInsight();
+  }catch(e){
+    console.error(e);
   }
 }
 
-/* ========= 左邊表格 ========= */
-function renderTable(rows) {
-  const tbody = document.getElementById("dataBody");
-  if (!tbody) {
-    // 如果畫面上沒有這個表格，就先跳過，不要報錯
-    return;
+/* 📌 表格 */
+function renderTable(){
+  const tbody=document.getElementById("dataBody");
+  tbody.innerHTML="";
+
+  globalRows.forEach(r=>{
+    tbody.innerHTML+=`
+      <tr>
+        <td>${parseMonth(r.month)}</td>
+        <td>${r.totalCount ?? ""}</td>
+        <td>${r.shareCount ?? ""}</td>
+        <td>${r.flashCount ?? ""}</td>
+        <td>${r.giftCount ?? ""}</td>
+        <td>${r.demandCount ?? ""}</td>
+      </tr>
+    `;
+  });
+}
+
+/* 📌 篩選 */
+function buildFilters(){
+  const sel=document.getElementById("rangeSelect");
+  sel.innerHTML=`
+    <option value="all">全部</option>
+    <option value="last12">最近12個月</option>
+  `;
+}
+
+/* 📌 折線 & 差異圖 */
+function drawCharts(){
+  const ctx1=document.getElementById("totalChart");
+  const ctx2=document.getElementById("momChart");
+
+  const labels=globalRows.map(r=>parseMonth(r.month));
+  const totals=globalRows.map(r=>Number(r.totalCount||0));
+  const diff=totals.map((v,i)=>i===0?0:v-totals[i-1]);
+
+  if(totalChart) totalChart.destroy();
+  totalChart=new Chart(ctx1,{
+    type:"line",
+    data:{labels,datasets:[{label:"寄件量",data:totals,borderWidth:2,tension:0.2}]}
+  });
+
+  if(momChart) momChart.destroy();
+  momChart=new Chart(ctx2,{
+    type:"bar",
+    data:{labels,datasets:[{label:"與上月增減",data:diff}]}
+  });
+}
+
+/* 📌 圓餅圖 */
+function drawPie(){
+  const row=globalRows[globalRows.length-1];
+  const labels=["分享通","閃送區","禮物池","需求池"];
+  const values=[row.shareCount,row.flashCount,row.giftCount,row.demandCount];
+
+  if(channelPieChart) channelPieChart.destroy();
+  channelPieChart=new Chart(document.getElementById("pieChart"),{
+    type:"pie",
+    data:{labels,datasets:[{data:values}]}
+  });
+}
+
+/* 📌 Insight */
+function writeInsight(){
+  const el=document.getElementById("insight");
+  const row=globalRows.at(-1);
+  const prev=globalRows.length>1?globalRows.at(-2):null;
+
+  let txt=`📌 最新月份：${parseMonth(row.month)}<br>總寄件量：<b>${row.totalCount}</b> 件`;
+  if(prev){
+    const diff=row.totalCount-prev.totalCount;
+    txt+=`<br>與上月相比：<b>${diff>0?`增加 ${diff}`:diff<0?`減少 ${Math.abs(diff)}`:"持平"}</b>`;
   }
-  tbody.innerHTML = "";
-
-  if (!rows || rows.length === 0) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.colSpan = 6;
-    td.textContent = "目前尚無資料。";
-    tr.appendChild(td);
-    tbody.appendChild(tr);
-    return;
-  }
-
-  rows.forEach(r => {
-    const tr = document.createElement("tr");
-
-    const fields = [
-      formatMonthLabel(r.month),
-      Number(r.totalCount || 0).toLocaleString(),
-      r.shareCount  == null ? "" : Number(r.shareCount  || 0).toLocaleString(),
-      r.flashCount  == null ? "" : Number(r.flashCount  || 0).toLocaleString(),
-      r.giftCount   == null ? "" : Number(r.giftCount   || 0).toLocaleString(),
-      r.demandCount == null ? "" : Number(r.demandCount || 0).toLocaleString()
-    ];
-
-    fields.forEach(text => {
-      const td = document.createElement("td");
-      td.textContent = text;
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  });
+  el.innerHTML=txt;
 }
 
-/* ========= 顯示範圍下拉 ========= */
-function buildRangeOptions(rows) {
-  const sel = document.getElementById("rangeSelect");
-  if (!sel) return;
-
-  sel.innerHTML = "";
-  const optAll = document.createElement("option");
-  optAll.value = "all";
-  optAll.textContent = "全部";
-  sel.appendChild(optAll);
-
-  const optLast12 = document.createElement("option");
-  optLast12.value = "last12";
-  optLast12.textContent = "最近 12 個月";
-  sel.appendChild(optLast12);
-
-  const yearSet = new Set();
-  rows.forEach(r => {
-    const ym = parseYearMonth(r.month);
-    if (ym.year) yearSet.add(ym.year);
-  });
-
-  Array.from(yearSet).sort((a, b) => a - b).forEach(y => {
-    const opt = document.createElement("option");
-    opt.value = "year-" + y;
-    opt.textContent = y + " 年";
-    sel.appendChild(opt);
-  });
-
-  sel.value = rows.length > 12 ? "last12" : "all";
-  sel.onchange = redrawCharts;
-}
-
-function getFilteredRows() {
-  const sel = document.getElementById("rangeSelect");
-  if (!sel || !globalRows) return globalRows;
-
-  const v = sel.value || "all";
-  const rows = globalRows;
-
-  if (v === "all") return rows;
-  if (v === "last12") return rows.slice(-12);
-  if (v.startsWith("year-")) {
-    const y = parseInt(v.slice(5), 10);
-    return rows.filter(r => parseYearMonth(r.month).year === y);
-  }
-  return rows;
-}
-
-/* ========= 折線圖 & 月增減圖 ========= */
-function redrawCharts() {
-  const rows = getFilteredRows();
-  const labels = rows.map(r => formatMonthLabel(r.month));
-  const totals = rows.map(r => Number(r.totalCount || 0));
-
-  renderTotalChart(labels, totals);
-  renderMomChart(labels, totals);
-}
-
-function renderTotalChart(labels, totals) {
-  const canvas = document.getElementById("totalChart");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  if (totalChart) totalChart.destroy();
-
-  totalChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels,
-      datasets: [{
-        label: "總寄件量",
-        data: totals,
-        borderWidth: 2,
-        tension: 0.25,
-        pointRadius: 3
-      }]
-    }
-  });
-}
-
-function renderMomChart(labels, totals) {
-  const canvas = document.getElementById("momChart");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  if (momChart) momChart.destroy();
-
-  const diff = totals.map((v, i) => i === 0 ? 0 : v - (totals[i - 1] || 0));
-
-  momChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        label: "與上月差異",
-        data: diff
-      }]
-    }
-  });
-}
-
-/* ========= 圓餅圖：分享通 / 閃送區 / 禮物池 / 需求池 ========= */
-function buildYearMonthOptions(rows) {
-  const yearSel = document.getElementById("yearSelect");
-  const monthSel = document.getElementById("monthSelect");
-  if (!yearSel || !monthSel) return;
-
-  yearSel.innerHTML = "";
-  monthSel.innerHTML = "";
-
-  const parsed = rows.map(r => ({ ...parseYearMonth(r.month), raw: r }))
-                     .filter(x => x.year && x.month);
-
-  const yearSet = new Set(parsed.map(x => x.year));
-  Array.from(yearSet).sort((a, b) => a - b).forEach(y => {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y + " 年";
-    yearSel.appendChild(opt);
-  });
-
-  yearSel.onchange = () => {
-    fillMonths(parsed);
-    renderChannelPieBySelection();
-  };
-  monthSel.onchange = renderChannelPieBySelection;
-
-  // 預設選最新一筆資料的年月
-  if (parsed.length > 0) {
-    const last = parsed[parsed.length - 1];
-    yearSel.value = last.year;
-    fillMonths(parsed);
-    monthSel.value = String(last.month);
-  }
-}
-
-function fillMonths(parsed) {
-  const yearSel = document.getElementById("yearSelect");
-  const monthSel = document.getElementById("monthSelect");
-  if (!yearSel || !monthSel) return;
-
-  const year = parseInt(yearSel.value, 10);
-  monthSel.innerHTML = "";
-
-  const months = new Set();
-  parsed.forEach(x => {
-    if (x.year === year) months.add(x.month);
-  });
-
-  Array.from(months).sort((a, b) => a - b).forEach(m => {
-    const opt = document.createElement("option");
-    opt.value = m;
-    opt.textContent = m + " 月";
-    monthSel.appendChild(opt);
-  });
-}
-
-function renderChannelPieBySelection() {
-  const yearSel = document.getElementById("yearSelect");
-  const monthSel = document.getElementById("monthSelect");
-  const canvas = document.getElementById("channelPieChart");
-  if (!yearSel || !monthSel || !canvas) return;
-
-  const year = parseInt(yearSel.value, 10);
-  const month = parseInt(monthSel.value, 10);
-
-  const row = globalRows.find(r => {
-    const ym = parseYearMonth(r.month);
-    return ym.year === year && ym.month === month;
-  });
-  if (!row) return;
-
-  const items = [
-    ["分享通", Number(row.shareCount  || 0)],
-    ["閃送區", Number(row.flashCount  || 0)],
-    ["禮物池", Number(row.giftCount   || 0)],
-    ["需求池", Number(row.demandCount || 0)]
-  ].filter(([_, v]) => v > 0);
-
-  if (items.length === 0) return;
-
-  const labels = items.map(i => i[0]);
-  const values = items.map(i => i[1]);
-
-  const ctx = canvas.getContext("2d");
-  if (channelPieChart) channelPieChart.destroy();
-
-  channelPieChart = new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels,
-      datasets: [{ data: values }]
-    }
-  });
-}
-
-/* ========= 簡易 Insight（可選，有元素就顯示） ========= */
-function updateInsight(rows) {
-  const el = document.getElementById("insightText");
-  if (!el || !rows || rows.length === 0) return;
-
-  const latest = rows[rows.length - 1];
-  const prev   = rows.length > 1 ? rows[rows.length - 2] : null;
-
-  let html = `最新月份：<b>${formatMonthLabel(latest.month)}</b>，總寄件量 <b>${Number(latest.totalCount || 0).toLocaleString()}</b> 件。`;
-
-  if (prev) {
-    const diff = Number(latest.totalCount || 0) - Number(prev.totalCount || 0);
-    const sign = diff > 0 ? "增加" : (diff < 0 ? "減少" : "持平");
-    html += `<br>相較上月（${formatMonthLabel(prev.month)}）${sign} <b>${Math.abs(diff).toLocaleString()}</b> 件。`;
-  }
-
-  el.innerHTML = html;
-}
-
-/* ========= 頁面載入就開始跑 ========= */
-window.addEventListener("load", loadData);
+window.onload=loadData;
 </script>
+
+
+<!-- 📦 表格 -->
+<h2>📦 寄件統計表</h2>
+<table>
+<thead>
+<tr>
+<th>月份</th><th>寄件總量</th><th>分享通</th><th>閃送區</th><th>禮物池</th><th>需求池</th>
+</tr>
+</thead>
+<tbody id="dataBody"></tbody>
+</table>
+
+<br>
+
+<!-- 📅 篩選 -->
+顯示範圍： <select id="rangeSelect"></select>
+
+<!-- 📈 圖表 -->
+<div class="flex">
+  <div class="panel" style="flex:1;">
+    <h3>趨勢線</h3>
+    <canvas id="totalChart"></canvas>
+  </div>
+  <div class="panel" style="flex:1;">
+    <h3>月增減量</h3>
+    <canvas id="momChart"></canvas>
+  </div>
+</div>
+
+<!-- 🥧 圓餅 -->
+<div class="panel" style="width:300px;margin-top:20px;">
+<h3>分布比例</h3>
+<canvas id="pieChart"></canvas>
+</div>
+
+<!-- 🧠 Insight -->
+<div id="insight" class="panel" style="margin-top:20px;background:#fef9c3;"></div>
+
+</body>
+</html>
