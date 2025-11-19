@@ -553,19 +553,6 @@
     a.click();
   }
 
- window.addEventListener('load', () => {
-  const refreshBtn = document.getElementById('refreshBtn');
-  if (refreshBtn) {
-    refreshBtn.addEventListener('click', loadData);
-  }
-
-  const downloadBtn = document.getElementById('downloadMainBtn');
-  if (downloadBtn) {
-    downloadBtn.addEventListener('click', downloadMainChart);
-  }
-
-  // 頁面載完就自動載入資料
-  loadData();
-});
+window.addEventListener('load', loadData);
 
 </script>
