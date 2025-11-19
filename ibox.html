@@ -1,169 +1,249 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <title>GC IBOX 數據月報</title>
+  <meta charset="UTF-8">
+  <title>GC IBOX 數據儀表板</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
-    body { font-family: "Helvetica", "Microsoft JhengHei"; margin: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
-    th { background: #f4f4f4; }
-    h2 { margin-bottom: 6px; }
-    .flex { display:flex; gap:20px; margin-top:20px; }
-    .panel { border:1px solid #ddd; padding:10px; border-radius:6px; }
+    :root {
+      --gc-green: #2DB57D;
+      --gc-blue: #59C3FF;
+      --gc-yellow: #FFD268;
+      --gc-red: #FF7A7A;
+      --text-dark: #1a1a1a;
+      --text-light: #777;
+    }
+    body {
+      font-family: "Inter","Microsoft JhengHei",Helvetica;
+      background:#f7f7f7;
+      max-width:1100px;
+      margin:30px auto;
+      padding:20px;
+      color:var(--text-dark);
+    }
+    h2 { margin-bottom:8px; }
+    .panel {
+      background:white;
+      padding:16px;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom:20px;
+    }
+    table {
+      width:100%; border-collapse:collapse; background:white;
+      border-radius:8px; overflow:hidden;
+      font-size:14px;
+    }
+    th {
+      background:var(--gc-green);
+      color:white;
+      padding:10px;
+    }
+    td {
+      text-align:center;
+      padding:8px;
+      border-bottom:1px solid #eee;
+    }
+    tbody tr:hover { background:#f1fff7; transition:0.3s; }
+
+    .flex { display:flex; gap:22px; flex-wrap:wrap; }
+    .chart-box { flex:1; min-width:350px; height:260px; }
+
+    /* 顏色 */
+    .up { color:#0f8b4b; font-weight:600; }
+    .down { color:#d63939; font-weight:600; }
+    .neutral { color:#777; }
+
+    /* RWD */
+    @media(max-width:768px){
+      body{padding:10px;}
+      .chart-box{min-width:100%;}
+    }
   </style>
 </head>
 
 <body>
 
 <script>
-/* ---- 只改這一段 URL ---- */
+/* 🔧  修改這裡 → 你的 Web App URL  */
 const API_URL = "https://script.google.com/macros/s/AKfycbx9eVJpOxflNXwrMmTFFQsR74f74Vr9RYlOXi5NU7DKDVQE_05VDTraZ6TRtl-t8A6nXg/exec";
 
-let globalRows = [];
-let totalChart, momChart, channelPieChart;
+let globalRows=[];
+let totalChart, momChart, pieChart;
 
-/* 📌 工具：解析月份 */
+/* 📌 格式：2025-02 */
 function parseMonth(text){
-  if(!text) return null;
-  const m=text.match(/(20\d{2}).*?(\d{1,2})/);
-  return m?`${m[1]}-${String(m[2]).padStart(2,"0")}`:String(text);
+  const m=text.match(/(20\\d{2}).*?(\\d{1,2})/);
+  return m?`${m[1]}-${String(m[2]).padStart(2,"0")}`:text;
 }
 
-/* 📌 主流程 */
+/* 📌 顏色 class */
+function formatDiff(value){
+  if(value===null) return "neutral";
+  if(value>0) return "up";
+  if(value<0) return "down";
+  return "neutral";
+}
+
+/* 📌 主要資料讀取 */
 async function loadData(){
   try{
     const res=await fetch(API_URL);
     const json=await res.json();
     globalRows=json.rows||[];
-    renderTable();
-    buildFilters();
+
+    buildTableFilter();
+    applyFilterToTable();
+
     drawCharts();
     drawPie();
-    writeInsight();
   }catch(e){
     console.error(e);
   }
 }
 
-/* 📌 表格 */
-function renderTable(){
+/* ================= 表格區 ================= */
+function buildTableFilter(){
+  const sel=document.getElementById("tableFilter");
+  sel.innerHTML=`<option value="all">全部年份</option><option value="last12">最近12個月</option>`;
+
+  const years=[...new Set(globalRows.map(r=>parseMonth(r.month).slice(0,4)))].sort();
+  years.forEach(y=> sel.innerHTML+=`<option value="${y}">${y} 年</option>`);
+
+  sel.value = globalRows.length>12?"last12":"all";
+  sel.onchange = applyFilterToTable;
+}
+
+function applyFilterToTable(){
+  const mode=document.getElementById("tableFilter").value;
+  let rows=[...globalRows];
+
+  if(mode==="last12") rows=rows.slice(-12);
+  else if(mode!=="all") rows=rows.filter(r=>parseMonth(r.month).startsWith(mode));
+
+  renderTable(rows);
+}
+
+/* 📌 渲染表格 + MOM/YOY */
+function renderTable(rows){
   const tbody=document.getElementById("dataBody");
   tbody.innerHTML="";
 
-  globalRows.forEach(r=>{
+  rows.forEach((r,idx)=>{
+    const current=parseMonth(r.month);
+    const total=Number(r.totalCount||0);
+
+    /* MoM */
+    let mom=null;
+    if(idx>0) mom=total - Number(rows[idx-1].totalCount||0);
+
+    /* YoY */
+    let yoy=null;
+    const year=current.slice(0,4);
+    const month=current.slice(5,7);
+    const lastYear=rows.find(row=>parseMonth(row.month)===`${year-1}-${month}`);
+    if(lastYear) yoy=total - Number(lastYear.totalCount||0);
+
     tbody.innerHTML+=`
       <tr>
-        <td>${parseMonth(r.month)}</td>
-        <td>${r.totalCount ?? ""}</td>
+        <td>${current}</td>
+        <td>${total.toLocaleString()}</td>
         <td>${r.shareCount ?? ""}</td>
         <td>${r.flashCount ?? ""}</td>
         <td>${r.giftCount ?? ""}</td>
         <td>${r.demandCount ?? ""}</td>
+
+        <td class="${formatDiff(mom)}">${mom===null?'-':(mom>0?'+':'')+mom.toLocaleString()}</td>
+        <td class="${formatDiff(yoy)}">${yoy===null?'-':(yoy>0?'+':'')+yoy.toLocaleString()}</td>
       </tr>
     `;
   });
 }
 
-/* 📌 篩選 */
-function buildFilters(){
-  const sel=document.getElementById("rangeSelect");
-  sel.innerHTML=`
-    <option value="all">全部</option>
-    <option value="last12">最近12個月</option>
-  `;
-}
-
-/* 📌 折線 & 差異圖 */
+/* ================== 圖表 ================== */
 function drawCharts(){
-  const ctx1=document.getElementById("totalChart");
-  const ctx2=document.getElementById("momChart");
-
   const labels=globalRows.map(r=>parseMonth(r.month));
   const totals=globalRows.map(r=>Number(r.totalCount||0));
-  const diff=totals.map((v,i)=>i===0?0:v-totals[i-1]);
+  const diff=totals.map((v,i)=>i===0?0:(v-totals[i-1]));
 
+  /* 折線 */
   if(totalChart) totalChart.destroy();
-  totalChart=new Chart(ctx1,{
+  totalChart=new Chart(document.getElementById("totalChart"),{
     type:"line",
-    data:{labels,datasets:[{label:"寄件量",data:totals,borderWidth:2,tension:0.2}]}
+    data:{ labels,
+      datasets:[{
+        label:"寄件量",
+        data:totals,
+        borderColor:"#2DB57D",
+        backgroundColor:"rgba(45,181,125,.2)",
+        fill:true,
+        tension:.35 }]
+    }
   });
 
+  /* 月增減 */
   if(momChart) momChart.destroy();
-  momChart=new Chart(ctx2,{
+  momChart=new Chart(document.getElementById("momChart"),{
     type:"bar",
-    data:{labels,datasets:[{label:"與上月增減",data:diff}]}
+    data:{
+      labels,
+      datasets:[{label:"與上月差異",data:diff, backgroundColor: diff.map(v=>v>=0?"#0f8b4b":"#d63939") }]
+    }
   });
 }
 
-/* 📌 圓餅圖 */
+/* 圓餅：最新月份來源組成 */
 function drawPie(){
-  const row=globalRows[globalRows.length-1];
-  const labels=["分享通","閃送區","禮物池","需求池"];
-  const values=[row.shareCount,row.flashCount,row.giftCount,row.demandCount];
+  const r=globalRows.at(-1);
+  if(!r) return;
 
-  if(channelPieChart) channelPieChart.destroy();
-  channelPieChart=new Chart(document.getElementById("pieChart"),{
+  if(pieChart) pieChart.destroy();
+  pieChart=new Chart(document.getElementById("pieChart"),{
     type:"pie",
-    data:{labels,datasets:[{data:values}]}
+    data:{
+      labels:["分享通","閃送區","禮物池","需求池"],
+      datasets:[{
+        data:[r.shareCount,r.flashCount,r.giftCount,r.demandCount],
+        backgroundColor:["#2DB57D","#59C3FF","#FFD268","#FF7A7A"]
+      }]
+    }
   });
-}
-
-/* 📌 Insight */
-function writeInsight(){
-  const el=document.getElementById("insight");
-  const row=globalRows.at(-1);
-  const prev=globalRows.length>1?globalRows.at(-2):null;
-
-  let txt=`📌 最新月份：${parseMonth(row.month)}<br>總寄件量：<b>${row.totalCount}</b> 件`;
-  if(prev){
-    const diff=row.totalCount-prev.totalCount;
-    txt+=`<br>與上月相比：<b>${diff>0?`增加 ${diff}`:diff<0?`減少 ${Math.abs(diff)}`:"持平"}</b>`;
-  }
-  el.innerHTML=txt;
 }
 
 window.onload=loadData;
 </script>
 
 
-<!-- 📦 表格 -->
-<h2>📦 寄件統計表</h2>
-<table>
-<thead>
-<tr>
-<th>月份</th><th>寄件總量</th><th>分享通</th><th>閃送區</th><th>禮物池</th><th>需求池</th>
-</tr>
-</thead>
-<tbody id="dataBody"></tbody>
-</table>
+<!-- ====================== UI ====================== -->
 
-<br>
+<div class="panel">
+  <h2>📦 寄件統計表</h2>
+  <div style="margin-bottom:10px;">
+    顯示方式：
+    <select id="tableFilter"></select>
+  </div>
 
-<!-- 📅 篩選 -->
-顯示範圍： <select id="rangeSelect"></select>
+  <table>
+    <thead>
+      <tr>
+        <th>月份</th><th>寄件總量</th><th>分享通</th><th>閃送區</th><th>禮物池</th><th>需求池</th>
+        <th>MoM</th><th>YoY</th>
+      </tr>
+    </thead>
+    <tbody id="dataBody"></tbody>
+  </table>
+</div>
 
-<!-- 📈 圖表 -->
 <div class="flex">
-  <div class="panel" style="flex:1;">
-    <h3>趨勢線</h3>
-    <canvas id="totalChart"></canvas>
-  </div>
-  <div class="panel" style="flex:1;">
-    <h3>月增減量</h3>
-    <canvas id="momChart"></canvas>
-  </div>
+  <div class="panel chart-box"><h3>📈 寄件趨勢</h3><canvas id="totalChart"></canvas></div>
+  <div class="panel chart-box"><h3>📊 月增減變化</h3><canvas id="momChart"></canvas></div>
 </div>
 
-<!-- 🥧 圓餅 -->
-<div class="panel" style="width:300px;margin-top:20px;">
-<h3>分布比例</h3>
-<canvas id="pieChart"></canvas>
+<div class="panel chart-box">
+  <h3>🥧 最新月份來源分布</h3>
+  <canvas id="pieChart"></canvas>
 </div>
-
-<!-- 🧠 Insight -->
-<div id="insight" class="panel" style="margin-top:20px;background:#fef9c3;"></div>
 
 </body>
 </html>
