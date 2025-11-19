@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>GC贈物網｜IBOX 月度趨勢 & 自動分析</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f6f7fb;
+      color: #111827;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 24px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 20px 20px 28px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 2fr;
+      gap: 20px;
+    }
+    @media (max-width: 960px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead {
+      background: #eff6ff;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: center;
+    }
+    th {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+      margin-right: 4px;
+    }
+    .tag.up {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .tag.down {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .buttons {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+    }
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+      box-shadow: none;
+    }
+    button:hover {
+      filter: brightness(1.05);
+    }
+    .summary {
+      font-size: 13px;
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 12px;
+      border: 1px dashed #d1d5db;
+      color: #374151;
+      line-height: 1.5;
+    }
+    .summary span {
+      font-weight: 600;
+    }
+    .insight {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #eef2ff;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #111827;
+    }
+    .insight-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .insight-title span {
+      font-size: 18px;
+    }
+    .chart-box {
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+      background: #f9fafb;
+      height: 260px;
+    }
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .chart-subtitle {
+      font-size: 11px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    .footer-note {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>IBOX 月度趨勢 & 自動分析</h1>
+    <div class="subtitle">
+      保留原本「每月填表」的習慣，這裡會自動讀取試算表並產生圖表與文字分析。
+    </div>
+
+    <div class="grid">
+      <!-- 左：資料表 + 按鈕 + 總結 -->
+      <div>
+        <h2>1. 月度資料（來自試算表）</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>月份</th>
+              <th>寄件總數量</th>
+              <th>每日平均</th>
+              <th>郵局數量</th>
+              <th>GC數量</th>
+              <th>GC-郵局</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody">
+            <!-- JS 動態填入 -->
+          </tbody>
+        </table>
+
+        <div class="buttons">
+          <button id="refreshBtn">🔄 重新抓試算表資料</button>
+          <button id="downloadMainBtn" class="secondary">⬇️ 下載主圖（PNG）</button>
+        </div>
+
+        <div id="summaryBox" class="summary">
+          正在載入資料…
+        </div>
+
+        <div id="insightBox" class="insight" style="display:none;">
+          <div class="insight-title">
+            <span>📊</span> 自動分析重點
+          </div>
+          <div id="insightText"></div>
+        </div>
+      </div>
+
+      <!-- 右：多圖表 -->
+      <div>
+        <h2>2. 圖表區</h2>
+
+        <div class="chart-box">
+          <div class="chart-title">A. 月度寄件總數量</div>
+          <div class="chart-subtitle">反映 IBOX 寄件的整體趨勢與季節性變化。</div>
+          <canvas id="totalChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">B. 與上月比較（件數變化）</div>
+          <div class="chart-subtitle">自動計算「本月 - 上月」，綠色為成長、紅色為衰退。</div>
+          <canvas id="momChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">C. GC vs 郵局 寄件量</div>
+          <div class="chart-subtitle">觀察 GC 管道是否逐步拉大與郵局的差距。</div>
+          <canvas id="gcPostChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      資料來源：GC贈物網 IBOX 使用情況（Google 試算表）
+    </div>
+  </div>
+
+  <script>
+    // ★★★ 這裡改成你的 Web App URL ★★★
+    const API_URL = 'https://script.google.com/macros/s/你的_web_app_ID/exec';
+
+    let totalChart = null;
+    let momChart = null;
+    let gcPostChart = null;
+
+    async function loadData() {
+      const summaryBox = document.getElementById('summaryBox');
+      summaryBox.textContent = '正在從試算表載入資料…';
+
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'API 回傳錯誤');
+
+        const rows = data.rows || [];
+        const labels = rows.map(r => r.month);
+        const totals = rows.map(r => Number(r.totalCount || 0));
+        const avgDaily = rows.map(r => r.avgDaily);
+        const postCounts = rows.map(r => r.postCount);
+        const gcCounts = rows.map(r => r.gcCount);
+        const diffGCPost = rows.map(r => r.gcMinusPost);
+
+        renderTable(rows);
+        renderTotalChart(labels, totals);
+        renderMomChart(labels, totals);
+        renderGCPostChart(labels, gcCounts, postCounts);
+        updateSummary(labels, totals);
+        updateInsight(rows);
+
+      } catch (err) {
+        console.error(err);
+        summaryBox.textContent = '載入資料失敗：' + err.message;
+      }
+    }
+
+    function renderTable(rows) {
+      const tbody = document.getElementById('dataBody');
+      tbody.innerHTML = '';
+
+      if (!rows || rows.length === 0) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 6;
+        td.textContent = '目前試算表尚無資料。';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      rows.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+
+        const tdMonth  = document.createElement('td');
+        const tdTotal  = document.createElement('td');
+        const tdAvg    = document.createElement('td');
+        const tdPost   = document.createElement('td');
+        const tdGC     = document.createElement('td');
+        const tdDiff   = document.createElement('td');
+
+        tdMonth.textContent = r.month || '';
+        tdTotal.textContent = (r.totalCount || 0).toLocaleString();
+
+        // 每日平均可能是公式結果，我們不處理格式，直接顯示
+        tdAvg.textContent  = r.avgDaily === '' ? '' : String(r.avgDaily);
+
+        tdPost.textContent = r.postCount == null ? '' : (r.postCount || 0).toLocaleString();
+        tdGC.textContent   = r.gcCount   == null ? '' : (r.gcCount   || 0).toLocaleString();
+
+        if (r.gcMinusPost != null) {
+          const val = r.gcMinusPost || 0;
+          tdDiff.textContent = val.toLocaleString();
+          if (val > 0) {
+            tdDiff.innerHTML = val.toLocaleString() + ' <span class="tag up">GC 高於郵局</span>';
+          } else if (val < 0) {
+            tdDiff.innerHTML = val.toLocaleString() + ' <span class="tag down">GC 低於郵局</span>';
+          }
+        } else {
+          tdDiff.textContent = '';
+        }
+
+        tr.appendChild(tdMonth);
+        tr.appendChild(tdTotal);
+        tr.appendChild(tdAvg);
+        tr.appendChild(tdPost);
+        tr.appendChild(tdGC);
+        tr.appendChild(tdDiff);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTotalChart(labels, totals) {
+      const ctx = document.getElementById('totalChart').getContext('2d');
+      if (totalChart) totalChart.destroy();
+
+      totalChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '寄件總數量（件）',
+            data: totals,
+            borderWidth: 2,
+            tension: 0.25,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const val = context.parsed.y || 0;
+                  return ' ' + val.toLocaleString() + ' 件';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: '月份'
+              }
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '寄件總數量（件）'
+              },
+              ticks: {
+                callback: function (value) {
+                  return value.toLocaleString();
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderMomChart(labels, totals) {
+      const momLabels = [];
+      const momValues = [];
+
+      for (let i = 0; i < totals.length; i++) {
+        if (i === 0) {
+          momLabels.push(labels[i]);
+          momValues.push(0);
+        } else {
+          momLabels.push(labels[i]);
+          momValues.push((totals[i] || 0) - (totals[i - 1] || 0));
+        }
+      }
+
+      const ctx = document.getElementById('momChart').getContext('2d');
+      if (momChart) momChart.destroy();
+
+      momChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: momLabels,
+          datasets: [{
+            label: '與上月差異（件）',
+            data: momValues,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const val = context.parsed.y || 0;
+                  const sign = val > 0 ? '+' : '';
+                  return ' ' + sign + val.toLocaleString() + ' 件';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: '月份' }
+            },
+            y: {
+              title: { display: true, text: '與上月差異（件）' },
+              ticks: {
+                callback: function (value) {
+                  const sign = value > 0 ? '+' : '';
+                  return sign + value.toLocaleString();
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // 依正負給顏色（需 Chart.js 3+ 支援）
+      const dataset = momChart.data.datasets[0];
+      dataset.backgroundColor = momValues.map(v => v >= 0 ? 'rgba(34,197,94,0.35)' : 'rgba(248,113,113,0.5)');
+      dataset.borderColor = momValues.map(v => v >= 0 ? 'rgba(22,163,74,1)' : 'rgba(185,28,28,1)');
+      momChart.update();
+    }
+
+    function renderGCPostChart(labels, gcCounts, postCounts) {
+      const ctx = document.getElementById('gcPostChart').getContext('2d');
+      if (gcPostChart) gcPostChart.destroy();
+
+      gcPostChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'GC數量',
+              data: gcCounts,
+              borderWidth: 1
+            },
+            {
+              label: '郵局數量',
+              data: postCounts,
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const val = context.parsed.y || 0;
+                  return ' ' + val.toLocaleString() + ' 件';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: '月份' },
+              stacked: false
+            },
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: '件數' },
+              ticks: {
+                callback: function (value) {
+                  return value.toLocaleString();
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateSummary(labels, totals) {
+      const box = document.getElementById('summaryBox');
+      if (!labels || labels.length === 0) {
+        box.textContent = '目前尚未輸入月度資料。請先在試算表填寫「月份」與「寄件總數量」。';
+        return;
+      }
+
+      let total = 0;
+      let minVal = null, maxVal = null;
+      let minLabel = '', maxLabel = '';
+      const nonZero = [];
+
+      totals.forEach((v, i) => {
+        const val = Number(v) || 0;
+        total += val;
+        if (val > 0) nonZero.push(val);
+        if (minVal === null || val < minVal) {
+          minVal = val;
+          minLabel = labels[i];
+        }
+        if (maxVal === null || val > maxVal) {
+          maxVal = val;
+          maxLabel = labels[i];
+        }
+      });
+
+      if (nonZero.length === 0) {
+        box.textContent = '目前資料都是 0 或空白，請確認「寄件總數量」欄位。';
+        return;
+      }
+
+      const avg = total / nonZero.length;
+      box.innerHTML =
+        '已讀取 <span>' + labels.length + '</span> 個月份，' +
+        '總寄件量 <span>' + total.toLocaleString() + '</span> 件，' +
+        '平均每月 <span>' + Math.round(avg).toLocaleString() + '</span> 件。<br>' +
+        '最高為 <span>' + maxLabel + '</span>（' + maxVal.toLocaleString() + ' 件），' +
+        '最低為 <span>' + minLabel + '</span>（' + minVal.toLocaleString() + ' 件）。';
+    }
+
+    function updateInsight(rows) {
+      const insightBox = document.getElementById('insightBox');
+      const insightText = document.getElementById('insightText');
+
+      if (!rows || rows.length === 0) {
+        insightBox.style.display = 'none';
+        return;
+      }
+
+      insightBox.style.display = 'block';
+
+      const latest = rows[rows.length - 1];
+      const prev   = rows.length >= 2 ? rows[rows.length - 2] : null;
+
+      const latestMonth = latest.month || '（未填）';
+      const latestTotal = Number(latest.totalCount || 0);
+
+      let momSentence = '目前只有一個月份資料，尚無法比較上月變化。';
+      if (prev) {
+        const prevTotal = Number(prev.totalCount || 0);
+        const diff = latestTotal - prevTotal;
+        const diffSign = diff > 0 ? '增加' : (diff < 0 ? '減少' : '持平');
+        const diffAbs = Math.abs(diff);
+        const rate = prevTotal > 0 ? (diff / prevTotal) * 100 : 0;
+
+        if (diff === 0) {
+          momSentence = `相較上個月份（${prev.month}），寄件量持平，皆為 ${latestTotal.toLocaleString()} 件。`;
+        } else {
+          momSentence =
+            `相較上個月份（${prev.month}），本月寄件量${diffSign} <b>${diffAbs.toLocaleString()}</b> 件，` +
+            `約 <b>${rate.toFixed(1)}%</b>。`;
+        }
+      }
+
+      // 過去三個月趨勢
+      let trendSentence = '';
+      if (rows.length >= 3) {
+        const a = Number(rows[rows.length - 3].totalCount || 0);
+        const b = Number(rows[rows.length - 2].totalCount || 0);
+        const c = Number(rows[rows.length - 1].totalCount || 0);
+
+        if (a <= b && b <= c && !(a === b && b === c)) {
+          trendSentence = '過去三個月份呈現「穩定成長」趨勢，適合加碼放大成功做法。';
+        } else if (a >= b && b >= c && !(a === b && b === c)) {
+          trendSentence = '過去三個月份呈現「連續下滑」趨勢，建議檢視行銷 / 引導流程是否需要調整。';
+        } else {
+          trendSentence = '過去三個月份變化較為波動，可能受到活動檔期或外部因素影響，建議搭配活動日曆一起解讀。';
+        }
+      }
+
+      // GC vs 郵局 分析（只看最新一列）
+      let gcSentence = '';
+      if (latest.gcCount != null || latest.postCount != null) {
+        const gc = Number(latest.gcCount || 0);
+        const post = Number(latest.postCount || 0);
+        const totalChannel = gc + post;
+        const gcShare = totalChannel > 0 ? (gc / totalChannel) * 100 : 0;
+        const diff = gc - post;
+        const diffWord = diff > 0 ? '高於' : (diff < 0 ? '低於' : '與…相當');
+
+        if (totalChannel > 0) {
+          gcSentence =
+            `在最新月份中，GC 管道寄件量為 <b>${gc.toLocaleString()}</b> 件，` +
+            `郵局為 <b>${post.toLocaleString()}</b> 件，GC ${diffWord}郵局 <b>${Math.abs(diff).toLocaleString()}</b> 件，` +
+            `約佔兩者總和的 <b>${gcShare.toFixed(1)}%</b>。`;
+        }
+      }
+
+      insightText.innerHTML =
+        `● 最新月份為 <b>${latestMonth}</b>，寄件總數量為 <b>${latestTotal.toLocaleString()}</b> 件。<br>` +
+        `● ${momSentence}<br>` +
+        (trendSentence ? `● ${trendSentence}<br>` : '') +
+        (gcSentence ? `● ${gcSentence}` : '');
+    }
+
+    function downloadMainChart() {
+      if (!totalChart) {
+        alert('圖表尚未載入，請稍後再試一次。');
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = totalChart.toBase64Image('image/png', 1.0);
+      a.download = 'ibox-monthly-total.png';
+      a.click();
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', loadData);
+    document.getElementById('downloadMainBtn').addEventListener('click', downloadMainChart);
+
+    window.addEventListener('load', loadData);
+  </script>
+</body>
+</html>
