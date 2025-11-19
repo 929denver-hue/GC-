@@ -65,7 +65,10 @@ async function loadData() {
 /* ========= 左邊表格 ========= */
 function renderTable(rows) {
   const tbody = document.getElementById("dataBody");
-  if (!tbody) return;
+  if (!tbody) {
+    // 如果畫面上沒有這個表格，就先跳過，不要報錯
+    return;
+  }
   tbody.innerHTML = "";
 
   if (!rows || rows.length === 0) {
@@ -84,10 +87,10 @@ function renderTable(rows) {
     const fields = [
       formatMonthLabel(r.month),
       Number(r.totalCount || 0).toLocaleString(),
-      r.shareCount == null ? "" : Number(r.shareCount || 0).toLocaleString(),
-      r.flashCount == null ? "" : Number(r.flashCount || 0).toLocaleString(),
-      r.giftCount  == null ? "" : Number(r.giftCount  || 0).toLocaleString(),
-      r.demandCount== null ? "" : Number(r.demandCount|| 0).toLocaleString()
+      r.shareCount  == null ? "" : Number(r.shareCount  || 0).toLocaleString(),
+      r.flashCount  == null ? "" : Number(r.flashCount  || 0).toLocaleString(),
+      r.giftCount   == null ? "" : Number(r.giftCount   || 0).toLocaleString(),
+      r.demandCount == null ? "" : Number(r.demandCount || 0).toLocaleString()
     ];
 
     fields.forEach(text => {
