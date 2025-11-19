@@ -23,6 +23,7 @@
       color:var(--text-dark);
     }
     h2 { margin-bottom:8px; }
+    h3 { margin-top:0; margin-bottom:8px; }
     .panel {
       background:white;
       padding:16px;
@@ -50,10 +51,18 @@
     .flex { display:flex; gap:22px; flex-wrap:wrap; }
     .chart-box { flex:1; min-width:350px; height:260px; }
 
-    /* 顏色 */
-    .up { color:#0f8b4b; font-weight:600; }
-    .down { color:#d63939; font-weight:600; }
-    .neutral { color:#777; }
+    /* MoM / YoY 顏色：成長紅、減少綠、持平灰 */
+    .growth { 
+      color: #d91e18;
+      font-weight:600;
+    }
+    .decline { 
+      color: #0f8b4b;
+      font-weight:600;
+    }
+    .neutral {
+      color:#7c7c7c;
+    }
 
     /* RWD */
     @media(max-width:768px){
@@ -66,142 +75,212 @@
 <body>
 
 <script>
-/* 🔧  修改這裡 → 你的 Web App URL  */
+// 🔧 這裡改成你自己的 Web App URL
 const API_URL = "https://script.google.com/macros/s/AKfycbx9eVJpOxflNXwrMmTFFQsR74f74Vr9RYlOXi5NU7DKDVQE_05VDTraZ6TRtl-t8A6nXg/exec";
 
-let globalRows=[];
+let globalRows = [];
 let totalChart, momChart, pieChart;
 
-/* 📌 格式：2025-02 */
-function parseMonth(text){
-  const m=text.match(/(20\\d{2}).*?(\\d{1,2})/);
-  return m?`${m[1]}-${String(m[2]).padStart(2,"0")}`:text;
+/* 解析月份：永遠回傳 'YYYY-MM' */
+function parseMonth(text) {
+  if (!text) return "";
+  const s = String(text).trim();
+
+  // 已經是 YYYY-MM 或 YYYY/MM
+  let m = s.match(/^(\d{4})[-/](\d{1,2})$/);
+  if (m) {
+    return `${m[1]}-${m[2].padStart(2,"0")}`;
+  }
+
+  // 例如 2024年11月
+  m = s.match(/(20\d{2})\D+(\d{1,2})\D*月?/);
+  if (m) {
+    return `${m[1]}-${m[2].padStart(2,"0")}`;
+  }
+
+  // 一般日期字串：Fri Nov 01 2024 ...
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+  }
+
+  // 最後保險：抓第一個年 + 後面一個數字當月
+  m = s.match(/(20\d{2}).*?(\d{1,2})/);
+  if (m) {
+    return `${m[1]}-${m[2].padStart(2,"0")}`;
+  }
+
+  return s;
 }
 
-/* 📌 顏色 class */
-function formatDiff(value){
-  if(value===null) return "neutral";
-  if(value>0) return "up";
-  if(value<0) return "down";
+/* 成長/減少 顏色 class：成長=紅，減少=綠 */
+function diffClass(value) {
+  if (value === null || value === 0) return "neutral";
+  if (value > 0) return "growth";   // 成長：紅
+  if (value < 0) return "decline";  // 減少：綠
   return "neutral";
 }
 
-/* 📌 主要資料讀取 */
-async function loadData(){
-  try{
-    const res=await fetch(API_URL);
-    const json=await res.json();
-    globalRows=json.rows||[];
+/* 讀取資料 */
+async function loadData() {
+  try {
+    const res  = await fetch(API_URL);
+    const json = await res.json();
+    globalRows  = json.rows || [];
 
     buildTableFilter();
     applyFilterToTable();
 
     drawCharts();
     drawPie();
-  }catch(e){
+  } catch (e) {
     console.error(e);
   }
 }
 
-/* ================= 表格區 ================= */
-function buildTableFilter(){
-  const sel=document.getElementById("tableFilter");
-  sel.innerHTML=`<option value="all">全部年份</option><option value="last12">最近12個月</option>`;
-
-  const years=[...new Set(globalRows.map(r=>parseMonth(r.month).slice(0,4)))].sort();
-  years.forEach(y=> sel.innerHTML+=`<option value="${y}">${y} 年</option>`);
-
-  sel.value = globalRows.length>12?"last12":"all";
+/* ========== 表格區：篩選 ========== */
+function buildTableFilter() {
+  const sel = document.getElementById("tableFilter");
+  sel.innerHTML = `
+    <option value="all">全部年份</option>
+    <option value="last12">最近12個月</option>
+  `;
+  const years = [...new Set(globalRows.map(r => parseMonth(r.month).slice(0,4)))].sort();
+  years.forEach(y => {
+    sel.innerHTML += `<option value="${y}">${y} 年</option>`;
+  });
+  sel.value = globalRows.length > 12 ? "last12" : "all";
   sel.onchange = applyFilterToTable;
 }
 
-function applyFilterToTable(){
-  const mode=document.getElementById("tableFilter").value;
-  let rows=[...globalRows];
+function applyFilterToTable() {
+  const mode = document.getElementById("tableFilter").value;
+  let rows = [...globalRows];
 
-  if(mode==="last12") rows=rows.slice(-12);
-  else if(mode!=="all") rows=rows.filter(r=>parseMonth(r.month).startsWith(mode));
-
+  if (mode === "last12") {
+    rows = rows.slice(-12);
+  } else if (mode !== "all") {
+    rows = rows.filter(r => parseMonth(r.month).startsWith(mode));
+  }
   renderTable(rows);
 }
 
-/* 📌 渲染表格 + MOM/YOY */
-function renderTable(rows){
-  const tbody=document.getElementById("dataBody");
-  tbody.innerHTML="";
+/* ========== 表格：含 MoM / YoY ========== */
+function renderTable(rows) {
+  const tbody = document.getElementById("dataBody");
+  tbody.innerHTML = "";
 
-  rows.forEach((r,idx)=>{
-    const current=parseMonth(r.month);
-    const total=Number(r.totalCount||0);
+  rows.forEach((r, idx) => {
+    const monthKey = parseMonth(r.month);   // '2025-03'
+    const displayMonth = `${monthKey.slice(0,4)} / ${monthKey.slice(5,7)}`; // '2025 / 03'
+    const total = Number(r.totalCount || 0);
 
-    /* MoM */
-    let mom=null;
-    if(idx>0) mom=total - Number(rows[idx-1].totalCount||0);
+    // MoM：與上一列比較
+    let mom = null;
+    if (idx > 0) {
+      mom = total - Number(rows[idx - 1].totalCount || 0);
+    }
 
-    /* YoY */
-    let yoy=null;
-    const year=current.slice(0,4);
-    const month=current.slice(5,7);
-    const lastYear=rows.find(row=>parseMonth(row.month)===`${year-1}-${month}`);
-    if(lastYear) yoy=total - Number(lastYear.totalCount||0);
+    // YoY：找去年同月
+    let yoy = null;
+    const year  = parseInt(monthKey.slice(0,4), 10);
+    const month = monthKey.slice(5,7);
+    const lastYearRow = rows.find(row => parseMonth(row.month) === `${year-1}-${month}`);
+    if (lastYearRow) {
+      yoy = total - Number(lastYearRow.totalCount || 0);
+    }
 
-    tbody.innerHTML+=`
+    tbody.innerHTML += `
       <tr>
-        <td>${current}</td>
+        <td>${displayMonth}</td>
         <td>${total.toLocaleString()}</td>
         <td>${r.shareCount ?? ""}</td>
         <td>${r.flashCount ?? ""}</td>
         <td>${r.giftCount ?? ""}</td>
         <td>${r.demandCount ?? ""}</td>
 
-        <td class="${formatDiff(mom)}">${mom===null?'-':(mom>0?'+':'')+mom.toLocaleString()}</td>
-        <td class="${formatDiff(yoy)}">${yoy===null?'-':(yoy>0?'+':'')+yoy.toLocaleString()}</td>
+        <td class="${diffClass(mom)}">
+          ${mom === null ? "-" : (mom > 0 ? "+" : "") + mom.toLocaleString()}
+        </td>
+        <td class="${diffClass(yoy)}">
+          ${yoy === null ? "-" : (yoy > 0 ? "+" : "") + yoy.toLocaleString()}
+        </td>
       </tr>
     `;
   });
 }
 
-/* ================== 圖表 ================== */
-function drawCharts(){
-  const labels=globalRows.map(r=>parseMonth(r.month));
-  const totals=globalRows.map(r=>Number(r.totalCount||0));
-  const diff=totals.map((v,i)=>i===0?0:(v-totals[i-1]));
+/* ========== 圖表區 ========== */
+function drawCharts() {
+  const labels = globalRows.map(r => {
+    const m = parseMonth(r.month);
+    return `${m.slice(0,4)}/${m.slice(5,7)}`;
+  });
+  const totals = globalRows.map(r => Number(r.totalCount || 0));
+  const diff   = totals.map((v,i) => i===0 ? 0 : v - totals[i-1]);
 
-  /* 折線 */
-  if(totalChart) totalChart.destroy();
-  totalChart=new Chart(document.getElementById("totalChart"),{
-    type:"line",
-    data:{ labels,
-      datasets:[{
-        label:"寄件量",
-        data:totals,
-        borderColor:"#2DB57D",
-        backgroundColor:"rgba(45,181,125,.2)",
-        fill:true,
-        tension:.35 }]
+  // 折線：寄件趨勢
+  if (totalChart) totalChart.destroy();
+  totalChart = new Chart(document.getElementById("totalChart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "寄件量",
+        data: totals,
+        borderColor: "#2DB57D",
+        backgroundColor: "rgba(45,181,125,.2)",
+        fill: true,
+        tension: .35,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.parsed.y.toLocaleString()} 件`
+          }
+        }
+      }
     }
   });
 
-  /* 月增減 */
-  if(momChart) momChart.destroy();
-  momChart=new Chart(document.getElementById("momChart"),{
-    type:"bar",
-    data:{
+  // 月增減：成長紅、減少綠
+  if (momChart) momChart.destroy();
+  momChart = new Chart(document.getElementById("momChart"), {
+    type: "bar",
+    data: {
       labels,
-      datasets:[{label:"與上月差異",data:diff, backgroundColor: diff.map(v=>v>=0?"#0f8b4b":"#d63939") }]
+      datasets: [{
+        label: "與上月差異",
+        data: diff,
+        backgroundColor: diff.map(v => v >= 0 ? "#d91e18" : "#0f8b4b")
+      }]
+    },
+    options: {
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.parsed.y > 0 ? "+" : ""}${ctx.parsed.y.toLocaleString()} 件`
+          }
+        }
+      }
     }
   });
 }
 
-/* 圓餅：最新月份來源組成 */
-function drawPie(){
-  const r=globalRows.at(-1);
-  if(!r) return;
+/* 最新月份：來源分布圓餅 */
+function drawPie() {
+  const r = globalRows.at(-1);
+  if (!r) return;
 
-  if(pieChart) pieChart.destroy();
-  pieChart=new Chart(document.getElementById("pieChart"),{
-    type:"pie",
-    data:{
+  if (pieChart) pieChart.destroy();
+  pieChart = new Chart(document.getElementById("pieChart"), {
+    type: "pie",
+    data: {
       labels:["分享通","閃送區","禮物池","需求池"],
       datasets:[{
         data:[r.shareCount,r.flashCount,r.giftCount,r.demandCount],
@@ -211,7 +290,7 @@ function drawPie(){
   });
 }
 
-window.onload=loadData;
+window.onload = loadData;
 </script>
 
 
@@ -227,8 +306,14 @@ window.onload=loadData;
   <table>
     <thead>
       <tr>
-        <th>月份</th><th>寄件總量</th><th>分享通</th><th>閃送區</th><th>禮物池</th><th>需求池</th>
-        <th>MoM</th><th>YoY</th>
+        <th>月份</th>
+        <th>寄件總量</th>
+        <th>分享通</th>
+        <th>閃送區</th>
+        <th>禮物池</th>
+        <th>需求池</th>
+        <th>MoM</th>
+        <th>YoY</th>
       </tr>
     </thead>
     <tbody id="dataBody"></tbody>
@@ -236,8 +321,14 @@ window.onload=loadData;
 </div>
 
 <div class="flex">
-  <div class="panel chart-box"><h3>📈 寄件趨勢</h3><canvas id="totalChart"></canvas></div>
-  <div class="panel chart-box"><h3>📊 月增減變化</h3><canvas id="momChart"></canvas></div>
+  <div class="panel chart-box">
+    <h3>📈 寄件趨勢</h3>
+    <canvas id="totalChart"></canvas>
+  </div>
+  <div class="panel chart-box">
+    <h3>📊 月增減變化（成長紅、減少綠）</h3>
+    <canvas id="momChart"></canvas>
+  </div>
 </div>
 
 <div class="panel chart-box">
