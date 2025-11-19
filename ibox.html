@@ -553,8 +553,19 @@
     a.click();
   }
 
-  document.getElementById('refreshBtn').addEventListener('click', loadData);
-  document.getElementById('downloadMainBtn').addEventListener('click', downloadMainChart);
+ window.addEventListener('load', () => {
+  const refreshBtn = document.getElementById('refreshBtn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', loadData);
+  }
 
-  window.addEventListener('load', loadData);
+  const downloadBtn = document.getElementById('downloadMainBtn');
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', downloadMainChart);
+  }
+
+  // 頁面載完就自動載入資料
+  loadData();
+});
+
 </script>
