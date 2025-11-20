@@ -348,23 +348,9 @@ function updateMonthlyReport() {
     channelSentence = "各通路占比約為：" + parts.join("、") + "。";
   }
 
-  // 最近三個月趨勢
-  let trendSentence = "";
-  if (globalRows.length >= 3) {
-    const a = Number(globalRows[globalRows.length-3].totalCount || 0);
-    const b = Number(globalRows[globalRows.length-2].totalCount || 0);
-    const c = total;
-    if (a <= b && b <= c && !(a === b && b === c)) {
-      trendSentence = "最近三個月呈現穩定成長的趨勢，適合持續放大有效的推廣做法。";
-    } else if (a >= b && b >= c && !(a === b && b === c)) {
-      trendSentence = "最近三個月寄件量連續下降，建議檢視行銷節奏與使用者引導流程。";
-    } else {
-      trendSentence = "最近三個月變化較為波動，可能與活動檔期或外部事件有關，建議搭配活動日曆一起觀察。";
-    }
-  }
 
   box.innerHTML =
-    `📦 <b>${monthLabel} GC IBOX 當月報告</b><br>` +
+    `📦 <b>${monthLabel} GC贈物網 IBOX當月報告</b><br>` +
     `本月寄件量：<b>${total.toLocaleString()} 件</b>。<br>` +
     `・${momSentence}<br>` +
     `・${yoySentence}<br>` +
@@ -379,7 +365,7 @@ window.onload = loadData;
 <!-- ====================== UI ====================== -->
 
 <div class="panel">
-  <h2>📦 寄件統計表</h2>
+  <h2>📦i郵箱寄件統計表</h2>
   <div style="margin-bottom:10px;">
     顯示方式：
     <select id="tableFilter"></select>
@@ -394,8 +380,8 @@ window.onload = loadData;
         <th>閃送區</th>
         <th>禮物池</th>
         <th>需求池</th>
-        <th>MoM</th>
-        <th>YoY</th>
+        <th>與上月比較</th>
+        <th>與去年同期比較</th>
       </tr>
     </thead>
     <tbody id="dataBody"></tbody>
