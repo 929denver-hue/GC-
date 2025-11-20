@@ -348,15 +348,15 @@ function updateMonthlyReport() {
     channelSentence = "各通路占比約為：" + parts.join("、") + "。";
   }
 
-
+  // ⭐ 這裡只保留三行說明：本月量 / MoM / YoY / 通路占比
   box.innerHTML =
     `📦 <b>${monthLabel} GC贈物網 IBOX當月報告</b><br>` +
     `本月寄件量：<b>${total.toLocaleString()} 件</b>。<br>` +
     `・${momSentence}<br>` +
     `・${yoySentence}<br>` +
-    `・${channelSentence}` +
-    (trendSentence ? `<br>・${trendSentence}` : "");
+    `・${channelSentence}`;
 }
+
 
 window.onload = loadData;
 </script>
@@ -412,3 +412,5 @@ window.onload = loadData;
 
 </body>
 </html>
+
+
