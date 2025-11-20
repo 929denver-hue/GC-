@@ -110,16 +110,33 @@ function diffClass(value) {
 
 /* 讀取資料 */
 async function loadData() {
+  const summaryBox = document.getElementById('summaryBox');
+  summaryBox.textContent = '正在載入資料...';
+
   try {
-    const res  = await fetch(API_URL);
-    const json = await res.json();
-    globalRows  = json.rows || [];
+    const response = await fetch(API_URL);
+    
+    if (!response.ok) throw new Error('API 回應失敗：' + response.status);
 
-    buildTableFilter();
-    applyFilterToTable();
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.error || 'API 回傳資料格式錯誤');
 
-    drawCharts();
-    drawPie();
+    globalRows = data.rows || [];
+
+    renderTable(globalRows);
+    buildRangeOptions(globalRows);
+    buildYearMonthOptions(globalRows);
+    redrawCharts();
+    updateMonthlyReport();
+
+    summaryBox.textContent = '資料已更新 ✔️';
+
+  } catch (err) {
+    console.error(err);
+    summaryBox.innerHTML = `<span style="color:red;">載入失敗：${err.message}</span>`;
+  }
+}
+
   // ======= 當月報告（乾淨版） =======
 function updateMonthlyReport() {  
   const box = document.getElementById("monthlyReportText");
