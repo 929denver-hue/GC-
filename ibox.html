@@ -120,11 +120,75 @@ async function loadData() {
 
     drawCharts();
     drawPie();
-    updateMonthlyReport();   // ⬅️ 當月報告
-  } catch (e) {
-    console.error(e);
+  // ======= 當月報告（乾淨版） =======
+function updateMonthlyReport() {  
+  const box = document.getElementById("monthlyReportText");
+  if (!box) return;
+
+  if (!globalRows.length) {
+    box.textContent = "目前尚未有任何月份資料。";
+    return;
   }
+
+  const latest = globalRows[globalRows.length - 1];
+  const latestKey = latest.month;
+  const monthLabel = latestKey.replace("-", " / ");
+  const total = Number(latest.totalCount || 0);
+
+  /* ---- MoM ---- */
+  let momSentence;
+  if (globalRows.length >= 2) {
+    const prev = globalRows[globalRows.length - 2];
+    const prevTotal = Number(prev.totalCount || 0);
+    const diff = total - prevTotal;
+    const rate = prevTotal > 0 ? (diff / prevTotal) * 100 : 0;
+    const word = diff > 0 ? "成長" : (diff < 0 ? "減少" : "持平");
+    momSentence = `相較上月：${word} ${Math.abs(diff).toLocaleString()} 件（${rate.toFixed(1)}%）`;
+  } else {
+    momSentence = "相較上月：無可比較資料";
+  }
+
+  /* ---- YoY ---- */
+  let yoySentence;
+  const year = Number(latestKey.split("-")[0]);
+  const month = latestKey.split("-")[1];
+  const lastYearRow = globalRows.find(r => r.month === `${year - 1}-${month}`);
+
+  if (lastYearRow) {
+    const lastYearTotal = Number(lastYearRow.totalCount || 0);
+    const diff = total - lastYearTotal;
+    const rate = lastYearTotal > 0 ? (diff / lastYearTotal) * 100 : 0;
+    const word = diff > 0 ? "成長" : (diff < 0 ? "減少" : "持平");
+    yoySentence = `與去年同期相比：${word} ${Math.abs(diff).toLocaleString()} 件（${rate.toFixed(1)}%）`;
+  } else {
+    yoySentence = "與去年同期相比：尚無資料";
+  }
+
+  /* ---- 通路佔比 ---- */
+  const share = Number(latest.shareCount || 0);
+  const flash = Number(latest.flashCount || 0);
+  const gift  = Number(latest.giftCount  || 0);
+  const dem   = Number(latest.demandCount|| 0);
+  const totalChannel = share + flash + gift + dem;
+
+  let channelSentence;
+  if (totalChannel > 0) {
+    const pct = v => (v / totalChannel * 100).toFixed(1) + "%";
+    channelSentence =
+      `通路佔比：分享通 ${pct(share)}、閃送區 ${pct(flash)}、禮物池 ${pct(gift)}、需求池 ${pct(dem)}`;
+  } else {
+    channelSentence = "通路佔比：尚無統計資料";
+  }
+
+  /* ---- 輸出到頁面 ---- */
+  box.innerHTML =
+    `📦 <b>${monthLabel} GC IBOX 當月報告</b><br>` +
+    `本月寄件量：<b>${total.toLocaleString()} 件</b><br><br>` +
+    `• ${momSentence}<br>` +
+    `• ${yoySentence}<br>` +
+    `• ${channelSentence}`;
 }
+
 
 /* ========== 表格區：篩選 ========== */
 function buildTableFilter() {
