@@ -114,12 +114,12 @@ async function loadData() {
   summaryBox.textContent = '正在載入資料...';
 
   try {
+
     const response = await fetch(API_URL);
-    
-    if (!response.ok) throw new Error('API 回應失敗：' + response.status);
+    if (!response.ok) throw new Error(`API 回應異常：HTTP ${response.status}`);
 
     const data = await response.json();
-    if (!data.ok) throw new Error(data.error || 'API 回傳資料格式錯誤');
+    if (!data.ok) throw new Error(data.error || 'API 格式錯誤');
 
     globalRows = data.rows || [];
 
@@ -129,11 +129,13 @@ async function loadData() {
     redrawCharts();
     updateMonthlyReport();
 
-    summaryBox.textContent = '資料已更新 ✔️';
+    summaryBox.textContent = '資料已更新 ✔';
 
   } catch (err) {
+
     console.error(err);
-    summaryBox.innerHTML = `<span style="color:red;">載入失敗：${err.message}</span>`;
+    summaryBox.innerHTML = `<span style="color:red;">❌ 載入失敗：${err.message}</span>`;
+
   }
 }
 
