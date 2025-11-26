@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>幸福偏鄉心願認養成效報表</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --gc-green: #2db57d;
+      --gc-blue: #59c3ff;
+      --gc-yellow: #ffd268;
+      --gc-red: #ff7a7a;
+      --bg: #f5f5f7;
+      --text-main: #222;
+      --text-sub: #777;
+      --card-bg: #ffffff;
+      --border-soft: #e5e5ea;
+      --radius-lg: 16px;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Microsoft JhengHei", system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      margin: 0 0 4px;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 14px;
+    }
+
+    .tag-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(45, 181, 125, 0.1);
+      color: var(--gc-green);
+      border: 1px solid rgba(45, 181, 125, 0.25);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 18px 18px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .kpi-card {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid #ececef;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    .kpi-value {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .kpi-tagline {
+      font-size: 11px;
+      color: var(--gc-green);
+      margin-top: 2px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 6px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 520px;
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f0f0f3;
+      text-align: left;
+    }
+
+    th {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(45, 181, 125, 0.08);
+      color: var(--gc-green);
+    }
+
+    .status-pill.pending {
+      background: rgba(255, 210, 104, 0.15);
+      color: #ad7b00;
+    }
+
+    .status-pill.failed {
+      background: rgba(255, 122, 122, 0.12);
+      color: var(--gc-red);
+    }
+
+    .pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid #e0e0e6;
+      color: var(--text-sub);
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--gc-blue);
+    }
+
+    .pill-dot.green {
+      background: var(--gc-green);
+    }
+
+    .pill-dot.yellow {
+      background: var(--gc-yellow);
+    }
+
+    .pill-dot.red {
+      background: var(--gc-red);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .story-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .story-item {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fafafa;
+      border: 1px solid #ececef;
+      font-size: 13px;
+    }
+
+    .story-meta {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    .story-quote {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .story-quote::before,
+    .story-quote::after {
+      content: "“";
+    }
+
+    .story-quote::after {
+      content: "”";
+    }
+
+    .rating-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .stars {
+      color: #f5a623;
+      letter-spacing: 1px;
+    }
+
+    .comment-text {
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--text-sub);
+      text-align: right;
+    }
+
+    .error-banner {
+      background: #ffecec;
+      border-radius: 12px;
+      border: 1px solid #ffc2c2;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      color: #b40000;
+      font-size: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>幸福偏鄉心願認養成效儀表板</h1>
+      <p>從「數字」、ESG、參與、情感故事，一眼看懂這批心願帶來的改變。</p>
+      <div class="tag-row">
+        <span class="tag">量化成果</span>
+        <span class="tag">ESG / SDG</span>
+        <span class="tag">參與深度</span>
+        <span class="tag">情感故事</span>
+        <span class="tag">流程體驗</span>
+      </div>
+    </header>
+
+    <div id="error" class="error-banner"></div>
+
+    <!-- 上方：整體 KPI + 量化成果表 -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">1. 量化成果</div>
+          <div class="card-subtitle">上架 → 點擊 → 認養，清楚看到整體效率。</div>
+        </div>
+        <div class="pill">
+          <span class="pill-dot green"></span>
+          本批心願成效摘要
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="kpi-grid">
+        <!-- JS 產生 KPI 卡片 -->
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>心願名稱</th>
+              <th>上架時間</th>
+              <th>認養時間</th>
+              <th>點擊次數</th>
+              <th>心願狀態</th>
+            </tr>
+          </thead>
+          <tbody id="quantitative-rows">
+            <!-- JS 填入 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="layout" style="margin-top: 18px;">
+      <!-- 左：ESG / SDG + 參與分析 -->
+      <div class="left-col">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">2. ESG / SDG</div>
+              <div class="card-subtitle">每一份心願，都對環境與永續目標有貢獻。</div>
+            </div>
+            <div class="pill">
+              <span class="pill-dot"></span>
+              減碳量 & SDG 對應
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <div style="font-size:12px; color:var(--text-sub); margin-bottom:4px;">
+                本批心願估計減碳量（kg CO₂e）
+              </div>
+              <div style="font-size:26px; font-weight:600;" id="total-co2">--</div>
+              <div style="font-size:11px; color:var(--text-sub); margin-top:2px;">
+                透過延長物品壽命、減少新購買所需的碳排。
+              </div>
+
+              <div class="table-wrapper" style="margin-top:10px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>心願名稱</th>
+                      <th>類別</th>
+                      <th>物品狀態</th>
+                      <th>減碳量</th>
+                      <th>SDG</th>
+                    </tr>
+                  </thead>
+                  <tbody id="esg-rows">
+                    <!-- JS 填入 -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size:12px; color:var(--text-sub); margin-bottom:4px;">
+                SDG 目標分布
+              </div>
+              <canvas id="sdgChart" height="180"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:14px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">3. 參與分析</div>
+              <div class="card-subtitle">看見「第一次參與」與「持續陪伴」的人。</div>
+            </div>
+            <div class="pill">
+              <span class="pill-dot yellow"></span>
+              認養人結構
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <div style="font-size:12px; color:var(--text-sub); margin-bottom:4px;">
+                新公益參與者比例
+              </div>
+              <div style="font-size:22px; font-weight:600;" id="new-participation">--</div>
+              <div style="font-size:11px; color:var(--text-sub); margin-top:2px;">
+                代表有多少人，因為這次活動第一次踏入公益。
+              </div>
+
+              <div style="font-size:12px; color:var(--text-sub); margin:10px 0 4px;">
+                平均參與深度（歷史認養次數）
+              </div>
+              <div style="font-size:18px; font-weight:600;" id="avg-depth">--</div>
+            </div>
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>領養人 ID</th>
+                    <th>歷史認養次數</th>
+                    <th>是否新參與者</th>
+                  </tr>
+                </thead>
+                <tbody id="participation-rows">
+                  <!-- JS 填入 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 右：情感敘事 + 效率評語 -->
+      <div class="right-col">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">4. 情感敘事</div>
+              <div class="card-subtitle">用一句話，感受孩子真正被看見的那一刻。</div>
+            </div>
+            <div class="pill">
+              <span class="pill-dot red"></span>
+              受助者真實回饋
+            </div>
+          </div>
+
+          <div class="story-list" id="story-list">
+            <!-- JS 填入 -->
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:14px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">5. 效率評語</div>
+              <div class="card-subtitle">讓企業與民眾放心投入的，是順手又清楚的流程。</div>
+            </div>
+          </div>
+
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:4px;">
+            領養體驗評分（滿分 5 分）
+          </div>
+          <div style="font-size:26px; font-weight:600;" id="avg-score">--</div>
+          <div style="font-size:11px; color:var(--text-sub); margin-top:2px;">
+            來自認養人的實際回饋。
+          </div>
+
+          <div style="margin-top:10px;" id="experience-rows">
+            <!-- JS 填入 -->
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      ※ 數據由 GC 贈物網後端自動匯入，報表可重複套用於每一批心願認養專案。
+    </div>
+  </div>
+
+  <script>
+    // === mock 測試資料（先看畫面用） ===
+    const mockData = {
+      quantitative: {
+        summary: {
+          avg_adopt_days: 4.2,
+          adoption_rate: 0.82,
+          conversion_rate: 0.37
+        },
+        rows: [
+          {
+            wish_name: "藍色的遙控汽車",
+            listed_at: "2025/10/27 12:01",
+            adopted_at: "2025/10/29 20:15",
+            clicks: 127,
+            status: "已認養"
+          },
+          {
+            wish_name: "超人力霸王樂高積木",
+            listed_at: "2025/10/27 14:04",
+            adopted_at: "2025/11/01 19:03",
+            clicks: 91,
+            status: "已認養"
+          },
+          {
+            wish_name: "球鞋一雙",
+            listed_at: "2025/10/28 09:20",
+            adopted_at: null,
+            clicks: 63,
+            status: "待認養"
+          }
+        ]
+      },
+      esg: {
+        summary: {
+          total_co2e: 128.5
+        },
+        sdg_counts: [
+          { sdg: "SDG 4", count: 23 },
+          { sdg: "SDG 10", count: 7 },
+          { sdg: "SDG 12", count: 17 }
+        ],
+        rows: [
+          {
+            wish_name: "藍色的遙控汽車",
+            category: "學習與遊戲",
+            item_status: "全新",
+            co2e: 3.5,
+            sdgs: ["SDG 4", "SDG 12"]
+          },
+          {
+            wish_name: "球鞋一雙",
+            category: "運動與體育",
+            item_status: "近新",
+            co2e: 4.8,
+            sdgs: ["SDG 3", "SDG 10"]
+          }
+        ]
+      },
+      participation: {
+        summary: {
+          new_participant_ratio: 0.42,
+          avg_depth: 3.1
+        },
+        rows: [
+          { adopter_id: "54903", history_count: 4, is_new: false },
+          { adopter_id: "45794", history_count: 1, is_new: true },
+          { adopter_id: "58096", history_count: 2, is_new: false }
+        ]
+      },
+      stories: [
+        {
+          student_name: "陳宥丞",
+          school: "嘉義縣灣內國小",
+          quote: "我終於有球鞋可以跑步了！"
+        },
+        {
+          student_name: "林小安",
+          school: "更寮國小",
+          quote: "下課可以跟同學一起玩直排輪了。"
+        }
+      ],
+      experience: {
+        summary: {
+          avg_score: 4.8
+        },
+        rows: [
+          {
+            score: 5,
+            comment: "流程順暢，3分鐘完成認養。"
+          },
+          {
+            score: 4,
+            comment: "操作簡單，如果可以多看幾張照片就更好了。"
+          }
+        ]
+      }
+    };
+
+    let sdgChartInstance = null;
+
+    async function loadData() {
+      const errorEl = document.getElementById("error");
+
+      try {
+        // === 如果要接後端，把下面兩行改成 fetch ===
+        // const API_URL = 'https://your-gas-or-api-url/exec';
+        // const data = await (await fetch(API_URL)).json();
+        const data = mockData; // 目前用 mock 測試
+
+        errorEl.style.display = "none";
+        renderKpis(data);
+        renderQuantitativeTable(data);
+        renderEsg(data);
+        renderParticipation(data);
+        renderStories(data);
+        renderExperience(data);
+      } catch (e) {
+        console.error(e);
+        errorEl.textContent =
+          "載入資料時發生問題，請稍後再試或檢查後端 API。";
+        errorEl.style.display = "block";
+      }
+    }
+
+    function formatPercent(value) {
+      if (value === null || value === undefined || isNaN(value)) return "--";
+      return (value * 100).toFixed(1) + "%";
+    }
+
+    function renderKpis(data) {
+      const kpiGrid = document.getElementById("kpi-grid");
+      kpiGrid.innerHTML = "";
+
+      const q = data.quantitative?.summary || {};
+      const p = data.participation?.summary || {};
+      const e = data.experience?.summary || {};
+
+      const items = [
+        {
+          label: "平均認養天數",
+          value:
+            q.avg_adopt_days !== undefined
+              ? q.avg_adopt_days.toFixed(1) + " 天"
+              : "--",
+          tagline: "從上架到被認養的平均等待時間"
+        },
+        {
+          label: "認養完成率",
+          value: formatPercent(q.adoption_rate),
+          tagline: "本批心願中已被認養的比例"
+        },
+        {
+          label: "轉換率（點擊 → 認養）",
+          value: formatPercent(q.conversion_rate),
+          tagline: "有點擊且完成認養的比例"
+        },
+        {
+          label: "新公益參與者比例",
+          value: formatPercent(p.new_participant_ratio),
+          tagline: "第一次做公益的認養人比例"
+        }
+      ];
+
+      items.forEach((kpi) => {
+        const div = document.createElement("div");
+        div.className = "kpi-card";
+        div.innerHTML = `
+          <div class="kpi-label">${kpi.label}</div>
+          <div class="kpi-value">${kpi.value}</div>
+          <div class="kpi-tagline">${kpi.tagline}</div>
+        `;
+        kpiGrid.appendChild(div);
+      });
+    }
+
+    function renderQuantitativeTable(data) {
+      const tbody = document.getElementById("quantitative-rows");
+      tbody.innerHTML = "";
+
+      const rows = data.quantitative?.rows || [];
+      rows.forEach((row) => {
+        const tr = document.createElement("tr");
+
+        const statusClass =
+          row.status === "已認養"
+            ? "status-pill"
+            : row.status === "待認養"
+            ? "status-pill pending"
+            : "status-pill failed";
+
+        tr.innerHTML = `
+          <td>${row.wish_name || "-"}</td>
+          <td>${row.listed_at || "-"}</td>
+          <td>${row.adopted_at || "-"}</td>
+          <td>${row.clicks ?? "-"}</td>
+          <td><span class="${statusClass}">${row.status || "-"}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderEsg(data) {
+      // 總減碳
+      const total = data.esg?.summary?.total_co2e;
+      document.getElementById("total-co2").textContent =
+        total !== undefined ? total.toFixed(1) + " kg" : "--";
+
+      // ESG 表格
+      const tbody = document.getElementById("esg-rows");
+      tbody.innerHTML = "";
+
+      const rows = data.esg?.rows || [];
+      rows.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.wish_name || "-"}</td>
+          <td>${row.category || "-"}</td>
+          <td>${row.item_status || "-"}</td>
+          <td>${row.co2e !== undefined ? row.co2e.toFixed(1) : "-"}</td>
+          <td>${Array.isArray(row.sdgs) ? row.sdgs.join(", ") : "-"}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // SDG 圖表
+      const sdgData = data.esg?.sdg_counts || [];
+      const labels = sdgData.map((d) => d.sdg);
+      const values = sdgData.map((d) => d.count);
+
+      const ctx = document.getElementById("sdgChart");
+      if (!ctx) return;
+
+      if (sdgChartInstance) {
+        sdgChartInstance.destroy();
+      }
+
+      sdgChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "心願數量",
+              data: values,
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                font: { size: 10 }
+              }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderParticipation(data) {
+      const sum = data.participation?.summary || {};
+      const newRatio = sum.new_participant_ratio;
+      const avgDepth = sum.avg_depth;
+
+      document.getElementById("new-participation").textContent =
+        newRatio !== undefined ? formatPercent(newRatio) : "--";
+      document.getElementById("avg-depth").textContent =
+        avgDepth !== undefined ? avgDepth.toFixed(1) + " 次" : "--";
+
+      const tbody = document.getElementById("participation-rows");
+      tbody.innerHTML = "";
+
+      const rows = data.participation?.rows || [];
+      rows.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.adopter_id || "-"}</td>
+          <td>${row.history_count ?? "-"}</td>
+          <td>${
+            row.is_new ? "是（首次參與）" : "否（持續認養）"
+          }</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderStories(data) {
+      const container = document.getElementById("story-list");
+      container.innerHTML = "";
+
+      const stories = data.stories || [];
+      stories.forEach((s) => {
+        const div = document.createElement("div");
+        div.className = "story-item";
+        div.innerHTML = `
+          <div class="story-meta">${s.school || ""} · ${
+          s.student_name || ""
+        }</div>
+          <div class="story-quote">${s.quote || ""}</div>
+        `;
+        container.appendChild(div);
+      });
+
+      if (stories.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "story-item";
+        empty.innerHTML =
+          '<div class="story-meta">尚未蒐集回饋</div><div class="story-quote">這批心願完成後，我們會向老師與孩子邀請一句話的回應。</div>';
+        container.appendChild(empty);
+      }
+    }
+
+    function renderExperience(data) {
+      const sum = data.experience?.summary || {};
+      const avg = sum.avg_score;
+      document.getElementById("avg-score").textContent =
+        avg !== undefined ? avg.toFixed(1) + " 分" : "--";
+
+      const container = document.getElementById("experience-rows");
+      container.innerHTML = "";
+
+      const rows = data.experience?.rows || [];
+      rows.forEach((row) => {
+        const div = document.createElement("div");
+        div.style.marginBottom = "8px";
+
+        const starsCount = Math.round(row.score || 0);
+        const stars =
+          "★★★★★".slice(0, starsCount) +
+          "☆☆☆☆☆".slice(0, 5 - starsCount);
+
+        div.innerHTML = `
+          <div class="rating-row">
+            <span class="stars">${stars}</span>
+            <span style="font-size:11px; color:var(--text-sub); margin-left:4px;">
+              ${row.score?.toFixed ? row.score.toFixed(1) : row.score || ""} 分
+            </span>
+          </div>
+          <div class="comment-text">${row.comment || ""}</div>
+        `;
+        container.appendChild(div);
+      });
+
+      if (rows.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "comment-text";
+        empty.textContent = "尚未蒐集領養體驗評分。";
+        container.appendChild(empty);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadData);
+  </script>
+</body>
+</html>
