@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>AI高效平台</title>
+  <title>AI高效平台 - 系統控制模組</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -12,6 +12,7 @@
       color: #e5e7eb;
     }
 
+    /* Hero 區塊 */
     .hero-section {
       min-height: 60vh;
       display: flex;
@@ -59,22 +60,153 @@
       box-shadow: 0 18px 40px rgba(56, 189, 248, 0.45);
       opacity: 0.95;
     }
+
+    /* 控制模組區塊 */
+    .modules-section {
+      padding: 60px 20px 80px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .modules-title {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      text-align: center;
+      color: #e5e7eb;
+    }
+
+    .modules-subtitle {
+      text-align: center;
+      color: #9ca3af;
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .module-card {
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.08), rgba(15, 23, 42, 0.98));
+      padding: 18px 20px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.6);
+    }
+
+    .module-index {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .module-title {
+      font-size: 1.1rem;
+      color: #e5e7eb;
+      margin-bottom: 4px;
+    }
+
+    .module-desc {
+      font-size: 0.92rem;
+      color: #9ca3af;
+    }
+
+    /* 簡單 RWD 調整 */
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2.2rem;
+        letter-spacing: 0.08em;
+      }
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- 主視覺區塊：AI高效平台 -->
   <section class="hero-section" id="top">
     <div class="hero-inner">
       <h1 class="hero-title">AI高效平台</h1>
       <p class="hero-subtitle">
         歡迎進入小洵打造的智慧高效平台，啟動你的未來工作流程
       </p>
-      <a href="#start" class="hero-button">立即啟動</a>
+      <a href="#modules" class="hero-button">瀏覽系統模組</a>
     </div>
   </section>
 
-  <section id="start" style="padding: 60px 20px; max-width: 960px; margin: 0 auto;">
-    <h2>開始使用</h2>
-    <p>這裡可以放你平台的功能介紹、登入按鈕或操作說明。</p>
+  <!-- 系統控制模組區塊（原本控制終端後面的 10 個功能） -->
+  <section class="modules-section" id="modules">
+    <h2 class="modules-title">系統控制模組總覽</h2>
+    <p class="modules-subtitle">
+      從儀表監控到終止連接，完整掌控每一個 AI 系統節點與運作狀態。
+    </p>
+
+    <div class="modules-grid">
+      <div class="module-card" id="dashboard">
+        <div class="module-index">01</div>
+        <div class="module-title">儀表監控</div>
+        <div class="module-desc">實時系統狀態分析</div>
+      </div>
+
+      <div class="module-card" id="network">
+        <div class="module-index">02</div>
+        <div class="module-title">神經網絡</div>
+        <div class="module-desc">全球節點連接狀態</div>
+      </div>
+
+      <div class="module-card" id="security">
+        <div class="module-index">03</div>
+        <div class="module-title">安全防禦</div>
+        <div class="module-desc">防火牆狀態：ACTIVE</div>
+      </div>
+
+      <div class="module-card" id="data">
+        <div class="module-index">04</div>
+        <div class="module-title">數據核心</div>
+        <div class="module-desc">訪問加密資料庫</div>
+      </div>
+
+      <div class="module-card" id="analytics">
+        <div class="module-index">05</div>
+        <div class="module-title">演算分析</div>
+        <div class="module-desc">生成預測模型</div>
+      </div>
+
+      <div class="module-card" id="archives">
+        <div class="module-index">06</div>
+        <div class="module-title">歷史檔案</div>
+        <div class="module-desc">檢索舊有記錄</div>
+      </div>
+
+      <div class="module-card" id="comms">
+        <div class="module-index">07</div>
+        <div class="module-title">通訊模組</div>
+        <div class="module-desc">加密頻段：89.2Hz</div>
+      </div>
+
+      <div class="module-card" id="geo">
+        <div class="module-index">08</div>
+        <div class="module-title">空間定位</div>
+        <div class="module-desc">坐標追踪已啟動</div>
+      </div>
+
+      <div class="module-card" id="settings">
+        <div class="module-index">09</div>
+        <div class="module-title">系統參數</div>
+        <div class="module-desc">調整介面配置</div>
+      </div>
+
+      <div class="module-card" id="exit">
+        <div class="module-index">10</div>
+        <div class="module-title">終止連接</div>
+        <div class="module-desc">斷開神經連接</div>
+      </div>
+    </div>
   </section>
 </body>
 </html>
