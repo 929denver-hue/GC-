@@ -2,193 +2,398 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>需求狀態查詢</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>需求管理系統</title>
   <style>
-    :root {
-      --gc-green: #2DB57D;
-      --gc-gray-bg: #f5f7fa;
-      --gc-border: #e2e6ee;
-      --gc-text: #222;
-      --gc-text-light: #666;
-    }
-    * {
-      box-sizing: border-box;
-    }
     body {
+      font-family: "Microsoft JhengHei", sans-serif;
       margin: 0;
-      font-family: "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--gc-gray-bg);
-      color: var(--gc-text);
-    }
-    .page {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 16px;
+      padding: 0;
+      background: #f5f7fa;
+      color: #333;
     }
     header {
-      text-align: center;
-      margin-bottom: 12px;
+      background: #2DB57D;
+      color: #fff;
+      padding: 16px;
     }
     header h1 {
-      font-size: 20px;
-      margin: 8px 0 4px;
-    }
-    header p {
       margin: 0;
-      font-size: 12px;
-      color: var(--gc-text-light);
+      font-size: 20px;
+    }
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+    .tab {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .tab.active {
+      border-bottom-color: #2DB57D;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 16px auto;
+      padding: 0 16px 32px;
     }
     .card {
       background: #fff;
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+      margin-bottom: 16px;
     }
     label {
       display: block;
-      font-size: 12px;
-      margin-bottom: 4px;
+      margin-top: 8px;
+      font-size: 13px;
     }
-    input[type="text"] {
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
       width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--gc-border);
-      font-size: 14px;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 13px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .col-6 {
+      flex: 1 1 200px;
     }
     .btn {
       display: inline-block;
       padding: 8px 16px;
-      border-radius: 999px;
+      border-radius: 4px;
       border: none;
-      background: var(--gc-green);
-      color: #fff;
-      font-size: 14px;
       cursor: pointer;
-      margin-top: 10px;
+      font-size: 13px;
     }
-    .btn:active {
-      opacity: 0.9;
+    .btn-primary {
+      background: #2DB57D;
+      color: #fff;
     }
-    .status-tag {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
+    .btn-secondary {
+      background: #eee;
+      color: #333;
+    }
+    .btn-sm {
+      padding: 4px 8px;
       font-size: 12px;
-      font-weight: 600;
-      margin-top: 4px;
     }
-    .status-待處理 { background:#ffecec; color:#b30000; }
-    .status-已通知工程部 { background:#fff3cd; color:#8a6d3b; }
-    .status-工程部處理中 { background:#e0f0ff; color:#215b9a; }
-    .status-工程部處理完畢 { background:#e5f8e8; color:#1b7b41; }
-
-    .field {
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
       margin-bottom: 8px;
     }
-    .field-label {
+    table {
+      width: 100%;
+      border-collapse: collapse;
       font-size: 12px;
-      color: var(--gc-text-light);
-      margin-bottom: 2px;
     }
-    .field-value {
-      font-size: 14px;
+    th, td {
+      border-bottom: 1px solid #eee;
+      padding: 6px 4px;
+      vertical-align: top;
+      text-align: left;
     }
-    .hint {
-      font-size: 12px;
-      color: var(--gc-text-light);
-      margin-top: 6px;
+    th {
+      background: #fafafa;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
-    .not-found {
-      font-size: 13px;
-      color: #b30000;
-      margin-top: 8px;
-    }
-    footer {
-      text-align: center;
+    .status-tag {
+      padding: 2px 6px;
+      border-radius: 4px;
       font-size: 11px;
-      color: var(--gc-text-light);
-      margin-top: 12px;
+      display: inline-block;
+    }
+    .status-待處理 { background:#ffecec; }
+    .status-已通知工程部 { background:#fff3cd; }
+    .status-工程部處理中 { background:#e0f0ff; }
+    .status-工程部處理完畢 { background:#e5f8e8; }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 8px 24px;
+      }
+      table {
+        font-size: 11px;
+      }
+      th, td {
+        padding: 4px 2px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <h1>需求狀態查詢</h1>
-      <p>輸入或確認您的需求編號查看最新進度</p>
-    </header>
+<header>
+  <h1>需求管理系統</h1>
+</header>
 
-    <div class="card">
-      <form id="queryForm" method="GET">
-        <label for="idInput">需求編號（例如：REQ-20251129-0001）</label>
-        <input type="text" id="idInput" name="id"
-               value="<?= requestId ? requestId : '' ?>" required>
-        <button type="submit" class="btn">查詢</button>
-        <div class="hint">
-          若由 LINE 開單通知進入，本欄位應已自動帶入您的需求編號。
+<div class="tabs">
+  <div class="tab active" data-tab="new">新增需求</div>
+  <div class="tab" data-tab="admin">需求管理</div>
+</div>
+
+<div class="container">
+  <!-- 新增需求 -->
+  <div id="tab-new" class="card">
+    <h2 style="margin-top:0;">前台｜提交需求</h2>
+    <div id="new-msg" style="font-size:12px;color:#d9534f;"></div>
+    <form id="newForm">
+      <div class="row">
+        <div class="col-6">
+          <label>開立者姓名</label>
+          <input type="text" name="creatorName" required>
         </div>
-      </form>
+        <div class="col-6">
+          <label>單位 / 部門</label>
+          <input type="text" name="creatorDept">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <label>Email</label>
+          <input type="email" name="creatorEmail">
+        </div>
+        <div class="col-6">
+          <label>LINE UserID（選填，用於通知）</label>
+          <input type="text" name="creatorLineId">
+        </div>
+      </div>
+
+      <label>需求標題</label>
+      <input type="text" name="title" required>
+
+      <label>需求內容詳細描述</label>
+      <textarea name="content" required></textarea>
+
+      <label>需求原因說明</label>
+      <textarea name="reason"></textarea>
+
+      <div class="row">
+        <div class="col-6">
+          <label>等級</label>
+          <select name="level">
+            <option value="緊急">緊急</option>
+            <option value="高">高</option>
+            <option value="中" selected>中</option>
+            <option value="低">低</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label>附件連結（如：Drive / 圖片 / 文件 URL）</label>
+          <input type="text" name="attachmentUrl" placeholder="https://...">
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button type="submit" class="btn btn-primary">送出需求</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 後台管理 -->
+  <div id="tab-admin" class="card" style="display:none;">
+    <h2 style="margin-top:0;">後台｜需求清單管理</h2>
+    <div class="toolbar">
+      <select id="filter-status">
+        <option value="ALL">全部狀態</option>
+        <option value="待處理">待處理</option>
+        <option value="已通知工程部">已通知工程部</option>
+        <option value="工程部處理中">工程部處理中</option>
+        <option value="工程部處理完畢">工程部處理完畢</option>
+      </select>
+      <select id="filter-level">
+        <option value="ALL">全部等級</option>
+        <option value="緊急">緊急</option>
+        <option value="高">高</option>
+        <option value="中">中</option>
+        <option value="低">低</option>
+      </select>
+      <input type="text" id="filter-keyword" placeholder="關鍵字搜尋（編號 / 標題 / 開立者）">
+      <button class="btn btn-secondary btn-sm" onclick="loadRequests()">重新載入</button>
+      <span id="admin-msg" style="font-size:12px;color:#999;"></span>
     </div>
 
-    <? if (requestId) { ?>
-      <div class="card">
-        <? if (requestInfo) { ?>
-          <div class="field">
-            <div class="field-label">需求編號</div>
-            <div class="field-value"><?= requestInfo.id ?></div>
-          </div>
-
-          <div class="field">
-            <div class="field-label">標題</div>
-            <div class="field-value"><?= requestInfo.title || '（未填寫）' ?></div>
-          </div>
-
-          <div class="field">
-            <div class="field-label">等級</div>
-            <div class="field-value"><?= requestInfo.level || '-' ?></div>
-          </div>
-
-          <div class="field">
-            <div class="field-label">目前狀態</div>
-            <? 
-              var s = requestInfo.status || '';
-              var cls = 'status-tag ';
-              cls += 'status-' + s.replace(/\s/g,'');
-            ?>
-            <div class="field-value">
-              <span class="<?= cls ?>"><?= s || '（尚未設定）' ?></span>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="field-label">建立時間</div>
-            <div class="field-value"><?= requestInfo.createdAt || '-' ?></div>
-          </div>
-
-          <div class="field">
-            <div class="field-label">最後更新</div>
-            <div class="field-value">
-              <?= requestInfo.lastUpdateAt || '-' ?>
-              <? if (requestInfo.lastOperator) { ?>
-                （<?= requestInfo.lastOperator ?>）
-              <? } ?>
-            </div>
-          </div>
-        <? } else { ?>
-          <div class="not-found">
-            查無此需求編號：<?= requestId ?><br>
-            請確認是否輸入正確，或洽詢 PM。
-          </div>
-        <? } ?>
-      </div>
-    <? } ?>
-
-    <footer>
-      GC 內部需求管理系統
-    </footer>
+    <div style="max-height:450px;overflow:auto;">
+      <table id="req-table">
+        <thead>
+          <tr>
+            <th>編號</th>
+            <th>建立時間</th>
+            <th>標題 / 開立者</th>
+            <th>等級</th>
+            <th>狀態</th>
+            <th>附件</th>
+            <th>更新狀態</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 動態產生 -->
+        </tbody>
+      </table>
+    </div>
   </div>
+</div>
+
+<script>
+  // Tab 切換
+  document.querySelectorAll('.tab').forEach(function(el) {
+    el.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+
+      document.getElementById('tab-new').style.display   = el.dataset.tab === 'new'   ? 'block' : 'none';
+      document.getElementById('tab-admin').style.display = el.dataset.tab === 'admin' ? 'block' : 'none';
+
+      if (el.dataset.tab === 'admin') {
+        loadRequests();
+      }
+    });
+  });
+
+  // 新增需求提交
+  document.getElementById('newForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = e.target;
+    var data = {
+      creatorName:   form.creatorName.value,
+      creatorDept:   form.creatorDept.value,
+      creatorEmail:  form.creatorEmail.value,
+      creatorLineId: form.creatorLineId.value,
+      title:         form.title.value,
+      content:       form.content.value,
+      reason:        form.reason.value,
+      level:         form.level.value,
+      attachmentUrl: form.attachmentUrl.value
+    };
+
+    document.getElementById('new-msg').style.color = '#999';
+    document.getElementById('new-msg').textContent = '送出中...';
+
+    google.script.run
+      .withSuccessHandler(function(res) {
+        if (res && res.ok) {
+          document.getElementById('new-msg').style.color = '#2DB57D';
+          document.getElementById('new-msg').textContent = res.message;
+          form.reset();
+        } else {
+          document.getElementById('new-msg').style.color = '#d9534f';
+          document.getElementById('new-msg').textContent = (res && res.message) || '送出失敗';
+        }
+      })
+      .withFailureHandler(function(err) {
+        document.getElementById('new-msg').style.color = '#d9534f';
+        document.getElementById('new-msg').textContent = '系統錯誤：' + err.message;
+      })
+      .createRequest(data);
+  });
+
+  // 載入需求清單（後台）
+  function loadRequests() {
+    var filter = {
+      status:  document.getElementById('filter-status').value,
+      level:   document.getElementById('filter-level').value,
+      keyword: document.getElementById('filter-keyword').value.trim()
+    };
+    document.getElementById('admin-msg').textContent = '載入中...';
+
+    google.script.run
+      .withSuccessHandler(function(list) {
+        var tbody = document.querySelector('#req-table tbody');
+        tbody.innerHTML = '';
+        list.forEach(function(r) {
+          var tr = document.createElement('tr');
+
+          var statusClass = 'status-' + (r.status || '').replace(/ /g, '');
+
+          tr.innerHTML =
+            '<td>' + r.id + '</td>' +
+            '<td>' + r.createdAt + '</td>' +
+            '<td><div style="font-weight:bold;">' + escapeHtml(r.title) +
+            '</div><div style="font-size:11px;color:#666;">' +
+            escapeHtml(r.creatorName || "") + '</div></td>' +
+            '<td>' + (r.level || '') + '</td>' +
+            '<td><span class="status-tag ' + statusClass + '">' + (r.status || '') + '</span></td>' +
+            '<td>' + (r.attachmentUrl
+              ? '<a href="' + r.attachmentUrl + '" target="_blank">查看</a>'
+              : '') + '</td>' +
+            '<td>' +
+              '<select data-id="' + r.id + '" class="status-select">' +
+                '<option value="待處理"' + (r.status === '待處理' ? ' selected':'') + '>待處理</option>' +
+                '<option value="已通知工程部"' + (r.status === '已通知工程部' ? ' selected':'') + '>已通知工程部</option>' +
+                '<option value="工程部處理中"' + (r.status === '工程部處理中' ? ' selected':'') + '>工程部處理中</option>' +
+                '<option value="工程部處理完畢"' + (r.status === '工程部處理完畢' ? ' selected':'') + '>工程部處理完畢</option>' +
+              '</select>' +
+              '<button class="btn btn-primary btn-sm" onclick="saveStatus(\'' + r.id + '\')">儲存</button>' +
+            '</td>';
+
+          tbody.appendChild(tr);
+        });
+        document.getElementById('admin-msg').textContent = '共 ' + list.length + ' 筆';
+      })
+      .withFailureHandler(function(err) {
+        document.getElementById('admin-msg').textContent = '載入失敗：' + err.message;
+      })
+      .getRequestList(filter);
+  }
+
+  // 儲存狀態更新
+  function saveStatus(id) {
+    var select = document.querySelector('select.status-select[data-id="' + id + '"]');
+    if (!select) return;
+    var newStatus = select.value;
+
+    var operator = prompt('請輸入操作人（可留空）：', '');
+    var remark   = prompt('如需補充說明，請輸入備註（可留空）：', '');
+
+    document.getElementById('admin-msg').textContent = '更新中...';
+
+    google.script.run
+      .withSuccessHandler(function(res) {
+        if (res && res.ok) {
+          document.getElementById('admin-msg').textContent = '已更新：' + id;
+          loadRequests(); // 重新載入，呈現最新狀態
+        } else {
+          document.getElementById('admin-msg').textContent = (res && res.message) || '更新失敗';
+        }
+      })
+      .withFailureHandler(function(err) {
+        document.getElementById('admin-msg').textContent = '更新失敗：' + err.message;
+      })
+      .updateRequestStatus(id, newStatus, operator, remark);
+  }
+
+  // 簡單防 XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+</script>
 </body>
 </html>
