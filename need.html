@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>互動式需求管理系統（前端 Demo）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- 使用 CDN 版 Tailwind，直接就能用 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 讓左側清單與右側內容固定高度並可捲動 */
+    .panel {
+      height: 600px;
+    }
+    .panel-scroll {
+      height: calc(600px - 48px);
+    }
+  </style>
+</head>
+<body class="bg-slate-100">
+  <!-- 頂部標題 -->
+  <header class="bg-slate-900 text-white px-6 py-4 shadow">
+    <h1 class="text-xl font-semibold">
+      互動式需求管理系統（前端 Demo，純前端無後端）
+    </h1>
+  </header>
+
+  <!-- 主內容容器 -->
+  <main class="p-6 max-w-6xl mx-auto">
+    <div class="grid gap-4 lg:grid-cols-3">
+      <!-- 左側：需求清單 -->
+      <div class="lg:col-span-1 panel">
+        <div class="flex flex-col h-full">
+          <div class="mb-3 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-slate-800">需求清單</h2>
+            <button
+              id="btnCreate"
+              class="inline-flex items-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-medium text-white shadow hover:bg-sky-700"
+            >
+              + 新增需求
+            </button>
+          </div>
+
+          <div
+            id="listContainer"
+            class="panel-scroll overflow-y-auto rounded-lg border border-slate-200 bg-white"
+          >
+            <!-- 清單項目由 JavaScript 動態產生 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側：詳情 / 表單 -->
+      <div class="lg:col-span-2 panel">
+        <div
+          id="detailContainer"
+          class="h-full rounded-lg border border-slate-200 bg-white p-4"
+        >
+          <!-- 詳情或表單由 JavaScript 動態產生 -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 純前端邏輯 -->
+  <script>
+    /**********************
+     * 1. 假資料（可以依需求修改文字）
+     **********************/
+    const mockRequirements = [
+      {
+        id: "1",
+        reqNumber: "REQ-2025-001",
+        title: "會員登入功能優化",
+        description: "改善登入流程，新增登入錯誤提示與帳號鎖定機制。",
+        businessValue: "降低客服申訴，提升登入轉換率。",
+        priority: "high", // low / medium / high / urgent
+        status: "in_progress", // pending / notified / in_progress / completed / rejected
+        creatorName: "Alice (PM)",
+        assigneeName: "Bob (工程師)",
+        createdAt: "2025-11-20T10:00:00Z",
+        dueDate: "2025-12-01T00:00:00Z",
+      },
+      {
+        id: "2",
+        reqNumber: "REQ-2025-002",
+        title: "報表匯出功能",
+        description: "提供 CSV / Excel 匯出需求列表的功能。",
+        businessValue: "方便 PM 與管理層做週會報告。",
+        priority: "medium",
+        status: "pending",
+        creatorName: "Charlie (PM)",
+        assigneeName: "",
+        createdAt: "2025-11-22T09:30:00Z",
+        dueDate: "",
+      },
+      {
+        id: "3",
+        reqNumber: "REQ-2025-003",
+        title: "即時通知整合",
+        description: "當需求狀態變更時，顯示即時通知提示。",
+        businessValue: "加速團隊溝通，減少漏看需求的風險。",
+        priority: "urgent",
+        status: "notified",
+        creatorName: "Alice (PM)",
+        assigneeName: "David (工程師)",
+        createdAt: "2025-11-23T14:15:00Z",
+        dueDate: "2025-11-30T00:00:00Z",
+      },
+    ];
+
+    /**********************
+     * 2. 全域狀態
+     **********************/
+    let requirements = JSON.parse(JSON.stringify(mockRequirements));
+    let selectedId = requirements.length ? requirements[0].id : null;
+    let mode = "view"; // view | create | edit
+
+    const listContainer = document.getElementById("listContainer");
+    const detailContainer = document.getElementById("detailContainer");
+    const btnCreate = document.getElementById("btnCreate");
+
+    /**********************
+     * 3. 小工具：狀態 & 優先度 顏色
+     **********************/
+    function statusColor(status) {
+      switch (status) {
+        case "pending":
+          return "bg-gray-100 text-gray-800";
+        case "notified":
+          return "bg-sky-100 text-sky-800";
+        case "in_progress":
+          return "bg-amber-100 text-amber-800";
+        case "completed":
+          return "bg-emerald-100 text-emerald-800";
+        case "rejected":
+          return "bg-rose-100 text-rose-800";
+        default:
+          return "bg-gray-100 text-gray-800";
+      }
+    }
+
+    function priorityColor(priority) {
+      switch (priority) {
+        case "low":
+          return "bg-emerald-100 text-emerald-800";
+        case "medium":
+          return "bg-sky-100 text-sky-800";
+        case "high":
+          return "bg-amber-100 text-amber-800";
+        case "urgent":
+          return "bg-rose-100 text-rose-800";
+        default:
+          return "bg-gray-100 text-gray-800";
+      }
+    }
+
+    /**********************
+     * 4. 渲染：左側清單
+     **********************/
+    function renderList() {
+      if (!requirements.length) {
+        listContainer.innerHTML =
+          '<div class="p-4 text-center text-sm text-slate-500">目前尚無任何需求，請點擊「新增需求」建立。</div>';
+        return;
+      }
+
+      const itemsHtml = requirements
+        .map((req) => {
+          const isSelected = req.id === selectedId;
+          return `
+          <li
+            data-id="${req.id}"
+            class="cursor-pointer px-4 py-3 hover:bg-slate-50 ${
+              isSelected ? "bg-sky-50" : ""
+            }"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-mono text-slate-400">
+                    ${req.reqNumber}
+                  </span>
+                  <p class="text-sm font-medium text-slate-800">
+                    ${escapeHtml(req.title)}
+                  </p>
+                </div>
+                <p class="mt-1 line-clamp-2 text-xs text-slate-500">
+                  ${escapeHtml(req.description)}
+                </p>
+                <p class="mt-1 text-xs text-slate-400">
+                  建立者：${escapeHtml(req.creatorName || "")}
+                  ${
+                    req.assigneeName
+                      ? "｜負責人：" + escapeHtml(req.assigneeName)
+                      : ""
+                  }
+                </p>
+              </div>
+
+              <div class="flex flex-col items-end gap-1">
+                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColor(
+                  req.status
+                )}">
+                  狀態：${req.status}
+                </span>
+                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${priorityColor(
+                  req.priority
+                )}">
+                  優先度：${req.priority}
+                </span>
+              </div>
+            </div>
+          </li>
+        `;
+        })
+        .join("");
+
+      listContainer.innerHTML = `
+        <ul class="divide-y divide-slate-100">
+          ${itemsHtml}
+        </ul>
+      `;
+
+      // 綁定點擊事件
+      const lis = listContainer.querySelectorAll("li[data-id]");
+      lis.forEach((li) => {
+        li.addEventListener("click", () => {
+          const id = li.getAttribute("data-id");
+          selectedId = id;
+          mode = "view";
+          renderAll();
+        });
+      });
+    }
+
+    /**********************
+     * 5. 渲染：詳情
+     **********************/
+    function renderDetailView(req) {
+      if (!req) {
+        detailContainer.innerHTML = `
+          <div class="flex h-full items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50">
+            <p class="text-sm text-slate-500">
+              請從左側清單選擇一筆需求，或點「新增需求」建立新的需求。
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      const createdAtText = req.createdAt
+        ? new Date(req.createdAt).toLocaleString()
+        : "-";
+      const dueDateText = req.dueDate
+        ? new Date(req.dueDate).toLocaleDateString()
+        : "";
+
+      detailContainer.innerHTML = `
+        <div class="flex h-full flex-col">
+          <div class="mb-3 flex items-start justify-between">
+            <div>
+              <p class="text-xs font-mono text-slate-400">${req.reqNumber}</p>
+              <h2 class="mt-1 text-lg font-semibold text-slate-900">
+                ${escapeHtml(req.title)}
+              </h2>
+            </div>
+            <button
+              id="btnEdit"
+              class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            >
+              編輯
+            </button>
+          </div>
+
+          <div class="mb-3 flex flex-wrap gap-2 text-xs">
+            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 font-medium bg-sky-100 text-sky-800">
+              建立者：${escapeHtml(req.creatorName || "")}
+            </span>
+            ${
+              req.assigneeName
+                ? `<span class="inline-flex items-center rounded-full px-2.5 py-0.5 font-medium bg-emerald-100 text-emerald-800">
+                    負責人：${escapeHtml(req.assigneeName)}
+                   </span>`
+                : ""
+            }
+            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 font-medium ${priorityColor(
+              req.priority
+            )}">
+              優先度：${req.priority}
+            </span>
+            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 font-medium ${statusColor(
+              req.status
+            )}">
+              狀態：${req.status}
+            </span>
+          </div>
+
+          <div class="mt-2 flex-1 space-y-3 overflow-y-auto text-sm text-slate-700">
+            <section>
+              <h3 class="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                需求描述
+              </h3>
+              <p class="whitespace-pre-line">
+                ${escapeHtml(req.description)}
+              </p>
+            </section>
+
+            ${
+              req.businessValue
+                ? `
+              <section>
+                <h3 class="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  商業價值
+                </h3>
+                <p class="whitespace-pre-line">
+                  ${escapeHtml(req.businessValue || "")}
+                </p>
+              </section>
+            `
+                : ""
+            }
+
+            <section class="text-xs text-slate-400">
+              <p>建立時間：${createdAtText}</p>
+              ${
+                dueDateText
+                  ? `<p>預計完成：${dueDateText}</p>`
+                  : ""
+              }
+            </section>
+          </div>
+        </div>
+      `;
+
+      const btnEdit = document.getElementById("btnEdit");
+      if (btnEdit) {
+        btnEdit.addEventListener("click", () => {
+          mode = "edit";
+          renderAll();
+        });
+      }
+    }
+
+    /**********************
+     * 6. 渲染：表單（新增 / 編輯）
+     **********************/
+    function renderForm(initial, isEdit) {
+      const title = initial?.title || "";
+      const description = initial?.description || "";
+      const businessValue = initial?.businessValue || "";
+      const priority = initial?.priority || "medium";
+      const status = initial?.status || "pending";
+      const creatorName = initial?.creatorName || "Demo PM";
+      const assigneeName = initial?.assigneeName || "";
+      const dueDate = initial?.dueDate
+        ? initial.dueDate.slice(0, 10)
+        : "";
+
+      detailContainer.innerHTML = `
+        <form id="requirementForm" class="flex h-full flex-col space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-slate-800">
+              ${isEdit ? "編輯需求" : "新增需求"}
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="col-span-2">
+              <label class="mb-1 block text-xs font-medium text-slate-600">
+                標題
+              </label>
+              <input
+                name="title"
+                class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                value="${escapeAttr(title)}"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="mb-1 block text-xs font-medium text-slate-600">
+                優先度
+              </label>
+              <select
+                name="priority"
+                class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+              >
+                <option value="low" ${
+                  priority === "low" ? "selected" : ""
+                }>low</option>
+                <option value="medium" ${
+                  priority === "medium" ? "selected" : ""
+                }>medium</option>
+                <option value="high" ${
+                  priority === "high" ? "selected" : ""
+                }>high</option>
+                <option value="urgent" ${
+                  priority === "urgent" ? "selected" : ""
+                }>urgent</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="mb-1 block text-xs font-medium text-slate-600">
+                狀態
+              </label>
+              <select
+                name="status"
+                class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+              >
+                <option value="pending" ${
+                  status === "pending" ? "selected" : ""
+                }>pending</option>
+                <option value="notified" ${
+                  status === "notified" ? "selected" : ""
+                }>notified</option>
+                <option value="in_progress" ${
+                  status === "in_progress" ? "selected" : ""
+                }>in_progress</option>
+                <option value="completed" ${
+                  status === "completed" ? "selected" : ""
+                }>completed</option>
+                <option value="rejected" ${
+                  status === "rejected" ? "selected" : ""
+                }>rejected</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="mb-1 block text-xs font-medium text-slate-600">
+                建立者
+              </label>
+              <input
+                name="creatorName"
+                class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
+                value="${escapeAttr(creatorName)}"
+              />
+            </div>
+
+            <div>
+              <label class="mb-1 block text-xs font-medium text-slate-600">
+                負責人
+              </label>
+              <input
+                name="assigneeName"
+                class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
+                value="${escapeAttr(assigneeName)}"
+              />
+            </div>
+
+            <div>
+              <label class="mb-1 block text-xs font-medium text-slate-600">
+                預計完成日
+              </label>
+              <input
+                type="date"
+                name="dueDate"
+                class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
+                value="${escapeAttr(dueDate)}"
+              />
+            </div>
+          </div>
+
+          <div class="text-sm">
+            <label class="mb-1 block text-xs font-medium text-slate-600">
+              需求描述
+            </label>
+            <textarea
+              name="description"
+              class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+              rows="4"
+              required
+            >${escapeHtml(description)}</textarea>
+          </div>
+
+          <div class="text-sm">
+            <label class="mb-1 block text-xs font-medium text-slate-600">
+              商業價值（選填）
+            </label>
+            <textarea
+              name="businessValue"
+              class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
+              rows="3"
+            >${escapeHtml(businessValue)}</textarea>
+          </div>
+
+          <div class="mt-auto flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              id="btnCancel"
+              class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              class="rounded-md bg-sky-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-sky-700"
+            >
+              儲存
+            </button>
+          </div>
+        </form>
+      `;
+
+      const form = document.getElementById("requirementForm");
+      const btnCancel = document.getElementById("btnCancel");
+
+      if (btnCancel) {
+        btnCancel.addEventListener("click", () => {
+          mode = "view";
+          renderAll();
+        });
+      }
+
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const fd = new FormData(form);
+
+          const value = {
+            reqNumber: initial?.reqNumber || "REQ-NEW",
+            title: fd.get("title")?.toString().trim() || "",
+            description: fd.get("description")?.toString().trim() || "",
+            businessValue:
+              fd.get("businessValue")?.toString().trim() || "",
+            priority: fd.get("priority")?.toString() || "medium",
+            status: fd.get("status")?.toString() || "pending",
+            creatorName:
+              fd.get("creatorName")?.toString().trim() || "",
+            assigneeName:
+              fd.get("assigneeName")?.toString().trim() || "",
+            dueDate: fd.get("dueDate")?.toString() || "",
+          };
+
+          if (!value.title || !value.description) {
+            alert("標題與描述為必填");
+            return;
+          }
+
+          if (isEdit && initial?.id) {
+            // 編輯
+            requirements = requirements.map((r) =>
+              r.id === initial.id
+                ? {
+                    ...r,
+                    ...value,
+                    assigneeName: value.assigneeName || "",
+                    dueDate: value.dueDate
+                      ? new Date(value.dueDate).toISOString()
+                      : "",
+                  }
+                : r
+            );
+            mode = "view";
+          } else {
+            // 新增
+            const newId = Date.now().toString();
+            const newReqNumber = `REQ-2025-${String(
+              requirements.length + 1
+            ).padStart(3, "0")}`;
+            const newReq = {
+              ...value,
+              id: newId,
+              reqNumber:
+                value.reqNumber === "REQ-NEW"
+                  ? newReqNumber
+                  : value.reqNumber,
+              assigneeName: value.assigneeName || "",
+              createdAt: new Date().toISOString(),
+              dueDate: value.dueDate
+                ? new Date(value.dueDate).toISOString()
+                : "",
+            };
+            requirements = [newReq, ...requirements];
+            selectedId = newId;
+            mode = "view";
+          }
+
+          renderAll();
+        });
+      }
+    }
+
+    /**********************
+     * 7. 主渲染函式
+     **********************/
+    function renderAll() {
+      // 左側清單
+      renderList();
+      // 右側內容
+      const current = requirements.find((r) => r.id === selectedId) || null;
+      if (mode === "create") {
+        renderForm(null, false);
+      } else if (mode === "edit") {
+        renderForm(current, true);
+      } else {
+        renderDetailView(current);
+      }
+    }
+
+    /**********************
+     * 8. 事件：新增按鈕
+     **********************/
+    btnCreate.addEventListener("click", () => {
+      mode = "create";
+      selectedId = null;
+      renderAll();
+    });
+
+    /**********************
+     * 9. 安全處理：避免 XSS
+     **********************/
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function escapeAttr(str) {
+      if (!str) return "";
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    /**********************
+     * 10. 初始化
+     **********************/
+    renderAll();
+  </script>
+</body>
+</html>
