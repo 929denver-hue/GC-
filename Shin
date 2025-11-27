@@ -12,7 +12,6 @@
       color: #e5e7eb;
     }
 
-    /* 整個主視覺區塊 */
     .hero-section {
       min-height: 60vh;
       display: flex;
@@ -63,7 +62,6 @@
   </style>
 </head>
 <body>
-  <!-- 主視覺區塊：AI高效平台 -->
   <section class="hero-section" id="top">
     <div class="hero-inner">
       <h1 class="hero-title">AI高效平台</h1>
@@ -74,7 +72,6 @@
     </div>
   </section>
 
-  <!-- 下面是示意的下一區塊，可以自行替換或刪除 -->
   <section id="start" style="padding: 60px 20px; max-width: 960px; margin: 0 auto;">
     <h2>開始使用</h2>
     <p>這裡可以放你平台的功能介紹、登入按鈕或操作說明。</p>
