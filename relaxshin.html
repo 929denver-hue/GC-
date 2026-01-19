@@ -3,101 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小洵的修復時光｜互惠轉盤</title>
+    <title>修復時光｜與洵的互惠之約</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 升級版配色：更加沉穩的高級翡翠與香檳金 */
-            --primary-dark: #3a6b48; /* 翡翠深綠 */
-            --primary-light: #e8f3ea; /* 淺玉色背景 */
-            --accent-gold: #c5a059;   /* 霧面香檳金 */
-            --text-main: #444444;
-            --text-sub: #777777;
-            --white: #ffffff;
+            /* --- 定義高級色票 --- */
+            --primary-deep: #1a3c34;  /* 森系墨綠：專業、沉穩 */
+            --primary-muted: #6a8d83; /* 莫蘭迪玉色：療癒 */
+            --accent-bronze: #a68b5b; /* 拉絲古銅金：低調奢華 */
+            --bg-cream: #f5f2ed;      /* 米灰紙張色：溫暖 */
+            --text-dark: #2c2c2c;     /* 深灰字體，比純黑柔和 */
+            --text-light: #666666;
+            --white-soft: #ffffff;
         }
 
         body {
-            font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", serif;
-            background-color: var(--primary-light);
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
-            background-size: 30px 30px; /* 格紋背景增加專業感 */
-            color: var(--text-main);
+            /* 標題用宋體，內文用黑體 */
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-cream);
+            /* 加入極細微的雜點紋理，模擬高級紙張 */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            color: var(--text-dark);
             margin: 0;
-            padding: 30px 20px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            letter-spacing: 0.05em;
         }
 
+        h1, h2, h3, h4 { font-family: 'Noto Serif TC', serif; }
+
         .container {
-            max-width: 600px;
+            max-width: 550px;
             width: 100%;
         }
 
-        /* --- 1. 專業感前言區 (信箋風格) --- */
+        /* --- 1. 前言區：如同一張高級邀請函 --- */
         .intro-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(58, 107, 72, 0.08);
-            margin-bottom: 40px;
-            position: relative;
-            border-top: 6px solid var(--primary-dark);
+            background: var(--white-soft);
+            padding: 40px 30px;
+            border-radius: 4px; /* 微圓角，更俐落 */
+            box-shadow: 0 10px 30px rgba(26, 60, 52, 0.05);
+            margin-bottom: 50px;
             text-align: center;
+            position: relative;
+            border-top: 3px solid var(--accent-bronze);
         }
 
-        .intro-card::before {
-            content: "❝"; /* 引用符號 */
-            font-size: 60px;
-            color: var(--primary-light);
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-family: serif;
-            z-index: 0;
+        /* 使用裝飾線條代替巨大的引號 */
+        .intro-divider {
+            height: 1px;
+            width: 60px;
+            background: var(--accent-bronze);
+            margin: 20px auto;
         }
 
         .intro-title {
-            font-size: 1.4em;
-            color: var(--primary-dark);
-            margin: 0 0 15px 0;
-            font-weight: bold;
-            position: relative;
-            z-index: 1;
-            letter-spacing: 1px;
+            font-size: 1.6em;
+            color: var(--primary-deep);
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .intro-subtitle {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 0.9em;
+            color: var(--accent-bronze);
+            margin-bottom: 25px;
+            font-style: italic;
         }
 
         .intro-text {
             font-size: 0.95em;
-            line-height: 1.8;
-            color: var(--text-main);
-            position: relative;
-            z-index: 1;
-            text-align: justify; /* 左右對齊 */
+            line-height: 2;
+            color: var(--text-light);
+            text-align: justify;
+            font-weight: 300;
         }
 
         .highlight {
-            color: var(--primary-dark);
-            font-weight: bold;
-            background: linear-gradient(120deg, transparent 0%, transparent 100%, #d4edda 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
+            color: var(--primary-deep);
+            font-weight: 500;
+            border-bottom: 1px dotted var(--accent-bronze);
         }
 
-        /* --- 轉盤區 --- */
+        /* --- 2. 轉盤區：打造工藝品般的質感 --- */
         .wheel-wrapper {
             position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 0 auto 30px;
-            padding: 8px;
-            background: white;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto 40px;
+            padding: 12px;
+            background: var(--white-soft);
             border-radius: 50%;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border: 4px solid var(--accent-gold);
+            /* 多層次陰影製造懸浮感 */
+            box-shadow: 
+                0 10px 20px rgba(0,0,0,0.05),
+                inset 0 0 15px rgba(166, 139, 91, 0.1); 
+            border: 1px solid var(--accent-bronze);
         }
 
         canvas {
@@ -107,168 +113,183 @@
             transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        .pointer {
+        /* 指針：設計成珠寶樣式 */
+        .pointer-container {
             position: absolute;
-            top: -20px;
+            top: -18px;
             left: 50%;
             transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 40px solid var(--primary-dark);
-            filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2));
             z-index: 10;
+            filter: drop-shadow(0 4px 3px rgba(0,0,0,0.1));
         }
 
+        .pointer-jewel {
+            width: 20px; height: 20px;
+            background: var(--primary-deep);
+            border-radius: 50%;
+            border: 2px solid var(--accent-bronze);
+            margin: 0 auto;
+        }
+        .pointer-arrow {
+            width: 0; height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 25px solid var(--primary-deep);
+            margin-top: -5px;
+        }
+
+        /* 中心裝飾點 */
+        .center-knob {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px; height: 50px;
+            background: radial-gradient(circle at 30% 30%, var(--accent-bronze), #8c734b);
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 5;
+            border: 2px solid var(--white-soft);
+        }
+
+        /* 按鈕：細緻、扁平化 */
         .btn-spin {
             display: block;
             margin: 0 auto;
-            background: linear-gradient(135deg, var(--primary-dark), #2a4f34);
-            color: var(--accent-gold);
-            border: 1px solid var(--accent-gold);
-            padding: 14px 45px;
+            background: var(--primary-deep);
+            color: var(--accent-bronze);
+            border: 1px solid var(--accent-bronze);
+            padding: 15px 50px;
             font-size: 1.1em;
-            border-radius: 50px;
+            border-radius: 2px; /* 微圓角，更現代 */
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(58, 107, 72, 0.25);
-            transition: all 0.2s;
-            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(26, 60, 52, 0.15);
+            transition: all 0.3s ease;
+            letter-spacing: 0.15em;
+            font-family: 'Noto Serif TC', serif;
         }
 
-        .btn-spin:active { transform: scale(0.96); }
-
-        /* --- 手動選擇區 --- */
-        .manual-section {
-            margin-top: 50px;
-            position: relative;
+        .btn-spin:hover {
+            background: var(--accent-bronze);
+            color: var(--primary-deep);
+            box-shadow: 0 8px 20px rgba(166, 139, 91, 0.2);
         }
+
+        /* --- 3. 手動選擇區：票券質感 --- */
+        .manual-section { margin-top: 60px; }
         
-        .divider {
-            display: flex;
-            align-items: center;
+        .section-header {
             text-align: center;
-            color: var(--accent-gold);
-            margin-bottom: 25px;
-            font-size: 0.9em;
+            margin-bottom: 30px;
         }
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #ddd;
+        .section-title {
+            font-size: 1.1em;
+            color: var(--primary-deep);
+            font-weight: normal;
         }
-        .divider:not(:empty)::before { margin-right: .5em; }
-        .divider:not(:empty)::after { margin-left: .5em; }
+        .section-line {
+            width: 30px; height: 1px; background: var(--accent-bronze); margin: 15px auto;
+        }
 
-        .card-grid {
-            display: grid;
-            gap: 12px;
-        }
+        .card-grid { display: grid; gap: 15px; }
 
         .card {
-            background: white;
-            padding: 18px 20px;
-            border-radius: 12px;
-            border-left: 4px solid transparent;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            background: var(--white-soft);
+            padding: 25px;
+            border-radius: 4px;
+            border: 1px solid #eee;
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 卡片左側的金線裝飾 */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--accent-bronze);
+            opacity: 0.5;
+            transition: all 0.3s;
         }
 
         .card:hover {
-            border-left-color: var(--accent-gold);
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-color: var(--accent-bronze);
+            box-shadow: 0 10px 25px rgba(166, 139, 91, 0.1);
+            transform: translateY(-2px);
+        }
+        .card:hover::before { opacity: 1; }
+
+        .card h4 {
+            margin: 0 0 10px 0;
+            color: var(--primary-deep);
+            font-size: 1.1em;
+            letter-spacing: 0.05em;
         }
 
-        .card-content h4 {
-            margin: 0 0 6px 0;
-            color: var(--primary-dark);
-            font-size: 1.05em;
-        }
-
-        /* 需求1：完整顯示文字 */
-        .card-content p {
+        .card p {
             margin: 0;
             font-size: 0.9em;
-            color: var(--text-sub);
-            line-height: 1.5;
-            /* 確保文字換行 */
-            white-space: normal; 
+            color: var(--text-light);
+            line-height: 1.6;
         }
 
-        .card-arrow { color: #ddd; font-size: 1.2em; }
-
-        /* --- 彈窗設計 --- */
+        /* --- 彈窗 --- */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(26, 60, 52, 0.7); /* 深綠色半透明背景 */
+            backdrop-filter: blur(5px);
             z-index: 1000;
-            animation: fadeIn 0.3s;
+            animation: fadeIn 0.4s ease;
         }
 
         .modal {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            padding: 40px 30px;
-            border-radius: 20px;
+            background: var(--white-soft);
+            padding: 50px 40px;
+            border-radius: 4px;
             width: 85%;
-            max-width: 340px;
+            max-width: 360px;
             text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            border: 2px solid var(--accent-gold);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border-top: 4px solid var(--accent-bronze);
         }
 
-        /* 需求2：右上角關閉按鈕 */
         .close-icon {
             position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            color: #aaa;
-            cursor: pointer;
-            line-height: 1;
-            transition: color 0.2s;
-            font-family: sans-serif;
-            font-weight: 100;
+            top: 20px; right: 20px;
+            font-size: 24px; color: #ccc;
+            cursor: pointer; transition: color 0.2s; font-family: sans-serif;
         }
-        .close-icon:hover { color: var(--text-main); }
+        .close-icon:hover { color: var(--primary-deep); }
 
-        .modal h2 { color: var(--primary-dark); margin-top: 10px; font-size: 1.5em; }
-        .modal-desc { 
-            margin: 20px 0; 
-            line-height: 1.6; 
-            color: var(--text-main);
-            font-size: 1em;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-        }
+        .modal h2 { color: var(--primary-deep); margin: 15px 0; font-size: 1.6em; }
+        .modal-divider { width: 40px; height: 2px; background: var(--accent-bronze); margin: 20px auto; }
+        .modal-desc { margin: 25px 0; line-height: 1.8; color: var(--text-dark); font-size: 1em; }
         
         .btn-line {
             background: #06c755;
             color: white;
             border: none;
-            padding: 12px 0;
+            padding: 15px 0;
             width: 100%;
-            border-radius: 8px;
+            border-radius: 2px;
             font-size: 1em;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             text-decoration: none;
-            font-weight: bold;
-            margin-top: 15px;
+            font-weight: 500;
+            margin-top: 30px;
+            transition: background 0.3s;
         }
+        .btn-line:hover { background: #05a546; }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -278,23 +299,32 @@
 <div class="container">
     
     <div class="intro-card">
-        <h2 class="intro-title">小洵的修復時光</h2>
+        <h2 class="intro-title">修復時光 ‧ 互惠之約</h2>
+        <p class="intro-subtitle">Reciprocity & Healing Journey</p>
+        <div class="intro-divider"></div>
         <div class="intro-text">
-            <p>看到好友們按完後全身舒暢，就是我最大的成就感！</p>
-            <p>這真的不是一份工作，<strong>「GC贈物網」現在仍是我的最愛 XDD</strong>。不想談錢傷感情，但為了讓我們能長久地<span class="highlight">互惠互利</span>，我準備了這個【愛的轉盤】。</p>
-            <p style="margin-bottom: 0;">點一下轉盤或直接從下方選擇，抽中什麼就用什麼方式回饋。這樣我更有動力鑽研下去，你們也不准再說不好意思喔！🎡</p>
+            <p>看見好友們舒展眉頭、身心輕盈，便是我最深的滿足。</p>
+            <p>這非關工作，而是源於對<span class="highlight">「GC贈物網」互惠精神</span>的熱愛與延續。我們之間不談金錢，只論心意流動。</p>
+            <p>為了讓這份美好能長久循環，我準備了這份【互惠之約】。請隨心轉動羅盤，或從下方箋言中擇一，作為我們之間的交換。您的回饋，是我持續精進的動力。🌿</p>
         </div>
     </div>
 
     <div class="wheel-wrapper">
-        <div class="pointer"></div>
-        <canvas id="wheel" width="600" height="600"></canvas>
+        <div class="pointer-container">
+            <div class="pointer-jewel"></div>
+            <div class="pointer-arrow"></div>
+        </div>
+        <div class="center-knob"></div>
+        <canvas id="wheel" width="640" height="640"></canvas>
     </div>
 
-    <button class="btn-spin" onclick="spinWheel()">啟動命運轉盤</button>
+    <button class="btn-spin" onclick="spinWheel()">啟動互惠羅盤</button>
 
     <div class="manual-section">
-        <div class="divider">或是直接選擇回饋方式</div>
+        <div class="section-header">
+            <h3 class="section-title">或者，選擇您屬意的方式</h3>
+            <div class="section-line"></div>
+        </div>
         <div class="card-grid" id="card-list">
             </div>
     </div>
@@ -303,73 +333,77 @@
 <div class="modal-overlay" id="modal">
     <div class="modal">
         <span class="close-icon" onclick="closeModal()">×</span>
-
-        <p style="font-size: 0.9em; color: #888; margin-bottom: 5px;">互惠約定確認</p>
+        <p style="font-size: 0.9em; color: var(--accent-bronze); margin-bottom: 5px; font-family: 'Noto Serif TC', serif; font-style: italic;">The Covenant</p>
         <h2 id="result-title"></h2>
+        <div class="modal-divider"></div>
         <div id="result-desc" class="modal-desc"></div>
         
         <a id="line-btn" href="#" class="btn-line" target="_blank">
-            <span>💬 傳 Line 告訴小洵</span>
+            <span>💬 傳送Line與SHIN確認</span>
         </a>
     </div>
 </div>
 
 <script>
-    // 資料設定
+    // 資料設定 (配色改為更低飽和、高雅的色調)
     const options = [
-        { title: "生活小確幸", desc: "請我喝一杯你最近心頭好的飲料（記得要無糖的唷 XDD）。", color: "#e8f3ea" },
-        { title: "專業應援", desc: "回家後用心感受身體變化，傳 Line 給我詳細回饋（這是我進步的動力！）。", color: "#fffdf5" },
-        { title: "技能交換", desc: "當我的一日小老師！分享一個你擅長的領域或最近學到的新知。", color: "#f0f7f4" },
-        { title: "夢想資助", desc: "隨喜贊助今日耗材，這筆錢會投入「未來小洵基金會」的公積金盒中。", color: "#fff8f0" },
-        { title: "身心修復", desc: "回家後心無罣礙地好好睡一覺，這就是對我手藝最好的讚美！", color: "#f4eeff" }
+        { title: "生活小確幸", desc: "請我喝一杯你最近心頭好的飲料。（貼心備註：我偏好無糖口味）", color: "#f0f5f3" }, // 極淡墨綠
+        { title: "專業應援", desc: "回家後靜心感受身體的細微變化，傳 Line 給我詳細回饋，助我精進技術。", color: "#f7f4ef" }, // 極淡米黃
+        { title: "技能交換", desc: "擔任我的一日導師！分享一個您擅長的專業領域，或最近習得的新知。", color: "#f2f4f7" }, // 極淡灰藍
+        { title: "夢想資助", desc: "隨喜挹注今日耗材，這筆心意將投入「未來小洵基金會」籌備公積金。", color: "#fcf7f2" }, // 極淡暖橘
+        { title: "身心修復", desc: "今晚請心無罣礙地深層睡眠，您充滿元氣的樣子，就是對我手藝最高的讚美。", color: "#f4f0f5" }  // 極淡紫灰
     ];
 
     const canvas = document.getElementById('wheel');
     const ctx = canvas.getContext('2d');
     
-    // 繪製轉盤
+    // 繪製轉盤 (羅盤風格)
     function drawWheel() {
         const arc = (2 * Math.PI) / options.length;
-        const radius = 300; 
-        
-        ctx.translate(300, 300); 
+        const radius = 320; 
+        ctx.translate(320, 320); 
         
         options.forEach((opt, i) => {
             const angle = i * arc;
-            
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.arc(0, 0, radius, angle, angle + arc);
             ctx.fillStyle = opt.color;
             ctx.fill();
             
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 4;
+            // 使用細金線作為分隔
+            ctx.strokeStyle = "#a68b5b"; 
+            ctx.lineWidth = 1;
             ctx.stroke();
 
             ctx.save();
             ctx.rotate(angle + arc / 2);
             ctx.textAlign = "right";
-            ctx.fillStyle = "#3a6b48";
-            ctx.font = "bold 24px Microsoft JhengHei";
-            // 轉盤上的文字不需要太長，保持簡潔
-            ctx.fillText(opt.title, 260, 10);
+            // 轉盤文字樣式
+            ctx.fillStyle = "#1a3c34";
+            ctx.font = "500 26px 'Noto Serif TC'"; 
+            ctx.fillText(opt.title, 270, 10);
             ctx.restore();
         });
+
+        // 繪製外圈裝飾環
+        ctx.beginPath();
+        ctx.arc(0, 0, radius - 5, 0, 2 * Math.PI);
+        ctx.strokeStyle = "rgba(166, 139, 91, 0.3)";
+        ctx.lineWidth = 10;
+        ctx.stroke();
     }
 
-    // 生成下方卡片清單 (需求1：完整顯示文字)
+    // 生成下方卡片清單
     const listContainer = document.getElementById('card-list');
     options.forEach(opt => {
         const div = document.createElement('div');
         div.className = 'card';
-        // 這裡直接放入 opt.desc，不使用 substring，CSS 會處理換行
         div.innerHTML = `
             <div class="card-content">
                 <h4>${opt.title}</h4>
                 <p>${opt.desc}</p>
             </div> 
-            <div class="card-arrow">➜</div>
         `;
         div.onclick = () => showResult(opt);
         listContainer.appendChild(div);
@@ -379,7 +413,6 @@
     function spinWheel() {
         const randomDeg = Math.floor(Math.random() * 360);
         const totalDeg = 1800 + randomDeg; 
-        
         rotation += totalDeg;
         canvas.style.transform = `rotate(${rotation}deg)`;
         
@@ -388,18 +421,16 @@
             const sectorSize = 360 / options.length;
             const correctedDeg = (360 - (finalDeg % 360) + 270) % 360; 
             const index = Math.floor(correctedDeg / sectorSize) % options.length;
-            
             showResult(options[index]);
         }, 5000);
     }
 
     function showResult(opt) {
-        document.getElementById('result-title').innerText = `✨ ${opt.title} ✨`;
+        document.getElementById('result-title').innerText = opt.title;
         document.getElementById('result-desc').innerText = opt.desc;
-        
-        const message = `Hi 小洵，今天謝謝你的修復！\n我剛剛轉到了【${opt.title}】\n內容是：${opt.desc}\n我會遵守約定唷！💪`;
+        // 優化 Line 訊息內容，更專業有禮
+        const message = `SHIN，感謝今日的專業修復！\n關於互惠約定，我選擇了【${opt.title}】。\n內容確認為：「${opt.desc}」\n期待下次再會。🌿`;
         const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
-        
         document.getElementById('line-btn').href = lineUrl;
         document.getElementById('modal').style.display = 'block';
     }
@@ -408,7 +439,10 @@
         document.getElementById('modal').style.display = 'none';
     }
 
-    drawWheel();
+    // 確保字體載入後再繪製，避免文字閃爍
+    document.fonts.ready.then(function () {
+      drawWheel();
+    });
 </script>
 
 </body>
