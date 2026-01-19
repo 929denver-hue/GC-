@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小洵的修復時光｜愛的轉盤</title>
+    <style>
+        :root {
+            --primary-color: #84a59d; /* 療癒綠 */
+            --bg-color: #f7f2ef; /* 溫暖米 */
+            --accent-color: #f28482; /* 基金會暖橘紅 */
+            --text-color: #5d5d5d;
+        }
+
+        body {
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 { font-weight: 400; margin-bottom: 10px; color: var(--primary-color); }
+        p { margin-bottom: 30px; font-size: 0.9em; letter-spacing: 1px; }
+
+        .wheel-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+        }
+
+        #wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+        }
+
+        .pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 40px;
+            background-color: var(--accent-color);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        .spin-btn {
+            margin-top: 40px;
+            padding: 12px 40px;
+            font-size: 1.1em;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(132, 165, 157, 0.3);
+            transition: 0.3s;
+        }
+
+        .spin-btn:hover { background-color: #6a8d84; }
+
+        /* 結果彈窗 */
+        #result-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 100;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #result-modal h2 { color: var(--accent-color); margin-top: 0; }
+        #result-modal button {
+            margin-top: 20px;
+            padding: 8px 20px;
+            border: none;
+            background: #eee;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>修復時光 ‧ 愛的轉盤</h1>
+    <p>讓心意隨機流動，感謝美好的相遇</p>
+
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="400" height="400"></canvas>
+    </div>
+
+    <button class="spin-btn" onclick="spinWheel()">啟動轉盤</button>
+
+    <div id="result-modal">
+        <h2 id="result-text"></h2>
+        <p id="result-desc"></p>
+        <button onclick="closeModal()">收下心意</button>
+    </div>
+
+    <script>
+        const options = [
+            { title: "生活小確幸", desc: "請我喝一杯最近你心頭好的飲料（記得要無糖唷 XDD）" },
+            { title: "專業應援", desc: "回家感受身體變化，傳 Line 給我詳細回饋，這對我很重要！" },
+            { title: "技能交換", desc: "當我的一日老師！分享一個你擅長的領域或最近學到的新知。" },
+            { title: "耗材回饋", desc: "隨喜贊助今日耗材，這筆錢會投入「未來小洵基金會」公積金盒中。" },
+            { title: "身心修復", desc: "回家後心無罣礙地好好睡一覺，這就是對我手藝最好的讚美！" }
+        ];
+
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const colors = ['#f5cac3', '#f6bd60', '#84a59d', '#f28482', '#9ad1d4'];
+
+        function drawWheel() {
+            const arc = (2 * Math.PI) / options.length;
+            options.forEach((opt, i) => {
+                const angle = i * arc;
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.moveTo(200, 200);
+                ctx.arc(200, 200, 200, angle, angle + arc);
+                ctx.fill();
+
+                ctx.save();
+                ctx.translate(200, 200);
+                ctx.rotate(angle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 18px sans-serif";
+                ctx.fillText(opt.title, 180, 10);
+                ctx.restore();
+            });
+        }
+
+        let currentRotation = 0;
+        function spinWheel() {
+            const randomSpin = Math.floor(Math.random() * 360) + 1440; // 旋轉至少4圈
+            currentRotation += randomSpin;
+            canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(() => {
+                const actualDeg = currentRotation % 360;
+                const index = Math.floor((360 - (actualDeg % 360)) / (360 / options.length)) % options.length;
+                showResult(options[index]);
+            }, 4000);
+        }
+
+        function showResult(opt) {
+            document.getElementById('result-text').innerText = opt.title;
+            document.getElementById('result-desc').innerText = opt.desc;
+            document.getElementById('result-modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('result-modal').style.display = 'none';
+        }
+
+        drawWheel();
+    </script>
+</body>
+</html>
