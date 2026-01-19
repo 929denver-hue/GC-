@@ -208,7 +208,7 @@
 
 <script>
     // ★★★ API 網址 (請確認這行是正確的) ★★★
-    const API_URL = "https://script.google.com/macros/s/AKfycbyrTJ1p1hQVTBWRqLkIiDNuYIISltJe8-HUmKq7pLdg90a4l_kzxgYa1l7l_2W-4Oye/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwoN7TS_5p0Uk4C2twNc7jVFbpAszgjDQt5mOM5rE4vvgJ88o1x2LiwAeZCBB7yEV2zlQ/exec";
 
     // 轉盤邏輯
     const options = [
@@ -309,11 +309,11 @@
                 });
 
                 // 私訊按鈕只在還有空位時顯示 (通常是有空位但時間對不上的時候用)
-                const otherBtn = document.createElement('button');
-                otherBtn.className = 'slot-btn';
-                otherBtn.innerText = "其他時間 (私訊討論)";
-                otherBtn.onclick = () => selectSlot(otherBtn, "其他時間 (私訊討論)");
-                container.appendChild(otherBtn);
+               // const otherBtn = document.createElement('button');
+               // otherBtn.className = 'slot-btn';
+               // otherBtn.innerText = "其他時間 (私訊討論)";
+               // otherBtn.onclick = () => selectSlot(otherBtn, "其他時間 (私訊討論)");
+                //container.appendChild(otherBtn);
             }
 
         } catch (error) {
