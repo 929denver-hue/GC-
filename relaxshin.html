@@ -147,7 +147,7 @@
             親愛的好友，預約代碼已失效。<br>
             如想預約修復時光，請私訊索取本月份最新的連結。
         </div>
-        <a href="https://line.me/R/msg/text/?Hi%20小洵，原本的連結好像更新了，我想索取這個月新的預約連結！🌿" target="_blank" class="btn-line" style="margin-top:0;">
+        <a href="https://line.me/R/msg/text/?Hi%20小洵，原本的連結好像更新了，我想索取這個月新的預約連結！謝謝🌿" target="_blank" class="btn-line" style="margin-top:0;">
             <span>💬 私訊索取新連結</span>
         </a>
     </div>
@@ -206,21 +206,23 @@
 </div>
 
 <script>
-    // ★★★ API 網址 ★★★
+    // ★★★ API 網址 (確認是新的) ★★★
     const API_URL = "https://script.google.com/macros/s/AKfycbzYv-P9YaCoVcXUkK1lRMV6phksO_kefa52om5viq7vxaHAzr5Z-aTU8FlVT_utIzOONw/exec";
 
     // 從網址獲取金鑰 (Key)
     const urlParams = new URLSearchParams(window.location.search);
     const accessKey = urlParams.get('key'); 
 
-    // 轉盤邏輯
+    // 轉盤邏輯 (資料已更新)
     const options = [
         { title: "生活小確幸", desc: "請我喝一杯你最近心頭好的飲料。（貼心備註：我偏好無糖口味）", color: "#f0f5f3" }, 
         { title: "專業應援", desc: "回家後靜心感受身體的細微變化，傳 Line 給我詳細回饋，助我精進技術。", color: "#f7f4ef" }, 
         { title: "技能交換", desc: "擔任我的一日導師！分享一個您擅長的專業領域，或最近習得的新知。", color: "#f2f4f7" }, 
-        { title: "夢想資助", desc: "隨喜挹注今日耗材，這筆心意將投入「未來小洵基金會」籌備公積金。", color: "#fcf7f2" }, 
+        // ★★★ 修改處：贊助GC 選項 (加入 link 屬性) ★★★
+        { title: "贊助 GC贈物網 ", desc: "支持分享與共享的美好循環，讓每一份心意持續創造價值。", color: "#fcf7f2", link: "https://www.give-circle.com/heartwallwords" }, 
         { title: "身心修復", desc: "今晚請心無罣礙地深層睡眠，您充滿元氣的樣子，就是對我手藝最高的讚美。", color: "#f4f0f5" }  
     ];
+    
     const canvas = document.getElementById('wheel');
     const ctx = canvas.getContext('2d');
     function drawWheel() {
@@ -245,9 +247,25 @@
         canvas.style.transform = `rotate(${rotation}deg)`;
         setTimeout(() => { showResult(options[Math.floor((360 - (rotation % 360) + 270) % 360 / (360 / options.length)) % options.length]); }, 5000);
     }
+    
+    // ★★★ 彈窗邏輯修改：支援連結跳轉 ★★★
     function showResult(opt) {
-        document.getElementById('result-title').innerText = opt.title; document.getElementById('result-desc').innerText = opt.desc;
-        document.getElementById('line-btn').href = `https://line.me/R/msg/text/?${encodeURIComponent(`小洵您好，感謝今日的專業修復！\n我選擇了【${opt.title}】。\n內容：「${opt.desc}」`)}`;
+        document.getElementById('result-title').innerText = opt.title; 
+        document.getElementById('result-desc').innerText = opt.desc;
+        
+        const lineBtn = document.getElementById('line-btn');
+        
+        // 如果這個選項有設定連結 (GC 贊助)，就改成前往網頁
+        if (opt.link) {
+            lineBtn.href = opt.link;
+            lineBtn.innerHTML = '<span>❤️ 前往支持頁面</span>';
+        } else {
+            // 一般選項：產生乾淨的 Line 訊息
+            let message = `Hi 小洵，感謝今日的專業修復！\n我選擇了【${opt.title}】。\n內容：「${opt.desc}」`;
+            lineBtn.href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
+            lineBtn.innerHTML = '<span>💬 傳送 Line 與小洵確認</span>';
+        }
+        
         document.getElementById('modal').style.display = 'block';
     }
 
@@ -326,7 +344,10 @@
         // ★★★ 純文字訊息，不含網址 ★★★
         let message = `Hi 小洵，我是 ${name}，我已在網頁上鎖定預約！🌿\n\n時段：【${timeSlot}】\n\n請幫我保留，謝謝！`;
         
-        document.getElementById('line-btn').href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
+        const lineBtn = document.getElementById('line-btn');
+        lineBtn.href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
+        lineBtn.innerHTML = '<span>💬 傳送 Line 與小洵確認</span>'; // 確保這裡是預約確認文字
+        
         document.getElementById('modal').style.display = 'block';
     }
     
