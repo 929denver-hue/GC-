@@ -244,8 +244,7 @@
     
     <div class="manifesto">
         <p>看到好友們按完後全身舒暢，就是我最大的成就感！</p>
-        <p>這不是一份工作，<strong>「GC贈物網」現在仍是我的最愛 XDD</strong>，所以我不收費，也不希望談錢傷感情。</p>
-        <p>為了讓我們能長久地<strong>『互惠互利』</strong>，我準備了這個【愛的轉盤】。請點選或旋轉，選定一種回饋方式，讓我更有動力鑽研下去，大家也能約得心安理得！🎡</p>
+        <p>這不是一份工作，<strong> GC贈物網 現在仍是我的最愛 XDD</strong>，所以我不收費，也不希望談錢傷感情。為了讓我們能長久地<strong>『互惠互利』</strong>，我準備了這個【愛的轉盤】。請點選或旋轉，選定一種回饋方式，讓我更有動力鑽研下去，大家也能約得更開心！🎡</p>
     </div>
 
     <div class="wheel-wrapper">
@@ -331,3 +330,60 @@
     }
 
     // 生成下方卡片清單
+    const listContainer = document.getElementById('card-list');
+    options.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `<div><h4>${opt.title}</h4><p>${opt.desc.substring(0, 18)}...</p></div> <span style="color:var(--accent-gold)">➜</span>`;
+        div.onclick = () => showResult(opt);
+        listContainer.appendChild(div);
+    });
+
+    // 轉動邏輯
+    let rotation = 0;
+    function spinWheel() {
+        // 隨機旋轉圈數 (5圈以上 + 隨機角度)
+        const randomDeg = Math.floor(Math.random() * 360);
+        const totalDeg = 1800 + randomDeg; 
+        
+        rotation += totalDeg;
+        canvas.style.transform = `rotate(${rotation}deg)`;
+        
+        // 計算結果
+        setTimeout(() => {
+            const finalDeg = rotation % 360;
+            // Canvas 0度在右邊，CSS旋轉是順時針。需要反推索引。
+            // 每個扇形角度 = 360 / 5 = 72度
+            // 指針在上方(-90度 或 270度位置)，需做校正
+            const sectorSize = 360 / options.length;
+            const correctedDeg = (360 - (finalDeg % 360) + 270) % 360; 
+            const index = Math.floor(correctedDeg / sectorSize) % options.length;
+            
+            showResult(options[index]);
+        }, 5000); // 配合 CSS transition 時間
+    }
+
+    // 顯示結果與設定 Line 訊息
+    function showResult(opt) {
+        document.getElementById('result-title').innerText = `✨ ${opt.title} ✨`;
+        document.getElementById('result-desc').innerText = opt.desc;
+        
+        // 設定 Line 分享連結
+        // 格式：https://line.me/R/msg/text/?{編碼後的文字}
+        const message = `Hi 小洵，今天謝謝你的修復！\n我剛剛轉到了【${opt.title}】\n內容是：${opt.desc}\n我會遵守約定唷！💪`;
+        const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
+        
+        document.getElementById('line-btn').href = lineUrl;
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    // 啟動繪製
+    drawWheel();
+</script>
+
+</body>
+</html>
