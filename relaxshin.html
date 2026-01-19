@@ -6,174 +6,240 @@
     <title>小洵的修復時光｜愛的轉盤</title>
     <style>
         :root {
-            --primary-color: #84a59d; /* 療癒綠 */
-            --bg-color: #f7f2ef; /* 溫暖米 */
-            --accent-color: #f28482; /* 基金會暖橘紅 */
-            --text-color: #5d5d5d;
+            --primary-color: #7ca59a; /* 舒緩綠 */
+            --secondary-color: #d4a373; /* 木質調 */
+            --bg-color: #fcfaf7;
+            --text-color: #4a4a4a;
         }
 
         body {
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            padding: 40px 20px;
             margin: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .intro-text {
+            text-align: left;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            background: #f0f4f3;
             padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-color);
         }
 
-        h1 { font-weight: 400; margin-bottom: 10px; color: var(--primary-color); }
-        p { margin-bottom: 30px; font-size: 0.9em; letter-spacing: 1px; }
-
-        .wheel-container {
+        .wheel-box {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
         }
 
-        #wheel {
+        canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 5px solid white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
         }
 
         .pointer {
             position: absolute;
-            top: -15px;
+            top: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 30px;
-            height: 40px;
-            background-color: var(--accent-color);
+            width: 25px;
+            height: 35px;
+            background: #e76f51;
             clip-path: polygon(50% 100%, 0 0, 100% 0);
             z-index: 10;
         }
 
-        .spin-btn {
-            margin-top: 40px;
-            padding: 12px 40px;
-            font-size: 1.1em;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
             border-radius: 25px;
+            border: none;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(132, 165, 157, 0.3);
+            font-size: 1em;
             transition: 0.3s;
         }
 
-        .spin-btn:hover { background-color: #6a8d84; }
+        .spin-btn { background: var(--primary-color); color: white; }
+        .spin-btn:hover { background: #638c82; }
 
-        /* 結果彈窗 */
-        #result-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
-            z-index: 100;
-            width: 80%;
-            max-width: 300px;
+        /* 選擇清單樣式 */
+        .option-list {
+            text-align: left;
+            margin-top: 20px;
         }
 
-        #result-modal h2 { color: var(--accent-color); margin-top: 0; }
-        #result-modal button {
-            margin-top: 20px;
-            padding: 8px 20px;
-            border: none;
-            background: #eee;
-            border-radius: 5px;
+        .option-item {
+            background: #fff;
+            border: 1px solid #eee;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 12px;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-color);
+            background: #f9fdfc;
+            transform: translateX(5px);
+        }
+
+        .option-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        /* 彈窗 */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        #result-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px 30px;
+            border-radius: 25px;
+            text-align: center;
+            width: 85%;
+            max-width: 320px;
         }
     </style>
 </head>
 <body>
 
-    <h1>修復時光 ‧ 愛的轉盤</h1>
-    <p>讓心意隨機流動，感謝美好的相遇</p>
+<div class="container">
+    <h2>小洵的修復時光 ✨</h2>
+    
+    <div class="intro-text">
+        看到好友們按完後全身舒暢，我也覺得超有成就感！但這真的不是我的工作<strong>「GC贈物網現在仍是我的最愛XDD」</strong>，也不想收錢傷感情。<br><br>
+        為了讓我們能長久地『互惠互利』，我準備了一個【愛的轉盤】，你可以隨機抽一個，或是從下方清單直接挑選你喜歡的回饋方式。這樣我更有動力鑽研下去，你們也不准再說不好意思喔！🎡
+    </div>
 
-    <div class="wheel-container">
+    <div class="wheel-box">
         <div class="pointer"></div>
         <canvas id="wheel" width="400" height="400"></canvas>
     </div>
 
-    <button class="spin-btn" onclick="spinWheel()">啟動轉盤</button>
-
-    <div id="result-modal">
-        <h2 id="result-text"></h2>
-        <p id="result-desc"></p>
-        <button onclick="closeModal()">收下心意</button>
+    <div class="btn-group">
+        <button class="spin-btn" onclick="spinWheel()">啟動轉盤抽籤</button>
     </div>
 
-    <script>
-        const options = [
-            { title: "生活小確幸", desc: "請我喝一杯最近你心頭好的飲料（記得要無糖唷 XDD）" },
-            { title: "專業應援", desc: "回家感受身體變化，傳 Line 給我詳細回饋，這對我很重要！" },
-            { title: "技能交換", desc: "當我的一日老師！分享一個你擅長的領域或最近學到的新知。" },
-            { title: "耗材回饋", desc: "隨喜贊助今日耗材，這筆錢會投入「未來小洵基金會」公積金盒中。" },
-            { title: "身心修復", desc: "回家後心無罣礙地好好睡一覺，這就是對我手藝最好的讚美！" }
-        ];
+    <hr style="border: 0.5px solid #eee; margin: 30px 0;">
+    
+    <h3>直接挑選回饋方式：</h3>
+    <div class="option-list" id="manual-list"></div>
+</div>
 
-        const canvas = document.getElementById('wheel');
-        const ctx = canvas.getContext('2d');
-        const colors = ['#f5cac3', '#f6bd60', '#84a59d', '#f28482', '#9ad1d4'];
+<div id="modal-overlay">
+    <div id="result-modal">
+        <p style="font-size: 0.9em; color: #888;">恭喜獲得/選擇：</p>
+        <h2 id="result-title" style="color: #7ca59a; margin: 10px 0;"></h2>
+        <p id="result-desc"></p>
+        <button onclick="closeModal()" style="background: #eee; margin-top: 20px;">收下約定</button>
+    </div>
+</div>
 
-        function drawWheel() {
-            const arc = (2 * Math.PI) / options.length;
-            options.forEach((opt, i) => {
-                const angle = i * arc;
-                ctx.fillStyle = colors[i];
-                ctx.beginPath();
-                ctx.moveTo(200, 200);
-                ctx.arc(200, 200, 200, angle, angle + arc);
-                ctx.fill();
+<script>
+    const options = [
+        { title: "【生活小確幸】", desc: "請我喝一杯你最近心頭好的飲料（記得要無糖的唷 XDD）。" },
+        { title: "【專業應援】", desc: "回家感受身體變化，傳 Line 給我詳細回饋（這是我進步的動力！）。" },
+        { title: "【技能交換】", desc: "當我的一日小老師！分享一個你擅長的領域或最近學到的新知。" },
+        { title: "【夢夢資助】", desc: "隨喜贊助今日耗材，這筆錢會投入「未來小洵基金會」公積金盒中。" },
+        { title: "【身心修復】", desc: "回家後心無罣礙地好好睡一覺，這就是對我手藝最好的讚美！" }
+    ];
 
-                ctx.save();
-                ctx.translate(200, 200);
-                ctx.rotate(angle + arc / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#fff";
-                ctx.font = "bold 18px sans-serif";
-                ctx.fillText(opt.title, 180, 10);
-                ctx.restore();
-            });
-        }
+    const colors = ['#e9edc9', '#fefae0', '#faedcd', '#d4a373', '#ccd5ae'];
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
 
-        let currentRotation = 0;
-        function spinWheel() {
-            const randomSpin = Math.floor(Math.random() * 360) + 1440; // 旋轉至少4圈
-            currentRotation += randomSpin;
-            canvas.style.transform = `rotate(${currentRotation}deg)`;
+    function drawWheel() {
+        const arc = (2 * Math.PI) / options.length;
+        options.forEach((opt, i) => {
+            const angle = i * arc;
+            ctx.fillStyle = colors[i];
+            ctx.beginPath();
+            ctx.moveTo(200, 200);
+            ctx.arc(200, 200, 200, angle, angle + arc);
+            ctx.fill();
+            ctx.save();
+            ctx.translate(200, 200);
+            ctx.rotate(angle + arc / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "#555";
+            ctx.font = "16px sans-serif";
+            ctx.fillText(opt.title.replace(/[【】]/g, ""), 180, 10);
+            ctx.restore();
+        });
+    }
 
-            setTimeout(() => {
-                const actualDeg = currentRotation % 360;
-                const index = Math.floor((360 - (actualDeg % 360)) / (360 / options.length)) % options.length;
-                showResult(options[index]);
-            }, 4000);
-        }
+    // 建立手動清單
+    const listContainer = document.getElementById('manual-list');
+    options.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = 'option-item';
+        div.innerHTML = `<span class="option-title">${opt.title}</span><small>${opt.desc}</small>`;
+        div.onclick = () => showResult(opt);
+        listContainer.appendChild(div);
+    });
 
-        function showResult(opt) {
-            document.getElementById('result-text').innerText = opt.title;
-            document.getElementById('result-desc').innerText = opt.desc;
-            document.getElementById('result-modal').style.display = 'block';
-        }
+    let rotation = 0;
+    function spinWheel() {
+        const extra = Math.floor(Math.random() * 360) + 1440;
+        rotation += extra;
+        canvas.style.transform = `rotate(${rotation}deg)`;
+        setTimeout(() => {
+            const deg = rotation % 360;
+            const idx = Math.floor((360 - deg) / (360 / options.length)) % options.length;
+            showResult(options[idx]);
+        }, 4000);
+    }
 
-        function closeModal() {
-            document.getElementById('result-modal').style.display = 'none';
-        }
+    function showResult(opt) {
+        document.getElementById('result-title').innerText = opt.title;
+        document.getElementById('result-desc').innerText = opt.desc;
+        document.getElementById('modal-overlay').style.display = 'block';
+    }
 
-        drawWheel();
-    </script>
+    function closeModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    drawWheel();
+</script>
+
 </body>
 </html>
