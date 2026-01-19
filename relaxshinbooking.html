@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>修復時光｜專屬預約</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 配色：森系墨綠、古銅金、紙張米色 */
+            --primary-deep: #1a3c34; --primary-muted: #6a8d83; --accent-bronze: #a68b5b;
+            --bg-cream: #f5f2ed; --text-dark: #2c2c2c; --text-light: #666666; --white-soft: #ffffff;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif; background-color: var(--bg-cream);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            color: var(--text-dark); margin: 0; padding: 40px 20px 80px 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; letter-spacing: 0.05em;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Noto Serif TC', serif; }
+        .container { max-width: 550px; width: 100%; transition: opacity 0.5s; margin-top: 20px; }
+
+        /* 前言卡片 (簡化版) */
+        .intro-card {
+            background: var(--white-soft); padding: 30px 30px; border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(26, 60, 52, 0.05); margin-bottom: 40px;
+            text-align: center; position: relative; border-top: 3px solid var(--accent-bronze);
+        }
+        .intro-title { font-size: 1.6em; color: var(--primary-deep); margin: 0 0 5px 0; font-weight: 700; letter-spacing: 0.1em; }
+        .intro-subtitle { font-family: 'Noto Serif TC', serif; font-size: 0.9em; color: var(--accent-bronze); margin-bottom: 0; font-style: italic; }
+
+        /* 預約區塊 */
+        .booking-section {
+            background: linear-gradient(145deg, #ffffff, #f9f9f9); padding: 35px 30px;
+            border-radius: 8px; border: 1px solid #e0e0e0; text-align: center; position: relative;
+        }
+        .booking-section::after {
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px dashed var(--accent-bronze); pointer-events: none; border-radius: 4px; opacity: 0.3;
+        }
+        .booking-title { font-size: 1.3em; color: var(--primary-deep); margin-bottom: 10px; font-weight: 700; }
+        .booking-desc { font-size: 0.9em; color: var(--text-light); margin-bottom: 25px; }
+
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; position: relative; z-index: 2; }
+        .slot-btn {
+            background: white; border: 1px solid #dcdcdc; color: var(--text-dark); padding: 12px 5px;
+            border-radius: 4px; font-size: 0.95em; cursor: pointer; transition: all 0.3s;
+            font-family: 'Noto Sans TC', sans-serif; letter-spacing: 0.05em;
+        }
+        .slot-btn:hover { border-color: var(--primary-muted); color: var(--primary-deep); }
+        .slot-btn.active { background: var(--primary-deep); color: var(--accent-bronze); border-color: var(--primary-deep); box-shadow: 0 5px 15px rgba(26, 60, 52, 0.2); font-weight: bold; }
+        .slot-btn.removing { transform: scale(0); opacity: 0; margin: 0; padding: 0; height: 0; overflow: hidden; border: none; }
+
+        .name-input-group { margin-bottom: 25px; position: relative; z-index: 2; text-align: left; max-width: 300px; margin-left: auto; margin-right: auto; display: none; }
+        .name-label { display: block; font-size: 0.9em; color: var(--primary-deep); margin-bottom: 8px; font-weight: bold; }
+        .name-input { width: 100%; padding: 12px; border: 1px solid #dcdcdc; border-radius: 4px; font-size: 1em; font-family: 'Noto Sans TC', sans-serif; box-sizing: border-box; transition: 0.3s; }
+        .name-input:focus { outline: none; border-color: var(--accent-bronze); box-shadow: 0 0 8px rgba(166, 139, 91, 0.1); }
+
+        .btn-book {
+            background: var(--accent-bronze); color: white; border: none; padding: 14px 40px;
+            font-size: 1em; border-radius: 2px; cursor: pointer; box-shadow: 0 5px 15px rgba(166, 139, 91, 0.3);
+            transition: all 0.3s; font-family: 'Noto Serif TC', serif; letter-spacing: 0.1em; position: relative; z-index: 2;
+        }
+        .btn-book:hover { background: #8c734b; transform: translateY(-2px); }
+        .btn-book:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .full-booked-text { color: var(--primary-deep); font-size: 1.1em; line-height: 1.8; padding: 20px; border: 1px solid var(--accent-bronze); border-radius: 8px; background: rgba(255,255,255,0.5); }
+
+        /* 失效連結的溫馨告示卡 */
+        .expired-overlay {
+            display: none; /* 預設隱藏 */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-cream); z-index: 2000;
+            flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
+        }
+        .expired-card {
+            background: white; padding: 40px 30px; border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(26, 60, 52, 0.1);
+            border-top: 5px solid var(--accent-bronze);
+            max-width: 400px; width: 100%;
+        }
+        .expired-icon { font-size: 3em; color: var(--primary-muted); margin-bottom: 20px; display: block; }
+        .expired-title { font-family: 'Noto Serif TC', serif; font-size: 1.5em; color: var(--primary-deep); margin-bottom: 15px; font-weight: bold; }
+        .expired-desc { color: var(--text-light); line-height: 1.8; margin-bottom: 30px; font-size: 1em; }
+
+        /* 一般彈窗 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 60, 52, 0.7); backdrop-filter: blur(5px); z-index: 1000; animation: fadeIn 0.4s ease; }
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--white-soft); padding: 50px 40px; border-radius: 4px; width: 85%; max-width: 360px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.3); border-top: 4px solid var(--accent-bronze); }
+        .close-icon { position: absolute; top: 20px; right: 20px; font-size: 24px; color: #ccc; cursor: pointer; transition: color 0.2s; font-family: sans-serif; }
+        .close-icon:hover { color: var(--primary-deep); }
+        .modal h2 { color: var(--primary-deep); margin: 15px 0; font-size: 1.6em; }
+        .modal-divider { width: 40px; height: 2px; background: var(--accent-bronze); margin: 20px auto; }
+        .modal-desc { margin: 25px 0; line-height: 1.8; color: var(--text-dark); font-size: 1em; }
+        .btn-line { background: #06c755; color: white; border: none; padding: 15px 0; width: 100%; border-radius: 2px; font-size: 1em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none; font-weight: 500; margin-top: 30px; transition: background 0.3s; }
+        .btn-line:hover { background: #05a546; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div id="expired-view" class="expired-overlay">
+    <div class="expired-card">
+        <span class="expired-icon">⏳</span>
+        <h2 class="expired-title">連結已更新</h2>
+        <div class="expired-desc">
+            親愛的好友，預約代碼已失效。<br>
+            如想預約修復時光，請私訊索取本月份最新的連結。
+        </div>
+        <a href="https://line.me/R/msg/text/?Hi%20小洵，原本的連結好像更新了，我想索取這個月新的預約連結！🌿" target="_blank" class="btn-line" style="margin-top:0;">
+            <span>💬 私訊索取新連結</span>
+        </a>
+    </div>
+</div>
+
+<div class="container" id="main-container">
+    <div class="intro-card">
+        <h2 class="intro-title">修復時光 ‧ 專屬預約</h2>
+        <p class="intro-subtitle">Reciprocity & Healing Journey</p>
+    </div>
+
+    <div class="booking-section">
+        <h3 class="booking-title">預約下一次修復</h3>
+        <p class="booking-desc" id="booking-subtitle">請點選時段並輸入您的稱呼</p>
+        <div class="slots-grid" id="slots-container">
+            <p style="color:#a68b5b;">正在讀取預約本...</p>
+        </div>
+        <div class="name-input-group" id="name-group">
+            <label class="name-label">預約大名/稱呼</label>
+            <input type="text" id="user-name" class="name-input" placeholder="例如：Chris">
+        </div>
+        <button id="book-btn" class="btn-book" onclick="submitBooking()">請先選擇時段</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <span class="close-icon" onclick="closeModal()">×</span>
+        <p style="font-size: 0.9em; color: var(--accent-bronze); margin-bottom: 5px; font-family: 'Noto Serif TC', serif; font-style: italic;">The Covenant</p>
+        <h2 id="result-title"></h2>
+        <div class="modal-divider"></div>
+        <div id="result-desc" class="modal-desc"></div>
+        <a id="line-btn" href="#" class="btn-line" target="_blank"><span>💬 傳送 Line 與小洵確認</span></a>
+    </div>
+</div>
+
+<script>
+    // ★★★ API 網址 (確認是新的) ★★★
+    const API_URL = "https://script.google.com/macros/s/AKfycbzYv-P9YaCoVcXUkK1lRMV6phksO_kefa52om5viq7vxaHAzr5Z-aTU8FlVT_utIzOONw/exec";
+
+    // 從網址獲取金鑰 (Key)
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessKey = urlParams.get('key'); 
+
+    // 預約與驗證功能
+    let selectedSlot = null;
+    async function loadAvailableTimes() {
+        const container = document.getElementById('slots-container');
+        const nameGroup = document.getElementById('name-group');
+        const bookBtn = document.getElementById('book-btn');
+        const subtitle = document.getElementById('booking-subtitle');
+        const mainContainer = document.getElementById('main-container');
+        const expiredView = document.getElementById('expired-view');
+
+        try {
+            const response = await fetch(`${API_URL}?action=getSlots&key=${encodeURIComponent(accessKey || "")}`);
+            const data = await response.json();
+            
+            container.innerHTML = ''; 
+
+            if (data.error === "InvalidKey") {
+                mainContainer.style.display = 'none'; 
+                expiredView.style.display = 'flex';   
+                return;
+            }
+            
+            if (data.length === 0) {
+                // 額滿
+                container.innerHTML = '<div class="full-booked-text">本期預約已全數額滿嚕～<br>請留意小洵的後續公告，期待下次與您相見。🌿</div>';
+                nameGroup.style.display = 'none'; bookBtn.style.display = 'none'; subtitle.style.display = 'none';
+            } else {
+                // 有空位
+                nameGroup.style.display = 'block'; bookBtn.style.display = 'inline-block'; subtitle.style.display = 'block';
+                data.forEach(time => {
+                    const btn = document.createElement('button'); btn.className = 'slot-btn'; btn.innerText = time;
+                    btn.onclick = () => selectSlot(btn, time); container.appendChild(btn);
+                });
+            }
+        } catch (error) {
+            console.error(error); container.innerHTML = '<p style="color:red;">系統連線異常，請稍後再試。</p>';
+        }
+    }
+
+    function selectSlot(btn, time) {
+        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active'); selectedSlot = time; checkForm(); 
+    }
+    document.getElementById('user-name').addEventListener('input', checkForm);
+    
+    function checkForm() {
+        const name = document.getElementById('user-name').value.trim(); const bookBtn = document.getElementById('book-btn');
+        if (!selectedSlot) { bookBtn.innerText = "請先選擇時段"; bookBtn.disabled = true; return; }
+        if (!name) { bookBtn.innerText = "請輸入預約大名"; bookBtn.disabled = true; return; }
+        bookBtn.disabled = false; bookBtn.innerText = "確認預約此時段";
+    }
+
+    async function submitBooking() {
+        if (!selectedSlot) return;
+        const userName = document.getElementById('user-name').value.trim(); const bookBtn = document.getElementById('book-btn');
+        
+        bookBtn.disabled = true; bookBtn.innerText = "預約鎖定中...";
+        try {
+            await fetch(`${API_URL}?action=bookSlot&key=${encodeURIComponent(accessKey || "")}&time=${encodeURIComponent(selectedSlot)}&name=${encodeURIComponent(userName)}`, { method: 'POST', mode: 'no-cors' });
+            const activeBtn = document.querySelector('.slot-btn.active');
+            if (activeBtn) { activeBtn.classList.add('removing'); setTimeout(() => { activeBtn.style.display = 'none'; activeBtn.classList.remove('active'); }, 500); }
+            openLineAndModal(selectedSlot, userName);
+            document.getElementById('user-name').value = ''; selectedSlot = null; bookBtn.innerText = "請選擇其他時段";
+        } catch (error) {
+            alert("連線異常，請直接私訊確認。"); bookBtn.disabled = false; bookBtn.innerText = "確認預約此時段";
+        }
+    }
+
+    function openLineAndModal(timeSlot, name) {
+        document.getElementById('result-title').innerText = "預約請求確認";
+        document.getElementById('result-desc').innerText = `系統已鎖定時段：\n${timeSlot}\n\n預約人：${name}\n\n請務必按下按鈕，傳送 Line 訊息給我才算完成喔！`;
+        
+        // ★★★ 純文字訊息，不含網址 ★★★
+        let message = `Hi 小洵，我是 ${name}，我已在網頁上鎖定預約！🌿\n\n時段：【${timeSlot}】\n\n請幫我保留，謝謝！`;
+        
+        document.getElementById('line-btn').href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
+        document.getElementById('modal').style.display = 'block';
+    }
+    
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    document.addEventListener('DOMContentLoaded', loadAvailableTimes);
+</script>
+
+</body>
+</html>
