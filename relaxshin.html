@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>修復時光｜與Shin互惠之約</title>
+    <title>修復時光｜互惠之約</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-deep: #1a3c34;
-            --primary-muted: #6a8d83;
-            --accent-bronze: #a68b5b;
-            --bg-cream: #f5f2ed;
+            /* --- 高級色票定義 --- */
+            --primary-deep: #1a3c34;  /* 森系墨綠 */
+            --primary-muted: #6a8d83; /* 莫蘭迪玉色 */
+            --accent-bronze: #a68b5b; /* 拉絲古銅金 */
+            --bg-cream: #f5f2ed;      /* 米灰紙張色 */
             --text-dark: #2c2c2c;     
             --text-light: #666666;
             --white-soft: #ffffff;
@@ -19,6 +20,7 @@
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: var(--bg-cream);
+            /* 紙張紋理效果 */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
             color: var(--text-dark);
             margin: 0;
@@ -34,7 +36,7 @@
 
         .container { max-width: 550px; width: 100%; }
 
-        /* --- 前言區 --- */
+        /* --- 1. 前言區 --- */
         .intro-card {
             background: var(--white-soft); padding: 40px 30px; border-radius: 4px;
             box-shadow: 0 10px 30px rgba(26, 60, 52, 0.05); margin-bottom: 50px;
@@ -46,7 +48,7 @@
         .intro-text { font-size: 0.95em; line-height: 2; color: var(--text-light); text-align: justify; font-weight: 300; }
         .highlight { color: var(--primary-deep); font-weight: 500; border-bottom: 1px dotted var(--accent-bronze); }
 
-        /* --- 轉盤區 --- */
+        /* --- 2. 轉盤區 --- */
         .wheel-wrapper {
             position: relative; width: 320px; height: 320px; margin: 0 auto 40px; padding: 12px;
             background: var(--white-soft); border-radius: 50%;
@@ -66,7 +68,7 @@
         }
         .btn-spin:hover { background: var(--accent-bronze); color: var(--primary-deep); box-shadow: 0 8px 20px rgba(166, 139, 91, 0.2); }
 
-        /* --- 手動選擇區 --- */
+        /* --- 3. 手動選擇區 --- */
         .manual-section { margin-top: 60px; }
         .section-header { text-align: center; margin-bottom: 30px; }
         .section-title { font-size: 1.1em; color: var(--primary-deep); font-weight: normal; }
@@ -82,7 +84,7 @@
         .card h4 { margin: 0 0 10px 0; color: var(--primary-deep); font-size: 1.1em; letter-spacing: 0.05em; }
         .card p { margin: 0; font-size: 0.9em; color: var(--text-light); line-height: 1.6; }
 
-        /* --- 4. 預約區塊 (改版：限定時段) --- */
+        /* --- 4. 預約區塊 --- */
         .booking-section {
             margin-top: 60px; background: linear-gradient(145deg, #ffffff, #f9f9f9); padding: 35px 30px;
             border-radius: 8px; border: 1px solid #e0e0e0; text-align: center; position: relative;
@@ -104,27 +106,21 @@
         }
 
         .slot-btn {
-            background: white;
-            border: 1px solid #dcdcdc;
-            color: var(--text-dark);
-            padding: 12px 5px;
-            border-radius: 4px;
-            font-size: 0.95em;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Noto Sans TC', sans-serif;
-            letter-spacing: 0.05em;
+            background: white; border: 1px solid #dcdcdc; color: var(--text-dark);
+            padding: 12px 5px; border-radius: 4px; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s; font-family: 'Noto Sans TC', sans-serif; letter-spacing: 0.05em;
         }
 
         .slot-btn:hover { border-color: var(--primary-muted); color: var(--primary-deep); }
         
-        /* 選中狀態 */
         .slot-btn.active {
-            background: var(--primary-deep);
-            color: var(--accent-bronze);
-            border-color: var(--primary-deep);
-            box-shadow: 0 5px 15px rgba(26, 60, 52, 0.2);
-            font-weight: bold;
+            background: var(--primary-deep); color: var(--accent-bronze);
+            border-color: var(--primary-deep); box-shadow: 0 5px 15px rgba(26, 60, 52, 0.2); font-weight: bold;
+        }
+
+        /* 按鈕消失動畫 */
+        .slot-btn.removing {
+            transform: scale(0); opacity: 0; margin: 0; padding: 0; height: 0; overflow: hidden; border: none;
         }
 
         .btn-book {
@@ -133,8 +129,6 @@
             transition: all 0.3s; font-family: 'Noto Serif TC', serif; letter-spacing: 0.1em; position: relative; z-index: 2;
         }
         .btn-book:hover { background: #8c734b; transform: translateY(-2px); }
-        
-        /* 禁用按鈕樣式 */
         .btn-book:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
 
         /* --- 彈窗 --- */
@@ -161,7 +155,7 @@
         <div class="intro-text">
             <p>看見好友們舒展眉頭、身心輕盈，便是我最深的滿足。</p>
             <p>這非關工作，而是源於對<span class="highlight"> GC贈物網 互惠精神</span>的熱愛與延續。我們之間不談金錢，只論心意流動。</p>
-            <p>為了讓這份美好能長久循環，我準備了這份【互惠之約】。請隨心轉動羅盤，或從下方箋言中擇一，作為我們之間交換的方式。您的回饋，是我持續精進的動力。🌿</p>
+            <p>為了讓這份美好能長久循環，我準備了這份【互惠之約】。請隨心轉動羅盤，或從下方箋言中擇一，作為我們之間交換的方式。您的回饋，是我持續精進的動力🌿</p>
         </div>
     </div>
 
@@ -182,10 +176,11 @@
 
     <div class="booking-section">
         <h3 class="booking-title">預約下一次修復</h3>
-        <p class="booking-desc">請點選下方我方便的時段，確認您的專屬時間</p>
+        <p class="booking-desc">請點選下方時段，確認您的專屬時間</p>
         
         <div class="slots-grid" id="slots-container">
-            </div>
+            <p style="color:#a68b5b;">正在讀取預約本...</p>
+        </div>
         
         <button id="book-btn" class="btn-book" onclick="submitBooking()" disabled>請先選擇時段</button>
     </div>
@@ -199,12 +194,15 @@
         <h2 id="result-title"></h2>
         <div class="modal-divider"></div>
         <div id="result-desc" class="modal-desc"></div>
-        <a id="line-btn" href="#" class="btn-line" target="_blank"><span>💬 傳送 Line 與洵確認</span></a>
+        <a id="line-btn" href="#" class="btn-line" target="_blank"><span>💬 傳送 Line 與小洵確認</span></a>
     </div>
 </div>
 
 <script>
-    // --- 1. 轉盤資料 ---
+    // --- 0. 設定您的 API 網址 ---
+    const API_URL = "https://script.google.com/macros/s/AKfycbwAj2qkd0tE1keldu7uPQB82mk-sfOOw9Nst1W5Vv-TYetdzbHXaCmQAc8QDAWoVGA2sg/exec";
+
+    // --- 1. 轉盤與清單資料 ---
     const options = [
         { title: "生活小確幸", desc: "請我喝一杯你最近心頭好的飲料。（貼心備註：我偏好無糖口味）", color: "#f0f5f3" }, 
         { title: "專業應援", desc: "回家後靜心感受身體的細微變化，傳 Line 給我詳細回饋，助我精進技術。", color: "#f7f4ef" }, 
@@ -213,18 +211,8 @@
         { title: "身心修復", desc: "今晚請心無罣礙地深層睡眠，您充滿元氣的樣子，就是對我手藝最高的讚美。", color: "#f4f0f5" }  
     ];
 
-    // --- 2. 預約時段設定 (請在這裡修改您的時間！) ---
-    // 格式： "日期 (星期) 時間"
-    const availableTimes = [
-        "1/24 (五) 14:00",
-        "1/24 (五) 19:30",
-        "1/27 (一) 10:00",
-        "1/27 (一) 14:30",
-        "2/01 (六) 15:00",
-    ];
-
     // ---------------------------------------------------
-
+    // 轉盤繪製與邏輯
     const canvas = document.getElementById('wheel');
     const ctx = canvas.getContext('2d');
     
@@ -246,6 +234,7 @@
         ctx.strokeStyle = "rgba(166, 139, 91, 0.3)"; ctx.lineWidth = 10; ctx.stroke();
     }
 
+    // 生成卡片清單
     const listContainer = document.getElementById('card-list');
     options.forEach(opt => {
         const div = document.createElement('div');
@@ -255,28 +244,7 @@
         listContainer.appendChild(div);
     });
 
-    // 生成預約按鈕
-    const slotsContainer = document.getElementById('slots-container');
-    let selectedSlot = null;
-    const bookBtn = document.getElementById('book-btn');
-
-    availableTimes.forEach(time => {
-        const btn = document.createElement('button');
-        btn.className = 'slot-btn';
-        btn.innerText = time;
-        btn.onclick = () => {
-            // 清除其他選取狀態
-            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
-            // 設定當前選取
-            btn.classList.add('active');
-            selectedSlot = time;
-            // 啟用送出按鈕
-            bookBtn.disabled = false;
-            bookBtn.innerText = "確認預約此時段";
-        };
-        slotsContainer.appendChild(btn);
-    });
-
+    // 轉動動畫
     let rotation = 0;
     function spinWheel() {
         const randomDeg = Math.floor(Math.random() * 360);
@@ -294,23 +262,110 @@
     function showResult(opt) {
         document.getElementById('result-title').innerText = opt.title;
         document.getElementById('result-desc').innerText = opt.desc;
-        const message = `小洵您好，感謝今日的專業修復！\n關於互惠約定，我選擇了【${opt.title}】。\n內容確認為：「${opt.desc}」\n期待下次再會。🌿`;
+        const message = `小洵您好，感謝今日的專業修復！\n關於互惠約定，我選擇了【${opt.title}】。\n內容確認為：「${opt.desc}」\n期待下次再會🌿`;
         const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
         document.getElementById('line-btn').href = lineUrl;
         document.getElementById('modal').style.display = 'block';
     }
 
-    function submitBooking() {
-        if (!selectedSlot) return;
+    // ---------------------------------------------------
+    // 預約功能 (串接 Google Sheets)
+    let selectedSlot = null;
 
-        document.getElementById('result-title').innerText = "預約請求確認";
-        document.getElementById('result-desc').innerText = `您選擇的時段為：\n${selectedSlot}\n\n按下按鈕後將開啟 Line 視窗，請傳送訊息以完成預約。`;
+    async function loadAvailableTimes() {
+        const container = document.getElementById('slots-container');
+        try {
+            const response = await fetch(`${API_URL}?action=getSlots`);
+            const times = await response.json();
+            
+            container.innerHTML = ''; // 清空提示
+            
+            if (times.length === 0) {
+                container.innerHTML = '<p style="color:#a68b5b;">目前時段皆已額滿，請私訊討論時間。</p>';
+                // 仍需保留私訊按鈕
+            } else {
+                times.forEach(time => {
+                    const btn = document.createElement('button');
+                    btn.className = 'slot-btn';
+                    btn.innerText = time;
+                    btn.onclick = () => selectSlot(btn, time);
+                    container.appendChild(btn);
+                });
+            }
+            
+            // 永遠加上「私訊」選項
+            const otherBtn = document.createElement('button');
+            otherBtn.className = 'slot-btn';
+            otherBtn.innerText = "其他時間 (私訊討論)";
+            otherBtn.onclick = () => selectSlot(otherBtn, "其他時間 (私訊討論)");
+            container.appendChild(otherBtn);
+
+        } catch (error) {
+            console.error(error);
+            container.innerHTML = '<p style="color:red;">預約本讀取失敗，請重新整理頁面。</p>';
+        }
+    }
+
+    function selectSlot(btn, time) {
+        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSlot = time;
+        const bookBtn = document.getElementById('book-btn');
+        bookBtn.disabled = false;
+        bookBtn.innerText = time.includes("私訊") ? "確認討論此時段" : "確認預約此時段";
+    }
+
+    async function submitBooking() {
+        if (!selectedSlot) return;
         
-        let message = "";
-        if(selectedSlot.includes("私訊討論")) {
-             message = `Hi 小洵，我想預約下一次的修復時光！🌿\n\n不過您列出的時間我剛好都不行，我們可以另外約時間嗎？`;
-        } else {
-             message = `Hi 小洵，我想預約下一次的修復時光！🌿\n\n我選擇的時段是：【${selectedSlot}】\n\n請問方便嗎？`;
+        const bookBtn = document.getElementById('book-btn');
+        const originalText = bookBtn.innerText;
+        
+        // 如果是「私訊討論」，不需寫入資料庫，直接開 Line
+        if (selectedSlot.includes("私訊討論")) {
+             openLineAndModal(selectedSlot);
+             return;
+        }
+
+        // 鎖定按鈕避免重複點擊
+        bookBtn.disabled = true;
+        bookBtn.innerText = "預約鎖定中...";
+
+        try {
+            // 通知 Google Sheet 鎖定該時段
+            await fetch(`${API_URL}?action=bookSlot&time=${encodeURIComponent(selectedSlot)}`, {
+                method: 'POST', 
+                mode: 'no-cors' 
+            });
+
+            // 隱藏按鈕動畫
+            const activeBtn = document.querySelector('.slot-btn.active');
+            if (activeBtn) {
+                activeBtn.classList.add('removing');
+                setTimeout(() => {
+                    activeBtn.style.display = 'none';
+                    activeBtn.classList.remove('active');
+                }, 500);
+            }
+            
+            // 開啟 Line 與彈窗
+            openLineAndModal(selectedSlot);
+            bookBtn.innerText = "請選擇其他時段";
+
+        } catch (error) {
+            alert("網路連線異常，請直接私訊我確認時間。");
+            bookBtn.disabled = false;
+            bookBtn.innerText = originalText;
+        }
+    }
+
+    function openLineAndModal(timeSlot) {
+        document.getElementById('result-title').innerText = "預約請求確認";
+        document.getElementById('result-desc').innerText = `系統已鎖定時段：\n${timeSlot}\n\n請務必按下按鈕，傳送 Line 訊息給我才算完成喔！`;
+        
+        let message = `Hi 小洵，我已在網頁上鎖定預約！🌿\n\n時段：【${timeSlot}】\n\n請幫我保留，謝謝！`;
+        if(timeSlot.includes("私訊討論")) {
+             message = `Hi 小洵，我想預約下一次的修復時光！🌿\n\n不過時間我都剛好不行，想另外跟您約～`;
         }
         
         const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
@@ -319,7 +374,10 @@
     }
 
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    
+    // 初始化
     document.fonts.ready.then(function () { drawWheel(); });
+    document.addEventListener('DOMContentLoaded', loadAvailableTimes);
 </script>
 
 </body>
