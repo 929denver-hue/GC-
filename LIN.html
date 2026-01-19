@@ -147,12 +147,11 @@
             backdrop-filter: blur(10px);
         }
 
-        /* 財神到動畫：超大尺寸與出場特效 */
-        @keyframes cai-shen-zoom {
-            0% { transform: scale(0) translateY(100px) rotate(-10deg); opacity: 0; }
-            50% { transform: scale(3.5) translateY(0) rotate(5deg); opacity: 1; } /* 放大到 3.5 倍 */
-            70% { transform: scale(3.0) rotate(0deg); }
-            100% { transform: scale(3.2) rotate(0deg); }
+        /* 財神動畫：縮放與出場 */
+        @keyframes cai-shen-pop {
+            0% { transform: scale(0) translateY(100px); opacity: 0; }
+            60% { transform: scale(1.1) translateY(0); opacity: 1; }
+            100% { transform: scale(1); }
         }
         
         @keyframes ray-rotate {
@@ -161,7 +160,7 @@
         }
 
         .cai-shen-active {
-            animation: cai-shen-zoom 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: cai-shen-pop 1.0s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         
         /* 萬丈光芒背景 */
@@ -193,7 +192,6 @@
 
     <div class="container max-w-lg mx-auto p-4 w-full relative z-10">
         
-        <!-- Header -->
         <div class="text-center mb-8">
             <div class="inline-block border-b-2 border-yellow-500/50 pb-2 mb-4">
                 <span class="text-yellow-400 tracking-[0.5em] text-xs font-bold uppercase">Ultimate Edition</span>
@@ -206,9 +204,7 @@
             </p>
         </div>
 
-        <!-- Slot Machine Casing -->
         <div class="slot-machine-casing mb-8">
-            <!-- 裝飾燈 -->
             <div class="absolute top-3 left-1/2 transform -translate-x-1/2 w-full flex justify-between px-8">
                 <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_15px_#ef4444]"></div>
                 <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse delay-75 shadow-[0_0_15px_#facc15]"></div>
@@ -217,14 +213,12 @@
                 <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_15px_#ef4444]"></div>
             </div>
 
-            <!-- 螢幕視窗 -->
             <div class="reel-window grid grid-cols-3 gap-1 p-1 bg-black mb-8 mt-4">
                 <div id="reel1" class="reel rounded-l-md">💎</div>
-                <div id="reel2" class="reel">🧧</div>
-                <div id="reel3" class="reel rounded-r-md">🍊</div>
+                <div id="reel2" class="reel">👲</div>
+                <div id="reel3" class="reel rounded-r-md">💰</div>
             </div>
 
-            <!-- 控制按鈕 -->
             <div class="text-center px-2 pb-2">
                 <button id="spinBtn" onclick="spin()" class="spin-btn w-full py-6 rounded-2xl text-4xl font-black text-white text-shadow-md">
                     啟 動 好 運
@@ -232,21 +226,31 @@
             </div>
         </div>
 
-        <!-- 財神與結果全螢幕遮罩 -->
         <div id="resultOverlay" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-md transition-all duration-500 overflow-hidden">
             
-            <!-- 財神特效容器 -->
             <div id="caishenContainer" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden z-60">
-                <!-- 光芒 -->
                 <div id="caishenLight" class="holy-light"></div>
                 
-                <div class="text-center relative">
-                    <!-- 財神 emoji，初始很小，透過 class 放大 -->
-                    <div id="caishenEmoji" class="text-9xl filter drop-shadow-[0_0_50px_rgba(255,215,0,0.9)] opacity-0 origin-center">
-                        👲
+                <div class="text-center relative flex flex-col items-center">
+                    <div id="caishenImage" class="w-64 h-64 mb-6 opacity-0 transform translate-y-20 transition-all duration-700">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-[0_0_30px_rgba(255,215,0,0.6)]">
+                            <circle cx="100" cy="100" r="90" fill="#fcd34d" opacity="0.3" />
+                            <circle cx="100" cy="100" r="80" fill="#fbbf24" opacity="0.5" />
+                            <path d="M60 60 Q100 30 140 60 L150 50 L160 65 L145 75 L155 85 L130 90 L70 90 L45 85 L55 75 L40 65 L50 50 Z" fill="#000" />
+                            <rect x="70" y="50" width="60" height="40" rx="5" fill="#111" />
+                            <circle cx="100" cy="65" r="8" fill="#ef4444" stroke="#fbbf24" stroke-width="2" />
+                            <circle cx="100" cy="100" r="45" fill="#fde68a" />
+                            <path d="M75 120 Q100 160 125 120" fill="none" stroke="#111" stroke-width="3" />
+                            <path d="M100 125 L90 150 L100 160 L110 150 Z" fill="#111" />
+                            <path d="M80 95 Q85 90 90 95" fill="none" stroke="#000" stroke-width="2" />
+                            <path d="M110 95 Q115 90 120 95" fill="none" stroke="#000" stroke-width="2" />
+                            <path d="M90 115 Q100 125 110 115" fill="none" stroke="#b91c1c" stroke-width="2" />
+                            <path d="M50 140 Q100 130 150 140 L160 200 L40 200 Z" fill="#dc2626" />
+                            <path d="M80 160 Q100 180 120 160 L130 150 Q100 140 70 150 Z" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
+                        </svg>
                     </div>
                     
-                    <div id="caishenText" class="opacity-0 transition-opacity duration-1000 delay-500 mt-12 transform scale-150">
+                    <div id="caishenText" class="opacity-0 transition-opacity duration-1000 delay-500 mt-4 transform scale-150">
                         <div class="text-6xl font-black text-yellow-400 stroke-red-800 text-stroke drop-shadow-xl bg-red-900/90 px-8 py-3 rounded-full border-4 border-yellow-500 inline-block">
                             財神爺到！
                         </div>
@@ -254,9 +258,7 @@
                 </div>
             </div>
 
-            <!-- 結果卡片 -->
             <div id="resultCard" class="prize-display w-[90%] max-w-md rounded-3xl p-8 text-center relative overflow-hidden transform scale-0 transition-transform duration-500 delay-1000 z-70">
-                <!-- 光芒背景 -->
                 <div class="absolute inset-0 bg-[radial-gradient(circle,rgba(255,215,0,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
                 
                 <h2 class="text-2xl font-bold text-yellow-200 mb-4 tracking-widest">恭喜獲得</h2>
@@ -269,8 +271,7 @@
                 </div>
                 
                 <p id="prizeMsg" class="text-xl text-white font-medium leading-relaxed mb-8 border-t border-b border-yellow-500/30 py-4">
-                    <!-- 吉祥話 -->
-                </p>
+                    </p>
                 
                 <button onclick="resetGameUI()" class="w-full py-4 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold rounded-xl shadow-lg border border-yellow-500/50 text-xl transition transform hover:scale-105">
                     🧧 歡喜收下 🧧
@@ -278,7 +279,6 @@
             </div>
         </div>
         
-        <!-- 結束畫面 -->
         <div id="gameOverArea" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90">
             <div class="text-center p-8 border-2 border-yellow-600 rounded-2xl bg-red-950/50 backdrop-blur">
                 <div class="text-6xl mb-4">🏮</div>
@@ -295,35 +295,38 @@
         </div>
     </div>
 
-    <!-- Canvas -->
     <canvas id="confetti"></canvas>
 
     <script>
-        // --- 獎項設定 (共15份) ---
+        // --- 獎項與符號設定 ---
+        // 符號：金塊(🪙), 金元寶(💰), 紅包袋(🧧), 鑽石(💎), 財神爺(👲)
+        
         const initialPrizePool = [
-            // $500 組 (5個) - 💎
-            { amount: 500, symbol: '💎', msg: "五福臨門！2026 氣勢如虹，事業學業都頂尖！" },
-            { amount: 500, symbol: '💎', msg: "財源滾滾！堅持到底，成功就在不遠處！" },
-            { amount: 500, symbol: '💎', msg: "鴻運當頭！你的潛力無限，今年大放異彩！" },
-            { amount: 500, symbol: '💎', msg: "大吉大利！保持熱情，世界會為你讓路！" },
-            { amount: 500, symbol: '💎', msg: "心想事成！勇敢追夢，你就是自己的光！" },
+            // $500 組 (5個) - 財神爺 (👲)
+            { amount: 500, symbol: '👲', msg: "五福臨門！2026 氣勢如虹，事業學業都頂尖！" },
+            { amount: 500, symbol: '👲', msg: "財源滾滾！堅持到底，成功就在不遠處！" },
+            { amount: 500, symbol: '👲', msg: "鴻運當頭！你的潛力無限，今年大放異彩！" },
+            { amount: 500, symbol: '👲', msg: "大吉大利！保持熱情，世界會為你讓路！" },
+            { amount: 500, symbol: '👲', msg: "心想事成！勇敢追夢，你就是自己的光！" },
 
-            // $200 組 (5個) - 🧧
-            { amount: 200, symbol: '🧧', msg: "好事成雙！每天進步一點點，一年後將大不同！" },
-            { amount: 200, symbol: '🧧', msg: "龍馬精神！挑戰是成長的養分，擁抱它！" },
-            { amount: 200, symbol: '🧧', msg: "步步高升！心寬路就寬，樂觀迎接每一天！" },
-            { amount: 200, symbol: '🧧', msg: "花開富貴！相信美好的事情即將發生！" },
-            { amount: 200, symbol: '🧧', msg: "迎春納福！做自己的太陽，無需憑藉誰的光！" },
+            // $200 組 (5個) - 鑽石 (💎)
+            { amount: 200, symbol: '💎', msg: "好事成雙！每天進步一點點，一年後將大不同！" },
+            { amount: 200, symbol: '💎', msg: "龍馬精神！挑戰是成長的養分，擁抱它！" },
+            { amount: 200, symbol: '💎', msg: "步步高升！心寬路就寬，樂觀迎接每一天！" },
+            { amount: 200, symbol: '💎', msg: "花開富貴！相信美好的事情即將發生！" },
+            { amount: 200, symbol: '💎', msg: "迎春納福！做自己的太陽，無需憑藉誰的光！" },
 
-            // $100 組 (5個) - 🍊
-            { amount: 100, symbol: '🍊', msg: "一元復始！吃得好睡得好，健康沒煩惱！" },
-            { amount: 100, symbol: '🍊', msg: "歲歲平安！失敗是成功的墊腳石，別怕跌倒！" },
-            { amount: 100, symbol: '🍊', msg: "萬象更新！今天的努力，是為了未來的驚喜！" },
-            { amount: 100, symbol: '🍊', msg: "笑口常開！愛笑的人運氣不會太差！" },
-            { amount: 100, symbol: '🍊', msg: "吉祥如意！懂得感恩，幸福就會不期而遇！" }
+            // $100 組 (5個) - 紅包袋 (🧧)
+            { amount: 100, symbol: '🧧', msg: "一元復始！吃得好睡得好，健康沒煩惱！" },
+            { amount: 100, symbol: '🧧', msg: "歲歲平安！失敗是成功的墊腳石，別怕跌倒！" },
+            { amount: 100, symbol: '🧧', msg: "萬象更新！今天的努力，是為了未來的驚喜！" },
+            { amount: 100, symbol: '🧧', msg: "笑口常開！愛笑的人運氣不會太差！" },
+            { amount: 100, symbol: '🧧', msg: "吉祥如意！懂得感恩，幸福就會不期而遇！" }
         ];
 
-        const fillerSymbols = ['💎', '🧧', '🍊', '🦁', '💰', '🎱', '🍍'];
+        // 轉盤混淆用的符號池
+        const fillerSymbols = ['🪙', '💰', '🧧', '💎', '👲', '🪙', '💰']; 
+        
         let prizePool = [...initialPrizePool]; 
         let isSpinning = false;
         
@@ -335,7 +338,7 @@
         const resultOverlay = document.getElementById('resultOverlay');
         const resultCard = document.getElementById('resultCard');
         const caishenContainer = document.getElementById('caishenContainer');
-        const caishenEmoji = document.getElementById('caishenEmoji');
+        const caishenImage = document.getElementById('caishenImage');
         const caishenLight = document.getElementById('caishenLight');
         const caishenText = document.getElementById('caishenText');
         const gameOverArea = document.getElementById('gameOverArea');
@@ -414,15 +417,20 @@
             caishenContainer.classList.remove('hidden');
             
             // 重置動畫 Class
-            caishenEmoji.classList.remove('caishen-active');
-            void caishenEmoji.offsetWidth; // trigger reflow
-            caishenEmoji.classList.add('caishen-active');
+            caishenImage.classList.remove('caishen-active');
+            caishenImage.style.opacity = '0';
+            caishenImage.style.transform = 'translateY(50px) scale(0.5)';
+            
+            void caishenImage.offsetWidth; // trigger reflow
+            
+            // 播放財神動畫
+            caishenImage.classList.add('caishen-active');
             
             // 顯示光芒與文字
             setTimeout(() => { caishenLight.style.opacity = '1'; }, 200);
             setTimeout(() => { caishenText.classList.remove('opacity-0'); }, 800);
 
-            // 3. 啟動鞭炮雨特效 (Firecracker Rain)
+            // 3. 啟動鞭炮雨特效
             fireFirecrackerRain();
 
             // 4. 顯示卡片 (延遲一點讓財神先出來秀一下)
@@ -450,7 +458,7 @@
             resultCard.classList.add('scale-0');
             
             // 重置財神狀態
-            caishenEmoji.classList.remove('caishen-active');
+            caishenImage.classList.remove('caishen-active');
             caishenLight.style.opacity = '0';
             caishenText.classList.add('opacity-0');
 
@@ -475,21 +483,21 @@
 
             const particles = [];
             
-            // 混合鞭炮、紅包、金幣與彩帶
-            const items = ['🧨', '🧨', '🧨', '🧧', '💰', '✨']; 
+            // 混合：金塊, 金元寶, 紅包, 財神等
+            const items = ['💰', '🪙', '🧧', '💎', '✨']; 
             const colors = ['#ffd700', '#ff0000', '#ffffff', '#eab308'];
 
             // 產生大量粒子
             for (let i = 0; i < 250; i++) {
-                const isText = Math.random() > 0.5; // 50% 機率是圖案
+                const isText = Math.random() > 0.4; // 60% 機率是圖案
                 particles.push({
                     x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height - 200, // 從畫面更上方開始掉落
+                    y: Math.random() * canvas.height - canvas.height - 200,
                     vx: Math.random() * 4 - 2,
-                    vy: Math.random() * 8 + 5, // 掉落速度快一點
+                    vy: Math.random() * 8 + 5,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     text: items[Math.floor(Math.random() * items.length)],
-                    size: Math.random() * 30 + 20, // 圖案比較大
+                    size: Math.random() * 30 + 20,
                     rotation: Math.random() * 360,
                     rotationSpeed: Math.random() * 10 - 5,
                     isText: isText
