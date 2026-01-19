@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林家專屬・頂級新春拉霸</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
+
+        :root {
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --gold-text: linear-gradient(to bottom, #cfc09f 22%, #634f2c 24%, #cfc09f 26%, #cfc09f 27%, #ffecb3 40%, #3a2c0f 78%);
+            --deep-red-bg: radial-gradient(circle at center, #7f1d1d 0%, #450a0a 100%);
+        }
+
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background: var(--deep-red-bg);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fbbf24' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* 華麗流光標題 */
+        .shimmer-text {
+            background: linear-gradient(45deg, #FFD700, #FFF, #FFD700);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        .gold-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .slot-machine-casing {
+            background: linear-gradient(to bottom, #2a0a0a, #1a0505);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.9),
+                0 0 0 8px #594319,
+                0 0 0 12px #bf953f,
+                0 0 40px rgba(255, 215, 0, 0.2);
+            position: relative;
+        }
+
+        .reel-window {
+            background: #000;
+            border: 4px solid #855e14;
+            border-radius: 10px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reel-window::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 40%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .reel {
+            font-size: 4.5rem;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom, #fff8e1 0%, #d4b08c 100%);
+            color: #333;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+            border-right: 2px solid #594319;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        .reel:last-child { border-right: none; }
+
+        .reel.blur {
+            filter: blur(8px) motion-blur(vertical);
+            color: transparent;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        .spin-btn {
+            background: radial-gradient(circle at 30% 30%, #ff0000, #8b0000);
+            border: 4px solid #fcd34d;
+            box-shadow: 
+                0 10px 0 #5b0000, 
+                0 15px 20px rgba(0,0,0,0.6),
+                inset 0 2px 5px rgba(255,255,255,0.4);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spin-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .spin-btn:active {
+            transform: translateY(8px);
+            box-shadow: 
+                0 2px 0 #5b0000, 
+                inset 0 5px 10px rgba(0,0,0,0.4);
+        }
+
+        .spin-btn:disabled {
+            filter: grayscale(100%);
+            cursor: not-allowed;
+            transform: translateY(8px);
+            box-shadow: none;
+            animation: none;
+        }
+
+        .prize-display {
+            background: rgba(40, 0, 0, 0.95);
+            border: 2px solid #bf953f;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        /* 財神到動畫：超大尺寸與出場特效 */
+        @keyframes cai-shen-zoom {
+            0% { transform: scale(0) translateY(100px) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(3.5) translateY(0) rotate(5deg); opacity: 1; } /* 放大到 3.5 倍 */
+            70% { transform: scale(3.0) rotate(0deg); }
+            100% { transform: scale(3.2) rotate(0deg); }
+        }
+        
+        @keyframes ray-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cai-shen-active {
+            animation: cai-shen-zoom 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        /* 萬丈光芒背景 */
+        .holy-light {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: repeating-conic-gradient(
+                from 0deg,
+                rgba(255, 215, 0, 0.3) 0deg 20deg,
+                transparent 20deg 40deg
+            );
+            animation: ray-rotate 10s linear infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        #confetti {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container max-w-lg mx-auto p-4 w-full relative z-10">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-block border-b-2 border-yellow-500/50 pb-2 mb-4">
+                <span class="text-yellow-400 tracking-[0.5em] text-xs font-bold uppercase">Ultimate Edition</span>
+            </div>
+            <h1 class="text-6xl font-black mb-2 shimmer-text drop-shadow-xl tracking-wide">
+                林家御用
+            </h1>
+            <p class="text-2xl text-yellow-200 font-bold tracking-[0.8em] mt-2 gold-text">
+                新春發財金
+            </p>
+        </div>
+
+        <!-- Slot Machine Casing -->
+        <div class="slot-machine-casing mb-8">
+            <!-- 裝飾燈 -->
+            <div class="absolute top-3 left-1/2 transform -translate-x-1/2 w-full flex justify-between px-8">
+                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_15px_#ef4444]"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse delay-75 shadow-[0_0_15px_#facc15]"></div>
+                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse delay-150 shadow-[0_0_15px_#ef4444]"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse delay-75 shadow-[0_0_15px_#facc15]"></div>
+                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_15px_#ef4444]"></div>
+            </div>
+
+            <!-- 螢幕視窗 -->
+            <div class="reel-window grid grid-cols-3 gap-1 p-1 bg-black mb-8 mt-4">
+                <div id="reel1" class="reel rounded-l-md">💎</div>
+                <div id="reel2" class="reel">🧧</div>
+                <div id="reel3" class="reel rounded-r-md">🍊</div>
+            </div>
+
+            <!-- 控制按鈕 -->
+            <div class="text-center px-2 pb-2">
+                <button id="spinBtn" onclick="spin()" class="spin-btn w-full py-6 rounded-2xl text-4xl font-black text-white text-shadow-md">
+                    啟 動 好 運
+                </button>
+            </div>
+        </div>
+
+        <!-- 財神與結果全螢幕遮罩 -->
+        <div id="resultOverlay" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-md transition-all duration-500 overflow-hidden">
+            
+            <!-- 財神特效容器 -->
+            <div id="caishenContainer" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden z-60">
+                <!-- 光芒 -->
+                <div id="caishenLight" class="holy-light"></div>
+                
+                <div class="text-center relative">
+                    <!-- 財神 emoji，初始很小，透過 class 放大 -->
+                    <div id="caishenEmoji" class="text-9xl filter drop-shadow-[0_0_50px_rgba(255,215,0,0.9)] opacity-0 origin-center">
+                        👲
+                    </div>
+                    
+                    <div id="caishenText" class="opacity-0 transition-opacity duration-1000 delay-500 mt-12 transform scale-150">
+                        <div class="text-6xl font-black text-yellow-400 stroke-red-800 text-stroke drop-shadow-xl bg-red-900/90 px-8 py-3 rounded-full border-4 border-yellow-500 inline-block">
+                            財神爺到！
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 結果卡片 -->
+            <div id="resultCard" class="prize-display w-[90%] max-w-md rounded-3xl p-8 text-center relative overflow-hidden transform scale-0 transition-transform duration-500 delay-1000 z-70">
+                <!-- 光芒背景 -->
+                <div class="absolute inset-0 bg-[radial-gradient(circle,rgba(255,215,0,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
+                
+                <h2 class="text-2xl font-bold text-yellow-200 mb-4 tracking-widest">恭喜獲得</h2>
+                
+                <div class="my-6 relative">
+                    <div class="absolute inset-0 bg-yellow-500/20 blur-xl rounded-full"></div>
+                    <span id="prizeAmount" class="relative text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-100 to-yellow-500 drop-shadow-sm">
+                        $500
+                    </span>
+                </div>
+                
+                <p id="prizeMsg" class="text-xl text-white font-medium leading-relaxed mb-8 border-t border-b border-yellow-500/30 py-4">
+                    <!-- 吉祥話 -->
+                </p>
+                
+                <button onclick="resetGameUI()" class="w-full py-4 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold rounded-xl shadow-lg border border-yellow-500/50 text-xl transition transform hover:scale-105">
+                    🧧 歡喜收下 🧧
+                </button>
+            </div>
+        </div>
+        
+        <!-- 結束畫面 -->
+        <div id="gameOverArea" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+            <div class="text-center p-8 border-2 border-yellow-600 rounded-2xl bg-red-950/50 backdrop-blur">
+                <div class="text-6xl mb-4">🏮</div>
+                <h3 class="text-3xl text-yellow-400 font-bold mb-4">紅包圓滿發送完畢</h3>
+                <p class="text-white/80 text-lg mb-6">祝林家 2026 年<br>蛇年行大運，富貴萬萬年！</p>
+                <button onclick="location.reload()" class="text-sm text-yellow-600 underline hover:text-yellow-400">
+                    重新載入獎池
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center mt-12 text-yellow-500/30 text-xs font-serif tracking-[0.3em]">
+             LIN FAMILY EXCLUSIVE © 2026
+        </div>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="confetti"></canvas>
+
+    <script>
+        // --- 獎項設定 (共15份) ---
+        const initialPrizePool = [
+            // $500 組 (5個) - 💎
+            { amount: 500, symbol: '💎', msg: "五福臨門！2026 氣勢如虹，事業學業都頂尖！" },
+            { amount: 500, symbol: '💎', msg: "財源滾滾！堅持到底，成功就在不遠處！" },
+            { amount: 500, symbol: '💎', msg: "鴻運當頭！你的潛力無限，今年大放異彩！" },
+            { amount: 500, symbol: '💎', msg: "大吉大利！保持熱情，世界會為你讓路！" },
+            { amount: 500, symbol: '💎', msg: "心想事成！勇敢追夢，你就是自己的光！" },
+
+            // $200 組 (5個) - 🧧
+            { amount: 200, symbol: '🧧', msg: "好事成雙！每天進步一點點，一年後將大不同！" },
+            { amount: 200, symbol: '🧧', msg: "龍馬精神！挑戰是成長的養分，擁抱它！" },
+            { amount: 200, symbol: '🧧', msg: "步步高升！心寬路就寬，樂觀迎接每一天！" },
+            { amount: 200, symbol: '🧧', msg: "花開富貴！相信美好的事情即將發生！" },
+            { amount: 200, symbol: '🧧', msg: "迎春納福！做自己的太陽，無需憑藉誰的光！" },
+
+            // $100 組 (5個) - 🍊
+            { amount: 100, symbol: '🍊', msg: "一元復始！吃得好睡得好，健康沒煩惱！" },
+            { amount: 100, symbol: '🍊', msg: "歲歲平安！失敗是成功的墊腳石，別怕跌倒！" },
+            { amount: 100, symbol: '🍊', msg: "萬象更新！今天的努力，是為了未來的驚喜！" },
+            { amount: 100, symbol: '🍊', msg: "笑口常開！愛笑的人運氣不會太差！" },
+            { amount: 100, symbol: '🍊', msg: "吉祥如意！懂得感恩，幸福就會不期而遇！" }
+        ];
+
+        const fillerSymbols = ['💎', '🧧', '🍊', '🦁', '💰', '🎱', '🍍'];
+        let prizePool = [...initialPrizePool]; 
+        let isSpinning = false;
+        
+        // DOM Elements
+        const reel1 = document.getElementById('reel1');
+        const reel2 = document.getElementById('reel2');
+        const reel3 = document.getElementById('reel3');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultOverlay = document.getElementById('resultOverlay');
+        const resultCard = document.getElementById('resultCard');
+        const caishenContainer = document.getElementById('caishenContainer');
+        const caishenEmoji = document.getElementById('caishenEmoji');
+        const caishenLight = document.getElementById('caishenLight');
+        const caishenText = document.getElementById('caishenText');
+        const gameOverArea = document.getElementById('gameOverArea');
+
+        function spin() {
+            if (isSpinning) return;
+            if (prizePool.length === 0) {
+                gameOverArea.classList.remove('hidden');
+                return;
+            }
+
+            isSpinning = true;
+            spinBtn.disabled = true;
+            
+            // 決定獎項
+            const randomIndex = Math.floor(Math.random() * prizePool.length);
+            const winningPrize = prizePool[randomIndex];
+            prizePool.splice(randomIndex, 1); 
+
+            // 視覺特效：開始轉動
+            reel1.classList.add('blur');
+            reel2.classList.add('blur');
+            reel3.classList.add('blur');
+            spinBtn.innerText = "好 運 運 轉 中 ...";
+
+            let loopCount = 0;
+            const spinInterval = setInterval(() => {
+                reel1.innerText = getRandomFiller();
+                reel2.innerText = getRandomFiller();
+                reel3.innerText = getRandomFiller();
+                loopCount++;
+            }, 80);
+
+            // 停止轉動邏輯
+            setTimeout(() => {
+                reel1.classList.remove('blur');
+                reel1.innerText = winningPrize.symbol;
+                playThudEffect(reel1);
+            }, 1500);
+
+            setTimeout(() => {
+                reel2.classList.remove('blur');
+                reel2.innerText = winningPrize.symbol;
+                playThudEffect(reel2);
+            }, 2200);
+
+            setTimeout(() => {
+                clearInterval(spinInterval);
+                reel3.classList.remove('blur');
+                reel3.innerText = winningPrize.symbol;
+                playThudEffect(reel3);
+                
+                // 延遲顯示結果
+                setTimeout(() => showResult(winningPrize), 800);
+            }, 3000);
+        }
+
+        function getRandomFiller() {
+            return fillerSymbols[Math.floor(Math.random() * fillerSymbols.length)];
+        }
+
+        function playThudEffect(el) {
+            el.style.transform = "scale(1.3)";
+            el.style.color = "#fff"; 
+            setTimeout(() => {
+                el.style.transform = "scale(1)";
+                el.style.color = "#333";
+            }, 150);
+        }
+
+        function showResult(prize) {
+            // 1. 顯示全螢幕遮罩
+            resultOverlay.classList.remove('hidden');
+            
+            // 2. 財神出場
+            caishenContainer.classList.remove('hidden');
+            
+            // 重置動畫 Class
+            caishenEmoji.classList.remove('caishen-active');
+            void caishenEmoji.offsetWidth; // trigger reflow
+            caishenEmoji.classList.add('caishen-active');
+            
+            // 顯示光芒與文字
+            setTimeout(() => { caishenLight.style.opacity = '1'; }, 200);
+            setTimeout(() => { caishenText.classList.remove('opacity-0'); }, 800);
+
+            // 3. 啟動鞭炮雨特效 (Firecracker Rain)
+            fireFirecrackerRain();
+
+            // 4. 顯示卡片 (延遲一點讓財神先出來秀一下)
+            setTimeout(() => {
+                document.getElementById('prizeAmount').innerText = `$${prize.amount}`;
+                document.getElementById('prizeMsg').innerText = prize.msg;
+                
+                // 隱藏財神，切換到結果卡片
+                caishenContainer.classList.add('hidden');
+                // 關閉光芒
+                caishenLight.style.opacity = '0';
+                caishenText.classList.add('opacity-0');
+                
+                resultCard.classList.remove('scale-0');
+                resultCard.classList.add('scale-100');
+            }, 3000); // 讓財神秀久一點 (3秒)
+
+            isSpinning = false;
+        }
+
+        function resetGameUI() {
+            // 關閉視窗與特效
+            resultOverlay.classList.add('hidden');
+            resultCard.classList.remove('scale-100');
+            resultCard.classList.add('scale-0');
+            
+            // 重置財神狀態
+            caishenEmoji.classList.remove('caishen-active');
+            caishenLight.style.opacity = '0';
+            caishenText.classList.add('opacity-0');
+
+            if (prizePool.length === 0) {
+                spinBtn.innerText = "獎 項 已 空";
+                spinBtn.disabled = true;
+                setTimeout(() => {
+                    gameOverArea.classList.remove('hidden');
+                }, 1000);
+            } else {
+                spinBtn.disabled = false;
+                spinBtn.innerText = "下 一 位 接 財 神";
+            }
+        }
+
+        // --- Canvas Effects (Confetti + Firecrackers) ---
+        function fireFirecrackerRain() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            
+            // 混合鞭炮、紅包、金幣與彩帶
+            const items = ['🧨', '🧨', '🧨', '🧧', '💰', '✨']; 
+            const colors = ['#ffd700', '#ff0000', '#ffffff', '#eab308'];
+
+            // 產生大量粒子
+            for (let i = 0; i < 250; i++) {
+                const isText = Math.random() > 0.5; // 50% 機率是圖案
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height - 200, // 從畫面更上方開始掉落
+                    vx: Math.random() * 4 - 2,
+                    vy: Math.random() * 8 + 5, // 掉落速度快一點
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    text: items[Math.floor(Math.random() * items.length)],
+                    size: Math.random() * 30 + 20, // 圖案比較大
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 10 - 5,
+                    isText: isText
+                });
+            }
+
+            let animationId;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let activeParticles = false;
+
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.rotation += p.rotationSpeed;
+                    p.vy += 0.05; 
+                    
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    
+                    if (p.isText) {
+                        ctx.font = `${p.size}px serif`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(p.text, 0, 0);
+                    } else {
+                        // 彩帶
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(-p.size/4, -p.size/4, p.size/2, p.size/2);
+                    }
+                    
+                    ctx.restore();
+
+                    if (p.y < canvas.height + 100) activeParticles = true;
+                });
+
+                if (activeParticles) {
+                    animationId = requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        }
+        
+        window.addEventListener('resize', () => {
+            const c = document.getElementById('confetti');
+            if(c) {
+                c.width = window.innerWidth;
+                c.height = window.innerHeight;
+            }
+        });
+    </script>
+</body>
+</html>
