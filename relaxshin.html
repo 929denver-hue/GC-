@@ -106,38 +106,14 @@
         .slot-btn.active { background: var(--primary-deep); color: var(--accent-bronze); border-color: var(--primary-deep); box-shadow: 0 5px 15px rgba(26, 60, 52, 0.2); font-weight: bold; }
         .slot-btn.removing { transform: scale(0); opacity: 0; margin: 0; padding: 0; height: 0; overflow: hidden; border: none; }
 
-        /* 新增：名字輸入框樣式 */
         .name-input-group {
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 2;
-            text-align: left;
-            max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 25px; position: relative; z-index: 2; text-align: left; max-width: 300px; margin-left: auto; margin-right: auto;
+            /* 預設隱藏，有時段時才顯示 */
+            display: none; 
         }
-        .name-label {
-            display: block;
-            font-size: 0.9em;
-            color: var(--primary-deep);
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        .name-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #dcdcdc;
-            border-radius: 4px;
-            font-size: 1em;
-            font-family: 'Noto Sans TC', sans-serif;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
-        .name-input:focus {
-            outline: none;
-            border-color: var(--accent-bronze);
-            box-shadow: 0 0 8px rgba(166, 139, 91, 0.1);
-        }
+        .name-label { display: block; font-size: 0.9em; color: var(--primary-deep); margin-bottom: 8px; font-weight: bold; }
+        .name-input { width: 100%; padding: 12px; border: 1px solid #dcdcdc; border-radius: 4px; font-size: 1em; font-family: 'Noto Sans TC', sans-serif; box-sizing: border-box; transition: 0.3s; }
+        .name-input:focus { outline: none; border-color: var(--accent-bronze); box-shadow: 0 0 8px rgba(166, 139, 91, 0.1); }
 
         .btn-book {
             background: var(--accent-bronze); color: white; border: none; padding: 14px 40px;
@@ -146,6 +122,17 @@
         }
         .btn-book:hover { background: #8c734b; transform: translateY(-2px); }
         .btn-book:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        /* 滿額時的文字樣式 */
+        .full-booked-text {
+            color: var(--primary-deep);
+            font-size: 1.1em;
+            line-height: 1.8;
+            padding: 20px;
+            border: 1px solid var(--accent-bronze);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.5);
+        }
 
         /* 彈窗 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 60, 52, 0.7); backdrop-filter: blur(5px); z-index: 1000; animation: fadeIn 0.4s ease; }
@@ -170,7 +157,7 @@
         <div class="intro-divider"></div>
         <div class="intro-text">
             <p>看見好友們舒展眉頭、身心輕盈，便是我最深的滿足。</p>
-            <p>這非關工作，而是源於對<span class="highlight">GC贈物網 互惠精神</span>的熱愛與延續。我們之間不談金錢，只論心意流動。</p>
+            <p>這非關工作，而是源於對<span class="highlight">「GC贈物網」互惠精神</span>的熱愛與延續。我們之間不談金錢，只論心意流動。</p>
             <p>為了讓這份美好能長久循環，我準備了這份【互惠之約】。請隨心轉動羅盤，或從下方箋言中擇一，作為我們之間交換的方式。您的回饋，是我持續精進的動力🌿</p>
         </div>
     </div>
@@ -192,14 +179,14 @@
 
     <div class="booking-section">
         <h3 class="booking-title">預約下一次修復</h3>
-        <p class="booking-desc">請點選時段並輸入您的稱呼</p>
+        <p class="booking-desc" id="booking-subtitle">請點選時段並輸入您的稱呼</p>
         
         <div class="slots-grid" id="slots-container">
             <p style="color:#a68b5b;">正在讀取預約本...</p>
         </div>
 
-        <div class="name-input-group">
-            <label class="name-label">預約大名 / 稱呼</label>
+        <div class="name-input-group" id="name-group">
+            <label class="name-label">預約暱稱 / 稱呼</label>
             <input type="text" id="user-name" class="name-input" placeholder="例如：Chris">
         </div>
         
@@ -220,7 +207,7 @@
 </div>
 
 <script>
-    // ★★★ 請確認這裡填入的是您剛剛更新後的 API 網址 ★★★
+    // ★★★ API 網址 (請確認這行是正確的) ★★★
     const API_URL = "https://script.google.com/macros/s/AKfycbyrTJ1p1hQVTBWRqLkIiDNuYIISltJe8-HUmKq7pLdg90a4l_kzxgYa1l7l_2W-4Oye/exec";
 
     // 轉盤邏輯
@@ -279,17 +266,22 @@
     function showResult(opt) {
         document.getElementById('result-title').innerText = opt.title;
         document.getElementById('result-desc').innerText = opt.desc;
-        const message = `小洵，感謝今日的專業修復！\n關於互惠約定，我選擇了【${opt.title}】。\n內容確認為：「${opt.desc}」\n期待下次再會🌿`;
+        const message = `小洵您好，感謝今日的專業修復！\n關於互惠約定，我選擇了【${opt.title}】。\n內容確認為：「${opt.desc}」\n期待下次再會。🌿`;
         const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
         document.getElementById('line-btn').href = lineUrl;
         document.getElementById('modal').style.display = 'block';
     }
 
-    // 預約功能
+    // ------------------------------------------
+    // 預約功能 (邏輯更新)
     let selectedSlot = null;
 
     async function loadAvailableTimes() {
         const container = document.getElementById('slots-container');
+        const nameGroup = document.getElementById('name-group');
+        const bookBtn = document.getElementById('book-btn');
+        const subtitle = document.getElementById('booking-subtitle');
+
         try {
             const response = await fetch(`${API_URL}?action=getSlots`);
             const times = await response.json();
@@ -297,8 +289,17 @@
             container.innerHTML = ''; 
             
             if (times.length === 0) {
-                container.innerHTML = '<p style="color:#a68b5b;">目前時段皆已額滿。</p>';
+                // 情境 1：全滿 -> 顯示滿額文字，隱藏所有按鈕與輸入框
+                container.innerHTML = '<div class="full-booked-text">感謝大家的支持，本期預約已全數額滿。<br>請留意小洵的後續公告，期待下次為您服務。🌿</div>';
+                nameGroup.style.display = 'none'; // 隱藏名字輸入
+                bookBtn.style.display = 'none';   // 隱藏送出按鈕
+                subtitle.style.display = 'none';  // 隱藏副標題
             } else {
+                // 情境 2：有空位 -> 顯示按鈕、輸入框、私訊選項
+                nameGroup.style.display = 'block';
+                bookBtn.style.display = 'inline-block';
+                subtitle.style.display = 'block';
+
                 times.forEach(time => {
                     const btn = document.createElement('button');
                     btn.className = 'slot-btn';
@@ -306,14 +307,14 @@
                     btn.onclick = () => selectSlot(btn, time);
                     container.appendChild(btn);
                 });
+
+                // 私訊按鈕只在還有空位時顯示 (通常是有空位但時間對不上的時候用)
+                const otherBtn = document.createElement('button');
+                otherBtn.className = 'slot-btn';
+                otherBtn.innerText = "其他時間 (私訊討論)";
+                otherBtn.onclick = () => selectSlot(otherBtn, "其他時間 (私訊討論)");
+                container.appendChild(otherBtn);
             }
-            
-            // 私訊選項
-           // const otherBtn = document.createElement('button');
-           // otherBtn.className = 'slot-btn';
-           // otherBtn.innerText = "其他時間 (私訊討論)";
-           // otherBtn.onclick = () => selectSlot(otherBtn, "其他時間 (私訊討論)");
-           // container.appendChild(otherBtn);
 
         } catch (error) {
             console.error(error);
@@ -325,10 +326,9 @@
         document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         selectedSlot = time;
-        checkForm(); // 檢查按鈕狀態
+        checkForm(); 
     }
 
-    // 監聽名字輸入，動態啟用按鈕
     document.getElementById('user-name').addEventListener('input', checkForm);
 
     function checkForm() {
@@ -368,7 +368,6 @@
         bookBtn.innerText = "預約鎖定中...";
 
         try {
-            // 呼叫 API，帶入時段 (time) 和 名字 (name)
             await fetch(`${API_URL}?action=bookSlot&time=${encodeURIComponent(selectedSlot)}&name=${encodeURIComponent(userName)}`, {
                 method: 'POST', 
                 mode: 'no-cors' 
@@ -401,7 +400,7 @@
         document.getElementById('result-desc').innerText = `系統已鎖定時段：\n${timeSlot}\n\n預約人：${name}\n\n請務必按下按鈕，傳送 Line 訊息給我才算完成喔！`;
         
         let message = `Hi 小洵，我是 ${name}，我已在網頁上鎖定預約！🌿\n\n時段：【${timeSlot}】\n\n請幫我保留，謝謝！`;
-       // if(timeSlot.includes("私訊討論")) {
+        if(timeSlot.includes("私訊討論")) {
              message = `Hi 小洵，我是 ${name}，我想預約下一次的修復時光！🌿\n\n不過時間我都剛好不行，想另外跟您約～`;
         }
         
