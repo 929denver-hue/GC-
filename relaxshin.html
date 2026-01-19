@@ -206,14 +206,14 @@
 </div>
 
 <script>
-    // ★★★ API 網址 (確認是新的) ★★★
+    // ★★★ API 網址 ★★★
     const API_URL = "https://script.google.com/macros/s/AKfycbzYv-P9YaCoVcXUkK1lRMV6phksO_kefa52om5viq7vxaHAzr5Z-aTU8FlVT_utIzOONw/exec";
 
     // 從網址獲取金鑰 (Key)
     const urlParams = new URLSearchParams(window.location.search);
     const accessKey = urlParams.get('key'); 
 
-    // 轉盤邏輯 (保持不變)
+    // 轉盤邏輯
     const options = [
         { title: "生活小確幸", desc: "請我喝一杯你最近心頭好的飲料。（貼心備註：我偏好無糖口味）", color: "#f0f5f3" }, 
         { title: "專業應援", desc: "回家後靜心感受身體的細微變化，傳 Line 給我詳細回饋，助我精進技術。", color: "#f7f4ef" }, 
@@ -247,7 +247,6 @@
     }
     function showResult(opt) {
         document.getElementById('result-title').innerText = opt.title; document.getElementById('result-desc').innerText = opt.desc;
-        // 修正：確保這裡也只包含文字
         document.getElementById('line-btn').href = `https://line.me/R/msg/text/?${encodeURIComponent(`小洵您好，感謝今日的專業修復！\n我選擇了【${opt.title}】。\n內容：「${opt.desc}」`)}`;
         document.getElementById('modal').style.display = 'block';
     }
@@ -279,7 +278,7 @@
                 container.innerHTML = '<div class="full-booked-text">本期預約已全數額滿嚕～<br>請留意小洵的後續公告，期待下次與您相見。🌿</div>';
                 nameGroup.style.display = 'none'; bookBtn.style.display = 'none'; subtitle.style.display = 'none';
             } else {
-                // 有空位 (這裡修改：不再顯示私訊按鈕)
+                // 有空位 (只顯示空位按鈕，不顯示私訊按鈕)
                 nameGroup.style.display = 'block'; bookBtn.style.display = 'inline-block'; subtitle.style.display = 'block';
                 data.forEach(time => {
                     const btn = document.createElement('button'); btn.className = 'slot-btn'; btn.innerText = time;
@@ -301,8 +300,6 @@
         const name = document.getElementById('user-name').value.trim(); const bookBtn = document.getElementById('book-btn');
         if (!selectedSlot) { bookBtn.innerText = "請先選擇時段"; bookBtn.disabled = true; return; }
         if (!name) { bookBtn.innerText = "請輸入預約大名"; bookBtn.disabled = true; return; }
-        
-        // 這裡修改：不再有私訊按鈕的判斷
         bookBtn.disabled = false; bookBtn.innerText = "確認預約此時段";
     }
 
@@ -310,7 +307,6 @@
         if (!selectedSlot) return;
         const userName = document.getElementById('user-name').value.trim(); const bookBtn = document.getElementById('book-btn');
         
-        // 這裡修改：移除私訊討論的邏輯
         bookBtn.disabled = true; bookBtn.innerText = "預約鎖定中...";
         try {
             await fetch(`${API_URL}?action=bookSlot&key=${encodeURIComponent(accessKey || "")}&time=${encodeURIComponent(selectedSlot)}&name=${encodeURIComponent(userName)}`, { method: 'POST', mode: 'no-cors' });
@@ -327,7 +323,7 @@
         document.getElementById('result-title').innerText = "預約請求確認";
         document.getElementById('result-desc').innerText = `系統已鎖定時段：\n${timeSlot}\n\n預約人：${name}\n\n請務必按下按鈕，傳送 Line 訊息給我才算完成喔！`;
         
-        // ★★★ 關鍵修改：純淨版訊息，不含網址 ★★★
+        // ★★★ 純文字訊息，不含網址 ★★★
         let message = `Hi 小洵，我是 ${name}，我已在網頁上鎖定預約！🌿\n\n時段：【${timeSlot}】\n\n請幫我保留，謝謝！`;
         
         document.getElementById('line-btn').href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
