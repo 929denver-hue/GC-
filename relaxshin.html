@@ -2,244 +2,332 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小洵的修復時光｜愛的轉盤</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>小洵的修復時光｜互惠轉盤</title>
     <style>
         :root {
-            --primary-color: #7ca59a; /* 舒緩綠 */
-            --secondary-color: #d4a373; /* 木質調 */
-            --bg-color: #fcfaf7;
-            --text-color: #4a4a4a;
+            /* 翡翠流金配色 */
+            --primary-dark: #2c5f2d; /* 深翡翠 */
+            --primary-light: #97bc62; /* 嫩玉色 */
+            --accent-gold: #d4af37;   /* 香檳金 */
+            --bg-color: #fdfbf7;      /* 宣紙白 */
+            --text-main: #333333;
+            --text-sub: #666666;
         }
 
         body {
-            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            font-family: "PingFang TC", "Microsoft JhengHei", serif; /* 改用襯線體更有氣質 */
             background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            background-image: radial-gradient(#e8e8e8 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            margin: 0;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
             text-align: center;
-            background: white;
-            padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .intro-text {
+        /* 標題區：更像一張邀請函 */
+        header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--accent-gold);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .manifesto {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(44, 95, 45, 0.1);
             text-align: left;
-            margin-bottom: 30px;
+            line-height: 1.8;
             font-size: 0.95em;
-            background: #f0f4f3;
-            padding: 20px;
-            border-radius: 15px;
-            border-left: 5px solid var(--primary-color);
+            border-left: 4px solid var(--accent-gold);
+            margin-bottom: 40px;
         }
 
-        .wheel-box {
+        .manifesto strong {
+            color: var(--primary-dark);
+        }
+
+        /* 轉盤外框：加上陰影與光澤 */
+        .wheel-wrapper {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 320px;
+            height: 320px;
             margin: 0 auto 30px;
+            padding: 10px;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            border-radius: 50%;
+            box-shadow:  20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff;
+            border: 2px solid var(--accent-gold);
         }
 
         canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+            transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1); /* 更優雅的旋轉曲線 */
         }
 
+        /* 指針：設計成寶石樣式 */
         .pointer {
             position: absolute;
-            top: -10px;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 25px;
-            height: 35px;
-            background: #e76f51;
-            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 35px solid var(--primary-dark);
+            filter: drop-shadow(0 4px 2px rgba(0,0,0,0.3));
             z-index: 10;
         }
 
-        .btn-group {
+        .center-dot {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px; height: 40px;
+            background: radial-gradient(circle at 30% 30%, var(--accent-gold), #b8860b);
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 5;
             display: flex;
-            gap: 10px;
+            align-items: center;
             justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        button {
-            padding: 12px 25px;
-            border-radius: 25px;
-            border: none;
-            cursor: pointer;
-            font-size: 1em;
-            transition: 0.3s;
-        }
-
-        .spin-btn { background: var(--primary-color); color: white; }
-        .spin-btn:hover { background: #638c82; }
-
-        /* 選擇清單樣式 */
-        .option-list {
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .option-item {
-            background: #fff;
-            border: 1px solid #eee;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .option-item:hover {
-            border-color: var(--primary-color);
-            background: #f9fdfc;
-            transform: translateX(5px);
-        }
-
-        .option-title {
+            color: white;
             font-weight: bold;
-            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        /* 按鈕設計 */
+        .btn-spin {
+            background: linear-gradient(135deg, var(--primary-dark), #1a3c1b);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 15px 50px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(44, 95, 45, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 2px;
+        }
+
+        .btn-spin:active {
+            transform: scale(0.95);
+        }
+
+        /* 手動選擇區 */
+        .manual-section {
+            margin-top: 50px;
+            border-top: 1px solid #ddd;
+            padding-top: 30px;
+        }
+
+        .manual-title {
+            color: var(--text-sub);
+            font-size: 0.9em;
+            margin-bottom: 20px;
             display: block;
         }
 
-        /* 彈窗 */
-        #modal-overlay {
+        .card-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .card h4 { margin: 0 0 5px 0; color: var(--primary-dark); }
+        .card p { margin: 0; font-size: 0.85em; color: var(--text-sub); }
+
+        /* 彈窗樣式 */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
             z-index: 100;
+            animation: fadeIn 0.3s;
         }
 
-        #result-modal {
+        .modal {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: white;
             padding: 40px 30px;
-            border-radius: 25px;
-            text-align: center;
+            border-radius: 16px;
             width: 85%;
-            max-width: 320px;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            border-top: 8px solid var(--accent-gold);
         }
+
+        .modal h2 { color: var(--primary-dark); margin-top: 0; }
+        .modal-desc { margin: 20px 0; line-height: 1.6; }
+        
+        .btn-line {
+            background: #06c755; /* Line Green */
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .btn-close {
+            display: block;
+            margin-top: 15px;
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>小洵的修復時光 ✨</h2>
+    <header>
+        <h1>修復時光 ‧ 互惠約定</h1>
+        <p style="color: var(--accent-gold); font-style: italic;">Reciprocity & Healing</p>
+    </header>
     
-    <div class="intro-text">
-        看到好友們按完後全身舒暢，我也覺得超有成就感！但這真的不是我的工作<strong>「GC贈物網現在仍是我的最愛XDD」</strong>，也不想收錢傷感情。<br><br>
-        為了讓我們能長久地『互惠互利』，我準備了一個【愛的轉盤】，你可以隨機抽一個，或是從下方清單直接挑選你喜歡的回饋方式。這樣我更有動力鑽研下去，你們也不准再說不好意思喔！🎡
+    <div class="manifesto">
+        <p>看到好友們按完後全身舒暢，就是我最大的成就感！</p>
+        <p>這不是一份工作，<strong>「GC贈物網」現在仍是我的最愛 XDD</strong>，所以我不收費，也不希望談錢傷感情。</p>
+        <p>為了讓我們能長久地<strong>『互惠互利』</strong>，我準備了這個【愛的轉盤】。請點選或旋轉，選定一種回饋方式，讓我更有動力鑽研下去，大家也能約得心安理得！🎡</p>
     </div>
 
-    <div class="wheel-box">
+    <div class="wheel-wrapper">
         <div class="pointer"></div>
-        <canvas id="wheel" width="400" height="400"></canvas>
-    </div>
+        <div class="center-dot">✦</div>
+        <canvas id="wheel" width="640" height="640"></canvas> </div>
 
-    <div class="btn-group">
-        <button class="spin-btn" onclick="spinWheel()">啟動轉盤抽籤</button>
-    </div>
+    <button class="btn-spin" onclick="spinWheel()">啟動命運轉盤</button>
 
-    <hr style="border: 0.5px solid #eee; margin: 30px 0;">
-    
-    <h3>直接挑選回饋方式：</h3>
-    <div class="option-list" id="manual-list"></div>
+    <div class="manual-section">
+        <span class="manual-title">— 或直接選擇您屬意的回饋方式 —</span>
+        <div class="card-grid" id="card-list">
+            </div>
+    </div>
 </div>
 
-<div id="modal-overlay">
-    <div id="result-modal">
-        <p style="font-size: 0.9em; color: #888;">恭喜獲得/選擇：</p>
-        <h2 id="result-title" style="color: #7ca59a; margin: 10px 0;"></h2>
-        <p id="result-desc"></p>
-        <button onclick="closeModal()" style="background: #eee; margin-top: 20px;">收下約定</button>
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <p style="font-size: 0.9em; color: #888; margin-bottom: 5px;">互惠約定確認</p>
+        <h2 id="result-title"></h2>
+        <div style="width: 50px; height: 2px; background: var(--accent-gold); margin: 10px auto;"></div>
+        <p id="result-desc" class="modal-desc"></p>
+        
+        <a id="line-btn" href="#" class="btn-line" target="_blank">
+            <span>💬 傳 Line 告訴小洵</span>
+        </a>
+        
+        <button class="btn-close" onclick="closeModal()">我稍後再傳</button>
     </div>
 </div>
 
 <script>
+    // 資料設定
     const options = [
-        { title: "【生活小確幸】", desc: "請我喝一杯你最近心頭好的飲料（記得要無糖的唷 XDD）。" },
-        { title: "【專業應援】", desc: "回家感受身體變化，傳 Line 給我詳細回饋（這是我進步的動力！）。" },
-        { title: "【技能交換】", desc: "當我的一日小老師！分享一個你擅長的領域或最近學到的新知。" },
-        { title: "【夢夢資助】", desc: "隨喜贊助今日耗材，這筆錢會投入「未來小洵基金會」公積金盒中。" },
-        { title: "【身心修復】", desc: "回家後心無罣礙地好好睡一覺，這就是對我手藝最好的讚美！" }
+        { title: "生活小確幸", desc: "請我喝一杯你最近心頭好的飲料（記得要無糖的唷 XDD）。", color: "#F0F5E8" },
+        { title: "專業應援", desc: "回家後用心感受身體變化，傳 Line 給我詳細回饋（這是我進步的動力！）。", color: "#FFFBE6" },
+        { title: "技能交換", desc: "當我的一日小老師！分享一個你擅長的領域或最近學到的新知。", color: "#E8F3F1" },
+        { title: "夢想資助", desc: "隨喜贊助今日耗材，這筆錢會投入「未來小洵基金會」的公積金盒中。", color: "#FFF2F0" },
+        { title: "身心修復", desc: "回家後心無罣礙地好好睡一覺，這就是對我手藝最好的讚美！", color: "#F0E6EF" }
     ];
 
-    const colors = ['#e9edc9', '#fefae0', '#faedcd', '#d4a373', '#ccd5ae'];
     const canvas = document.getElementById('wheel');
     const ctx = canvas.getContext('2d');
-
+    
+    // 繪製轉盤 (華麗版)
     function drawWheel() {
         const arc = (2 * Math.PI) / options.length;
+        const radius = 320; // 半徑
+        
+        ctx.translate(320, 320); // 移動圓心到畫布中央
+        
         options.forEach((opt, i) => {
             const angle = i * arc;
-            ctx.fillStyle = colors[i];
+            
             ctx.beginPath();
-            ctx.moveTo(200, 200);
-            ctx.arc(200, 200, 200, angle, angle + arc);
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, radius, angle, angle + arc);
+            
+            // 製作漸層扇形
+            let gradient = ctx.createRadialGradient(0, 0, 50, 0, 0, radius);
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(1, opt.color); // 使用設定的淡雅色
+            
+            ctx.fillStyle = gradient;
             ctx.fill();
+            
+            // 扇形邊框
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // 文字
             ctx.save();
-            ctx.translate(200, 200);
             ctx.rotate(angle + arc / 2);
             ctx.textAlign = "right";
-            ctx.fillStyle = "#555";
-            ctx.font = "16px sans-serif";
-            ctx.fillText(opt.title.replace(/[【】]/g, ""), 180, 10);
+            ctx.fillStyle = "#2c5f2d"; // 深綠色字體
+            ctx.font = "bold 28px Microsoft JhengHei";
+            ctx.shadowColor = "rgba(255,255,255,0.8)";
+            ctx.shadowBlur = 4;
+            ctx.fillText(opt.title, 280, 10);
             ctx.restore();
         });
     }
 
-    // 建立手動清單
-    const listContainer = document.getElementById('manual-list');
-    options.forEach((opt, i) => {
-        const div = document.createElement('div');
-        div.className = 'option-item';
-        div.innerHTML = `<span class="option-title">${opt.title}</span><small>${opt.desc}</small>`;
-        div.onclick = () => showResult(opt);
-        listContainer.appendChild(div);
-    });
-
-    let rotation = 0;
-    function spinWheel() {
-        const extra = Math.floor(Math.random() * 360) + 1440;
-        rotation += extra;
-        canvas.style.transform = `rotate(${rotation}deg)`;
-        setTimeout(() => {
-            const deg = rotation % 360;
-            const idx = Math.floor((360 - deg) / (360 / options.length)) % options.length;
-            showResult(options[idx]);
-        }, 4000);
-    }
-
-    function showResult(opt) {
-        document.getElementById('result-title').innerText = opt.title;
-        document.getElementById('result-desc').innerText = opt.desc;
-        document.getElementById('modal-overlay').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('modal-overlay').style.display = 'none';
-    }
-
-    drawWheel();
-</script>
-
-</body>
-</html>
+    // 生成下方卡片清單
