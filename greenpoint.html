@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>環保集點 x GC贈物網 - 帳號綁定教學</title>
-    <style>
-        :root {
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<style type="text/css">:root {
             /* 專業配色：深綠搭配中性灰 */
             --primary-color: #00695C;  /* 穩重的深綠色 */
             --accent-color: #26A69A;   /* 輔助綠色 */
             --text-main: #333333;      /* 主要文字 */
             --text-sub: #666666;       /* 次要文字 */
-            --bg-color: #F7F9FA;       /* 極淺灰背景，減低眼睛疲勞 */
+            --bg-color: #F7F9FA;       /* 極淺灰背景 */
             --card-bg: #ffffff;
-            --border-radius: 8px;      /* 圓角改小，較為俐落 */
+            --border-radius: 8px;
         }
 
         body {
@@ -48,7 +43,7 @@
         }
 
         .subtitle-box {
-            background-color: #E0F2F1; /* 淡淡的綠底 */
+            background-color: #E0F2F1;
             color: var(--primary-color);
             padding: 16px;
             border-radius: var(--border-radius);
@@ -70,11 +65,10 @@
         }
 
         .step-item {
-            margin-bottom: 50px; /* 增加間距，讓閱讀不擁擠 */
+            margin-bottom: 50px;
             position: relative;
         }
 
-        /* 步驟標題設計 */
         .step-header {
             display: flex;
             align-items: center;
@@ -84,7 +78,7 @@
         .step-num {
             font-size: 48px;
             font-weight: 900;
-            color: #E0E0E0; /* 數字浮水印效果 */
+            color: #E0E0E0;
             line-height: 1;
             margin-right: 15px;
             font-family: 'Arial', sans-serif;
@@ -109,12 +103,11 @@
             color: var(--text-main);
         }
 
-        /* 步驟說明文字 */
         .step-desc {
             font-size: 15px;
             color: var(--text-sub);
             margin-bottom: 20px;
-            padding-left: 5px; /* 微調對齊 */
+            padding-left: 5px;
         }
         
         .step-desc ol {
@@ -126,18 +119,14 @@
             margin-bottom: 8px;
         }
 
-        /* 圖片容器：模擬手機邊框感 */
+        /* 圖片容器 */
         .img-frame {
             width: 100%;
             background-color: #FAFAFA;
             border: 1px solid #E0E0E0;
             border-radius: var(--border-radius);
             overflow: hidden;
-            /* 預設高度，放入圖片後可移除 height */
-            min-height: 250px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            /* 移除 min-height 以適應圖片實際高度 */
         }
 
         .img-frame img {
@@ -146,12 +135,16 @@
             display: block;
         }
 
-        /* 佔位文字樣式 */
+        /* 佔位文字樣式 (給還沒上傳圖片的步驟用) */
         .placeholder-text {
             color: #999;
             font-size: 14px;
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* --- Footer --- */
@@ -163,7 +156,6 @@
             font-size: 14px;
         }
         
-        /* 按鈕優化 */
         .action-link {
             color: var(--primary-color);
             text-decoration: none;
@@ -173,90 +165,79 @@
         .action-link:hover {
             border-bottom-style: solid;
         }
+</style>
+<div class="container">
+<header>
+<h1>綁定 GC贈物網 帳號<br />
+開始物資循環，累積綠點</h1>
 
-    </style>
-</head>
-<body>
+<div class="subtitle-box">只要綁定帳號，未來在 GC 贈物網進行贈物媒合，就能獲得綠點獎勵！</div>
+</header>
 
-    <div class="container">
-        
-        <header>
-            <h1>綁定 GC贈物網 帳號<br>開始物資循環，累積綠點</h1>
-            <div class="subtitle-box">
-                只要綁定帳號，未來在 GC 贈物網進行贈物媒合，就能獲得綠點獎勵！
-            </div>
-        </header>
+<div class="content">
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">01</div>
 
-        <div class="content">
+<div class="step-title-group"><span class="step-label">Step One</span> <span class="step-name">取得 GC 會員編號</span></div>
+</div>
 
-            <div class="step-item">
-                <div class="step-header">
-                    <div class="step-num">01</div>
-                    <div class="step-title-group">
-                        <span class="step-label">Step One</span>
-                        <span class="step-name">取得 GC 會員編號</span>
-                    </div>
-                </div>
-                <div class="step-desc">
-                    <ol>
-                        <li>開啟 <strong>GC 贈物網 App</strong> 或網頁。</li>
-                        <li>進入 <strong>[我的]</strong> 個人頁面。</li>
-                        <li>記下您的 <strong>「會員編號」</strong> (如圖示)。</li>
-                    </ol>
-                    <p style="margin-top:10px; font-size:13px;">尚未註冊？ <a href="#" class="action-link">點此前往註冊 GC 贈物網</a></p>
-                </div>
-                <div class="img-frame">
-                    <div class="placeholder-text">[ 請放入 STEP 1 截圖 ]<br>標示出會員編號位置</div>
-                    </div>
-            </div>
+<div class="step-desc">
+<ol>
+	<li>開啟 <strong>GC 贈物網 App</strong> 或網頁。</li>
+	<li>進入 <strong>[我的]</strong> 個人頁面。</li>
+	<li>記下您的 <strong>「會員編號」</strong> (如圖示)。</li>
+</ol>
 
-            <div class="step-item">
-                <div class="step-header">
-                    <div class="step-num">02</div>
-                    <div class="step-title-group">
-                        <span class="step-label">Step Two</span>
-                        <span class="step-name">新增環保集點載具</span>
-                    </div>
-                </div>
-                <div class="step-desc">
-                    <ol>
-                        <li>開啟 <strong>環保集點 App</strong>。</li>
-                        <li>點選選單：<strong>[會員]</strong> ➜ <strong>[載具管理]</strong>。</li>
-                        <li>點擊 <strong>[新增載具]</strong> 按鈕。</li>
-                    </ol>
-                </div>
-                <div class="img-frame">
-                    <div class="placeholder-text">[ 請放入 STEP 2 截圖 ]<br>環保集點新增載具畫面</div>
-                    </div>
-            </div>
+<p style="margin-top:10px; font-size:13px;">尚未註冊？ <a class="action-link" href="#">點此前往註冊 GC 贈物網</a></p>
+</div>
 
-            <div class="step-item">
-                <div class="step-header">
-                    <div class="step-num">03</div>
-                    <div class="step-title-group">
-                        <span class="step-label">Step Three</span>
-                        <span class="step-name">輸入資料完成綁定</span>
-                    </div>
-                </div>
-                <div class="step-desc">
-                    <ol>
-                        <li>在列表中選擇 <strong>[GC 贈物網]</strong>。</li>
-                        <li>輸入剛剛記下的 <strong>「GC 會員編號」</strong>。</li>
-                        <li>按下確認，顯示綁定成功！🎉</li>
-                    </ol>
-                </div>
-                <div class="img-frame">
-                    <div class="placeholder-text">[ 請放入 STEP 3 截圖 ]<br>輸入編號完成綁定</div>
-                    </div>
-            </div>
+<div class="img-frame"><img alt="GC會員編號截圖" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/resource/2026/1/20/ed8658c85d13db3752f6778d89dd6870.png" /></div>
+</div>
 
-        </div>
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">02</div>
 
-        <footer>
-            &copy; 環保集點 x GC贈物網<br>讓閒置物資創造綠色價值
-        </footer>
+<div class="step-title-group"><span class="step-label">Step Two</span> <span class="step-name">新增環保集點載具</span></div>
+</div>
 
-    </div>
+<div class="step-desc">
+<ol>
+	<li>開啟 <strong>環保集點 App</strong>。</li>
+	<li>點選選單：<strong>[會員]</strong> ➜ <strong>[載具管理]</strong>。</li>
+	<li>點擊 <strong>[新增載具]</strong> 按鈕。</li>
+</ol>
+</div>
 
-</body>
-</html>
+<div class="img-frame">
+<div class="placeholder-text">[ 請放入 STEP 2 截圖 ]<br />
+環保集點新增載具畫面</div>
+</div>
+</div>
+
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">03</div>
+
+<div class="step-title-group"><span class="step-label">Step Three</span> <span class="step-name">輸入資料完成綁定</span></div>
+</div>
+
+<div class="step-desc">
+<ol>
+	<li>在列表中選擇 <strong>[GC 贈物網]</strong>。</li>
+	<li>輸入剛剛記下的 <strong>「GC 會員編號」</strong>。</li>
+	<li>按下確認，顯示綁定成功！🎉</li>
+</ol>
+</div>
+
+<div class="img-frame">
+<div class="placeholder-text">[ 請放入 STEP 3 截圖 ]<br />
+輸入編號完成綁定</div>
+</div>
+</div>
+</div>
+
+<footer>&copy; 環保集點 x GC贈物網<br />
+讓閒置物資創造綠色價值</footer>
+</div>
