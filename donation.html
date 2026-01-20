@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>貴人私人媒合捐贈評估表 - GC贈物網</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #c0392b;
+            --bg-color: #f4f6f7;
+        }
+        body {
+            font-family: "Microsoft JhengHei", "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .section h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        .guidelines {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.6;
+        }
+        .guidelines .good { color: var(--success-color); font-weight: bold; }
+        .guidelines .bad { color: var(--danger-color); font-weight: bold; }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .radio-label:hover {
+            background-color: #fff3e0;
+            border-color: var(--accent-color);
+        }
+        .radio-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        .score-badge {
+            margin-left: auto;
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #34495e;
+        }
+
+        #result-area {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        .result-title { font-size: 18px; margin-bottom: 10px; }
+        .result-score { font-size: 36px; font-weight: bold; margin-bottom: 10px; }
+        .result-advice { font-size: 20px; font-weight: bold; }
+
+        .status-go { background-color: #d4efdf; color: #145a32; border: 1px solid #a9dfbf; }
+        .status-check { background-color: #fcf3cf; color: #7d6608; border: 1px solid #f9e79f; }
+        .status-stop { background-color: #fadbd8; color: #78281f; border: 1px solid #f5b7b1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>貴人私人媒合捐贈 • 決策評估表</h1>
+    
+    <form id="evalForm">
+        <div class="section">
+            <h3>一：公益價值 (Public Value)</h3>
+            <div class="guidelines">
+                <span class="good">✔ 建議承接：</span>高價稀缺、實質關鍵幫助、示範案例。<br>
+                <span class="bad">✖ 婉拒情境：</span>價值普通但流程複雜、單位可自行取得、條件過多。
+            </div>
+            <div class="options">
+                <label class="radio-label">
+                    <input type="radio" name="d1" value="0" required>
+                    普通 (流程複雜 / 價值一般)
+                    <span class="score-badge">0 分</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="d1" value="1">
+                    有幫助 (有些許加分)
+                    <span class="score-badge">1 分</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="d1" value="2">
+                    關鍵影響 (高價稀缺 / 示範案例)
+                    <span class="score-badge">2 分</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>二：平台價值 (Platform Asset)</h3>
+            <div class="guidelines">
+                <span class="good">✔ 值得接：</span>未來長期支持者、可產出公開故事/感謝、深化關係。<br>
+                <span class="bad">✖ 不值得接：</span>一次性私下處理、不願曝光、無感謝紀錄 (沉沒成本)。
+            </div>
+            <div class="options">
+                <label class="radio-label">
+                    <input type="radio" name="d2" value="0" required>
+                    無留存 (一次性 / 不願曝光)
+                    <span class="score-badge">0 分</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="d2" value="1">
+                    部分留存 (有簡單紀錄)
+                    <span class="score-badge">1 分</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="d2" value="2">
+                    明確累積 (轉為長期支持 / 媒體露出)
+                    <span class="score-badge">2 分</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>三：可複製性 (Replicability)</h3>
+            <div class="guidelines">
+                <span class="good">✔ 值得接：</span>可整理成 SOP、半自動流程、標準模式。<br>
+                <span class="bad">✖ 不值得接：</span>全程客製、人盯人、只此一次。
+            </div>
+            <div class="options">
+                <label class="radio-label">
+                    <input type="radio" name="d3" value="0" required>
+                    完全客製 (人盯人 / 不可複製)
+                    <span class="score-badge">0 分</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="d3" value="1">
+                    部分可用 (部分流程標準化)
+                    <span class="score-badge">1 分</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="d3" value="2">
+                    可成 SOP (半自動 / 標準模式)
+                    <span class="score-badge">2 分</span>
+                </label>
+            </div>
+        </div>
+
+        <button type="button" onclick="calculateScore()">計算評估結果</button>
+    </form>
+
+    <div id="result-area">
+        <div class="result-title">評估結果</div>
+        <div class="result-score" id="total-score">0 分</div>
+        <div class="result-advice" id="advice-text">--</div>
+    </div>
+
+</div>
+
+<script>
+    function calculateScore() {
+        // 取得所有選取的 radio button
+        const d1 = document.querySelector('input[name="d1"]:checked');
+        const d2 = document.querySelector('input[name="d2"]:checked');
+        const d3 = document.querySelector('input[name="d3"]:checked');
+
+        // 檢查是否都有填寫
+        if (!d1 || !d2 || !d3) {
+            alert("請完成所有面向的評估選項！");
+            return;
+        }
+
+        // 計算總分
+        const score = parseInt(d1.value) + parseInt(d2.value) + parseInt(d3.value);
+        
+        // 顯示區域
+        const resultArea = document.getElementById('result-area');
+        const scoreDisplay = document.getElementById('total-score');
+        const adviceDisplay = document.getElementById('advice-text');
+
+        // 清除舊樣式
+        resultArea.classList.remove('status-go', 'status-check', 'status-stop');
+        resultArea.style.display = 'block';
+
+        scoreDisplay.textContent = score + " 分";
+
+        // 判斷邏輯
+        if (score >= 5) {
+            resultArea.classList.add('status-go');
+            adviceDisplay.textContent = "✔ 建議承接";
+            adviceDisplay.innerHTML += "<br><span style='font-size:14px; font-weight:normal;'>符合高價值與長期效益</span>";
+        } else if (score >= 3) {
+            resultArea.classList.add('status-check');
+            adviceDisplay.textContent = "⚠ 視當期人力調整";
+            adviceDisplay.innerHTML += "<br><span style='font-size:14px; font-weight:normal;'>需權衡機會成本</span>";
+        } else {
+            resultArea.classList.add('status-stop');
+            adviceDisplay.textContent = "✖ 婉拒或轉介其他方式";
+            adviceDisplay.innerHTML += "<br><span style='font-size:14px; font-weight:normal;'>成本過高且效益不明確</span>";
+        }
+
+        // 平滑捲動到底部
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
