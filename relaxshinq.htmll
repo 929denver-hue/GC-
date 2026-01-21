@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>療癒行前諮詢｜小洵的修復時光</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-deep: #1a3c34;  /* 森系墨綠 */
+            --primary-muted: #6a8d83; /* 莫蘭迪玉色 */
+            --accent-bronze: #a68b5b; /* 拉絲古銅金 */
+            --bg-cream: #f5f2ed;      /* 米灰紙張色 */
+            --text-dark: #2c2c2c;     
+            --text-light: #666666;
+            --white-soft: #ffffff;
+            --error-red: #d9534f;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-cream);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            color: var(--text-dark);
+            margin: 0;
+            padding: 40px 20px 80px 20px;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 { font-family: 'Noto Serif TC', serif; color: var(--primary-deep); }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- 標題區 --- */
+        .header-card {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--accent-bronze);
+            padding-bottom: 20px;
+        }
+        .header-title { font-size: 1.8em; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.1em; }
+        .header-desc { font-size: 0.95em; color: var(--text-light); }
+
+        /* --- 表單區塊 --- */
+        .form-section {
+            background: var(--white-soft);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(26, 60, 52, 0.05);
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .form-section::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 20px; bottom: 20px;
+            width: 4px;
+            background-color: var(--accent-bronze);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .section-title { font-size: 1.2em; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        /* --- 輸入欄位樣式 --- */
+        .input-group { margin-bottom: 20px; }
+        .label { display: block; font-weight: 500; margin-bottom: 8px; color: var(--primary-deep); font-size: 0.95em; }
+        .required::after { content: " *"; color: var(--error-red); }
+        
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #fafafa;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-muted);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(106, 141, 131, 0.1);
+        }
+
+        /* --- 核取方塊與單選 --- */
+        .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
+        .checkbox-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .checkbox-item input { width: 18px; height: 18px; accent-color: var(--primary-deep); cursor: pointer; }
+        .checkbox-text { color: var(--text-dark); font-size: 0.95em; }
+
+        /* --- 送出按鈕 --- */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background: var(--primary-deep);
+            color: var(--accent-bronze);
+            border: 1px solid var(--primary-deep);
+            padding: 16px;
+            font-size: 1.1em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Noto Serif TC', serif;
+            letter-spacing: 0.1em;
+            margin-top: 40px;
+            box-shadow: 0 10px 20px rgba(26, 60, 52, 0.15);
+        }
+        .btn-submit:hover {
+            background: var(--accent-bronze);
+            color: var(--primary-deep);
+            border-color: var(--accent-bronze);
+            transform: translateY(-2px);
+        }
+
+        /* --- 備註文字 --- */
+        .note { font-size: 0.85em; color: #888; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="header-card">
+        <h1 class="header-title">修復時光 行前諮詢單</h1>
+        <p class="header-desc">
+            為了讓修復時光更貼近您的需求，<br>
+            請撥冗填寫以下資訊，讓我為您準備最適合的工具與手法。🌿
+        </p>
+    </div>
+
+    <form id="intakeForm" onsubmit="event.preventDefault(); generateLineMessage();">
+        
+        <div class="form-section">
+            <h3 class="section-title">✦ 基本資料</h3>
+            
+            <div class="input-group">
+                <label class="label required">您的暱稱</label>
+                <input type="text" id="name" placeholder="例如：Chris" required>
+            </div>
+            
+            <div class="input-group">
+                <label class="label required">性別 (評估生理結構用)</label>
+                <select id="gender" required>
+                    <option value="" disabled selected>請選擇</option>
+                    <option value="女">女</option>
+                    <option value="男">男</option>
+                    <option value="其他">其他</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label class="label">本次預約日期 </label>
+                <input type="text" id="bookingDate" placeholder="例如：1/24 晚上">
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">✦ 身體現況評估</h3>
+            <p class="note" style="margin-bottom:15px;">將幫助我判斷是否適合使用「軟罐」或「筋膜刀」。</p>
+
+            <div class="input-group">
+                <label class="label required">您目前最想改善的不適部位？</label>
+                <textarea id="painArea" rows="3" placeholder="例如：右肩頸緊繃、下背痠痛、小腿腫脹..." required></textarea>
+            </div>
+
+            <div class="input-group">
+                <label class="label required">請勾選目前的身體狀況 (可複選)</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="condition" value="懷孕中"> <span class="checkbox-text">懷孕中</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="condition" value="生理期中"> <span class="checkbox-text">生理期中</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="condition" value="皮膚過敏/傷口"> <span class="checkbox-text">欲施作部位有傷口或皮膚過敏</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="condition" value="高血壓/糖尿病"> <span class="checkbox-text">高血壓 / 糖尿病 / 心臟疾病</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="condition" value="服用抗凝血劑"> <span class="checkbox-text">長期服用抗凝血藥物 (易瘀青體質)</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="condition" value="半年內有手術"> <span class="checkbox-text">半年內曾進行手術</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="condition" value="無上述狀況" checked> <span class="checkbox-text">以上皆無，身體健康</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">✦療癒偏好</h3>
+            
+            <div class="input-group">
+                <label class="label">對於「出痧」(皮膚紅印) 的接受度？</label>
+                <select id="shaLevel">
+                    <option value="皆可配合">完全沒問題 </option>
+                    <option value="微量即可">可以微量，不要太深</option>
+                    <option value="完全不要">完全不希望有痕跡</option>
+                </select>
+                <p class="note">軟罐與筋膜刀操作可能會產生暫時性紅印。</p>
+            </div>
+
+            <div class="input-group">
+                <label class="label">本次期待的修復目標？</label>
+                <textarea id="goal" rows="2" placeholder="例如：想要深層放鬆好睡覺、或者想要改善肩關節受限的問題..."></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">確認內容並傳送 Line</button>
+        <p style="text-align:center; margin-top:15px; color:#999; font-size:0.9em;">點擊後將自動開啟 Line 視窗</p>
+
+    </form>
+</div>
+
+<script>
+    function generateLineMessage() {
+        // 1. 獲取欄位資料
+        const name = document.getElementById('name').value.trim();
+        const gender = document.getElementById('gender').value;
+        const bookingDate = document.getElementById('bookingDate').value.trim() || "尚未確認";
+        const painArea = document.getElementById('painArea').value.trim();
+        const shaLevel = document.getElementById('shaLevel').value;
+        const goal = document.getElementById('goal').value.trim() || "無特殊備註";
+
+        // 2. 處理複選題 (身體狀況)
+        const conditions = [];
+        document.querySelectorAll('input[name="condition"]:checked').forEach((checkbox) => {
+            conditions.push(checkbox.value);
+        });
+        const conditionText = conditions.length > 0 ? conditions.join("、") : "未填寫";
+
+        // 3. 組合訊息內容
+        // 使用 emoji 增加閱讀性，分段清楚
+        const message = `Hi 小洵，這是我的療癒前置諮詢單 🌿
+
+👤 **基本資料**
+稱呼：${name}
+性別：${gender}
+預約日期：${bookingDate}
+
+⚠️ **身體評估**
+不適部位：${painArea}
+身體狀況：${conditionText}
+
+💆 **療癒偏好**
+出痧接受度：${shaLevel}
+本次目標：${goal}
+
+請幫我評估適合的工具與方案，謝謝！`;
+
+        // 4. 進行 URL 編碼並跳轉 Line
+        // 使用 encodeURIComponent 確保特殊符號和換行能正常顯示
+        const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
+        
+        // 開啟 Line
+        window.location.href = lineUrl;
+    }
+</script>
+
+</body>
+</html>
