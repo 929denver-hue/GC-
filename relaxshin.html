@@ -177,7 +177,7 @@
             lineBtn.href = opt.link;
             lineBtn.innerHTML = '<span>❤️ 前往支持頁面</span>';
         } else {
-            let message = `Hi 小洵，感謝今日的專業修復！\n我選擇了【${opt.title}】。\n內容：「${opt.desc}」`;
+            let message = `Hi 小洵，感謝今日的專業修復！\n轉盤轉到【${opt.title}】。\n${opt.desc};
             lineBtn.href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
             lineBtn.innerHTML = '<span>💬 傳送 Line 與小洵確認</span>';
         }
