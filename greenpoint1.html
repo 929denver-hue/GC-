@@ -1,262 +1,348 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>環保集點 x GC贈物網 - 帳號綁定教學</title>
-    <style>
-        :root {
-            /* 專業配色：深綠搭配中性灰 */
-            --primary-color: #00695C;  /* 穩重的深綠色 */
-            --accent-color: #26A69A;   /* 輔助綠色 */
-            --text-main: #333333;      /* 主要文字 */
-            --text-sub: #666666;       /* 次要文字 */
-            --bg-color: #F7F9FA;       /* 極淺灰背景，減低眼睛疲勞 */
-            --card-bg: #ffffff;
-            --border-radius: 8px;      /* 圓角改小，較為俐落 */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GC贈物網會員 - 環保集點綁定與兌換教學</title>
+<style type="text/css">
+    :root {
+        /* 維持一致的品牌色系 */
+        --primary-color: #00695C;  /* 深綠 */
+        --accent-color: #26A69A;   /* 亮綠 */
+        --highlight-color: #FFA726; /* 橘色 (強調重點用) */
+        --text-main: #333333;
+        --text-sub: #666666;
+        --bg-color: #F7F9FA;
+        --card-bg: #ffffff;
+        --border-radius: 8px;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
+    html {
+        scroll-behavior: smooth;
+    }
 
-        .container {
-            max-width: 640px;
-            margin: 0 auto;
-            background-color: var(--card-bg);
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-        }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
 
-        /* --- Header 區塊 --- */
-        header {
-            padding: 40px 30px;
-            border-bottom: 1px solid #eeeeee;
-        }
+    .container {
+        max-width: 640px;
+        margin: 0 auto;
+        background-color: var(--card-bg);
+        min-height: 100vh;
+        box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        display: flex;         
+        flex-direction: column; 
+    }
 
-        header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 0 0 16px 0;
-            line-height: 1.4;
-        }
+    /* --- Header --- */
+    header {
+        padding: 40px 30px;
+        border-bottom: 1px solid #eeeeee;
+        background: linear-gradient(to bottom, #ffffff, #F1F8E9);
+    }
 
-        .subtitle-box {
-            background-color: #E0F2F1; /* 淡淡的綠底 */
-            color: var(--primary-color);
-            padding: 16px;
-            border-radius: var(--border-radius);
-            font-size: 15px;
-            font-weight: 500;
-            display: flex;
-            align-items: flex-start;
-        }
+    header h1 {
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--primary-color);
+        margin: 0 0 16px 0;
+        line-height: 1.3;
+    }
 
-        .subtitle-box::before {
-            content: "💡";
-            margin-right: 10px;
-            font-size: 18px;
-        }
+    .subtitle-box {
+        background-color: #E0F2F1;
+        color: var(--primary-color);
+        padding: 16px;
+        border-radius: var(--border-radius);
+        font-size: 15px;
+        font-weight: 500;
+        border-left: 5px solid var(--accent-color);
+    }
 
-        /* --- 步驟內容區塊 --- */
-        .content {
-            padding: 20px 30px 60px 30px;
-        }
+    /* --- 階段分隔標題 (New!) --- */
+    .phase-divider {
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 12px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        margin: 40px -30px 30px -30px; /* 負邊距讓它滿版 */
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .phase-badge {
+        background-color: #fff;
+        color: var(--primary-color);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-right: 12px;
+        font-weight: 900;
+    }
 
-        .step-item {
-            margin-bottom: 50px; /* 增加間距，讓閱讀不擁擠 */
-            position: relative;
-        }
+    /* --- 內容區塊 --- */
+    .content {
+        padding: 10px 30px 40px 30px;
+        flex: 1; 
+        overflow: hidden; /* 防止滿版標題撐爆容器 */
+    }
 
-        /* 步驟標題設計 */
-        .step-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-        }
+    .step-item {
+        margin-bottom: 50px;
+        position: relative;
+    }
 
-        .step-num {
-            font-size: 48px;
-            font-weight: 900;
-            color: #E0E0E0; /* 數字浮水印效果 */
-            line-height: 1;
-            margin-right: 15px;
-            font-family: 'Arial', sans-serif;
-        }
+    .step-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+    }
 
-        .step-title-group {
-            display: flex;
-            flex-direction: column;
-        }
+    .step-num {
+        font-size: 40px;
+        font-weight: 900;
+        color: #E0E0E0;
+        line-height: 1;
+        margin-right: 15px;
+        font-family: 'Arial', sans-serif;
+    }
 
-        .step-label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-color);
-            font-weight: 700;
-        }
+    .step-title-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-        .step-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
+    .step-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
 
-        /* 步驟說明文字 */
-        .step-desc {
-            font-size: 15px;
-            color: var(--text-sub);
-            margin-bottom: 20px;
-            padding-left: 5px; /* 微調對齊 */
-        }
-        
-        .step-desc ol {
-            padding-left: 20px;
-            margin: 0;
-        }
-        
-        .step-desc li {
-            margin-bottom: 8px;
-        }
+    .step-desc {
+        font-size: 15px;
+        color: var(--text-sub);
+        margin-bottom: 20px;
+    }
+    
+    .step-desc ol {
+        padding-left: 20px;
+        margin: 0;
+    }
+    
+    .step-desc li {
+        margin-bottom: 10px;
+    }
 
-        /* 圖片容器：模擬手機邊框感 */
-        .img-frame {
-            width: 100%;
-            background-color: #FAFAFA;
-            border: 1px solid #E0E0E0;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            /* 預設高度，放入圖片後可移除 height */
-            min-height: 250px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    /* 重點文字強調 */
+    strong {
+        color: var(--primary-color);
+    }
 
-        .img-frame img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+    .highlight {
+        color: #E65100; /* 深橘色 */
+        font-weight: bold;
+        background-color: #FFF3E0;
+        padding: 0 4px;
+        border-radius: 3px;
+    }
 
-        /* 佔位文字樣式 */
-        .placeholder-text {
-            color: #999;
-            font-size: 14px;
-            text-align: center;
-            padding: 20px;
-        }
+    /* 圖片容器 */
+    .img-frame {
+        width: 100%;
+        background-color: #FAFAFA;
+        border: 1px solid #E0E0E0;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
 
-        /* --- Footer --- */
-        footer {
-            text-align: center;
-            padding: 30px;
-            background-color: #333;
-            color: #fff;
-            font-size: 14px;
-        }
-        
-        /* 按鈕優化 */
-        .action-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            border-bottom: 1px dashed var(--primary-color);
-        }
-        .action-link:hover {
-            border-bottom-style: solid;
-        }
+    .img-frame img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .placeholder-text {
+        color: #999;
+        font-size: 14px;
+        text-align: center;
+        padding: 50px 20px;
+        background-color: #f5f5f5;
+        border: 2px dashed #ddd;
+    }
 
-    </style>
+    /* --- Footer --- */
+    footer {
+        text-align: center;
+        padding: 30px;
+        background-color: #333;
+        color: #fff;
+        font-size: 14px;
+        margin-top: auto; 
+    }
+
+    /* --- 回到頂部按鈕 --- */
+    #backToTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 99;
+        font-size: 24px;
+        border: none;
+        outline: none;
+        background-color: var(--primary-color);
+        color: white;
+        cursor: pointer;
+        padding: 0;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: background-color 0.3s, transform 0.3s;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #backToTopBtn:hover {
+        background-color: var(--accent-color);
+        transform: translateY(-3px);
+    }
+</style>
 </head>
 <body>
 
-    <div class="container">
+<div class="container">
+    <header id="top-anchor">
+        <h1>我是【 GC 贈物網】會員<br>如何綁定環保集點？</h1>
+        <div class="subtitle-box">
+            🎯 <strong>目標：</strong>綁定帳號，累積綠點，日後將手中的綠點換成好用的蘿蔔點！
+            </div>
         
-        <header>
-            <h1>綁定 GC贈物網 帳號<br>開始物資循環，累積綠點</h1>
-            <div class="subtitle-box">
-                只要綁定帳號，未來在 GC 贈物網進行贈物媒合，就能獲得綠點獎勵！
-            </div>
-        </header>
+        <p style="font-size: 14px; color: #666; margin-top: 15px; text-align: center;">
+            此流程分為「帳號綁定」與「點數兌換」兩個階段
+            </p>
+    </header>
 
-        <div class="content">
+    <div class="content">
 
-            <div class="step-item">
-                <div class="step-header">
-                    <div class="step-num">01</div>
-                    <div class="step-title-group">
-                        <span class="step-label">Step One</span>
-                        <span class="step-name">取得 GC 會員編號</span>
-                    </div>
-                </div>
-                <div class="step-desc">
-                    <ol>
-                        <li>開啟 <strong>GC 贈物網 App</strong> 或網頁。</li>
-                        <li>進入 <strong>[我的]</strong> 個人頁面。</li>
-                        <li>記下您的 <strong>「會員編號」</strong> (如圖示)。</li>
-                    </ol>
-                    <p style="margin-top:10px; font-size:13px;">尚未註冊？ <a href="#" class="action-link">點此前往註冊 GC 贈物網</a></p>
-                </div>
-                <div class="img-frame">
-                    <div class="placeholder-text">[ 請放入 STEP 1 截圖 ]<br>標示出會員編號位置</div>
-                    </div>
+        <div class="phase-divider">
+            <span class="phase-badge">Phase 1</span> 第一階段：帳號綁定
             </div>
 
-            <div class="step-item">
-                <div class="step-header">
-                    <div class="step-num">02</div>
-                    <div class="step-title-group">
-                        <span class="step-label">Step Two</span>
-                        <span class="step-name">新增環保集點載具</span>
-                    </div>
-                </div>
-                <div class="step-desc">
-                    <ol>
-                        <li>開啟 <strong>環保集點 App</strong>。</li>
-                        <li>點選選單：<strong>[會員]</strong> ➜ <strong>[載具管理]</strong>。</li>
-                        <li>點擊 <strong>[新增載具]</strong> 按鈕。</li>
-                    </ol>
-                </div>
-                <div class="img-frame">
-                    <div class="placeholder-text">[ 請放入 STEP 2 截圖 ]<br>環保集點新增載具畫面</div>
-                    </div>
+        <div class="step-item">
+            <div class="step-header">
+                <div class="step-num">01</div>
+                <div class="step-title-group"><span class="step-name">複製 GC 會員編號</span></div>
             </div>
-
-            <div class="step-item">
-                <div class="step-header">
-                    <div class="step-num">03</div>
-                    <div class="step-title-group">
-                        <span class="step-label">Step Three</span>
-                        <span class="step-name">輸入資料完成綁定</span>
-                    </div>
+            <div class="step-desc">
+                打開 <strong>GC 贈物網</strong> 會員頁面 (進入「我的」)，記下您的 <span class="highlight">「會員編號」</span>。
                 </div>
-                <div class="step-desc">
-                    <ol>
-                        <li>在列表中選擇 <strong>[GC 贈物網]</strong>。</li>
-                        <li>輸入剛剛記下的 <strong>「GC 會員編號」</strong>。</li>
-                        <li>按下確認，顯示綁定成功！🎉</li>
-                    </ol>
-                </div>
-                <div class="img-frame">
-                    <div class="placeholder-text">[ 請放入 STEP 3 截圖 ]<br>輸入編號完成綁定</div>
-                    </div>
+            <div class="img-frame">
+                <div class="placeholder-text">[請放入圖片：GC 會員頁面 (圈選編號)]</div>
             </div>
-
         </div>
 
-        <footer>
-            &copy; 環保集點 x GC贈物網<br>讓閒置物資創造綠色價值
-        </footer>
+        <div class="step-item">
+            <div class="step-header">
+                <div class="step-num">02</div>
+                <div class="step-title-group"><span class="step-name">前往環保集點新增載具</span></div>
+            </div>
+            <div class="step-desc">
+                <ol>
+                    <li>登入<strong>「環保集點」</strong>平台（若無帳號請先註冊）。</li>
+                    <li>點選選單：<strong>[會員]</strong> ➜ <strong>[載具管理]</strong> ➜ <strong>[新增載具]</strong>。</li>
+                    <li>在列表中選擇 <span class="highlight">[ GC 贈物網 ]</span>。</li>
+                </ol>
+            </div>
+            <div class="img-frame">
+                <div class="placeholder-text">[請放入圖片：環保集點選單/新增載具畫面]</div>
+            </div>
+        </div>
 
-    </div>
+        <div class="step-item">
+            <div class="step-header">
+                <div class="step-num">03</div>
+                <div class="step-title-group"><span class="step-name">輸入資訊完成綁定</span></div>
+            </div>
+            <div class="step-desc">
+                輸入您的<strong>「GC 會員編號」</strong>，按下確認，即完成綁定！🎉
+                </div>
+            <div class="img-frame">
+                <div class="placeholder-text">[請放入圖片：輸入 GC 編號畫面]</div>
+            </div>
+        </div>
+
+
+        <div class="phase-divider" style="background-color: #E65100;"> <span class="phase-badge" style="color: #E65100;">Phase 2</span> 第二階段：綠點換蘿蔔點
+            </div>
+        
+        <p style="margin-bottom: 30px; font-weight: bold; color: #555;">
+            綁定完成後，您可以將綠點變成好用的蘿蔔點：
+            </p>
+
+        <div class="step-item">
+            <div class="step-header">
+                <div class="step-num">04</div>
+                <div class="step-title-group"><span class="step-name">進入 GC 蘿蔔點數頁面</span></div>
+            </div>
+            <div class="step-desc">
+                <ol>
+                    <li>打開 GC 贈物網 App。</li>
+                    <li>點選 <strong>[我的]</strong> ➜ <strong>[蘿蔔點數]</strong>。</li>
+                    <li>點擊 <span class="highlight">【環保集點綠點兌換】</span> 按鈕。</li>
+                </ol>
+            </div>
+            <div class="img-frame">
+                <div class="placeholder-text">[請放入圖片：GC 蘿蔔點數頁面]</div>
+            </div>
+        </div>
+
+        <div class="step-item">
+            <div class="step-header">
+                <div class="step-num">05</div>
+                <div class="step-title-group"><span class="step-name">輸入兌換額度並確認</span></div>
+            </div>
+            <div class="step-desc">
+                <ol>
+                    <li>輸入您想使用多少綠點進行兌換。</li>
+                    <li>按下確認後，系統將即時扣除綠點，並存入對應的「蘿蔔點」！</li>
+                </ol>
+                <p style="font-size: 13px; color: #888; background: #eee; padding: 8px; border-radius: 4px;">
+                    💡 註：具體兌換匯率依當時活動公告為主 (例：1000 綠點 = 10 蘿蔔點) </p>
+            </div>
+            <div class="img-frame">
+                <div class="placeholder-text">[請放入圖片：輸入兌換點數畫面]</div>
+            </div>
+        </div>
+
+    </div> <footer>&copy; GC贈物網 x 環保集點<br>讓閒置物資創造綠色價值</footer>
+
+</div> <button onclick="topFunction()" id="backToTopBtn" title="回到頂部">↑</button>
+
+<script>
+    var mybutton = document.getElementById("backToTopBtn");
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            mybutton.style.display = "flex";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+</script>
 
 </body>
 </html>
