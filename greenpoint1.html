@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GC贈物網會員 - 環保集點綁定教學</title>
-<style type="text/css">
-    :root {
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<style type="text/css">:root {
         /* 品牌色系定義 */
         --primary-color: #00695C;  /* 主色：深綠 */
         --primary-light: #E0F2F1;  /* 淺綠背景 */
@@ -41,7 +36,7 @@
         flex-direction: column; 
     }
 
-    /* --- ✨ Header 視覺升級區塊 ✨ --- */
+    /* --- ✨ Header 視覺區塊 ✨ --- */
     header {
         position: relative;
         padding: 60px 30px 50px 30px;
@@ -66,28 +61,12 @@
         z-index: 0;
     }
 
-    /* 頂部小標籤 */
-    .header-badge {
-        position: relative;
-        display: inline-block;
-        background-color: var(--primary-color);
-        color: #fff;
-        padding: 6px 16px;
-        border-radius: 50px;
-        font-size: 13px;
-        font-weight: 700;
-        margin-bottom: 15px;
-        letter-spacing: 1.5px;
-        box-shadow: 0 4px 10px rgba(0, 105, 92, 0.2);
-        z-index: 1;
-    }
-
     header h1 {
         position: relative;
         font-size: 28px;
         font-weight: 800;
         color: var(--text-main);
-        margin: 0 0 25px 0;
+        margin: 10px 0 25px 0; /* 調整間距 */
         line-height: 1.4;
         z-index: 1;
     }
@@ -241,7 +220,7 @@
 
     /* --- 內容區塊 --- */
     .content {
-        padding: 0 30px 60px 30px;
+        padding: 0 30px 40px 30px;
         flex: 1; 
         overflow: hidden; 
     }
@@ -317,7 +296,7 @@
         border: 1px solid #E0E0E0;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06); /* 更強烈的陰影讓圖片浮起來 */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
     }
 
     .img-frame img {
@@ -325,17 +304,49 @@
         height: auto;
         display: block;
     }
-    
-    .placeholder-text {
-        color: #999;
-        font-size: 14px;
+
+    /* --- ✨ 質感獎勵卡片 (一致性設計) ✨ --- */
+    .reward-card {
+        margin-top: 50px;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #E0F2F1 0%, #FFFFFF 100%); /* 淡綠漸層 */
+        border: 1px solid #B2DFDB;
+        border-radius: 16px;
+        padding: 30px 20px;
         text-align: center;
-        padding: 60px 20px;
-        background-color: #f9f9f9;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 105, 92, 0.06);
+    }
+    
+    /* 浮水印裝飾 */
+    .reward-card::before {
+        content: "♻️";
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 80px;
+        opacity: 0.1; /* 調整為更低調 */
+        transform: rotate(20deg);
+        z-index: 0;
+    }
+
+    .reward-text {
+        position: relative;
+        z-index: 1;
+        font-size: 16px;
+        color: var(--primary-color); /* 統一使用主品牌色 */
+        font-weight: 600;
+        line-height: 1.8;
+    }
+    
+    /* 最後一句加強但維持同色系 */
+    .reward-strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
     }
 
     /* --- Footer --- */
@@ -381,149 +392,137 @@
         transform: translateY(-5px);
     }
 </style>
-</head>
-<body>
-
 <div class="container">
-    
-    <header id="top-anchor">
-        <h1>已是【GC贈物網】會員 如何綁定環保集點？</span></h1>
+<header id="top-anchor">
+<h1>已是【GC贈物網】會員<br />
+<span>如何綁定環保集點？</span></h1>
 
-        <div class="goal-box">
-            <div class="goal-icon">🎯</div>
-            <div class="goal-content">
-                <p>完成帳號綁定，累積環保綠點，日後將手中的綠點換成好用的蘿蔔點！</p>
-            </div>
-        </div>
+<div class="goal-box">
+<div class="goal-icon">🎯</div>
 
-        <div class="timeline-container">
-            <div class="timeline-line"></div>
-            
-            <div class="timeline-step active">
-                <div class="timeline-circle">1</div>
-                <div class="timeline-text">帳號綁定</div>
-            </div>
-            
-            <div class="timeline-step active-2">
-                <div class="timeline-circle">2</div>
-                <div class="timeline-text">綠點換蘿蔔</div>
-            </div>
-        </div>
-    </header>
+<div class="goal-content">
+<p>完成帳號綁定，累積環保綠點，日後將手中的綠點換成好用的蘿蔔點！</p>
+</div>
+</div>
 
-    <div class="content">
-        
-        <div class="phase-divider">
-            <span class="phase-badge">Phase 1</span> 第一階段：帳號綁定
-        </div>
+<div class="timeline-container">
+<div class="timeline-line">&nbsp;</div>
 
-        <div class="step-item">
-            <div class="step-header">
-                <div class="step-num">01</div>
-                <div class="step-title-group"><span class="step-name">複製 GC贈物網 會員編號</span></div>
-            </div>
+<div class="timeline-step active">
+<div class="timeline-circle">1</div>
 
-            <div class="step-desc">
-                打開 <strong>GC贈物網</strong> 會員頁面 (進入「我的」)，記下您的 <span class="highlight">「會員編號」</span>。
-            </div>
+<div class="timeline-text">帳號綁定</div>
+</div>
 
-            <div class="img-frame">
-                <img alt="GC會員編號截圖" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/resource/2026/1/21/80ae1aa26961abd3dded45bce17d0a81.png" />
-            </div>
-        </div>
+<div class="timeline-step active-2">
+<div class="timeline-circle">2</div>
 
-        <div class="step-item">
-            <div class="step-header">
-                <div class="step-num">02</div>
-                <div class="step-title-group"><span class="step-name">前往環保集點新增載具</span></div>
-            </div>
+<div class="timeline-text">綠點換蘿蔔點</div>
+</div>
+</div>
+</header>
 
-            <div class="step-desc">
-                <ol>
-                    <li>登入<strong>「環保集點」</strong>平台 (尚未註冊？<a href="https://www.greenpoint.org.tw/" target="_blank"> 點此前往環保集點 </a>)</li>
-                    <li>點選選單：<strong>[會員]</strong> ➜ <strong>[載具管理]</strong> ➜ <strong>[新增載具]</strong>。</li>
-                </ol>
-            </div>
+<div class="content">
+<div class="phase-divider"><span class="phase-badge">Phase 1</span> 第一階段：帳號綁定</div>
 
-            <div class="img-frame">
-                <img alt="環保集點新增載具畫面" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/resource/2026/1/21/0ca260ede44bf322397232eb4cf41382.png" />
-            </div>
-        </div>
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">01</div>
 
-        <div class="step-item">
-            <div class="step-header">
-                <div class="step-num">03</div>
-                <div class="step-title-group"><span class="step-name">輸入資訊完成綁定</span></div>
-            </div>
+<div class="step-title-group"><span class="step-name">複製 GC贈物網 會員編號</span></div>
+</div>
 
-            <div class="step-desc">
-                <ol>
-                    <li>在列表中選擇 <span class="highlight">[ GC贈物網 會員 ]</span></li>
-                    <li>輸入您的<strong>「GC贈物網 會員編號」</strong>，按下確認，即完成綁定！🎉</li>
-                </ol>
-            </div>
+<div class="step-desc">打開 <strong>GC贈物網</strong> 會員頁面 (進入「我的」)，記下您的 <span class="highlight">「會員編號」</span>。</div>
 
-            <div class="img-frame">
-                <img alt="輸入編號完成綁定" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-08-47-00-qZFftX4sFvZSRnRQ8nnYJSPe1usN06F3klQjufv9.png" />
-            </div>
-        </div>
+<div class="img-frame"><img alt="GC會員編號截圖" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/resource/2026/1/21/80ae1aa26961abd3dded45bce17d0a81.png" /></div>
+</div>
 
-        <div class="phase-divider phase-2">
-            <span class="phase-badge">Phase 2</span> 第二階段：綠點換蘿蔔點
-        </div>
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">02</div>
 
-        <p style="margin-bottom: 40px; font-weight: 600; color: #555; text-align: center; background: #FFF3E0; padding: 15px; border-radius: 8px;">
-            ✨ 綁定完成後，您可以將綠點變成好用的蘿蔔點！
-        </p>
+<div class="step-title-group"><span class="step-name">前往環保集點新增載具</span></div>
+</div>
 
-        <div class="step-item">
-            <div class="step-header">
-                <div class="step-num">04</div>
-                <div class="step-title-group"><span class="step-name">進入 GC 蘿蔔點數頁面</span></div>
-            </div>
+<div class="step-desc">
+<ol>
+	<li>登入<strong>「環保集點」</strong>平台 (尚未註冊？<a href="https://www.greenpoint.org.tw/" target="_blank"> 點此前往環保集點 </a>)</li>
+	<li>點選選單：<strong>[會員]</strong> ➜ <strong>[載具管理]</strong> ➜ <strong>[新增載具]</strong>。</li>
+</ol>
+</div>
 
-            <div class="step-desc">
-                <ol>
-                    <li>打開 GC 贈物網 App</li>
-                    <li>點選 <strong>[我的]</strong> ➜ <strong>[蘿蔔點數]</strong></li>
-                </ol>
-            </div>
+<div class="img-frame"><img alt="環保集點新增載具畫面" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/resource/2026/1/21/0ca260ede44bf322397232eb4cf41382.png" /></div>
+</div>
 
-            <div class="img-frame">
-                <img alt="GC 蘿蔔點數頁面" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-10-28-05-uUIaTZXOMVnjHqMWs2ig9cxxEC4FUL6JYPvA4dgm.png" />
-            </div>
-        </div>
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">03</div>
 
-        <div class="step-item">
-            <div class="step-header">
-                <div class="step-num">05</div>
-                <div class="step-title-group"><span class="step-name">輸入兌換數量並確認</span></div>
-            </div>
+<div class="step-title-group"><span class="step-name">輸入資訊完成綁定</span></div>
+</div>
 
-            <div class="step-desc">
-                <ol>
-                    <li>點擊 <span class="highlight">【環保集點綠點兌換】</span> 按鈕</li>
-                    <li>輸入您想使用多少綠點進行兌換</li>
-                    <li>按下確認後，系統將即時扣除綠點，並存入對應的「蘿蔔點」！</li>
-                </ol>
-                <p style="font-size: 13px; color: #888; background: #EEEEEE; padding: 10px; border-radius: 6px; margin-top: 10px;">
-                    💡 註：具體兌換匯率依當時活動公告為主 (例：1000 綠點 = 10 蘿蔔點)
-                </p>
-            </div>
+<div class="step-desc">
+<ol>
+	<li>在列表中選擇 <span class="highlight">[ GC贈物網 會員 ]</span></li>
+	<li>輸入您的<strong>「GC贈物網 會員編號」</strong>，按下確認，即完成綁定！🎉</li>
+</ol>
+</div>
 
-            <div class="img-frame">
-                <img alt="輸入兌換點數畫面" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-10-28-31-PlrFL5yixjrKiaMm5zMW2Oc1cZ0uZshYLBM7nHGM.png" />
-            </div>
-        </div>
+<div class="img-frame"><img alt="輸入編號完成綁定" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-08-47-00-qZFftX4sFvZSRnRQ8nnYJSPe1usN06F3klQjufv9.png" /></div>
+</div>
 
-    </div> <footer>
-        &copy; <strong>GC贈物網</strong> x <strong>環保集點</strong><br>
-        讓閒置物資創造綠色價值
-    </footer>
+<div class="phase-divider phase-2"><span class="phase-badge">Phase 2</span> 第二階段：綠點換蘿蔔點</div>
 
-</div> <button onclick="topFunction()" id="backToTopBtn" title="回到頂部">↑</button>
+<p style="margin-bottom: 40px; font-weight: 600; color: #555; text-align: center; background: #FFF3E0; padding: 15px; border-radius: 8px;">✨ 綁定完成後，您可以將綠點變成好用的蘿蔔點！</p>
 
-<script>
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">04</div>
+
+<div class="step-title-group"><span class="step-name">進入 GC 蘿蔔點數頁面</span></div>
+</div>
+
+<div class="step-desc">
+<ol>
+	<li>打開 GC 贈物網 App</li>
+	<li>點選 <strong>[我的]</strong> ➜ <strong>[蘿蔔點數]</strong></li>
+</ol>
+</div>
+
+<div class="img-frame"><img alt="GC 蘿蔔點數頁面" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-10-28-05-uUIaTZXOMVnjHqMWs2ig9cxxEC4FUL6JYPvA4dgm.png" /></div>
+</div>
+
+<div class="step-item">
+<div class="step-header">
+<div class="step-num">05</div>
+
+<div class="step-title-group"><span class="step-name">輸入兌換數量並確認</span></div>
+</div>
+
+<div class="step-desc">
+<ol>
+	<li>點擊 <span class="highlight">【環保集點綠點兌換】</span> 按鈕</li>
+	<li>輸入您想使用多少綠點進行兌換</li>
+	<li>按下確認後，系統將即時扣除綠點，並存入對應的「蘿蔔點」！</li>
+</ol>
+
+<p style="font-size: 13px; color: #888; background: #EEEEEE; padding: 10px; border-radius: 6px; margin-top: 10px;">💡 註：具體兌換匯率依當時活動公告為主 (例：1000 綠點 = 10 蘿蔔點)</p>
+</div>
+
+<div class="img-frame"><img alt="輸入兌換點數畫面" src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-10-28-31-PlrFL5yixjrKiaMm5zMW2Oc1cZ0uZshYLBM7nHGM.png" /></div>
+</div>
+
+<div class="reward-card">
+<div class="reward-text">在 GC贈物網成功完成物流寄送/領取<br />
+就是為物命續航 ♻力行物資循環再利用， <span class="reward-strong">都能獲得綠點獎勵唷！</span></div>
+</div>
+</div>
+
+<footer>&copy; <strong>GC贈物網</strong> x <strong>環保集點</strong><br />
+讓閒置物資創造綠色價值</footer>
+</div>
+
+<p><button id="backToTopBtn" onclick="topFunction()" title="回到頂部">&uarr;</button><script>
     var mybutton = document.getElementById("backToTopBtn");
     window.onscroll = function() {scrollFunction()};
 
@@ -538,7 +537,4 @@
     function topFunction() {
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
-</script>
-
-</body>
-</html>
+</script></p>
