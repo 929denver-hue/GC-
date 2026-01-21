@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>療癒行前諮詢｜小洵的修復時光</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title></title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&amp;family=Noto+Sans+TC:wght@300;400;500&amp;display=swap" rel="stylesheet" />
+<style type="text/css">:root {
             --primary-deep: #1a3c34;  /* 森系墨綠 */
             --primary-muted: #6a8d83; /* 莫蘭迪玉色 */
             --accent-bronze: #a68b5b; /* 拉絲古銅金 */
@@ -25,13 +20,14 @@
             margin: 0;
             padding: 40px 20px 80px 20px;
             line-height: 1.6;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         h1, h2, h3 { font-family: 'Noto Serif TC', serif; color: var(--primary-deep); }
 
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            width: 100%;
         }
 
         /* --- 標題區 --- */
@@ -119,94 +115,54 @@
 
         /* --- 備註文字 --- */
         .note { font-size: 0.85em; color: #888; margin-top: 5px; }
-    </style>
-</head>
-<body>
-
+</style>
 <div class="container">
-    
-    <div class="header-card">
-        <h1 class="header-title">修復時光 行前諮詢單</h1>
-        <p class="header-desc">
-            為了讓修復時光更貼近您的需求，<br>
-            請撥冗填寫以下資訊，讓我為您準備最適合的工具與手法。🌿
-        </p>
-    </div>
+<div class="header-card">
+<h1 class="header-title">修復時光 ‧ 行前諮詢</h1>
 
-    <form id="intakeForm" onsubmit="event.preventDefault(); generateLineMessage();">
-        
-        <div class="form-section">
-            <h3 class="section-title">✦ 基本資料</h3>
-            
-            <div class="input-group">
-                <label class="label required">您的暱稱</label>
-                <input type="text" id="name" placeholder="例如：Chris" required>
-            </div>
-            
-            <div class="input-group">
-                <label class="label required">性別 (評估生理結構用)</label>
-                <select id="gender" required>
-                    <option value="" disabled selected>請選擇</option>
-                    <option value="女">女</option>
-                    <option value="男">男</option>
-                    <option value="其他">其他</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label class="label">本次預約日期 </label>
-                <input type="text" id="bookingDate" placeholder="例如：1/24 晚上">
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h3 class="section-title">✦ 身體現況評估</h3>
-            <p class="note" style="margin-bottom:15px;">將幫助我判斷是否適合使用「軟罐」或「筋膜刀」。</p>
-
-            <div class="input-group">
-                <label class="label required">您目前最想改善的不適部位？</label>
-                <textarea id="painArea" rows="3" placeholder="例如：右肩頸緊繃、下背痠痛、小腿腫脹..." required></textarea>
-            </div>
-
-            <div class="input-group">
-                <label class="label required">請勾選目前的身體狀況 (可複選)</label>
-                <div class="checkbox-group">
-                    <label class="checkbox-item"><input type="checkbox" name="condition" value="懷孕中"> <span class="checkbox-text">懷孕中</span></label>
-                    <label class="checkbox-item"><input type="checkbox" name="condition" value="生理期中"> <span class="checkbox-text">生理期中</span></label>
-                    <label class="checkbox-item"><input type="checkbox" name="condition" value="皮膚過敏/傷口"> <span class="checkbox-text">欲施作部位有傷口或皮膚過敏</span></label>
-                    <label class="checkbox-item"><input type="checkbox" name="condition" value="高血壓/糖尿病"> <span class="checkbox-text">高血壓 / 糖尿病 / 心臟疾病</span></label>
-                    <label class="checkbox-item"><input type="checkbox" name="condition" value="服用抗凝血劑"> <span class="checkbox-text">長期服用抗凝血藥物 (易瘀青體質)</span></label>
-                    <label class="checkbox-item"><input type="checkbox" name="condition" value="半年內有手術"> <span class="checkbox-text">半年內曾進行手術</span></label>
-                    <label class="checkbox-item"><input type="checkbox" name="condition" value="無上述狀況" checked> <span class="checkbox-text">以上皆無，身體健康</span></label>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h3 class="section-title">✦療癒偏好</h3>
-            
-            <div class="input-group">
-                <label class="label">對於「出痧」(皮膚紅印) 的接受度？</label>
-                <select id="shaLevel">
-                    <option value="皆可配合">完全沒問題 </option>
-                    <option value="微量即可">可以微量，不要太深</option>
-                    <option value="完全不要">完全不希望有痕跡</option>
-                </select>
-                <p class="note">軟罐與筋膜刀操作可能會產生暫時性紅印。</p>
-            </div>
-
-            <div class="input-group">
-                <label class="label">本次期待的修復目標？</label>
-                <textarea id="goal" rows="2" placeholder="例如：想要深層放鬆好睡覺、或者想要改善肩關節受限的問題..."></textarea>
-            </div>
-        </div>
-
-        <button type="submit" class="btn-submit">確認內容並傳送 Line</button>
-        <p style="text-align:center; margin-top:15px; color:#999; font-size:0.9em;">點擊後將自動開啟 Line 視窗</p>
-
-    </form>
+<p class="header-desc">為了提供最適合您的修復方案，<br />
+請撥冗填寫以下資訊，讓我提前準備好工具與手法🌿</p>
 </div>
 
+<form id="intakeForm" onsubmit="event.preventDefault(); generateLineMessage();">
+<div class="form-section">
+<h3 class="section-title">✦ 基本資料</h3>
+
+<div class="input-group"><label class="label required">您的稱呼</label> <input id="name" placeholder="例如 Chris" required="" type="text" /></div>
+
+<div class="input-group"><label class="label required">性別 (評估生理結構用)</label> <select id="gender" required=""><option disabled="disabled" selected="selected" value="">請選擇</option><option value="女">女</option><option value="男">男</option><option value="其他">其他</option> </select></div>
+
+<div class="input-group"><label class="label">本次預約日期 </label> <input id="bookingDate" placeholder="例如：1/24 晚上" type="text" /></div>
+</div>
+
+<div class="form-section">
+<h3 class="section-title">✦ 身體現況評估</h3>
+
+<p class="note" style="margin-bottom:15px;">此資訊將協助判斷是否適合使用「軟罐」或「筋膜刀」。</p>
+
+<div class="input-group"><label class="label required">目前最想改善的不適部位？</label><textarea id="painArea" placeholder="例如：右肩頸緊繃、小腿腫脹..." required="" rows="3"></textarea></div>
+
+<div class="input-group"><label class="label required">請勾選目前的身體狀況 (可複選)</label>
+
+<div class="checkbox-group"><label class="checkbox-item"><input name="condition" type="checkbox" value="懷孕中" /> <span class="checkbox-text">懷孕中</span></label> <label class="checkbox-item"><input name="condition" type="checkbox" value="生理期中" /> <span class="checkbox-text">生理期中</span></label> <label class="checkbox-item"><input name="condition" type="checkbox" value="皮膚過敏/傷口" /> <span class="checkbox-text">欲施作部位有傷口或皮膚過敏</span></label> <label class="checkbox-item"><input name="condition" type="checkbox" value="高血壓/糖尿病" /> <span class="checkbox-text">高血壓 / 糖尿病 / 心臟疾病</span></label> <label class="checkbox-item"><input name="condition" type="checkbox" value="服用抗凝血劑" /> <span class="checkbox-text">長期服用抗凝血藥物 (易瘀青體質)</span></label> <label class="checkbox-item"><input name="condition" type="checkbox" value="半年內有手術" /> <span class="checkbox-text">半年內曾進行手術</span></label> <label class="checkbox-item"><input checked="checked" name="condition" type="checkbox" value="無上述狀況" /> <span class="checkbox-text">以上皆無，身體健康</span></label></div>
+</div>
+</div>
+
+<div class="form-section">
+<h3 class="section-title">✦ 療癒偏好</h3>
+
+<div class="input-group"><label class="label">對於「出痧」(皮膚紅印) 的接受度？</label> <select id="shaLevel"><option value="皆可配合">皆可配合 (視效果需要)</option><option value="微量即可">可以微量，不要太深</option><option value="完全不要">完全不希望有痕跡</option> </select>
+
+<p class="note">軟罐與筋膜刀操作可能會產生暫時性紅印。</p>
+</div>
+
+<div class="input-group"><label class="label">本次期待的修復目標？</label><textarea id="goal" placeholder="例如：想要深層放鬆好睡覺、或者想要改善肩膀活動度..." rows="2"></textarea></div>
+</div>
+<button class="btn-submit" type="submit">確認內容並傳送 Line</button>
+
+<p style="text-align:center; margin-top:15px; color:#999; font-size:0.9em;">點擊後將自動開啟 Line 視窗</p>
+</form>
+</div>
 <script>
     function generateLineMessage() {
         // 1. 獲取欄位資料
@@ -225,7 +181,6 @@
         const conditionText = conditions.length > 0 ? conditions.join("、") : "未填寫";
 
         // 3. 組合訊息內容
-        // 使用 emoji 增加閱讀性，分段清楚
         const message = `Hi 小洵，這是我的療癒前置諮詢單 🌿
 
 👤 **基本資料**
@@ -244,13 +199,9 @@
 請幫我評估適合的工具與方案，謝謝！`;
 
         // 4. 進行 URL 編碼並跳轉 Line
-        // 使用 encodeURIComponent 確保特殊符號和換行能正常顯示
         const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
         
         // 開啟 Line
         window.location.href = lineUrl;
     }
 </script>
-
-</body>
-</html>
