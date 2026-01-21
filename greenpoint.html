@@ -17,7 +17,7 @@
     }
 
     html {
-        scroll-behavior: smooth; /* 全局平滑滾動效果 */
+        scroll-behavior: smooth;
     }
 
     body {
@@ -72,7 +72,7 @@
 
     /* --- 步驟內容區塊 --- */
     .content {
-        padding: 20px 30px 60px 30px;
+        padding: 20px 30px 40px 30px; /* 底部padding稍微減少，給Benefits區塊空間 */
         flex: 1; 
     }
 
@@ -146,6 +146,35 @@
         display: block;
     }
 
+    /* --- 新增：綁定好處區塊設計 --- */
+    .benefit-section {
+        margin-top: 60px; /* 與上方步驟保持距離 */
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); /* 漸層綠底 */
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid #A5D6A7;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .benefit-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1B5E20; /* 更深的綠色強調標題 */
+        margin-bottom: 15px;
+        display: inline-block;
+        border-bottom: 2px solid #81C784;
+        padding-bottom: 5px;
+    }
+
+    .benefit-text {
+        font-size: 16px;
+        color: #2E7D32;
+        line-height: 1.7;
+        font-weight: 500;
+    }
+
     /* --- Footer --- */
     footer {
         text-align: center;
@@ -166,9 +195,9 @@
         border-bottom-style: solid;
     }
 
-    /* --- 回到頂部按鈕樣式 --- */
+    /* --- 回到頂部按鈕 --- */
     #backToTopBtn {
-        display: none; /* 預設隱藏 */
+        display: none;
         position: fixed;
         bottom: 30px;
         right: 30px;
@@ -191,7 +220,7 @@
 
     #backToTopBtn:hover {
         background-color: var(--accent-color);
-        transform: translateY(-3px); /* 懸浮微動效果 */
+        transform: translateY(-3px);
     }
 
 </style>
@@ -199,7 +228,8 @@
 <body>
 
 <div class="container">
-    <header id="top-anchor"> <h1>已是【環保集點】會員，如何綁定【GC贈物網】帳號<br />
+    <header id="top-anchor">
+        <h1>已是【環保集點】會員，如何綁定【GC贈物網】帳號<br />
         開始物資循環，累積綠點</h1>
 
         <div class="subtitle-box">只要綁定帳號，未來在 GC贈物網 進行贈物媒合，就能獲得綠點獎勵！</div>
@@ -251,37 +281,43 @@
 
             <div class="step-desc">
                 <ol>
-                    <li>在列表中選擇 <strong>[GC贈物網 會員]</strong>。</li>
-                    <li>輸入剛剛記下的 <strong>[GC贈物網 會員編號]</strong>。</li>
+                    <li>在列表中選擇 <strong>[ GC贈物網 會員]</strong>。</li>
+                    <li>輸入剛剛記下的 <strong>[ GC贈物網 會員編號]</strong>。</li>
                     <li>按下確認，顯示綁定成功！🎉</li>
                 </ol>
             </div>
 
             <div class="img-frame">
-                <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-08-23-21-b8h4ZA0CdLFZKhHroTBo0yvrEk57yD0xQMDMcX1z.png" alt="輸入編號完成綁定">
+                <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-01-21-08-47-00-qZFftX4sFvZSRnRQ8nnYJSPe1usN06F3klQjufv9.png" alt="輸入編號完成綁定">
             </div>
         </div>
-    </div> <footer>&copy; 環保集點 x GC贈物網<br />
+
+        <div class="benefit-section">
+            <div class="benefit-title">💡 綁定好處</div>
+            <div class="benefit-text">
+                在 GC贈物網 不論分享贈物或接收他人贈物，<br>
+                只要完成贈物媒合、力行物資循環再利用，<br>
+                都能得到綠點獎勵唷！
+            </div>
+        </div>
+
+    </div> <footer>&copy; 環保集點 x GC贈物網 <br />
     讓閒置物資創造綠色價值</footer>
 
 </div> <button onclick="topFunction()" id="backToTopBtn" title="回到頂部">↑</button>
 
 <script>
-    // 取得按鈕元素
     var mybutton = document.getElementById("backToTopBtn");
-
-    // 當卷軸往下滾動 300px 時，顯示按鈕
     window.onscroll = function() {scrollFunction()};
 
     function scrollFunction() {
         if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            mybutton.style.display = "flex"; // 使用 flex 讓箭頭垂直置中
+            mybutton.style.display = "flex";
         } else {
             mybutton.style.display = "none";
         }
     }
 
-    // 點擊按鈕時，平滑捲動回頂部
     function topFunction() {
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
