@@ -32,13 +32,13 @@
         .intro-title { font-size: 1.6em; color: var(--primary-deep); margin: 0 0 10px 0; font-weight: 700; letter-spacing: 0.1em; }
         .intro-subtitle { font-family: 'Noto Serif TC', serif; font-size: 0.9em; color: var(--accent-bronze); margin-bottom: 25px; font-style: italic; }
         
-        /* ★★★ 修改重點：說明文字加深、加粗 ★★★ */
+        /* 說明文字加深、加粗 */
         .intro-text { 
-            font-size: 1em; /* 稍微放大 */
+            font-size: 1em; 
             line-height: 1.8; 
-            color: var(--text-dark); /* 改用深色 */
+            color: var(--text-dark); 
             text-align: justify; 
-            font-weight: 200; /* 加粗 */
+            font-weight: 600; /* 加粗 */
         }
         .highlight { color: var(--primary-deep); font-weight: 700; border-bottom: 1px dotted var(--accent-bronze); }
 
@@ -177,6 +177,7 @@
             lineBtn.href = opt.link;
             lineBtn.innerHTML = '<span>❤️ 前往支持頁面</span>';
         } else {
+            // ★★★ 修正處：這裡只放文字，沒有放網址 ★★★
             let message = `Hi 小洵，感謝今日的專業修復！\n轉盤轉到【${opt.title}】。\n${opt.desc}`;
             lineBtn.href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
             lineBtn.innerHTML = '<span>💬 傳送 Line 與小洵確認</span>';
