@@ -135,11 +135,11 @@
 <script>
     // 轉盤邏輯
     const options = [
-        { title: "生活小確幸", desc: "請我喝一杯你最近心頭好的飲料。（貼心備註：我偏好無糖口味）", color: "#f0f5f3" }, 
-        { title: "專業應援", desc: "回家後靜心感受身體的細微變化，傳 Line 給我詳細回饋，助我精進技術。", color: "#f7f4ef" }, 
-        { title: "技能交換", desc: "擔任我的一日導師！分享一個您擅長的專業領域，或最近習得的新知。", color: "#f2f4f7" }, 
+        { title: "生活小確幸", desc: "請小洵喝一杯你最近心頭好的飲料。（貼心備註：偏好無糖口味）", color: "#f0f5f3" }, 
+        { title: "專業應援", desc: "回家後靜心感受身體的細微變化，傳 Line 詳細回饋，助精進技術。", color: "#f7f4ef" }, 
+        { title: "技能交換", desc: "擔任的一日導師！分享一個擅長的專業領域，或最近習得的新知。", color: "#f2f4f7" }, 
         { title: "贊助 GC贈物網 ", desc: "支持分享與共享的美好循環，讓每一份心意持續創造價值。", color: "#fcf7f2", link: "https://www.give-circle.com/heartwallwords" }, 
-        { title: "身心修復", desc: "今晚請心無罣礙地深層睡眠，您充滿元氣的樣子，就是對我手藝最高的讚美。", color: "#f4f0f5" }  
+        { title: "身心修復", desc: "今晚請心無罣礙地深層睡眠，充滿元氣的樣子，就是對小洵手藝最高的讚美。", color: "#f4f0f5" }  
     ];
     
     const canvas = document.getElementById('wheel');
@@ -178,7 +178,7 @@
             lineBtn.innerHTML = '<span>❤️ 前往支持頁面</span>';
         } else {
             // ★★★ 修正處：這裡只放文字，沒有放網址 ★★★
-            let message = `Hi 小洵，感謝今日的專業修復！\n轉盤轉到【${opt.title}】。\n${opt.desc}`;
+            let message = `Hi 小洵，感謝今日的專業修復！\n幸運轉盤轉到【${opt.title}】。\n${opt.desc}`;
             lineBtn.href = `https://line.me/R/msg/text/?${encodeURIComponent(message)}`;
             lineBtn.innerHTML = '<span>💬 傳送 Line 與小洵確認</span>';
         }
