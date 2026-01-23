@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>貴人私人媒合捐贈評估表 - GC贈物網</title>
-    <style>
-        :root {
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<style type="text/css">:root {
             --primary-color: #2c3e50;
             --accent-color: #e67e22;
             --success-color: #27ae60;
@@ -120,100 +115,49 @@
         .status-go { background-color: #d4efdf; color: #145a32; border: 1px solid #a9dfbf; }
         .status-check { background-color: #fcf3cf; color: #7d6608; border: 1px solid #f9e79f; }
         .status-stop { background-color: #fadbd8; color: #78281f; border: 1px solid #f5b7b1; }
-    </style>
-</head>
-<body>
-
+</style>
 <div class="container">
-    <h1>貴人私人媒合捐贈 • 決策評估表</h1>
-    
-    <form id="evalForm">
-        <div class="section">
-            <h3>一：公益價值 (Public Value)</h3>
-            <div class="guidelines">
-                <span class="good">✔ 建議承接：</span>高價稀缺、實質關鍵幫助、示範案例。<br>
-                <span class="bad">✖ 婉拒情境：</span>價值普通但流程複雜、單位可自行取得、條件過多。
-            </div>
-            <div class="options">
-                <label class="radio-label">
-                    <input type="radio" name="d1" value="0" required>
-                    普通 (流程複雜 / 價值一般)
-                    <span class="score-badge">0 分</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="d1" value="1">
-                    有幫助 (有些許加分)
-                    <span class="score-badge">1 分</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="d1" value="2">
-                    關鍵影響 (高價稀缺 / 示範案例)
-                    <span class="score-badge">2 分</span>
-                </label>
-            </div>
-        </div>
+<h1>貴人私人媒合捐贈 &bull; 決策評估表</h1>
 
-        <div class="section">
-            <h3>二：平台價值 (Platform Asset)</h3>
-            <div class="guidelines">
-                <span class="good">✔ 值得接：</span>未來長期支持者、可產出公開故事/感謝、深化關係。<br>
-                <span class="bad">✖ 不值得接：</span>一次性私下處理、不願曝光、無感謝紀錄 (沉沒成本)。
-            </div>
-            <div class="options">
-                <label class="radio-label">
-                    <input type="radio" name="d2" value="0" required>
-                    無留存 (一次性 / 不願曝光)
-                    <span class="score-badge">0 分</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="d2" value="1">
-                    部分留存 (有簡單紀錄)
-                    <span class="score-badge">1 分</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="d2" value="2">
-                    明確累積 (轉為長期支持 / 媒體露出)
-                    <span class="score-badge">2 分</span>
-                </label>
-            </div>
-        </div>
+<p style="text-align: center;">說明連結：<a href="https://bit.ly/4qD4o8r">https://bit.ly/4qD4o8r</a></p>
 
-        <div class="section">
-            <h3>三：可複製性 (Replicability)</h3>
-            <div class="guidelines">
-                <span class="good">✔ 值得接：</span>可整理成 SOP、半自動流程、標準模式。<br>
-                <span class="bad">✖ 不值得接：</span>全程客製、人盯人、只此一次。
-            </div>
-            <div class="options">
-                <label class="radio-label">
-                    <input type="radio" name="d3" value="0" required>
-                    完全客製 (人盯人 / 不可複製)
-                    <span class="score-badge">0 分</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="d3" value="1">
-                    部分可用 (部分流程標準化)
-                    <span class="score-badge">1 分</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="d3" value="2">
-                    可成 SOP (半自動 / 標準模式)
-                    <span class="score-badge">2 分</span>
-                </label>
-            </div>
-        </div>
+<form id="evalForm">
+<div class="section">
+<h3>一：公益價值 (Public Value)</h3>
 
-        <button type="button" onclick="calculateScore()">計算評估結果</button>
-    </form>
+<div class="guidelines"><span class="good">✔ 建議承接：</span>高價稀缺、實質關鍵幫助、示範案例。<br />
+<span class="bad">✖ 婉拒情境：</span>價值普通但流程複雜、單位可自行取得、條件過多。</div>
 
-    <div id="result-area">
-        <div class="result-title">評估結果</div>
-        <div class="result-score" id="total-score">0 分</div>
-        <div class="result-advice" id="advice-text">--</div>
-    </div>
-
+<div class="options"><label class="radio-label"><input name="d1" required="" type="radio" value="0" /> 普通 (流程複雜 / 價值一般) <span class="score-badge">0 分</span> </label> <label class="radio-label"> <input name="d1" type="radio" value="1" /> 有幫助 (有些許加分) <span class="score-badge">1 分</span> </label> <label class="radio-label"> <input name="d1" type="radio" value="2" /> 關鍵影響 (高價稀缺 / 示範案例) <span class="score-badge">2 分</span> </label></div>
 </div>
 
+<div class="section">
+<h3>二：平台價值 (Platform Asset)</h3>
+
+<div class="guidelines"><span class="good">✔ 值得接：</span>未來長期支持者、可產出公開故事/感謝、深化關係。<br />
+<span class="bad">✖ 不值得接：</span>一次性私下處理、不願曝光、無感謝紀錄 (沉沒成本)。</div>
+
+<div class="options"><label class="radio-label"><input name="d2" required="" type="radio" value="0" /> 無留存 (一次性 / 不願曝光) <span class="score-badge">0 分</span> </label> <label class="radio-label"> <input name="d2" type="radio" value="1" /> 部分留存 (有簡單紀錄) <span class="score-badge">1 分</span> </label> <label class="radio-label"> <input name="d2" type="radio" value="2" /> 明確累積 (轉為長期支持 / 媒體露出) <span class="score-badge">2 分</span> </label></div>
+</div>
+
+<div class="section">
+<h3>三：可複製性 (Replicability)</h3>
+
+<div class="guidelines"><span class="good">✔ 值得接：</span>可整理成 SOP、半自動流程、標準模式。<br />
+<span class="bad">✖ 不值得接：</span>全程客製、人盯人、只此一次。</div>
+
+<div class="options"><label class="radio-label"><input name="d3" required="" type="radio" value="0" /> 完全客製 (人盯人 / 不可複製) <span class="score-badge">0 分</span> </label> <label class="radio-label"> <input name="d3" type="radio" value="1" /> 部分可用 (部分流程標準化) <span class="score-badge">1 分</span> </label> <label class="radio-label"> <input name="d3" type="radio" value="2" /> 可成 SOP (半自動 / 標準模式) <span class="score-badge">2 分</span> </label></div>
+</div>
+<button onclick="calculateScore()" type="button">計算評估結果</button></form>
+
+<div id="result-area">
+<div class="result-title">評估結果</div>
+
+<div class="result-score" id="total-score">0 分</div>
+
+<div class="result-advice" id="advice-text">--</div>
+</div>
+</div>
 <script>
     function calculateScore() {
         // 取得所有選取的 radio button
@@ -260,6 +204,3 @@
         resultArea.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
-
-</body>
-</html>
