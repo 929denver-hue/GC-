@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <title>洵的AI高效平台</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root {
+<meta charset="UTF-8" />
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style type="text/css">:root {
       --bg-dark: #020617;
       --accent-blue: #3b82f6;
       --accent-green: #22c55e;
@@ -233,6 +229,9 @@
     .module-card:nth-child(5) { animation-delay: 0.5s; }
     .module-card:nth-child(6) { animation-delay: 0.6s; }
     .module-card:nth-child(7) { animation-delay: 0.7s; }
+    .module-card:nth-child(8) { animation-delay: 0.8s; }
+    .module-card:nth-child(9) { animation-delay: 0.9s; }
+    .module-card:nth-child(10) { animation-delay: 1.0s; }
 
     .module-card::before {
       content: "";
@@ -284,112 +283,99 @@
         font-size: 1rem;
       }
     }
-  </style>
-</head>
-<body>
-  <!-- 主視覺區塊：AI高效平台 -->
-  <section class="hero-section" id="top">
-    <div class="hero-inner">
-      <h1 class="hero-title">AI高效平台</h1>
-      <p class="hero-subtitle">
-        歡迎進入Shin打造的智慧高效平台，啟動你的未來工作流程
-      </p>
-      <a href="#modules" class="hero-button">瀏覽模組</a>
-    </div>
-  </section>
+</style>
+<section class="hero-section" id="top">
+<div class="hero-inner">
+<h1 class="hero-title">AI高效平台</h1>
 
-  <!-- 系統控制模組區塊（全部模組都有連結，且另開新分頁） -->
-  <section class="modules-section" id="modules">
-    <h2 class="modules-title">模組總覽</h2>
-    <p class="modules-subtitle">
-      集中模組，一站式掌握。
-    </p>
+<p class="hero-subtitle">歡迎進入Shin打造的智慧高效平台，啟動你的未來工作流程</p>
+<a class="hero-button" href="#modules">瀏覽模組</a></div>
+</section>
 
-    <div class="modules-grid">
-      <!-- 01 物流系統 -->
-      <a href="https://929denver-hue.github.io/GC-/money.html" target="_blank">
-        <div class="module-card" id="dashboard">
-          <div class="module-index"></div>
-          <div class="module-title">物流系統</div>
-          <div class="module-desc">了解每一筆金流成本</div>
-        </div>
-      </a>
+<section class="modules-section" id="modules">
+<h2 class="modules-title">模組總覽</h2>
 
-      <!-- 02 i郵箱數據 -->
-      <a href="https://929denver-hue.github.io/GC-/ibox.html" target="_blank">
-        <div class="module-card" id="network">
-          <div class="module-index"></div>
-          <div class="module-title">i郵箱數據</div>
-          <div class="module-desc">Ibox每月相關數據</div>
-        </div>
-      </a>
+<p class="modules-subtitle">集中模組，一站式掌握。</p>
 
-      <!-- 03 南瓜計畫 -->
-      <a href="https://929denver-hue.github.io/GC-/pumpkin.html" target="_blank">
-        <div class="module-card" id="security">
-          <div class="module-index"></div>
-          <div class="module-title">南瓜計畫</div>
-          <div class="module-desc">清楚分析利害關係心法</div>
-        </div>
-      </a>
+<div class="modules-grid">
+<div class="module-card" id="dashboard">
+<div class="module-index">&nbsp;</div>
 
-      <!-- 04 社福雷達圖（南瓜計畫社福評分） -->
-      <a href="https://script.google.com/macros/s/AKfycbyFT-kPvqeVbA0LTF83DZbruj_vyO2R00KQTyzSn38oIyS1ycf5ArSiQqfQXCNjf1YK/exec"
-         target="_blank">
-        <div class="module-card" id="ngo-radar">
-          <div class="module-index"></div>
-          <div class="module-title">社福雷達圖</div>
-          <div class="module-desc">南瓜計畫｜社福評分系統</div>
-        </div>
-      </a>
-      
-      <!-- 04 包裹異常通報 -->
-      <a href="https://929denver-hue.github.io/GC-/index.html" target="_blank">
-        <div class="module-card" id="analytics">
-          <div class="module-index"></div>
-          <div class="module-title">包裹異常通報</div>
-          <div class="module-desc">包裹異常通報與進度查詢</div>
-        </div>
-      </a>
+<div class="module-title"><a href="https://929denver-hue.github.io/GC-/money.html" target="_blank">物流系統</a></div>
 
-      <!-- 05 包裹試算分析 -->
-      <a href="https://929denver-hue.github.io/GC-/money-1.html" target="_blank">
-        <div class="module-card" id="archives">
-          <div class="module-index"></div>
-          <div class="module-title">包裹試算分析</div>
-          <div class="module-desc">包裹成本、利潤試算</div>
-        </div>
-      </a>
-    <!-- 06 開立平台需求 -->
-<a href="https://script.google.com/macros/s/AKfycbyTg99UI2graqlfxuKmj5d719Xea6O_k3-fo2zNvhcPm14U5ZcliWQzxFGXAjExyeHCrg/exec"
-   target="_blank">
-  <div class="module-card" id="comms">
-    <div class="module-index"></div>
-    <div class="module-title">請寫下需求許願單</div>
-    <div class="module-desc">請寫下需求許願單</div>
-  </div>
-</a>
+<div class="module-desc"><a href="https://929denver-hue.github.io/GC-/money.html" target="_blank">了解每一筆金流成本</a></div>
+</div>
 
-<!-- 07 需求管理清單 -->
-<a href="https://script.google.com/macros/s/AKfycbxqDHgTikVbU3EbQQDzPN-aibXuxtAlB8hlF1Bx3jxNikDnmF9omdtIh1-OXiUgGcFL-Q/exec?page=admin"
-   target="_blank">
-  <div class="module-card" id="comms">
-    <div class="module-index"></div>
-    <div class="module-title">隨時查看需求進度</div>
-    <div class="module-desc">隨時查看需求進度</div>
-  </div>
-</a>
+<div class="module-card" id="network">
+<div class="module-index">&nbsp;</div>
 
-<!-- 08 心願分析步驟 -->
-<a href="https://docs.google.com/document/d/1IyPX6DWTM0PTAM-_UjcquLcXWUV41Y3fEGP71-ZZbew/edit?usp=sharing"
-   target="_blank">
-  <div class="module-card" id="comms">
-    <div class="module-index"></div>
-    <div class="module-title">心願分析步驟</div>
-    <div class="module-desc">心願分析步驟</div>
-  </div>
-</a>
-    </div>
-  </section>
-</body>
-</html>
+<div class="module-title"><a href="https://929denver-hue.github.io/GC-/ibox.html" target="_blank">i郵箱數據</a></div>
+
+<div class="module-desc"><a href="https://929denver-hue.github.io/GC-/ibox.html" target="_blank">Ibox每月相關數據</a></div>
+</div>
+
+<div class="module-card" id="security">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://929denver-hue.github.io/GC-/pumpkin.html" target="_blank">南瓜計畫</a></div>
+
+<div class="module-desc"><a href="https://929denver-hue.github.io/GC-/pumpkin.html" target="_blank">清楚分析利害關係心法</a></div>
+</div>
+
+<div class="module-card" id="ngo-radar">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://script.google.com/macros/s/AKfycbyFT-kPvqeVbA0LTF83DZbruj_vyO2R00KQTyzSn38oIyS1ycf5ArSiQqfQXCNjf1YK/exec" target="_blank">社福雷達圖</a></div>
+
+<div class="module-desc"><a href="https://script.google.com/macros/s/AKfycbyFT-kPvqeVbA0LTF83DZbruj_vyO2R00KQTyzSn38oIyS1ycf5ArSiQqfQXCNjf1YK/exec" target="_blank">南瓜計畫｜社福評分系統</a></div>
+</div>
+
+<div class="module-card" id="analytics">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://929denver-hue.github.io/GC-/index.html" target="_blank">包裹異常通報</a></div>
+
+<div class="module-desc"><a href="https://929denver-hue.github.io/GC-/index.html" target="_blank">包裹異常通報與進度查詢</a></div>
+</div>
+
+<div class="module-card" id="archives">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://929denver-hue.github.io/GC-/money-1.html" target="_blank">包裹試算分析</a></div>
+
+<div class="module-desc"><a href="https://929denver-hue.github.io/GC-/money-1.html" target="_blank">包裹成本、利潤試算</a></div>
+</div>
+
+<div class="module-card" id="comms">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://script.google.com/macros/s/AKfycbyTg99UI2graqlfxuKmj5d719Xea6O_k3-fo2zNvhcPm14U5ZcliWQzxFGXAjExyeHCrg/exec" target="_blank">請寫下需求許願單</a></div>
+
+<div class="module-desc"><a href="https://script.google.com/macros/s/AKfycbyTg99UI2graqlfxuKmj5d719Xea6O_k3-fo2zNvhcPm14U5ZcliWQzxFGXAjExyeHCrg/exec" target="_blank">請寫下需求許願單</a></div>
+</div>
+
+<div class="module-card" id="comms">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://script.google.com/macros/s/AKfycbxqDHgTikVbU3EbQQDzPN-aibXuxtAlB8hlF1Bx3jxNikDnmF9omdtIh1-OXiUgGcFL-Q/exec?page=admin" target="_blank">隨時查看需求進度</a></div>
+
+<div class="module-desc"><a href="https://script.google.com/macros/s/AKfycbxqDHgTikVbU3EbQQDzPN-aibXuxtAlB8hlF1Bx3jxNikDnmF9omdtIh1-OXiUgGcFL-Q/exec?page=admin" target="_blank">隨時查看需求進度</a></div>
+</div>
+
+<div class="module-card" id="comms">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://docs.google.com/document/d/1IyPX6DWTM0PTAM-_UjcquLcXWUV41Y3fEGP71-ZZbew/edit?usp=sharing" target="_blank">心願分析步驟</a></div>
+
+<div class="module-desc"><a href="https://docs.google.com/document/d/1IyPX6DWTM0PTAM-_UjcquLcXWUV41Y3fEGP71-ZZbew/edit?usp=sharing" target="_blank">心願分析步驟</a></div>
+</div>
+
+<div class="module-card" id="donation-eval">
+<div class="module-index">&nbsp;</div>
+
+<div class="module-title"><a href="https://929denver-hue.github.io/GC-/donation.html" target="_blank">貴人捐贈評估表</a></div>
+
+<div class="module-desc"><a href="https://929denver-hue.github.io/GC-/donation.html" target="_blank">貴人捐贈評估表</a></div>
+</div>
+</div>
+</section>
