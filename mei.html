@@ -4,242 +4,211 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>觀易・知命 | 邱愛美女士專屬</title>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@300;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f1ea; /* 宣紙白 */
-            --ink-color: #2b2b2b; /* 濃墨 */
-            --light-ink: #555; /* 淡墨 */
-            --red-seal: #9a1818; /* 硃砂紅 */
-            --gold-accent: #bfa36c; /* 鎏金 */
-            --gold-glow: #ffd700; /* 發光金 */
-            --safe-area-top: env(safe-area-inset-top); /* 避開瀏海 */
+            --bg-color: #f4f1ea;
+            --ink-color: #2b2b2b;
+            --light-ink: #555;
+            --red-seal: #9a1818;
+            --gold-accent: #bfa36c;
+            --gold-dark: #8c7035;
+            --gold-glow: #ffd700;
+            --safe-area-top: env(safe-area-inset-top);
         }
 
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: var(--bg-color);
             color: var(--ink-color);
             font-family: 'Noto Serif TC', serif;
-            /* 允許捲動但隱藏卷軸，解決內容過長無法滑動的問題 */
-            overflow-y: auto; 
-            overflow-x: hidden;
+            overflow-y: auto; overflow-x: hidden;
             height: 100vh;
-            /* 紙張紋理 */
             background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.05' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.96 0 0 0 0 0.94 0 0 0 0 0.92 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23a)' opacity='0.4'/%3E%3C/svg%3E");
         }
 
-        /* 頂部導航列 (優化重點) */
+        /* 導航列 */
         .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            padding-top: var(--safe-area-top); /* 避開手機瀏海 */
-            display: flex;
-            align-items: center;
-            padding-left: 20px;
-            z-index: 1000;
-            pointer-events: none; /* 預設不擋住點擊，只有按鈕可點 */
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            padding-top: var(--safe-area-top);
+            display: flex; align-items: center; padding-left: 20px;
+            z-index: 1000; pointer-events: none;
         }
-
-        /* 顯眼的返回按鈕 */
         .nav-back-btn {
             pointer-events: auto;
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid var(--ink-color);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--ink-color);
             color: var(--ink-color);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-family: 'Ma Shan Zheng', cursive;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            opacity: 0; /* 預設隱藏 (首頁不顯示) */
-            transform: translateX(-20px);
-            transition: all 0.3s ease;
+            padding: 8px 18px; border-radius: 30px;
+            font-family: 'Ma Shan Zheng', cursive; font-size: 1.1rem;
+            display: flex; align-items: center; gap: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;
+            opacity: 0; transform: translateX(-20px); transition: all 0.3s ease;
         }
-
-        /* 當不在首頁時，顯示返回按鈕 */
-        body:not(.is-home) .nav-back-btn {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        body:not(.is-home) .nav-back-btn { opacity: 1; transform: translateX(0); }
 
         .container {
-            text-align: center;
-            width: 100%;
-            max-width: 900px;
-            min-height: 100vh;
-            padding: 80px 20px 40px 20px; /* 上方留白給 Navbar */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            text-align: center; width: 100%; max-width: 900px; min-height: 100vh;
+            padding: 80px 20px 60px 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-
         .hidden { display: none !important; }
         .fade-in { animation: fadeIn 0.6s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 標題與按鈕樣式 */
-        h1.main-title {
-            font-family: 'Ma Shan Zheng', cursive;
-            font-size: 4.5rem;
-            margin: 0;
-            color: var(--ink-color);
-        }
-        h2.sub-title-headers {
-             font-family: 'Ma Shan Zheng', cursive;
-             font-weight: normal;
-             font-size: 2.2rem;
-             margin-bottom: 10px;
-        }
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--light-ink);
-            border-bottom: 2px solid var(--gold-accent);
-            padding-bottom: 8px;
-            margin-bottom: 40px;
-            letter-spacing: 3px;
-        }
+        h1.main-title { font-family: 'Ma Shan Zheng', cursive; font-size: 4rem; margin: 0; color: var(--ink-color); }
+        h2.sub-title-headers { font-family: 'Ma Shan Zheng', cursive; font-weight: normal; font-size: 2.2rem; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; color: var(--light-ink); border-bottom: 2px solid var(--gold-accent); padding-bottom: 8px; margin-bottom: 40px; letter-spacing: 3px; }
 
-        .menu-btn-group {
-            display: flex;
-            gap: 40px;
-            margin-top: 30px;
-        }
+        .menu-btn-group { display: flex; gap: 40px; margin-top: 30px; }
         .circle-btn {
-            width: 100px;
-            height: 100px;
-            border: 3px solid var(--ink-color);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Ma Shan Zheng', cursive;
-            font-size: 2rem;
-            cursor: pointer;
-            background: rgba(244, 241, 234, 0.9);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            width: 100px; height: 100px; border: 3px solid var(--ink-color); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Ma Shan Zheng', cursive; font-size: 2rem; cursor: pointer;
+            background: rgba(244, 241, 234, 0.9); box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             transition: transform 0.2s;
         }
         .circle-btn:active { transform: scale(0.95); background: var(--ink-color); color: #fff; }
 
-        /* 輸入模式優化 */
+        /* 輸入模式 */
         .input-wrapper { margin: 30px auto; width: 160px; }
         input[type="number"] {
-            width: 100%;
-            font-family: 'Ma Shan Zheng', cursive;
-            font-size: 3.5rem;
-            text-align: center;
-            border: none;
-            background: transparent;
-            border-bottom: 4px solid var(--ink-color);
-            color: var(--ink-color);
-            outline: none;
+            width: 100%; font-family: 'Ma Shan Zheng', cursive; font-size: 3.5rem;
+            text-align: center; border: none; background: transparent;
+            border-bottom: 4px solid var(--ink-color); color: var(--ink-color); outline: none;
         }
         .seal-btn {
-            margin-top: 20px;
-            width: 80px;
-            height: 80px;
-            background-color: var(--red-seal);
-            color: #fff;
-            font-family: 'Ma Shan Zheng', cursive;
-            font-size: 1.6rem;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin-top: 20px; width: 80px; height: 80px; background-color: var(--red-seal);
+            color: #fff; font-family: 'Ma Shan Zheng', cursive; font-size: 1.6rem;
+            border-radius: 8px; cursor: pointer; display: inline-flex;
+            justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             writing-mode: vertical-lr;
         }
 
         /* 金龜模式 */
-        .turtle-container {
-            position: relative;
-            width: 280px;
-            height: 340px;
-            margin: 20px auto;
-            cursor: pointer;
-        }
-        .turtle-shell-svg {
-            width: 100%; height: 100%;
-            fill: var(--ink-color); stroke: var(--gold-accent); stroke-width: 2;
-            transition: all 3s ease;
-        }
+        .turtle-container { position: relative; width: 280px; height: 340px; margin: 20px auto; cursor: pointer; }
+        .turtle-shell-svg { width: 100%; height: 100%; fill: var(--ink-color); stroke: var(--gold-accent); stroke-width: 2; transition: all 3s ease; }
         .heating .turtle-shell-svg { fill: #5e4a2a; filter: drop-shadow(0 0 20px var(--gold-glow)); }
-        
-        /* 龜裂動畫層 */
         .cracks-overlay {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%; height: 100%;
-            pointer-events: none;
-            opacity: 0;
-            background: radial-gradient(circle, #fff 0%, transparent 70%);
-            mix-blend-mode: overlay;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100%; height: 100%; pointer-events: none; opacity: 0;
+            background: radial-gradient(circle, #fff 0%, transparent 70%); mix-blend-mode: overlay;
         }
         .cracking .cracks-overlay { animation: flash 0.5s ease-out; }
         @keyframes flash { 0% {opacity:0;} 50% {opacity:1;} 100% {opacity:0;} }
+        .instruction-text { color: var(--gold-accent); font-weight: bold; margin-top: 15px; }
 
-        .instruction-text {
-            color: var(--gold-accent); font-weight: bold; margin-top: 15px;
-        }
-
-        /* 結果頁面優化 (解決內容被切掉的問題) */
+        /* 結果頁面 (含付費引導) */
         .result-layout {
-            display: flex;
-            flex-direction: column; /* 手機預設改為直式排列 */
-            align-items: center;
-            width: 100%;
-            padding-bottom: 60px; /* 底部留白 */
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%; padding-bottom: 80px;
         }
-
-        .hexagram-box { margin-bottom: 20px; }
-        .hexagram-symbol {
-            display: flex; flex-direction: column; gap: 10px;
-            animation: inkShow 2s ease forwards;
-        }
-        
+        .hexagram-box { margin-bottom: 30px; }
+        .hexagram-symbol { display: flex; flex-direction: column; gap: 10px; animation: inkShow 2s ease forwards; }
         .yao-yang { width: 160px; height: 18px; background: var(--ink-color); border-radius: 3px; }
         .yao-yin { width: 160px; height: 18px; display: flex; justify-content: space-between; }
         .yao-yin::before, .yao-yin::after { content: ''; width: 70px; height: 100%; background: var(--ink-color); border-radius: 3px; }
-
         @keyframes inkShow { from {opacity:0; filter:blur(10px);} to {opacity:1; filter:blur(0);} }
 
-        .result-text { width: 100%; text-align: left; }
+        .result-text { width: 100%; text-align: left; position: relative; }
         .hex-header { border-bottom: 2px solid var(--red-seal); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: baseline; gap: 15px; }
         .hex-name { font-family: 'Ma Shan Zheng'; font-size: 3rem; color: var(--red-seal); margin: 0; }
-        .hex-quote-box { background: rgba(191,163,108,0.1); border-left: 4px solid var(--gold-accent); padding: 15px; margin-bottom: 20px; }
-        .hex-quote { font-size: 1.3rem; font-weight: 600; margin: 0; line-height: 1.4; }
-        .hex-philosophy { font-size: 1.1rem; line-height: 1.8; text-align: justify; }
-        .philosophy-keyword { color: var(--red-seal); font-weight: bold; font-size: 1.2rem; }
+        .hex-structure { font-size: 1.1rem; color: var(--light-ink); }
+        .hex-quote-box { background: rgba(191,163,108,0.1); border-left: 4px solid var(--gold-accent); padding: 15px; margin-bottom: 25px; }
+        .hex-quote { font-size: 1.2rem; font-weight: 600; margin: 0; line-height: 1.5; }
+        
+        /* 免費內容樣式 */
+        .hex-philosophy { font-size: 1.1rem; line-height: 1.8; text-align: justify; margin-bottom: 30px; }
+        .philosophy-keyword { color: var(--red-seal); font-weight: bold; font-size: 1.2rem; display: block; margin-bottom: 10px;}
 
-        /* RWD 調整 */
+        /* 付費鎖定區塊樣式 */
+        .locked-section {
+            position: relative;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--gold-accent);
+        }
+        
+        .locked-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--ink-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* 模糊遮罩效果 */
+        .blur-content {
+            filter: blur(6px);
+            opacity: 0.6;
+            user-select: none;
+            pointer-events: none;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* 浮在模糊上方的按鈕容器 */
+        .unlock-overlay {
+            position: absolute;
+            top: 60px; /* 調整遮擋位置 */
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 10;
+            /* 底部漸層遮罩，讓文字看起來消失 */
+            background: linear-gradient(to bottom, rgba(244, 241, 234, 0.4) 0%, rgba(244, 241, 234, 1) 80%);
+        }
+
+        /* 鎏金按鈕 */
+        .gold-btn {
+            background: linear-gradient(135deg, #2b2b2b 0%, #444 100%);
+            border: 1px solid var(--gold-accent);
+            color: var(--gold-accent);
+            padding: 15px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+            animation: pulseBtn 2s infinite;
+        }
+        
+        @keyframes pulseBtn {
+            0% { transform: scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 15px 30px rgba(191, 163, 108, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        }
+
+        .gold-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            transition: 0.5s;
+        }
+        .gold-btn:hover::before { left: 100%; }
+        
+        .btn-main { font-family: 'Ma Shan Zheng'; font-size: 1.6rem; letter-spacing: 3px; margin-bottom: 4px; color: var(--gold-glow); }
+        .btn-sub { font-size: 0.85rem; font-family: 'Noto Serif TC'; opacity: 0.9; letter-spacing: 1px; color: #ddd; }
+
         @media (min-width: 768px) {
             .result-layout { flex-direction: row; align-items: flex-start; gap: 50px; }
-            .nav-back-btn { margin-left: 20px; font-size: 1.4rem; padding: 10px 25px; }
-            .container { justify-content: center; }
+            .nav-back-btn { margin-left: 20px; font-size: 1.2rem; }
         }
     </style>
 </head>
-<body class="is-home"> <div class="navbar">
+<body class="is-home">
+
+    <div class="navbar">
         <div class="nav-back-btn" onclick="goBack()">
             <span>❮</span> 返回
         </div>
@@ -291,103 +260,109 @@
             <div class="hexagram-box">
                 <div class="hexagram-symbol" id="res-symbol-container"></div>
             </div>
+            
             <div class="result-text">
                 <div class="hex-header">
                     <h2 class="hex-name" id="res-name"></h2>
                     <span class="hex-structure" id="res-structure"></span>
                 </div>
+                
                 <div class="hex-quote-box">
                     <p class="hex-quote" id="res-quote"></p>
                 </div>
+                
                 <div class="hex-philosophy" id="res-philosophy"></div>
+
+                <div class="locked-section">
+                    <div class="locked-header">❖ 破局・關鍵行動</div>
+                    
+                    <div class="blur-content">
+                        針對您目前的處境，易經建議採取三步驟策略。首先，必須在內部進行調整，切勿急於向外擴張。具體的行動時機點落在下個月中旬，屆時會有貴人從北方出現。請務必留意與合作夥伴的契約細節，特別是關於資源分配的條款...
+                    </div>
+
+                    <div class="unlock-overlay">
+                        <div class="gold-btn" onclick="openBooking()">
+                            <span class="btn-main">私房・點撥</span>
+                            <span class="btn-sub">解鎖專屬破局對策</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 資料庫：易經64卦 (生命哲學版) - 為節省篇幅，這裡使用生成邏輯，請替換回上個版本的完整資料
-        // 請務必將上一個版本中 `const iChing64Data = [...]` 的完整內容貼在這裡
-        // 這裡僅放第一卦與通用填充以確保程式運作
-        const iChing64Data = [ null, 
-            { name: "乾為天", structure: "乾上乾下", quote: "天行健，君子以自強不息。", keyword: "【純粹創造】", philosophy: "生命的能量正處於極盛狀態。如同太陽每日升起未曾停歇，你現在需要的不是猶豫或退縮，而是模仿天的德行：持續、恆久、不停止地精進。" },
-            { name: "坤為地", structure: "坤上坤下", quote: "地勢坤，君子以厚德載物。", keyword: "【包容承載】", philosophy: "大地的美德在於「順承」。它不主動爭先，卻能生長萬物。現在對你而言，不是強出頭的時機，而是學習接納、配合與支持。" }
-        ]; 
-        // --- 這裡請記得補回完整的 64 卦資料 ---
+        // ================= 資料庫 =================
+        // 1. 完整資料庫結構，包含 "free"(免費哲學) 和 "structure"(結構)
+        // 為了確保程式運作，我會生成 64 卦的基礎資料
+        const iChing64Data = [];
 
-        // 頁面管理 (支援手機返回鍵)
+        // 範例資料 (第1卦與第2卦為精修示範)
+        iChing64Data[1] = { 
+            name: "乾為天", structure: "乾上乾下", 
+            quote: "天行健，君子以自強不息。", 
+            keyword: "【 純粹創造 】", 
+            philosophy: "生命的能量正處於極盛狀態。如同太陽每日升起未曾停歇，你現在需要的不是猶豫或退縮，而是模仿天的德行：持續、恆久、不停止地精進。這是一個完全依靠「自我驅動」的時刻，做自己的主宰，不假外求。" 
+        };
+        
+        iChing64Data[2] = { 
+            name: "坤為地", structure: "坤上坤下", 
+            quote: "地勢坤，君子以厚德載物。", 
+            keyword: "【 包容承載 】", 
+            philosophy: "大地的美德在於「順承」。它不主動爭先，卻能生長萬物。現在對你而言，不是強出頭的時機，而是學習接納、配合與支持。透過廣闊的胸襟去包容現狀的種種不如意，你的力量來自於「柔韌」與「成就他人」。" 
+        };
+
+        // 通用填充函數 (確保所有卦都有內容顯示)
+        for(let i=3; i<=64; i++) {
+             iChing64Data[i] = { 
+                 name: "第"+i+"卦", structure: "等待解鎖", 
+                 quote: "君子以觀象，知命而行。", 
+                 keyword: "【 潛沈探索 】", 
+                 philosophy: "此卦象對應易經六十四卦之一。這是一個邀請，邀請您與邱老師一同深入探討此卦的奧義。每個數字背後，都藏著宇宙對您當下狀態的一則隱喻，等待您用心靈去感應。" 
+             };
+        }
+        // 注意：實際上線時，請將您準備好的 64 卦文案逐一填入上方結構
+
+        // ================= 頁面邏輯 =================
         function goToPage(pageId, addToHistory = true) {
-            // 隱藏所有頁面
             document.querySelectorAll('.container').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('fade-in');
+                el.classList.add('hidden'); el.classList.remove('fade-in');
             });
 
-            // 顯示目標頁面
             const target = document.getElementById('page-' + pageId);
             if(target) {
-                target.classList.remove('hidden');
-                target.classList.add('fade-in');
-                window.scrollTo(0, 0); // 切換頁面後捲動到頂部
+                target.classList.remove('hidden'); target.classList.add('fade-in');
+                window.scrollTo(0, 0);
             }
 
-            // 控制返回按鈕顯示
             if(pageId === 'home') {
-                document.body.classList.add('is-home');
-                resetState();
+                document.body.classList.add('is-home'); resetState();
             } else {
                 document.body.classList.remove('is-home');
             }
 
-            // 處理瀏覽器歷史紀錄 (讓手機返回鍵生效)
             if (addToHistory) {
-                if (pageId === 'home') {
-                    // 如果去首頁，清除多餘歷史或單純替換
-                    history.replaceState({page: 'home'}, '', '#home');
-                } else {
-                    history.pushState({page: pageId}, '', '#' + pageId);
-                }
+                if (pageId === 'home') history.replaceState({page: 'home'}, '', '#home');
+                else history.pushState({page: pageId}, '', '#' + pageId);
             }
         }
 
-        // 監聽手機實體返回鍵
         window.onpopstate = function(event) {
-            if (event.state && event.state.page) {
-                // 如果歷史紀錄中有頁面，就去該頁面 (不需再 push history)
-                goToPage(event.state.page, false);
-            } else {
-                // 如果沒有紀錄，預設回首頁
-                goToPage('home', false);
-            }
+            if (event.state && event.state.page) goToPage(event.state.page, false);
+            else goToPage('home', false);
         };
 
-        // 點擊左上角返回按鈕
         function goBack() {
-            // 嘗試使用瀏覽器返回 (觸發 popstate)
-            if (history.length > 1) {
-                history.back();
-            } else {
-                // 如果沒有歷史紀錄，強制回首頁
-                goToPage('home');
-            }
+            if (history.length > 1) history.back();
+            else goToPage('home');
         }
 
         // 初始化
         window.addEventListener('load', () => {
-             // 替換所有未定義的卦象資料 (防止報錯)
-             for(let i=1; i<=64; i++) {
-                 if(!iChing64Data[i]) {
-                     iChing64Data[i] = { 
-                         name: "第"+i+"卦", structure: "尚未解鎖", 
-                         quote: "君子以觀象，知命而行。", keyword: "【潛沈探索】", 
-                         philosophy: "此卦象等待邱老師現場深度解析。" 
-                     };
-                 }
-             }
-             // 預設替換當前歷史為首頁
              history.replaceState({page: 'home'}, '', '#home');
         });
 
-        // 重置狀態
+        // 狀態重置
         function resetState() {
             document.getElementById('num-input').value = '';
             const shell = document.getElementById('turtle-trigger');
@@ -398,17 +373,16 @@
             isPressing = false;
         }
 
-        // 輸入模式邏輯
+        // 輸入模式
         function revealByInput() {
             const inputVal = parseInt(document.getElementById('num-input').value);
             if (!inputVal || inputVal < 1 || inputVal > 64) {
-                alert("請輸入 1 至 64");
-                return;
+                alert("請輸入 1 至 64"); return;
             }
             showResult(inputVal);
         }
 
-        // 金龜互動邏輯
+        // 金龜模式
         const turtleTrigger = document.getElementById('turtle-trigger');
         const instructionText = document.getElementById('turtle-instruction');
         let pressTimer;
@@ -426,14 +400,13 @@
             isPressing = true;
             turtleTrigger.classList.add('heating');
             instructionText.innerText = "能量匯聚中...";
-            pressTimer = setTimeout(triggerCracking, 2500); // 縮短一點點時間讓體驗更流暢
+            pressTimer = setTimeout(triggerCracking, 2000); 
         }
 
         function cancelPress() {
              if (!isPressing) return;
              if (pressTimer) {
-                 clearTimeout(pressTimer);
-                 resetState();
+                 clearTimeout(pressTimer); resetState();
                  instructionText.innerText = "請持續按住不放";
              }
              isPressing = false;
@@ -443,41 +416,49 @@
             pressTimer = null;
             instructionText.innerText = "卦象顯現！";
             turtleTrigger.classList.add('cracking');
-            // 震動回饋 (僅Android支援)
             if(navigator.vibrate) navigator.vibrate(200);
-            
             setTimeout(() => {
                  const randomNum = Math.floor(Math.random() * 64) + 1;
                  showResult(randomNum);
             }, 800);
         }
 
+        // 顯示結果
         function showResult(num) {
             const data = iChing64Data[num];
             renderHexagramSymbol(num);
             document.getElementById('res-name').innerText = data.name;
             document.getElementById('res-structure').innerText = data.structure;
             document.getElementById('res-quote').innerText = data.quote;
+            // 這裡顯示免費內容，加上關鍵字強調
             document.getElementById('res-philosophy').innerHTML = `<span class="philosophy-keyword">${data.keyword}</span>${data.philosophy}`;
             goToPage('result');
         }
 
+        // 繪製卦象
         function renderHexagramSymbol(num) {
             const container = document.getElementById('res-symbol-container');
             container.innerHTML = '';
-            // 這裡簡單生成陰陽爻示意 (實際應使用二進位算法)
             let yaoArray = [];
-            // 特殊處理乾坤，其餘隨機演示
+            // 簡易示範邏輯 (1=乾, 2=坤, 其他隨機)
             if (num === 1) yaoArray = [1,1,1,1,1,1];
             else if (num === 2) yaoArray = [0,0,0,0,0,0];
-            else {
-                for(let i=0; i<6; i++) yaoArray.push(Math.random() > 0.5 ? 1 : 0);
-            }
+            else { for(let i=0; i<6; i++) yaoArray.push(Math.random() > 0.5 ? 1 : 0); }
+            
             yaoArray.forEach(isYang => {
                 const yaoDiv = document.createElement('div');
                 yaoDiv.className = isYang ? 'yao-yang' : 'yao-yin';
                 container.appendChild(yaoDiv);
             });
+        }
+
+        // 付費按鈕點擊事件
+        function openBooking() {
+            // 這裡可以改成實際的 LINE 連結或付款頁面
+            // window.location.href = "https://line.me/R/ti/p/@your_id";
+            if(confirm("即將前往邱老師專屬預約頁面，進行深度解析？")) {
+                alert("（連結已開啟）");
+            }
         }
     </script>
 </body>
