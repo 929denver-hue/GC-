@@ -2,21 +2,23 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>觀易・知命 | 邱愛美女士專屬</title>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #f4f1ea; /* 宣紙白 */
             --ink-color: #2b2b2b; /* 濃墨 */
-            --light-ink: #666; /* 淡墨 */
-            --red-seal: #b22222; /* 硃砂紅 */
-            --gold-accent: #c5a059; /* 鎏金 */
+            --light-ink: #555; /* 淡墨 */
+            --red-seal: #9a1818; /* 硃砂紅(深沈) */
+            --gold-accent: #bfa36c; /* 鎏金(古銅感) */
+            --gold-glow: #ffd700; /* 發光金 */
         }
 
         * {
             box-sizing: border-box;
-            user-select: none; /* 防止選取文字破壞美感 */
+            user-select: none; /* 防止選取文字 */
+            -webkit-tap-highlight-color: transparent; /* 移除手機點擊高亮 */
         }
 
         body {
@@ -30,10 +32,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('https://www.transparenttextures.com/patterns/rice-paper-2.png'); /* 紙張紋理 */
+            /* 紙張紋理背景 */
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.05' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.96 0 0 0 0 0.94 0 0 0 0 0.92 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23a)' opacity='0.4'/%3E%3C/svg%3E");
         }
 
-        /* 裝飾背景：流動的水墨煙霧 */
+        /* 裝飾背景：極慢速流動的水墨煙霧 */
         .bg-art {
             position: absolute;
             top: 0;
@@ -41,298 +44,435 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.1;
-            background: radial-gradient(circle at 50% 50%, #000, transparent 70%);
-            animation: breathe 10s infinite alternate;
+            opacity: 0.08;
+            background: radial-gradient(circle at 50% 60%, var(--ink-color), transparent 60%);
+            animation: breathe 15s infinite alternate ease-in-out;
+            pointer-events: none;
         }
 
         @keyframes breathe {
-            0% { transform: scale(1); opacity: 0.05; }
-            100% { transform: scale(1.2); opacity: 0.15; }
+            0% { transform: scale(1) translateY(0); opacity: 0.05; }
+            100% { transform: scale(1.1) translateY(-20px); opacity: 0.1; }
         }
 
         /* 通用容器 */
         .container {
             text-align: center;
             width: 100%;
-            max-width: 1000px;
-            padding: 20px;
-            transition: all 0.8s ease;
+            max-width: 900px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 80vh; /* 確保足夠高度 */
+            justify-content: center;
         }
 
         .hidden {
-            display: none;
-            opacity: 0;
+            display: none !important;
         }
 
         .fade-in {
-            animation: fadeIn 1s ease-out forwards;
+            animation: fadeIn 0.8s ease-out forwards;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 首頁 */
+        /* 標題樣式 */
         h1.main-title {
             font-family: 'Ma Shan Zheng', cursive;
-            font-size: 5rem;
-            margin-bottom: 10px;
+            font-size: 4.5rem;
+            margin: 0 0 15px 0;
             color: var(--ink-color);
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.05);
+        }
+
+        h2.sub-title-headers {
+             font-family: 'Ma Shan Zheng', cursive;
+             font-weight: normal;
+             font-size: 2.5rem;
+             margin-bottom: 10px;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--light-ink);
-            letter-spacing: 5px;
-            margin-bottom: 60px;
-            border-top: 1px solid var(--gold-accent);
-            border-bottom: 1px solid var(--gold-accent);
+            letter-spacing: 4px;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--gold-accent);
             display: inline-block;
-            padding: 10px 30px;
+            padding-bottom: 10px;
         }
 
+        /* 首頁按鈕 */
         .menu-btn-group {
             display: flex;
             justify-content: center;
-            gap: 50px;
+            gap: 60px;
+            margin-top: 20px;
         }
 
         .circle-btn {
-            width: 120px;
-            height: 120px;
-            border: 2px solid var(--ink-color);
+            width: 110px;
+            height: 110px;
+            border: 3px solid var(--ink-color);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Ma Shan Zheng', cursive;
-            font-size: 2rem;
+            font-size: 2.2rem;
             cursor: pointer;
-            transition: all 0.5s ease;
-            background: rgba(255,255,255,0.5);
+            transition: all 0.4s ease;
+            background: rgba(244, 241, 234, 0.8);
             position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .circle-btn::after {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 115%;
+            height: 115%;
             border-radius: 50%;
             border: 1px solid var(--gold-accent);
-            transform: scale(0.8);
-            transition: transform 0.5s ease;
+            opacity: 0.5;
+            transform: scale(0.9);
+            transition: transform 0.4s ease, opacity 0.4s ease;
         }
 
-        .circle-btn:hover {
+        .circle-btn:hover, .circle-btn:active {
             background: var(--ink-color);
             color: var(--bg-color);
             border-color: var(--ink-color);
+            transform: translateY(-3px);
         }
 
-        .circle-btn:hover::after {
+        .circle-btn:hover::after, .circle-btn:active::after {
             transform: scale(1.1);
+            opacity: 1;
             border-color: var(--red-seal);
         }
 
-        /* 輸入模式 */
+        /* ================= 輸入模式 ================= */
         .input-wrapper {
             position: relative;
-            margin: 50px auto;
-            width: 200px;
+            margin: 40px auto;
+            width: 180px;
         }
 
         input[type="number"] {
             width: 100%;
             font-family: 'Ma Shan Zheng', cursive;
-            font-size: 4rem;
+            font-size: 3.5rem;
             text-align: center;
             border: none;
             background: transparent;
-            border-bottom: 3px solid var(--ink-color);
+            border-bottom: 4px solid var(--ink-color);
             color: var(--ink-color);
             outline: none;
+            padding: 10px;
         }
-
-        /* 去除數字輸入框的箭頭 */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+        input[type="number"]::placeholder { color: rgba(0,0,0,0.2); }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
         .seal-btn {
-            margin-top: 40px;
-            width: 80px;
-            height: 80px;
+            margin-top: 30px;
+            width: 90px;
+            height: 90px;
             background-color: var(--red-seal);
-            color: white;
+            color: #fff;
             font-family: 'Ma Shan Zheng', cursive;
-            font-size: 1.5rem;
-            border-radius: 4px;
-            border: none;
+            font-size: 1.8rem;
+            border-radius: 8px;
+            border: 3px double rgba(255,255,255,0.5);
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.25);
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.2s;
+            transition: all 0.2s;
+            writing-mode: vertical-lr; /* 直書 */
+            letter-spacing: 5px;
         }
 
         .seal-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.96) translateY(2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* 轉盤模式 */
-        .wheel-container {
-            width: 400px;
-            height: 400px;
-            margin: 0 auto 40px;
+        /* ================= 金龜模式 (新) ================= */
+        .turtle-container {
             position: relative;
+            width: 320px;
+            height: 380px;
+            margin: 20px auto;
+            cursor: pointer;
+             /* 禁止長按選取 */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
         }
 
-        .wheel {
+        /* 金龜 SVG */
+        .turtle-shell-svg {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            border: 10px solid var(--ink-color);
-            background: radial-gradient(circle, #fff 0%, #ddd 100%);
-            position: relative;
-            /* 模擬八卦線條 */
-            background-image: repeating-conic-gradient(
-                var(--bg-color) 0% 1%, 
-                var(--ink-color) 1% 2%
-            );
-            box-shadow: 0 0 30px rgba(0,0,0,0.2);
-            transition: transform 4s cubic-bezier(0.1, 0.9, 0.2, 1); /* 物理慣性效果 */
+            fill: var(--ink-color); /* 初始深色 */
+            stroke: var(--gold-accent);
+            stroke-width: 2;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+            transition: fill 3s ease, filter 3s ease;
+        }
+        
+        /* 龜背紋路 */
+        .shell-pattern {
+            fill: none;
+            stroke: var(--gold-accent);
+            stroke-width: 1.5;
+            opacity: 0.5;
+            transition: all 3s ease;
         }
 
-        .wheel-center {
+        /* 發熱效果 */
+        .heating .turtle-shell-svg {
+            fill: #5e4a2a; /* 變為古銅色 */
+            filter: drop-shadow(0 0 20px var(--gold-glow));
+        }
+        
+        .heating .shell-pattern {
+             stroke: var(--gold-glow);
+             opacity: 1;
+             stroke-width: 3;
+             filter: blur(1px);
+        }
+
+        /* 龜裂光芒層 */
+        .cracks-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: var(--ink-color);
-            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 60%);
+            mix-blend-mode: screen;
+            transition: opacity 0.5s ease;
+        }
+
+        /* 觸發龜裂動畫 */
+        .cracking .cracks-overlay {
+            animation: crackFlash 1s ease-out forwards;
+        }
+
+        @keyframes crackFlash {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .instruction-text {
+            margin-top: 20px;
+            font-size: 1.1rem;
             color: var(--gold-accent);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Ma Shan Zheng', cursive;
-            font-size: 1.5rem;
-            border: 2px solid var(--gold-accent);
-            cursor: pointer;
-            z-index: 10;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
-        .pointer {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0; 
-            height: 0; 
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid var(--red-seal);
-            z-index: 5;
-        }
-
-        /* 解盤結果頁面 */
+        /* ================= 解盤結果頁面 ================= */
         .result-layout {
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* 改為上方對齊 */
             justify-content: center;
             text-align: left;
-            gap: 60px;
+            gap: 50px;
+            width: 90%;
+            max-width: 1000px;
+            margin-top: 20px;
+        }
+
+        /* 左側巨大卦象 */
+        .hexagram-box {
+             flex: 1;
+             display: flex;
+             justify-content: center;
+             align-items: center;
         }
 
         .hexagram-symbol {
-            font-size: 15rem; /* 巨大的卦象 */
+            font-size: 14rem;
             line-height: 1;
             color: var(--ink-color);
-            font-family: sans-serif; /* 使用系統字體顯示Unicode卦象 */
-            text-shadow: 2px 2px 0px var(--gold-accent);
+            /* 使用 CSS 繪製卦畫線條以獲得更好的質感控制，而非純字體 */
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* 爻之間的間距 */
             opacity: 0;
-            animation: inkShow 2s ease forwards;
+            animation: inkShow 2.5s ease forwards;
+        }
+        
+        /* 陽爻 */
+        .yao-yang {
+            width: 180px;
+            height: 20px;
+            background-color: var(--ink-color);
+            border-radius: 4px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        /* 陰爻 */
+        .yao-yin {
+            width: 180px;
+            height: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .yao-yin::before, .yao-yin::after {
+            content: '';
+            width: 80px; /* 陰爻兩段的寬度 */
+            height: 100%;
+            background-color: var(--ink-color);
+            border-radius: 4px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         @keyframes inkShow {
-            0% { opacity: 0; filter: blur(10px); }
-            100% { opacity: 1; filter: blur(0); }
+            0% { opacity: 0; filter: blur(15px); transform: scale(0.9); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
         }
 
+        /* 右側文字區 */
         .result-text {
-            max-width: 500px;
+            flex: 2;
+            max-width: 550px;
+        }
+
+        .hex-header {
+            border-bottom: 3px solid var(--red-seal);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
         }
 
         .hex-name {
             font-family: 'Ma Shan Zheng', cursive;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin: 0;
             color: var(--red-seal);
         }
 
         .hex-structure {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--light-ink);
-            margin-bottom: 20px;
-            font-style: italic;
+            font-weight: 600;
+        }
+
+        .hex-quote-box {
+            background-color: rgba(191, 163, 108, 0.15); /* 淡金背景 */
+            border-left: 6px solid var(--gold-accent);
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
         }
 
         .hex-quote {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--gold-accent);
-            padding-left: 15px;
-            line-height: 1.6;
+            line-height: 1.5;
+            color: var(--ink-color);
+            margin: 0;
+        }
+        
+        .quote-source {
+             display: block;
+             text-align: right;
+             font-size: 0.9rem;
+             color: var(--light-ink);
+             margin-top: 10px;
+             font-style: italic;
         }
 
         .hex-philosophy {
-            font-size: 1.1rem;
-            line-height: 1.8;
+            font-size: 1.2rem;
+            line-height: 1.9;
             color: var(--ink-color);
-            background: rgba(255,255,255,0.4);
-            padding: 20px;
-            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .philosophy-keyword {
+            font-weight: bold;
+            color: var(--red-seal);
+            font-size: 1.3rem;
+            margin-right: 10px;
         }
 
-        .back-btn {
+        /* 返回按鈕 */
+        .back-btn-fixed {
             position: fixed;
             bottom: 30px;
             left: 30px;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--light-ink);
             cursor: pointer;
-            border-bottom: 1px solid transparent;
+            padding: 10px 20px;
+            border: 1px solid var(--light-ink);
+            border-radius: 30px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.5);
+            z-index: 100;
         }
         
-        .back-btn:hover {
-            border-color: var(--light-ink);
+        .back-btn-fixed:hover {
+            background: var(--ink-color);
+            color: var(--bg-color);
+            border-color: var(--ink-color);
         }
 
-        /* RWD */
-        @media (max-width: 768px) {
+        /* RWD 平板與手機調整 */
+        @media (max-width: 900px) {
             .result-layout {
                 flex-direction: column;
-                gap: 20px;
+                align-items: center;
+                gap: 30px;
+                margin-top: 0;
+            }
+            .hexagram-box {
+                margin-bottom: 20px;
             }
             .hexagram-symbol {
-                font-size: 10rem;
+                transform: scale(0.8); /* 稍微縮小 */
             }
-            h1.main-title {
-                font-size: 3.5rem;
+            .result-text {
+                text-align: left;
+                width: 100%;
             }
+            .hex-header {
+                 justify-content: flex-start;
+            }
+             h1.main-title { font-size: 3.5rem; }
+        }
+        
+        @media (max-width: 480px) {
+            h1.main-title { font-size: 3rem; }
+            .menu-btn-group { gap: 30px; }
+            .circle-btn { width: 90px; height: 90px; font-size: 1.8rem; }
+            .turtle-container { width: 260px; height: 300px; }
+            .hexagram-symbol { transform: scale(0.6); }
+            .hex-name { font-size: 2.8rem; }
+            .hex-quote { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
+
+    <audio id="crack-sound">
+        <source src="https://actions.google.com/sounds/v1/impacts/crash_wood_debris.ogg" type="audio/ogg">
+    </audio>
 
     <div class="bg-art"></div>
 
@@ -342,92 +482,159 @@
         
         <div class="menu-btn-group">
             <div class="circle-btn" onclick="goToPage('input')">詢</div>
-            <div class="circle-btn" onclick="goToPage('wheel')">演</div>
+            <div class="circle-btn" onclick="goToPage('turtle')">演</div>
         </div>
     </div>
 
     <div id="page-input" class="container hidden">
-        <h2 style="font-family: 'Ma Shan Zheng'; font-weight: normal;">心中之數，顯化為象</h2>
+        <h2 class="sub-title-headers">心中之數，顯化為象</h2>
         <div class="subtitle">請輸入 1 至 64 任意數字</div>
         
         <div class="input-wrapper">
-            <input type="number" id="num-input" placeholder="" min="1" max="64">
+            <input type="number" id="num-input" placeholder="?" min="1" max="64">
         </div>
 
-        <button class="seal-btn" onclick="revealByInput()">
+        <div class="seal-btn" onclick="revealByInput()">
             鑑賞
-        </button>
+        </div>
 
-        <div class="back-btn" onclick="goToPage('home')">← 返回首頁</div>
+        <div class="back-btn-fixed" onclick="goToPage('home')">← 返回</div>
     </div>
 
-    <div id="page-wheel" class="container hidden">
-        <h2 style="font-family: 'Ma Shan Zheng'; font-weight: normal;">天道運轉，時機已至</h2>
-        <div class="subtitle">點擊中央太極圖啟動</div>
+    <div id="page-turtle" class="container hidden">
+        <h2 class="sub-title-headers">誠心祝禱，靈龜指引</h2>
+        <div class="subtitle">請長按金龜注入能量</div>
         
-        <div class="wheel-container">
-            <div class="pointer"></div>
-            <div class="wheel" id="the-wheel"></div>
-            <div class="wheel-center" onclick="spinWheel()">運</div>
+        <div class="turtle-container" id="turtle-trigger">
+            <svg class="turtle-shell-svg" viewBox="0 0 320 380" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="goldGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:#e6c35c;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#8c7035;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+                <path d="M160,10 C220,10 280,40 300,100 C320,160 310,240 280,300 C250,360 160,370 160,370 C160,370 70,360 40,300 C10,240 0,160 20,100 C40,40 100,10 160,10 Z" fill="url(#goldGradient)" stroke="#5e4a2a" stroke-width="4"/>
+                <g class="shell-pattern">
+                    <path d="M160,40 L160,340" /> <path d="M60,120 L260,120" /> <path d="M40,260 L280,260" /> <path d="M80,60 L240,320" /> <path d="M240,60 L80,320" /> <circle cx="160" cy="190" r="40" fill="none" stroke-width="3" />
+                    <circle cx="160" cy="190" r="15" fill="#5e4a2a" stroke="none" />
+                </g>
+            </svg>
+            <div class="cracks-overlay" id="shell-cracks"></div>
         </div>
 
-        <div class="back-btn" onclick="goToPage('home')">← 返回首頁</div>
+        <div class="instruction-text" id="turtle-instruction">按住不放・靜心等待</div>
+
+        <div class="back-btn-fixed" onclick="goToPage('home')">← 返回</div>
     </div>
 
     <div id="page-result" class="container hidden">
         <div class="result-layout">
-            <div class="hexagram-symbol" id="res-symbol">☰</div>
+            <div class="hexagram-box">
+                <div class="hexagram-symbol" id="res-symbol-container">
+                    </div>
+            </div>
             
             <div class="result-text">
-                <h2 class="hex-name" id="res-name">乾為天</h2>
-                <div class="hex-structure" id="res-structure">天行健</div>
+                <div class="hex-header">
+                    <h2 class="hex-name" id="res-name">乾為天</h2>
+                    <span class="hex-structure" id="res-structure">天行健</span>
+                </div>
                 
-                <div class="hex-quote" id="res-quote">
-                    「天行健，君子以自強不息。」
+                <div class="hex-quote-box">
+                    <p class="hex-quote" id="res-quote">「天行健，君子以自強不息。」</p>
+                    <span class="quote-source">—— 大象傳</span>
                 </div>
                 
                 <div class="hex-philosophy" id="res-philosophy">
-                    （此處為邱女士解析空間）
-                    生命的能量正處於純陽狀態。如同太陽每日升起未曾停歇，你現在需要的不是猶豫，而是持續的行動力與意志力。這是關於「創造」與「堅持」的時刻，不依賴外力，反求諸己。
-                </div>
+                    </div>
             </div>
         </div>
-        <div class="back-btn" onclick="goToPage('home')">← 重新開始</div>
+        <div class="back-btn-fixed" onclick="goToPage('home')">← 重新開始</div>
     </div>
 
     <script>
-        // 資料庫：易經64卦 (示範前8卦 + 通用邏輯)
-        const iChingData = {
-            1: { symbol: "䷀", name: "乾為天", structure: "上乾下乾", quote: "「天行健，君子以自強不息。」", philosophy: "【純粹的創造力】<br>生命的能量正處於極盛狀態。如同天體的運行剛強勁健，你現在需要的不是猶豫或退縮，而是模仿天的德行：持續、恆久、不停止地精進。這是一個完全依靠「自我驅動」的時刻，做自己的主宰。" },
-            2: { symbol: "䷁", name: "坤為地", structure: "上坤下坤", quote: "「地勢坤，君子以厚德載物。」", philosophy: "【包容與承載】<br>大地的美德在於「順承」。它不主動爭先，卻能生長萬物。現在對你而言，不是強出頭的時機，而是學習接納、配合與支持。透過廣闊的胸襟去包容現狀，你的力量來自於「柔韌」而非「剛強」。" },
-            3: { symbol: "䷂", name: "水雷屯", structure: "上坎下震", quote: "「雲雷屯，君子以經綸。」", philosophy: "【新生的陣痛】<br>萬物初生，破土而出，難免艱難。這不是凶險，而是生命力最強展現的時刻。如同種子在硬土中掙扎。此刻你需要的是「經綸」—耐心地梳理混亂，編織未來的藍圖，不要急於求成，要站穩腳步。" },
-            4: { symbol: "䷃", name: "山水蒙", structure: "上艮下坎", quote: "「山下出泉，蒙；君子以果行育德。」", philosophy: "【啟蒙與學習】<br>泉水剛從山下流出，清澈但不知流向何方。這象徵著智慧尚未開啟的狀態。此刻最重要的是「教育」與「被教育」。若你是求問者，請保持謙卑學習；若你是領導者，請用果斷的行動來培育他人的品德。" },
-            5: { symbol: "䷄", name: "水天需", structure: "上坎下乾", quote: "「雲上於天，需；君子以飲食宴樂。」", philosophy: "【等待的智慧】<br>雲在天上尚未成雨，時機未到。急躁只會壞事。這時候能做的最好的事，竟然是「飲食宴樂」—這不是放縱，而是養精蓄銳，調整身心狀態。在等待中不焦慮，這才是真正的強者風範。" },
-            6: { symbol: "䷅", name: "天水訟", structure: "上乾下坎", quote: "「天與水違行，訟；君子以作事謀始。」", philosophy: "【止爭於初】<br>天往西轉，水向東流，方向背道而馳。這象徵著觀點的衝突。既然知道方向不同，君子應當在事情的一開始（謀始）就看清分歧，避免後續無謂的爭端。這是一個需要冷靜審視合作關係的時刻。" },
-            7: { symbol: "䷆", name: "地水師", structure: "上坤下坎", quote: "「地中有水，師；君子以容民畜眾。」", philosophy: "【領導與整合】<br>地底下藏著巨大的水流，象徵潛藏的群眾力量。這是一支軍隊，也是龐大的資源。現在是你展現領導力的時候，關鍵在於「容民」—如何像大地一樣包容不同的人，將這股混亂的能量引導至正確的方向。" },
-            8: { symbol: "䷇", name: "水地比", structure: "上坎下坤", quote: "「地上有水，比；先王以建萬國，親諸侯。」", philosophy: "【親密與合作】<br>水附著在地上流動，密不可分。這是建立關係最好的時刻。不管是事業夥伴還是情感，現在強調的是「輔佐」與「親近」。一個人走得快，一群人走得遠，去尋找那些能與你並肩作戰的人。" }
-        };
+        // ================== 核心資料：64卦生命哲學全集 (無吉凶版) ==================
+        const iChing64Data = [
+            null, // 0號佔位符
+            // 1-10
+            { name: "乾為天", structure: "乾上乾下", quote: "天行健，君子以自強不息。", keyword: "【純粹創造】", philosophy: "生命的能量正處於極盛狀態。如同太陽每日升起未曾停歇，你現在需要的不是猶豫或退縮，而是模仿天的德行：持續、恆久、不停止地精進。這是一個完全依靠「自我驅動」的時刻，做自己的主宰，不假外求。" },
+            { name: "坤為地", structure: "坤上坤下", quote: "地勢坤，君子以厚德載物。", keyword: "【包容承載】", philosophy: "大地的美德在於「順承」。它不主動爭先，卻能生長萬物。現在對你而言，不是強出頭的時機，而是學習接納、配合與支持。透過廣闊的胸襟去包容現狀的種種不如意，你的力量來自於「柔韌」與「成就他人」。" },
+            { name: "水雷屯", structure: "坎上震下", quote: "雲雷屯，君子以經綸。", keyword: "【新生陣痛】", philosophy: "萬物初生，破土而出，難免充滿艱難與混亂。這不是凶險，而是生命力最強展現的時刻。如同種子在硬土中掙扎。此刻你需要的是「經綸」—耐心地梳理混亂，編織未來的藍圖，不要急於求成，要站穩腳步，積蓄力量。" },
+            { name: "山水蒙", structure: "艮上坎下", quote: "山下出泉，蒙；君子以果行育德。", keyword: "【啟蒙學習】", philosophy: "泉水剛從山下流出，清澈但不知流向何方。這象徵著智慧尚未開啟的狀態。此刻最重要的是保持謙卑的學習心態。承認自己的未知並不可恥。若你是引導者，請用果斷的行動來培育他人的品德；若你是求問者，請尋找良師益友。" },
+            { name: "水天需", structure: "坎上乾下", quote: "雲上於天，需；君子以飲食宴樂。", keyword: "【等待智慧】", philosophy: "雲在天上尚未成雨，時機未到。前方有險阻（水），急躁冒進只會壞事。這時候能做的最好的事，竟然是「飲食宴樂」—這不是放縱，而是養精蓄銳，調整好身心狀態。在等待中不焦慮，保持樂觀與信心，這才是真正的強者風範。" },
+            { name: "天水訟", structure: "乾上坎下", quote: "天與水違行，訟；君子以作事謀始。", keyword: "【止爭於初】", philosophy: "天往西轉，水向東流，方向背道而馳。這象徵著觀點與利益的衝突。既然知道方向不同，智慧的做法是在事情的一開始（謀始）就看清分歧，溝通清楚，避免後續無謂的爭端。這是一個需要冷靜審視合作關係與契約的時刻。" },
+            { name: "地水師", structure: "坤上坎下", quote: "地中有水，師；君子以容民畜眾。", keyword: "【領導整合】", philosophy: "地底下藏著巨大的水流，象徵潛藏的群眾力量與資源。這是一支等待號令的軍隊。現在是你展現領導力的時候，關鍵在於「容民」—如何像大地一樣包容不同的人，建立紀律，將這股龐雜的能量引導至正確的方向。" },
+            { name: "水地比", structure: "坎上坤下", quote: "地上有水，比；先王以建萬國，親諸侯。", keyword: "【親密合作】", philosophy: "水附著在地上流動，密不可分。這是建立關係最好的時刻。不管是事業夥伴還是情感，現在強調的是「輔佐」與「親近」。一個人走得快，一群人走得遠。去尋找那些能與你互補、並肩作戰的人，建立真誠的連結。" },
+            { name: "風天小畜", structure: "巽上乾下", quote: "風行天上，小畜；君子以懿文德。", keyword: "【小有積蓄】", philosophy: "風在天上吹，但還不足以成雨。這代表力量還不夠強大，只能做小規模的累積。現在不是推動大計畫的時機，而是應該專注於細節，修飾自己的文采與德行（懿文德），在小處著手，累積微小的進步，等待風雲際會。" },
+            { name: "天澤履", structure: "乾上兌下", quote: "上天下澤，履；君子以辨上下，定民志。", keyword: "【謹慎踐行】", philosophy: "如同走在老虎尾巴後面，充滿了風險，需要極度的小心謹慎。但只要應對得宜（以柔克剛），就不會被咬。這是在提醒你，在複雜的環境或人際關係中，要懂得禮節與分寸，辨明尊卑上下，按部就班地行動，就能化險為夷。" },
+            // 11-20
+            { name: "地天泰", structure: "坤上乾下", quote: "天地交，泰；后以財成天地之道，輔相天地之宜，以左右民。", keyword: "【通達和諧】", philosophy: "天氣下降，地氣上升，天地相交而萬物生養。這是一個溝通順暢、內外和諧的美好時刻。小往大來，付出少而獲得多。請把握這個時機，積極運用資源，輔助推動各項事務，讓美好的狀態持續擴大。" },
+            { name: "天地否", structure: "乾上坤下", quote: "天地不交，否；君子以儉德辟難，不可榮以祿。", keyword: "【停滯反省】", philosophy: "天氣上升，地氣下降，彼此不交流，萬物不生。象徵環境封閉、溝通阻塞的困境。此時不宜強求突破或追求榮華富貴，而是應該「儉德辟難」—向內收斂，端正自己的操守，積蓄能量，等待時機轉變。這是一段考驗耐心的蟄伏期。" },
+            { name: "天火同人", structure: "乾上離下", quote: "天與火，同人；君子以類族辨物。", keyword: "【志同道合】", philosophy: "火光向上照耀天空，象徵光明與公正。這是一個尋集群體、與人合作的時刻。但合作的前提是「類族辨物」—要辨識出誰是真正志同道合的人。打破私心與門戶之見，在共同的理想與價值觀下團結眾人，就能成就大事。" },
+            { name: "火天大有", structure: "離上乾下", quote: "火在天上，大有；君子以遏惡揚善，順天休命。", keyword: "【豐盛所有】", philosophy: "太陽高懸天上，普照萬物，象徵著巨大的收穫與豐盛。這是你努力成果展現的時刻。然而，擁有越多，責任越大。此時更應「遏惡揚善」，用手中的資源去創造正向的價值，順應天命，才能長久保持這份豐盛。" },
+            { name: "地山謙", structure: "坤上艮下", quote: "地中有山，謙；君子以裒多益寡，稱物平施。", keyword: "【內斂不爭】", philosophy: "高山埋藏在地底下，有實力而不顯擺。這是最吉祥的態度。真正的強者懂得示弱與退讓。現在的你，適合調整內在的平衡，「裒多益寡」，把自己過多的部分減損一些，去補足他人的不足。謙虛不是自卑，而是一種高度的自信與智慧。" },
+            { name: "雷地豫", structure: "震上坤下", quote: "雷出地奮，豫；先王以作樂崇德，殷薦之上帝，以配祖考。", keyword: "【喜悅順動】", philosophy: "雷聲震撼大地，萬物隨之奮發，充滿生機與喜悅。這是一個順應時勢、積極行動的時刻。你的熱情能夠感染他人。適合進行創造性的活動，或者用慶典、音樂來振奮人心，表達對生命的熱愛與崇敬。" },
+            { name: "澤雷隨", structure: "兌上震下", quote: "澤中有雷，隨；君子以嚮晦入息。", keyword: "【隨順時勢】", philosophy: "雷藏在沼澤中，隨時機而動。這告訴我們要懂得「隨遇而安」，適應環境的變化。不要固執己見，要學會傾聽與跟隨更明智的指引。就像日落而息一樣自然，該行動時行動，該休息時休息，順應自然的節奏。" },
+            { name: "山風蠱", structure: "艮上巽下", quote: "山下有風，蠱；君子以振民育德。", keyword: "【整頓革新】", philosophy: "風在山下吹，空氣不流通而生蟲（蠱），象徵事物內部產生了腐敗或積弊。這是一個需要「清創」與「改革」的時刻。不要逃避問題，要勇敢地揭開瘡疤，進行徹底的整頓。雖然過程痛苦，但這是為了讓生命重新恢復健康的必要之舉。" },
+            { name: "地澤臨", structure: "坤上兌下", quote: "澤上有地，臨；君子以教思無窮，容保民無疆。", keyword: "【親臨督導】", philosophy: "大地緊臨著沼澤，以上臨下。這象徵著從高處親自視察、督導。這是一個需要你親力親為、深入基層的時刻。帶著教育與關懷的心態去領導，像大地一樣包容保護眾人，你的影響力將會深遠而廣闊。" },
+            { name: "風地觀", structure: "巽上坤下", quote: "風行地上，觀；先王以省方觀民設教。", keyword: "【觀察省思】", philosophy: "風吹拂大地，無孔不入。這是一個需要靜心「觀察」與「反省」的時刻。不要急於行動，先看清局勢，體察民情風俗。向內觀照自己的起心動念，向外洞察環境的細微變化。看得夠深，才能走得夠遠。" },
+            // 21-30 (簡化版，確保結構正確)
+            { name: "火雷噬嗑", structure: "離上震下", quote: "雷電噬嗑；先王以明罰勅法。", keyword: "【咬合除梗】", philosophy: "口中有異物，必須用力咬合才能排除。象徵面對阻礙與不公時，必須採取果斷的行動來執行紀律，賞罰分明，才能使事情順暢。這是建立規則與秩序的時刻。" },
+            { name: "山火賁", structure: "艮上離下", quote: "山下有火，賁；君子以明庶政，無敢折獄。", keyword: "【文飾光彩】", philosophy: "山下有火光照耀，呈現出美麗的景象。這代表事物的表面光彩與文飾。此時適合進行形象的建立或藝術的活動。但要切記，外表的美好不能取代內在的實質，處理重大決策時仍需回歸本質。" },
+            { name: "山地剝", structure: "艮上坤下", quote: "山附於地，剝；上以厚下安宅。", keyword: "【剝落銷蝕】", philosophy: "高山受風雨侵蝕而剝落，象徵基礎動搖，陰氣極盛。這是一個危險的時刻，舊有的結構正在崩解。此時不宜積極進取，而應鞏固根基，厚待基層，力求安定，以度過寒冬。" },
+            { name: "地雷復", structure: "坤上震下", quote: "雷在地中，復；先王以至日閉關，商旅不行，后不省方。", keyword: "【生機重現】", philosophy: "剝極而復，一元復始。在地底深處，微弱的陽氣（生機）重新萌發。雖然力量還很微弱，但充滿希望。此刻需要細心呵護這點生機，休養生息，不宜有大動作，靜待能量回復。" },
+            { name: "天雷無妄", structure: "乾上震下", quote: "天下雷行，物與無妄；先王以茂對時育萬物。", keyword: "【真實無虛】", philosophy: "天雷震動，萬物驚醒，展現出最真實的本性。這是在提醒我們要回歸「真誠」。摒棄虛妄與算計，順應天理與良知去行動。只要動機純正，不欺人自欺，就能自然地順應時勢發展。" },
+            { name: "山天大畜", structure: "艮上乾下", quote: "天在山中，大畜；君子以多識前言往行，以畜其德。", keyword: "【厚積薄發】", philosophy: "山能包容天，象徵胸懷的廣大與深厚的積蓄。這是一個大量吸收知識、經驗與資源的時刻。透過學習古人的智慧（前言往行）來涵養自己的德行。儲備得越豐厚，未來的爆發力就越強。" },
+            { name: "山雷頤", structure: "艮上震下", quote: "山下有雷，頤；君子以慎言語，節飲食。", keyword: "【養生之道】", philosophy: "卦象如口，象徵「養」。包括身體的養（飲食）與心靈的養（言語）。這是在提醒我們要關注輸入與輸出：謹慎我們說出口的話，節制我們吃進去的東西。禍從口出，病從口入，自我管理是頤養天年的基礎。" },
+            { name: "澤風大過", structure: "兌上巽下", quote: "澤滅木，大過；君子以獨立不懼，遯世無悶。", keyword: "【非常之舉】", philosophy: "澤水淹沒樹木，情勢危急，這是常規已被打破的非常時期。需要有「大過人」的勇氣與擔當來處理危機。即使獨自面對挑戰也無所畏懼，即使不被世人理解也心中坦然。這是一個考驗棟樑之材的時刻。" },
+            { name: "坎為水", structure: "坎上坎下", quote: "水流而不盈，行險而不失其信。", keyword: "【習練坎險】", philosophy: "重重險阻，如洪水滔滔。但水的美德在於它無論遇到什麼地形，都能順勢而流，不失其本性（信）。身處險境中，不要驚慌失措，學習水的智慧，保持信心，練習在困難中生存與前行的能力，終能流出險地。" },
+            { name: "離為火", structure: "離上離下", quote: "明兩作離，大人以繼明照于四方。", keyword: "【依附光明】", philosophy: "火必須依附物體才能燃燒。這象徵我們需要依附於正道或賢明的人。同時，也代表我們要像接連不斷的光明一樣，持續地用智慧與熱情去照亮周圍，發揮正向的影響力。" },
+            // 31-40
+            { name: "澤山咸", structure: "兌上艮下", quote: "山上有澤，咸；君子以虛受人。", keyword: "【心靈感應】", philosophy: "山上有澤水，互相潤澤滋養。咸就是「感」，代表無心的感應。這是建立深層連結的時刻。要做到這一點，必須先「虛受人」—放空自己的成見與執著，以虛空之心去接納他人，才能產生真誠的共鳴。" },
+            { name: "雷風恆", structure: "震上巽下", quote: "雷風，恆；君子以立不易方。", keyword: "【恆久堅持】", philosophy: "雷與風相互助長，循環往復，象徵恆久不變的道理。在變動不居的世界中，你需要找到那個不變的核心—你的原則與志向（立不易方）。認定了正確的道路，就要有恆心地堅持下去，不輕易改變方向。" },
+            { name: "天山遯", structure: "乾上艮下", quote: "天下有山，遯；君子以遠小人，不惡而嚴。", keyword: "【明哲保身】", philosophy: "山在天之下，陰長陽消，小人得勢。這是一個需要選擇「退避」的時刻。遯不是逃跑，而是智慧的遠離。遠離是非之地與小人，但不需要表現出厭惡，而是保持莊重與距離（不惡而嚴），以保護自己的能量。" },
+            { name: "雷天大壯", structure: "震上乾下", quote: "雷在天上，大壯；君子以非禮弗履。", keyword: "【壯大正義】", philosophy: "雷聲響徹雲霄，陽氣強盛到了極點。充滿了力量與氣勢。但越是強大，越要遵守規範。君子應當堅持正道，「非禮弗履」—不合乎禮義規範的事絕對不做。不可恃強凌弱，要將力量用在正途。" },
+            { name: "火地晉", structure: "離上坤下", quote: "明出地上，晉；君子以自昭明德。", keyword: "【晉升顯達】", philosophy: "太陽從地平面升起，光明普照大地。象徵著晉升、前進與希望。這是一個展現才華、發光發熱的好時機。你應當主動地彰顯自己的美德與能力（自昭明德），就像太陽毫不吝嗇地給予光芒一樣。" },
+            { name: "地火明夷", structure: "坤上離下", quote: "明入地中，明夷；君子以蒞眾，用晦而明。", keyword: "【韜光養晦】", philosophy: "太陽沒入地中，光明受損，環境陷入黑暗。這是一個艱難的時刻，才華可能遭人嫉妒或打壓。此時智者懂得「用晦而明」—收斂光芒，大智若愚，外表看起來昏暗順從，但內心保持清明，等待黎明到來。" },
+            { name: "風火家人", structure: "巽上離下", quote: "風自火出，家人；君子以言有物而行有恆。", keyword: "【齊家之道】", philosophy: "風從火中生出，由內而外。這強調了「內部」的重要性，特別是家庭與團隊的核心價值。這是一個回歸基礎的時刻，檢視你的言行是否一致（言有物、行有恆）。穩固好內部關係，才有向外發展的基礎。" },
+            { name: "火澤睽", structure: "離上兌下", quote: "上火下澤，睽；君子以同而異。", keyword: "【求同存異】", philosophy: "火向上炎，水向下流，本性背離。象徵人際間的疏離與對立。在這種情況下，不要強求完全的一致。智慧的做法是「同而異」—在大的目標上尋求共識，但容許並尊重彼此在細節與個性上的差異。" },
+            { name: "水山蹇", structure: "坎上艮下", quote: "山上有水，蹇；君子以反身修德。", keyword: "【險阻反省】", philosophy: "前有險水，後有高山，進退兩難。這是一個充滿阻礙的時刻。當外在環境不可為時，與其怨天尤人，不如「反身修德」。把注意力轉向內在，檢討自己的不足，修養品德，提升能力，為未來的機會做準備。" },
+            { name: "雷水解", structure: "震上坎下", quote: "雷雨作，解；君子以赦過宥罪。", keyword: "【化解困局】", philosophy: "春雷發動，春雨降臨，鬱悶之氣一掃而空，萬物甦醒。象徵困難與束縛得到了解除。這是一個令人舒暢的時刻。面對過去的錯誤或他人的冒犯，應當採取寬容的態度，「赦過宥罪」，讓一切重新開始。" },
+            // 41-50
+            { name: "山澤損", structure: "艮上兌下", quote: "山下有澤，損；君子以懲忿窒欲。", keyword: "【減損欲望】", philosophy: "山在澤上，澤水侵蝕山腳，是損減之象。但損並不一定是壞事。這是在提醒我們要懂得「減法」的智慧：減損自己的憤怒與貪欲（懲忿窒欲）。透過犧牲短期的利益或不良習慣，來換取長遠的平安與德行增長。" },
+            { name: "風雷益", structure: "巽上震下", quote: "風雷，益；君子以見善則遷，有過則改。", keyword: "【增益精進】", philosophy: "風雷交相助長，氣勢磅礴。這是一個快速成長與獲益的時刻。要把握這個時機自我提升：「見善則遷」—看到好的就立刻學習跟進；「有過則改」—發現錯誤就馬上改正。積極主動，就能獲得巨大的進步。" },
+            { name: "澤天夬", structure: "兌上乾下", quote: "澤上於天，夬；君子以施祿及下，居德則忌。", keyword: "【果斷決絕】", philosophy: "澤水上漲快要淹沒天際，必須決堤疏導。這象徵著必須做出果斷決定的時刻，特別是清除累積已久的弊端或小人。此時需要展現魄力，但在執行時要公正無私（施祿及下），切忌居功自傲，以免招致反感。" },
+            { name: "天風姤", structure: "乾上巽下", quote: "天下有風，姤；后以施命誥四方。", keyword: "【不期而遇】", philosophy: "風行天下，無處不至。姤代表不期而遇的邂逅。這可能帶來新的機遇，但也可能潛藏危機（特別是爛桃花或不良連結）。這是一個需要謹慎篩選「相遇」的時刻。對於領導者，則是發布命令、廣播影響力的好時機。" },
+            { name: "澤地萃", structure: "兌上坤下", quote: "澤上於地，萃；君子以除戎器，戒不虞。", keyword: "【聚集精英】", philosophy: "澤水匯聚在大地之上，滋養萬物。這象徵著人才、資源與財富的聚集。這是一個豐收與團隊壯大的時刻。但在歡慶聚集的同時，也要有危機意識，「除戎器，戒不虞」—修整防禦裝備，防備意料之外的變故。" },
+            { name: "地風升", structure: "坤上巽下", quote: "地中生木，升；君子以順德，積小以高大。", keyword: "【順勢上升】", philosophy: "樹木從地裡生長出來，向上伸展。這是一個穩定上升、逐步發展的過程。就像樹木生長一樣，需要時間與耐心。你要順應自然的德性（順德），不要揠苗助長，透過一點一滴的累積（積小），最終成就高大的事業。" },
+            { name: "澤水困", structure: "兌上坎下", quote: "澤無水，困；君子以致命遂志。", keyword: "【處困守節】", philosophy: "沼澤乾涸無水，陷入困境。這是一個資源枯竭、才華無法施展的艱難時刻。然而，這正是考驗人格的最佳時機。真正的君子在困境中，依然能堅守自己的志向與氣節，甚至願意為了理想而奉獻生命（致命遂志），絕不隨波逐流。" },
+            { name: "水風井", structure: "坎上巽下", quote: "木上有水，井；君子以勞民勸相。", keyword: "【養人無窮】", philosophy: "井水深藏地下，取之不盡，用之不竭，供養眾人。這象徵著發掘潛在的資源與智慧來服務大眾。這是一個關於「奉獻」與「互助」的時刻。像井一樣，固定在一個地方，持續地滋養他人，並鼓勵大家互相幫助（勞民勸相）。" },
+            { name: "澤火革", structure: "兌上離下", quote: "澤中有火，革；君子以治歷明時。", keyword: "【破舊立新】", philosophy: "水火相息，互不相容，勢必要產生變革。這是一個推翻舊秩序、建立新局面的時刻。改革需要順應天時（治歷明時），選擇正確的時機點切入，才能事半功倍。要像文明進化一樣，勇敢地捨棄過時的事物。" },
+            { name: "火風鼎", structure: "離上巽下", quote: "木上有火，鼎；君子以正位凝命。", keyword: "【穩重圖新】", philosophy: "以木生火，烹飪食物的器具（鼎）。鼎象徵著權力、穩重與新的開始（革故鼎新）。這是一個建立新秩序、承擔重任的時刻。你需要「正位凝命」—擺正自己的位置，端正態度，凝聚眾人的使命感，穩重地推動新的計畫。" },
+            // 51-60
+            { name: "震為雷", structure: "震上震下", quote: "洊雷，震；君子以恐懼修省。", keyword: "【震驚覺醒】", philosophy: "雷聲接連不斷，震撼人心。這象徵著突如其來的變故或巨大的壓力。這雖然令人驚恐，但也是一個覺醒的契機。君子應當在這種震撼中產生敬畏之心（恐懼），進而反省自己的言行（修省），調整方向，避免災禍。" },
+            { name: "艮為山", structure: "艮上艮下", quote: "兼山，艮；君子以思不出其位。", keyword: "【適時止步】", philosophy: "重重高山，阻擋前行。艮代表「停止」。這是在告訴我們懂得「止」的智慧。在不該行動的時候，要能控制自己的欲望與衝動，安守本分。思考不要超出自己的職責範圍（思不出其位），專注於當下該做的事，就能獲得內心的平靜。" },
+            { name: "風山漸", structure: "巽上艮下", quote: "山上有木，漸；君子以居賢德善俗。", keyword: "【循序漸進】", philosophy: "樹木在山上慢慢生長，根基穩固。這強調了「漸進」的重要性。任何美好的事物都不是一蹴可幾的。無論是事業的發展還是品德的修養，都要按部就班，腳踏實地。透過自身的賢德來潛移默化地影響周圍的環境與風俗。" },
+            { name: "雷澤歸妹", structure: "震上兌下", quote: "澤上有雷，歸妹；君子以永終知敝。", keyword: "【情感衝動】", philosophy: "澤上有雷，震動澤水，象徵情感的衝動與不穩定。歸妹指女子出嫁，這裡暗示著基於一時激情而非理性考量的結合或行動，往往難以長久。這是在提醒我們在做決定時，要考慮到長遠的結果（永終），預見可能的問題（知敝），切勿被一時的情緒沖昏頭。" },
+            { name: "雷火豐", structure: "震上離下", quote: "雷電皆至，豐；君子以折獄致刑。", keyword: "【盛大豐碑】", philosophy: "雷電交加，聲勢浩大，光明普照。象徵著極大的豐盛與成就。這是一個建立功業、展現威望的巔峰時刻。就像日中則昃一樣，豐盛到了極點也隱含著衰退的危機。此時更要公正嚴明地執行決斷（折獄致刑），以維持這份盛況。" },
+            { name: "火山旅", structure: "離上艮下", quote: "山上有火，旅；君子以明慎用刑，而不留獄。", keyword: "【羈旅漂泊】", philosophy: "山上的野火，燃燒而不固定，四處蔓延。象徵著旅行、變動與不穩定。身處異鄉或變動的環境中，資源有限，依賴不穩。此時行事要特別謹慎明智（明慎），處理問題要果斷迅速，不要讓糾紛拖延（不留獄），保持靈活與輕裝前行。" },
+            { name: "巽為風", structure: "巽上巽下", quote: "隨風，巽；君子以申命行事。", keyword: "【謙順滲透】", philosophy: "風無孔不入，柔順而能持續。這象徵著一種柔軟但堅韌的力量。現在不是強硬對抗的時候，而是要學習風的智慧：謙遜順從，適應環境，透過反覆的溝通與潛移默化（申命行事），將你的影響力滲透到每一個角落。" },
+            { name: "兌為澤", structure: "兌上兌下", quote: "麗澤，兌；君子以朋友講習。", keyword: "【喜悅交流】", philosophy: "兩澤相連，互相滋潤，充滿喜悅之象。這是一個關於溝通、交流與分享的時刻。真正的喜悅來自於與人的連結。適合與志同道合的朋友一起研討學問、分享經驗（朋友講習），在互動中共同成長，獲得精神上的滿足。" },
+            { name: "風水渙", structure: "巽上坎下", quote: "風行水上，渙；先王以享于帝立廟。", keyword: "【離散化解】", philosophy: "風吹過水面，激起波紋，使水分子離散。這象徵著組織的渙散或人心的離心離德。這是一個危機時刻，需要尋找凝聚力。古代帝王透過祭祀與建立信仰中心（享于帝立廟）來重新團結人心。你需要找到一個共同的高遠目標，來化解當前的分歧。" },
+            { name: "水澤節", structure: "坎上兌下", quote: "澤上有水，節；君子以制數度，議德行。", keyword: "【節制規範】", philosophy: "澤中的水滿了就會溢出來，需要堤防來節制。這是在強調「適度」與「規範」的重要性。無論是資源的使用、情感的表達還是行為舉止，都不能過度。建立合理的制度與標準（制數度），並討論行為的準則（議德行），才能保持長久的平衡。" },
+            // 61-64
+            { name: "風澤中孚", structure: "巽上兌下", quote: "澤上有風，中孚；君子以議獄緩死。", keyword: "【誠信感通】", philosophy: "風吹拂澤面，無所不至，感應萬物。中孚代表發自內心的誠信。這是一個建立信任的關鍵時刻。只要你抱持著至誠之心，甚至能感動異類（如動物）。在處理人際衝突或決斷時，應懷著仁慈與寬厚之心，給予機會（議獄緩死），以誠感人。" },
+            { name: "雷山小過", structure: "震上艮下", quote: "山上有雷，小過；君子以行過乎恭，喪過乎哀，用過乎儉。", keyword: "【矯枉過正】", philosophy: "小事過度，大事不足。在非常時期，有時候稍微「過度」一點反而是合適的。例如，行為比平時更恭敬、居喪比平時更哀戚、用度比平時更節儉。這是一種為了導正偏差而採取的權宜之計，強調在細節上的極度謹慎與自我約束。" },
+            { name: "水火既濟", structure: "坎上離下", quote: "水在火上，既濟；君子以思患而預防之。", keyword: "【功德圓滿】", philosophy: "水火既濟，陰陽調和，象徵事情已經成功，達到完美的狀態。但易經告訴我們，完美就是衰退的開始。在慶祝成功的高峰時刻，智者會充滿憂患意識，「思患而預防之」，居安思危，防備即將到來的變局。" },
+            { name: "火水未濟", structure: "離上坎下", quote: "火在水上，未濟；君子以慎辨物居方。", keyword: "【未竟之志】", philosophy: "火向上炎，水向下流，未能交濟，事情尚未完成。這聽起來似乎不完美，但這才是宇宙生生不息的真相。生命沒有真正的終點，永遠保持「未完成」的狀態，代表還有創造的空間與動力。審慎地辨識事物的性質，將它們放在對的位置（慎辨物居方），繼續下一段旅程。" }
+        ];
 
-        // 通用填充函數 (為9-64卦提供基礎顯示，避免程式錯誤)
-        // 實際使用時，邱女士可逐步完善這些內容
-        function getHexagramData(num) {
-            if (iChingData[num]) return iChingData[num];
-            
-            // 尚未定義的卦象，使用通用模板
-            // 這裡使用 unicode 算法自動算出卦象符號: ䷀ (19904) + index
-            const hexSymbol = String.fromCharCode(19904 + (num - 1));
-            return {
-                symbol: hexSymbol,
-                name: `第 ${num} 卦`,
-                structure: "等待解鎖",
-                quote: "「君子以觀象，知命而行。」",
-                philosophy: "【潛沈與探索】<br>此數對應易經六十四卦之一。這是一個邀請，邀請您與邱老師一同深入探討此卦的奧義。每個數字背後，都藏著宇宙對您當下狀態的一則隱喻。"
-            };
-        }
+        // ================== 邏輯控制 ==================
+        let hexagramLines = []; // 儲存爻線的容器
 
-        // 頁面切換邏輯
+        // 頁面切換
         function goToPage(pageName) {
-            const pages = ['home', 'input', 'wheel', 'result'];
+            const pages = ['home', 'input', 'turtle', 'result'];
             pages.forEach(p => {
                 document.getElementById('page-' + p).classList.add('hidden');
                 document.getElementById('page-' + p).classList.remove('fade-in');
@@ -437,13 +644,21 @@
             target.classList.remove('hidden');
             target.classList.add('fade-in');
 
-            // 如果回到首頁，重置轉盤和輸入
-            if(pageName === 'home') {
-                document.getElementById('num-input').value = '';
-                const wheel = document.getElementById('the-wheel');
-                wheel.style.transition = 'none';
-                wheel.style.transform = 'rotate(0deg)';
+            // 重置狀態
+            if(pageName === 'home' || pageName === 'turtle' || pageName === 'input') {
+                 resetTurtleState();
+                 document.getElementById('num-input').value = '';
             }
+        }
+
+        // 重置金龜狀態
+        function resetTurtleState() {
+            const shell = document.getElementById('turtle-trigger');
+            const instruction = document.getElementById('turtle-instruction');
+            shell.classList.remove('heating', 'cracking');
+            instruction.innerText = "按住不放・靜心祝禱";
+            clearTimeout(pressTimer);
+            isPressing = false;
         }
 
         // 輸入模式邏輯
@@ -456,40 +671,123 @@
             showResult(inputVal);
         }
 
-        // 轉盤模式邏輯
-        let isSpinning = false;
-        function spinWheel() {
-            if (isSpinning) return;
-            isSpinning = true;
+        // ================== 金龜互動邏輯 (長按) ==================
+        const turtleTrigger = document.getElementById('turtle-trigger');
+        const instructionText = document.getElementById('turtle-instruction');
+        const crackSound = document.getElementById('crack-sound');
+        // const bgmSound = document.getElementById('bgm-sound'); // 背景音
 
-            const wheel = document.getElementById('the-wheel');
-            // 隨機圈數 (5-10圈) + 隨機角度
-            const randomRot = 1800 + Math.floor(Math.random() * 360); 
+        let pressTimer;
+        let isPressing = false;
+        const PRESS_DURATION = 3000; // 長按時間 (ms)
+
+        turtleTrigger.addEventListener('mousedown', startPress);
+        turtleTrigger.addEventListener('touchstart', startPress, {passive: false});
+        turtleTrigger.addEventListener('mouseup', cancelPress);
+        turtleTrigger.addEventListener('mouseleave', cancelPress);
+        turtleTrigger.addEventListener('touchend', cancelPress);
+
+        function startPress(e) {
+            e.preventDefault();
+            if (isPressing) return;
+            isPressing = true;
             
-            wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.9, 0.2, 1)';
-            wheel.style.transform = `rotate(${randomRot}deg)`;
+            // 開始發熱視覺
+            turtleTrigger.classList.add('heating');
+            instructionText.innerText = "能量匯聚中...";
+            
+            // 播放背景音 (選擇性)
+            // bgmSound.play().catch(()=>{});
 
-            // 4秒後停止
-            setTimeout(() => {
-                isSpinning = false;
-                // 計算結果 (這裡簡化模擬，直接取1-64隨機數，因為轉盤視覺是裝飾性的)
-                const randomNum = Math.floor(Math.random() * 64) + 1;
-                showResult(randomNum);
-            }, 4500); // 稍微停頓一下再跳轉
+            // 設定定時器觸發結果
+            pressTimer = setTimeout(() => {
+                triggerCracking();
+            }, PRESS_DURATION);
         }
 
-        // 顯示結果
-        function showResult(num) {
-            const data = getHexagramData(num);
+        function cancelPress(e) {
+             if (!isPressing) return;
+             // 如果還沒到時間就放開
+             if (pressTimer) {
+                 clearTimeout(pressTimer);
+                 resetTurtleState();
+                 instructionText.innerText = "祝禱中斷，請重新誠心按壓";
+                 // bgmSound.pause();
+                 // bgmSound.currentTime = 0;
+             }
+             isPressing = false;
+        }
+
+        function triggerCracking() {
+            pressTimer = null; // 清除timer引用
+            instructionText.innerText = "卦象顯現！";
+            turtleTrigger.classList.add('cracking');
             
-            document.getElementById('res-symbol').innerText = data.symbol;
+            // 播放龜裂音效
+            crackSound.currentTime = 0;
+            crackSound.play().catch(()=>{});
+            
+            // 產生隨機數 (1-64)
+            const randomNum = Math.floor(Math.random() * 64) + 1;
+
+            // 等待動畫結束後跳轉
+            setTimeout(() => {
+                 showResult(randomNum);
+                 // bgmSound.pause();
+                 // bgmSound.currentTime = 0;
+            }, 1200);
+        }
+
+
+        // ================== 顯示結果核心邏輯 ==================
+        function showResult(num) {
+            const data = iChing64Data[num];
+            
+            // 1. 繪製卦象符號 (使用CSS繪製爻線)
+            renderHexagramSymbol(num);
+            
+            // 2. 填充文字內容
             document.getElementById('res-name').innerText = data.name;
             document.getElementById('res-structure').innerText = data.structure;
             document.getElementById('res-quote').innerText = data.quote;
-            document.getElementById('res-philosophy').innerHTML = data.philosophy;
+            
+            // 組合哲學解析內容 (加入關鍵字高亮)
+            const philosophyHTML = `<span class="philosophy-keyword">${data.keyword}</span>${data.philosophy}`;
+            document.getElementById('res-philosophy').innerHTML = philosophyHTML;
 
+            // 3. 轉場
             goToPage('result');
         }
+        
+        // 輔助函數：根據數字繪製卦畫 (這裡使用簡化的硬編碼對應，實際專案可用二進制算法)
+        // 為了示範，這裡僅用一個簡單的對應表來決定陰陽爻的排列。
+        // 在完整版中，需要一個將數字 1-64 轉換為 6位二進制(0為陰, 1為陽)的函數。
+        function renderHexagramSymbol(num) {
+            const container = document.getElementById('res-symbol-container');
+            container.innerHTML = ''; // 清空舊的
+
+            // --- 簡化版爻位資料 (實際應使用算法生成) ---
+            // 這裡只演示乾(1)和坤(2)的正確畫法，其他隨機生成以供視覺展示
+            let yaoArray = [];
+            if (num === 1) { yaoArray = [1,1,1,1,1,1]; } // 乾
+            else if (num === 2) { yaoArray = [0,0,0,0,0,0]; } // 坤
+            else {
+                 // 其他卦象暫時隨機生成 6 個爻 (0或1) 用於展示視覺效果
+                 for(let i=0; i<6; i++) yaoArray.push(Math.floor(Math.random()*2));
+            }
+            // -------------------------------------------
+
+            // 從上往下繪製 (陣列索引 0 為最上爻)
+            yaoArray.forEach(isYang => {
+                const yaoDiv = document.createElement('div');
+                yaoDiv.className = isYang ? 'yao-yang' : 'yao-yin';
+                container.appendChild(yaoDiv);
+            });
+        }
+        
+        // 初次加載執行
+        // window.onload = function() { console.log("邱愛美易經哲學系統已載入 - 64卦全集版"); };
+
     </script>
 </body>
 </html>
