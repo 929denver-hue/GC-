@@ -452,14 +452,22 @@
             });
         }
 
-        // 付費按鈕點擊事件
-        function openBooking() {
-            // 這裡可以改成實際的 LINE 連結或付款頁面
-            // window.location.href = "https://line.me/R/ti/p/@your_id";
-            if(confirm("即將前往邱老師專屬預約頁面，進行深度解析？")) {
-                alert("（連結已開啟）");
-            }
-        }
+      // 付費按鈕點擊事件
+function openBooking() {
+    // 邱愛美老師官方 LINE ID 連結
+    const lineLink = "https://line.me/R/ti/p/@286dwvhy"; 
+
+    // 顯示引導訊息，建立安全感
+    const message = "【 即將前往邱老師官方 LINE 】\n\n" +
+                    "為確保交易安全與個資隱私，\n" +
+                    "深度解盤諮詢將由官方 LINE 帳號進行一對一服務。\n\n" +
+                    "我們會提供第三方安全支付連結 (支援刷卡/轉帳)，\n" +
+                    "請安心點擊「確定」前往預約。";
+
+    if(confirm(message)) {
+        window.location.href = lineLink;
+    }
+}
     </script>
 </body>
 </html>
