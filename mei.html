@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>觀易・知命 | 邱愛美女士專屬</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f1ea; /* 宣紙白 */
+            --ink-color: #2b2b2b; /* 濃墨 */
+            --light-ink: #666; /* 淡墨 */
+            --red-seal: #b22222; /* 硃砂紅 */
+            --gold-accent: #c5a059; /* 鎏金 */
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none; /* 防止選取文字破壞美感 */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--ink-color);
+            font-family: 'Noto Serif TC', serif;
+            overflow: hidden; /* 隱藏卷軸 */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://www.transparenttextures.com/patterns/rice-paper-2.png'); /* 紙張紋理 */
+        }
+
+        /* 裝飾背景：流動的水墨煙霧 */
+        .bg-art {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: radial-gradient(circle at 50% 50%, #000, transparent 70%);
+            animation: breathe 10s infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.05; }
+            100% { transform: scale(1.2); opacity: 0.15; }
+        }
+
+        /* 通用容器 */
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            transition: all 0.8s ease;
+        }
+
+        .hidden {
+            display: none;
+            opacity: 0;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 首頁 */
+        h1.main-title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 5rem;
+            margin-bottom: 10px;
+            color: var(--ink-color);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--light-ink);
+            letter-spacing: 5px;
+            margin-bottom: 60px;
+            border-top: 1px solid var(--gold-accent);
+            border-bottom: 1px solid var(--gold-accent);
+            display: inline-block;
+            padding: 10px 30px;
+        }
+
+        .menu-btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .circle-btn {
+            width: 120px;
+            height: 120px;
+            border: 2px solid var(--ink-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            background: rgba(255,255,255,0.5);
+            position: relative;
+        }
+
+        .circle-btn::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid var(--gold-accent);
+            transform: scale(0.8);
+            transition: transform 0.5s ease;
+        }
+
+        .circle-btn:hover {
+            background: var(--ink-color);
+            color: var(--bg-color);
+            border-color: var(--ink-color);
+        }
+
+        .circle-btn:hover::after {
+            transform: scale(1.1);
+            border-color: var(--red-seal);
+        }
+
+        /* 輸入模式 */
+        .input-wrapper {
+            position: relative;
+            margin: 50px auto;
+            width: 200px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 4rem;
+            text-align: center;
+            border: none;
+            background: transparent;
+            border-bottom: 3px solid var(--ink-color);
+            color: var(--ink-color);
+            outline: none;
+        }
+
+        /* 去除數字輸入框的箭頭 */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .seal-btn {
+            margin-top: 40px;
+            width: 80px;
+            height: 80px;
+            background-color: var(--red-seal);
+            color: white;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.5rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .seal-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 轉盤模式 */
+        .wheel-container {
+            width: 400px;
+            height: 400px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid var(--ink-color);
+            background: radial-gradient(circle, #fff 0%, #ddd 100%);
+            position: relative;
+            /* 模擬八卦線條 */
+            background-image: repeating-conic-gradient(
+                var(--bg-color) 0% 1%, 
+                var(--ink-color) 1% 2%
+            );
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+            transition: transform 4s cubic-bezier(0.1, 0.9, 0.2, 1); /* 物理慣性效果 */
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: var(--ink-color);
+            border-radius: 50%;
+            color: var(--gold-accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.5rem;
+            border: 2px solid var(--gold-accent);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid var(--red-seal);
+            z-index: 5;
+        }
+
+        /* 解盤結果頁面 */
+        .result-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left;
+            gap: 60px;
+        }
+
+        .hexagram-symbol {
+            font-size: 15rem; /* 巨大的卦象 */
+            line-height: 1;
+            color: var(--ink-color);
+            font-family: sans-serif; /* 使用系統字體顯示Unicode卦象 */
+            text-shadow: 2px 2px 0px var(--gold-accent);
+            opacity: 0;
+            animation: inkShow 2s ease forwards;
+        }
+
+        @keyframes inkShow {
+            0% { opacity: 0; filter: blur(10px); }
+            100% { opacity: 1; filter: blur(0); }
+        }
+
+        .result-text {
+            max-width: 500px;
+        }
+
+        .hex-name {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 3rem;
+            margin: 0;
+            color: var(--red-seal);
+        }
+
+        .hex-structure {
+            font-size: 1.2rem;
+            color: var(--light-ink);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .hex-quote {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--gold-accent);
+            padding-left: 15px;
+            line-height: 1.6;
+        }
+
+        .hex-philosophy {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--ink-color);
+            background: rgba(255,255,255,0.4);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-size: 0.9rem;
+            color: var(--light-ink);
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+        }
+        
+        .back-btn:hover {
+            border-color: var(--light-ink);
+        }
+
+        /* RWD */
+        @media (max-width: 768px) {
+            .result-layout {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .hexagram-symbol {
+                font-size: 10rem;
+            }
+            h1.main-title {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-art"></div>
+
+    <div id="page-home" class="container fade-in">
+        <h1 class="main-title">觀易・知命</h1>
+        <div class="subtitle">邱愛美・易經生命哲學</div>
+        
+        <div class="menu-btn-group">
+            <div class="circle-btn" onclick="goToPage('input')">詢</div>
+            <div class="circle-btn" onclick="goToPage('wheel')">演</div>
+        </div>
+    </div>
+
+    <div id="page-input" class="container hidden">
+        <h2 style="font-family: 'Ma Shan Zheng'; font-weight: normal;">心中之數，顯化為象</h2>
+        <div class="subtitle">請輸入 1 至 64 任意數字</div>
+        
+        <div class="input-wrapper">
+            <input type="number" id="num-input" placeholder="" min="1" max="64">
+        </div>
+
+        <button class="seal-btn" onclick="revealByInput()">
+            鑑賞
+        </button>
+
+        <div class="back-btn" onclick="goToPage('home')">← 返回首頁</div>
+    </div>
+
+    <div id="page-wheel" class="container hidden">
+        <h2 style="font-family: 'Ma Shan Zheng'; font-weight: normal;">天道運轉，時機已至</h2>
+        <div class="subtitle">點擊中央太極圖啟動</div>
+        
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <div class="wheel" id="the-wheel"></div>
+            <div class="wheel-center" onclick="spinWheel()">運</div>
+        </div>
+
+        <div class="back-btn" onclick="goToPage('home')">← 返回首頁</div>
+    </div>
+
+    <div id="page-result" class="container hidden">
+        <div class="result-layout">
+            <div class="hexagram-symbol" id="res-symbol">☰</div>
+            
+            <div class="result-text">
+                <h2 class="hex-name" id="res-name">乾為天</h2>
+                <div class="hex-structure" id="res-structure">天行健</div>
+                
+                <div class="hex-quote" id="res-quote">
+                    「天行健，君子以自強不息。」
+                </div>
+                
+                <div class="hex-philosophy" id="res-philosophy">
+                    （此處為邱女士解析空間）
+                    生命的能量正處於純陽狀態。如同太陽每日升起未曾停歇，你現在需要的不是猶豫，而是持續的行動力與意志力。這是關於「創造」與「堅持」的時刻，不依賴外力，反求諸己。
+                </div>
+            </div>
+        </div>
+        <div class="back-btn" onclick="goToPage('home')">← 重新開始</div>
+    </div>
+
+    <script>
+        // 資料庫：易經64卦 (示範前8卦 + 通用邏輯)
+        const iChingData = {
+            1: { symbol: "䷀", name: "乾為天", structure: "上乾下乾", quote: "「天行健，君子以自強不息。」", philosophy: "【純粹的創造力】<br>生命的能量正處於極盛狀態。如同天體的運行剛強勁健，你現在需要的不是猶豫或退縮，而是模仿天的德行：持續、恆久、不停止地精進。這是一個完全依靠「自我驅動」的時刻，做自己的主宰。" },
+            2: { symbol: "䷁", name: "坤為地", structure: "上坤下坤", quote: "「地勢坤，君子以厚德載物。」", philosophy: "【包容與承載】<br>大地的美德在於「順承」。它不主動爭先，卻能生長萬物。現在對你而言，不是強出頭的時機，而是學習接納、配合與支持。透過廣闊的胸襟去包容現狀，你的力量來自於「柔韌」而非「剛強」。" },
+            3: { symbol: "䷂", name: "水雷屯", structure: "上坎下震", quote: "「雲雷屯，君子以經綸。」", philosophy: "【新生的陣痛】<br>萬物初生，破土而出，難免艱難。這不是凶險，而是生命力最強展現的時刻。如同種子在硬土中掙扎。此刻你需要的是「經綸」—耐心地梳理混亂，編織未來的藍圖，不要急於求成，要站穩腳步。" },
+            4: { symbol: "䷃", name: "山水蒙", structure: "上艮下坎", quote: "「山下出泉，蒙；君子以果行育德。」", philosophy: "【啟蒙與學習】<br>泉水剛從山下流出，清澈但不知流向何方。這象徵著智慧尚未開啟的狀態。此刻最重要的是「教育」與「被教育」。若你是求問者，請保持謙卑學習；若你是領導者，請用果斷的行動來培育他人的品德。" },
+            5: { symbol: "䷄", name: "水天需", structure: "上坎下乾", quote: "「雲上於天，需；君子以飲食宴樂。」", philosophy: "【等待的智慧】<br>雲在天上尚未成雨，時機未到。急躁只會壞事。這時候能做的最好的事，竟然是「飲食宴樂」—這不是放縱，而是養精蓄銳，調整身心狀態。在等待中不焦慮，這才是真正的強者風範。" },
+            6: { symbol: "䷅", name: "天水訟", structure: "上乾下坎", quote: "「天與水違行，訟；君子以作事謀始。」", philosophy: "【止爭於初】<br>天往西轉，水向東流，方向背道而馳。這象徵著觀點的衝突。既然知道方向不同，君子應當在事情的一開始（謀始）就看清分歧，避免後續無謂的爭端。這是一個需要冷靜審視合作關係的時刻。" },
+            7: { symbol: "䷆", name: "地水師", structure: "上坤下坎", quote: "「地中有水，師；君子以容民畜眾。」", philosophy: "【領導與整合】<br>地底下藏著巨大的水流，象徵潛藏的群眾力量。這是一支軍隊，也是龐大的資源。現在是你展現領導力的時候，關鍵在於「容民」—如何像大地一樣包容不同的人，將這股混亂的能量引導至正確的方向。" },
+            8: { symbol: "䷇", name: "水地比", structure: "上坎下坤", quote: "「地上有水，比；先王以建萬國，親諸侯。」", philosophy: "【親密與合作】<br>水附著在地上流動，密不可分。這是建立關係最好的時刻。不管是事業夥伴還是情感，現在強調的是「輔佐」與「親近」。一個人走得快，一群人走得遠，去尋找那些能與你並肩作戰的人。" }
+        };
+
+        // 通用填充函數 (為9-64卦提供基礎顯示，避免程式錯誤)
+        // 實際使用時，邱女士可逐步完善這些內容
+        function getHexagramData(num) {
+            if (iChingData[num]) return iChingData[num];
+            
+            // 尚未定義的卦象，使用通用模板
+            // 這裡使用 unicode 算法自動算出卦象符號: ䷀ (19904) + index
+            const hexSymbol = String.fromCharCode(19904 + (num - 1));
+            return {
+                symbol: hexSymbol,
+                name: `第 ${num} 卦`,
+                structure: "等待解鎖",
+                quote: "「君子以觀象，知命而行。」",
+                philosophy: "【潛沈與探索】<br>此數對應易經六十四卦之一。這是一個邀請，邀請您與邱老師一同深入探討此卦的奧義。每個數字背後，都藏著宇宙對您當下狀態的一則隱喻。"
+            };
+        }
+
+        // 頁面切換邏輯
+        function goToPage(pageName) {
+            const pages = ['home', 'input', 'wheel', 'result'];
+            pages.forEach(p => {
+                document.getElementById('page-' + p).classList.add('hidden');
+                document.getElementById('page-' + p).classList.remove('fade-in');
+            });
+
+            const target = document.getElementById('page-' + pageName);
+            target.classList.remove('hidden');
+            target.classList.add('fade-in');
+
+            // 如果回到首頁，重置轉盤和輸入
+            if(pageName === 'home') {
+                document.getElementById('num-input').value = '';
+                const wheel = document.getElementById('the-wheel');
+                wheel.style.transition = 'none';
+                wheel.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // 輸入模式邏輯
+        function revealByInput() {
+            const inputVal = parseInt(document.getElementById('num-input').value);
+            if (!inputVal || inputVal < 1 || inputVal > 64) {
+                alert("請輸入 1 至 64 之間的數字，以應卦象。");
+                return;
+            }
+            showResult(inputVal);
+        }
+
+        // 轉盤模式邏輯
+        let isSpinning = false;
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const wheel = document.getElementById('the-wheel');
+            // 隨機圈數 (5-10圈) + 隨機角度
+            const randomRot = 1800 + Math.floor(Math.random() * 360); 
+            
+            wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.9, 0.2, 1)';
+            wheel.style.transform = `rotate(${randomRot}deg)`;
+
+            // 4秒後停止
+            setTimeout(() => {
+                isSpinning = false;
+                // 計算結果 (這裡簡化模擬，直接取1-64隨機數，因為轉盤視覺是裝飾性的)
+                const randomNum = Math.floor(Math.random() * 64) + 1;
+                showResult(randomNum);
+            }, 4500); // 稍微停頓一下再跳轉
+        }
+
+        // 顯示結果
+        function showResult(num) {
+            const data = getHexagramData(num);
+            
+            document.getElementById('res-symbol').innerText = data.symbol;
+            document.getElementById('res-name').innerText = data.name;
+            document.getElementById('res-structure').innerText = data.structure;
+            document.getElementById('res-quote').innerText = data.quote;
+            document.getElementById('res-philosophy').innerHTML = data.philosophy;
+
+            goToPage('result');
+        }
+    </script>
+</body>
+</html>
