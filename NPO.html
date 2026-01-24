@@ -1,0 +1,283 @@
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+<style type="text/css">:root {
+            --primary-color: #d63384;
+            --bg-soft: #fcfcfd;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            color: var(--text-main); 
+            background-color: var(--bg-soft);
+            line-height: 1.8;
+            font-size: 1.15rem; /* 整體字體加大 */
+        }
+
+        /* 英雄區：強化專業感與大器氛圍 */
+        .hero-section { 
+            background: linear-gradient(120deg, #fff 0%, #fff5f7 100%); 
+            padding: 100px 0; 
+            text-align: center; 
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .honor-badge {
+            background: #fff4e6;
+            color: #d9480f;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+            border: 1px solid #ffd8a8;
+        }
+        .hero-title { font-size: 3.5rem; letter-spacing: -1px; margin-bottom: 20px; }
+        .hero-lead { font-size: 1.4rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; }
+
+        /* 好處區：專業圖示與卡片 */
+        .benefit-box {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            height: 100%;
+            border: 1px solid #f1f1f1;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        .benefit-box:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .benefit-icon { font-size: 3.5rem; margin-bottom: 20px; display: block; }
+        .benefit-box h5 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 700; }
+
+        /* 季度卡片：提升字體與間距 */
+        .quarter-card { 
+            background: #fff;
+            transition: all 0.3s ease; 
+            border: 1px solid #eee; 
+            border-radius: 24px; 
+            padding: 35px !important;
+            box-shadow: var(--card-shadow);
+        }
+        .card-header-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .quarter-card h4 { font-size: 1.8rem; margin-bottom: 10px; }
+        .quarter-card hr { margin: 25px 0; opacity: 0.1; }
+
+        /* 時間軸：更清晰的步驟指引 */
+        .timeline-container { padding: 40px 0; }
+        .timeline-step { 
+            position: relative;
+            padding-left: 60px; 
+            margin-bottom: 60px; 
+            border-left: 3px solid #ffdeeb;
+        }
+        .timeline-step::before {
+            content: attr(data-step);
+            position: absolute;
+            left: -22px;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+        }
+        .timeline-step h5 { font-size: 1.6rem; margin-bottom: 15px; font-weight: 700; }
+
+        /* 輔助文字與標籤 */
+        .badge-custom {
+            font-size: 1rem;
+            padding: 8px 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            background: #f8f9fa;
+            color: #495057;
+            margin-right: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        /* 底部提醒區 */
+        .announcement-box {
+            background: #fff0f6;
+            border-left: 5px solid var(--primary-color);
+            padding: 30px;
+            border-radius: 16px;
+            font-size: 1.3rem;
+        }
+
+        /* 顏色標記 */
+        .season-q1 { border-top: 8px solid #51cf66; }
+        .season-q2 { border-top: 8px solid #fcc419; }
+        .season-q3 { border-top: 8px solid #ff922b; }
+        .season-q4 { border-top: 8px solid #339af0; }
+</style>
+<header class="hero-section">
+<div class="container">
+<div class="honor-badge">✦ 2026 年度優質社福單位專屬邀請 ✦</div>
+
+<h1 class="hero-title fw-bold">GC 四季，送愛一起</h1>
+
+<p class="hero-lead">精準對位需求，讓每一份善意都能適時抵達<br />
+我們誠摯邀請合作夥伴透過「生活情境策劃」，共創最具溫度的影響力</p>
+</div>
+</header>
+
+<main class="container my-5 py-4">
+<section class="mb-5 pb-5">
+<h2 class="text-center mb-5 fw-bold" style="font-size: 2.2rem;">為什麼參與此計畫？</h2>
+
+<div class="row g-4">
+<div class="col-md-4">
+<div class="benefit-box"><span class="benefit-icon">📈</span>
+
+<h5>多渠道精準曝光</h5>
+
+<p class="text-muted">含括 GC 站內 Banner、首頁彈窗、IG 及 Threads，預計觸及數萬名活躍捐贈者</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="benefit-box"><span class="benefit-icon">🎨</span>
+
+<h5>專業敘事包裝</h5>
+
+<p class="text-muted">由 GC 團隊將物資需求轉化為有溫度的<br />
+「生活情境故事」，深度打動群眾內心</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="benefit-box"><span class="benefit-icon">🤝</span>
+
+<h5>深化長期連結</h5>
+
+<p class="text-muted">透過「一鍵 Tag」與說說功能，<br />
+建立單位與捐贈者間的互動，積累品牌數位資產</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="mb-5 pb-5">
+<h2 class="text-center mb-5 fw-bold" style="font-size: 2.2rem;">2026 年度募集主題</h2>
+
+<div class="row g-4">
+<div class="col-md-3">
+<div class="card h-100 quarter-card season-q1"><span class="card-header-label text-success">SPRING / Q1</span>
+
+<h4 class="fw-bold">成長季</h4>
+
+<p class="text-muted">「剛剛好，接住需要」</p>
+
+<hr />
+<p class="fw-bold mb-2">重點物資方向：</p>
+
+<p class="text-muted small">學用品、文具、書籍、各類美術與學習工具。</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card h-100 quarter-card season-q2"><span class="card-header-label text-warning">SUMMER / Q2</span>
+
+<h4 class="fw-bold">行動季</h4>
+
+<p class="text-muted">「從心出發，行動開始」</p>
+
+<hr />
+<p class="fw-bold mb-2">重點物資方向：</p>
+
+<p class="text-muted small">成人衣物、居家清潔品、日常消耗品、小家電。</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card h-100 quarter-card season-q3"><span class="card-header-label" style="color: #fd7e14;">AUTUMN / Q3</span>
+
+<h4 class="fw-bold">安穩季</h4>
+
+<p class="text-muted">「滿足日常，細微需求」</p>
+
+<hr />
+<p class="fw-bold mb-2">重點物資方向：</p>
+
+<p class="text-muted small">常備品補位、缺口型需求、廚房用品與長期物資。</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card h-100 quarter-card season-q4"><span class="card-header-label text-primary">WINTER / Q4</span>
+
+<h4 class="fw-bold">守護季</h4>
+
+<p class="text-muted">「溫暖，不只在節日」</p>
+
+<hr />
+<p class="fw-bold mb-2">重點物資方向：</p>
+
+<p class="text-muted small">保暖用品、年節生活物資、冬季急需生活品。</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="bg-white p-5 rounded-4 shadow-sm border">
+<h2 class="text-center mb-5 fw-bold" style="font-size: 2.2rem;">單位配合流程</h2>
+
+<div class="row">
+<div class="col-lg-10 mx-auto">
+<div class="timeline-container">
+<div class="timeline-step" data-step="1">
+<h5>前置籌備 <span class="text-muted" style="font-size: 1.1rem;">(當月 20 日前)</span></h5>
+
+<div class="mb-3"><span class="badge-custom">募集網址提交</span> <span class="badge-custom">單位簡介 (200-500字)</span> <span class="badge-custom">精選素材照片 (5張)</span></div>
+
+<p class="text-muted">請於期限內完成需求刊登（預設 29 日上架），以便我們為您量身打造宣傳視覺。</p>
+</div>
+
+<div class="timeline-step" data-step="2">
+<h5>曝光啟動 <span class="text-muted" style="font-size: 1.1rem;">(募集當月)</span></h5>
+
+<p>GC 贈物網將啟動全站曝光，並於 IG / Threads 發布</p>
+
+<p class="text-muted small">建議單位同步轉發 GC贈物網 內容或自主 PO 文，共同擴大社會影響力</p>
+</div>
+
+<div class="timeline-step" data-step="3">
+<h5>善意回響 <span class="text-muted" style="font-size: 1.1rem;">(活動結案)</span></h5>
+
+<p>於 GC 贈物網「說說」發布感謝圖文，並使用 <a class="fw-bold text-decoration-none" href="https://www.give-circle.com/story/22339" style="color: var(--primary-color);">一鍵 Tag 功能</a></p>
+
+<p class="text-muted">後續提供物資發放的照片，我們將追加回顧貼文，完整記錄愛心旅程</p>
+</div>
+</div>
+
+<div class="announcement-box text-center"><strong>📢 首波「成長季」計畫將於 2026/02/28 正式啟動！</strong></div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="text-center py-5 bg-dark text-white-50 mt-5">
+<div class="container">
+<p class="mb-2">讓每一份資源，在最需要的角落閃閃發光</p>
+
+<p class="mb-0 text-white fw-bold">&copy; 2026 GC 贈物網 公益部</p>
+</div>
+</footer>
