@@ -2,73 +2,109 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>72法則實測-理財方案對比</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>72法則實測-實質購買力與翻倍分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: #f4f6f9; padding: 20px; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 1000px; margin: auto; }
-        
-        .input-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .card { padding: 15px; border-radius: 10px; border: 1px solid #ddd; background: #fff; }
-        .card.plan-a { border-top: 5px solid #34a853; }
-        .card.plan-b { border-top: 5px solid #4285f4; }
-        .card.plan-c { border-top: 5px solid #fabc05; }
-        .card.inflation { border-top: 5px solid #ea4335; background: #fff5f5; }
-        
-        label { font-size: 0.85rem; font-weight: bold; color: #555; }
-        input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        
-        button { width: 100%; padding: 15px; background: #202124; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
-        button:hover { background: #444; }
+        /* --- 全局設定 --- */
+        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        .container { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 1000px; margin: auto; }
+        h1 { text-align: center; color: #202124; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #5f6368; margin-bottom: 30px; font-size: 0.95rem; }
 
-        .chart-container { height: 500px; margin-top: 30px; position: relative; }
+        /* --- 輸入區佈局 --- */
+        .input-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { padding: 20px; border-radius: 12px; border: 1px solid #e0e0e0; background: #fff; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
+        .card.plan-a { border-top: 6px solid #34a853; }
+        .card.plan-b { border-top: 6px solid #4285f4; }
+        .card.plan-c { border-top: 6px solid #fabc05; }
+        .card.inflation { border-top: 6px solid #ea4335; background: #fff8f8; }
 
-        /* 自動摘要報告區塊 - 顏色邏輯對調 */
-        .summary-box { margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 12px; border: 1px solid #ddd; }
-        .summary-box h3 { margin: 0 0 10px 0; color: #333; }
-        .summary-item { margin-bottom: 8px; line-height: 1.6; color: #333; font-size: 1.05rem; }
+        h4 { margin: 0 0 10px 0; font-size: 1.1rem; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: #5f6368; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #dadce0; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
         
-        /* 依照要求：增加為紅色，減少為綠色 */
-        .alert-increase { color: #d93025; font-weight: bold; } /* 紅色 */
-        .alert-decrease { color: #188038; font-weight: bold; } /* 綠色 */
+        button { width: 100%; padding: 16px; background: #202124; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold; transition: background 0.3s; }
+        button:hover { background: #d93025; }
 
-        .knowledge-base { margin-top: 40px; padding: 25px; background: #f8faff; border: 1px solid #e8f0fe; border-radius: 12px; }
-        .formula-box { background: #1a73e8; color: #fff; text-align: center; padding: 15px; font-size: 1.5rem; font-weight: bold; border-radius: 8px; margin: 20px 0; }
-        .ref-link { padding: 8px 16px; background-color: #fff; color: #1a73e8; border: 2px solid #1a73e8; border-radius: 20px; text-decoration: none; font-weight: bold; }
+        .chart-container { height: 500px; margin-top: 40px; position: relative; }
+
+        /* --- 自動摘要報告 --- */
+        .summary-box { margin-top: 40px; padding: 25px; background: #fdfdfd; border: 1px solid #eee; border-radius: 12px; border-left: 6px solid #202124; }
+        .summary-box h3 { margin: 0 0 15px 0; }
+        .summary-item { margin-bottom: 12px; font-size: 1.05rem; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
+        
+        /* 顏色警示邏輯 */
+        .alert-increase { color: #d93025; font-weight: 900; background: #fce8e6; padding: 2px 6px; border-radius: 4px; }
+        .alert-decrease { color: #188038; font-weight: 900; background: #e6f4ea; padding: 2px 6px; border-radius: 4px; }
+
+        /* --- 專業備註區 (黃色警告框風格) --- */
+        .notes-section { 
+            margin-top: 40px; 
+            padding: 25px; 
+            background-color: #fff8e1; /* 淺黃背景 */
+            border-left: 6px solid #ffc107; /* 深黃邊框 */
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .notes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .notes-header h2 { margin: 0; color: #856404; font-size: 1.3rem; }
+        
+        .ref-link { padding: 8px 20px; background-color: white; color: #856404; border: 2px solid #856404; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+        .ref-link:hover { background-color: #856404; color: white; }
+
+        .formula-box { background: #202124; color: #fff; text-align: center; padding: 15px; font-size: 1.5rem; font-weight: bold; border-radius: 8px; margin: 20px 0; }
+        
+        .notes-list { list-style: none; padding: 0; }
+        .notes-list li { margin-bottom: 12px; color: #533f03; line-height: 1.6; }
+        .notes-list strong { color: #000; text-decoration: underline decoration-color #ffc107; text-decoration-thickness: 3px; }
+
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center;">72法則實測-理財方案對比</h1>
+    <h1>2法則實測計算器</h1>
+    <p class="subtitle">將通膨納入，顯示「實質資產」真實變化，並標示出翻倍的關鍵時間點</p>
     
     <div class="input-card-grid">
-        <div class="card plan-a"><h4>方案 A</h4><label>年利率 (%)</label><input type="number" id="rateA" value="1.5"></div>
-        <div class="card plan-b"><h4>方案 B</h4><label>年利率 (%)</label><input type="number" id="rateB" value="6"></div>
-        <div class="card plan-c"><h4>方案 C</h4><label>年利率 (%)</label><input type="number" id="rateC" value="10"></div>
-        <div class="card inflation"><h4>⚠️全局通膨</h4><label>年通膨 (%)</label><input type="number" id="rateInf" value="3"><label>模擬年數</label><input type="number" id="years" value="35"></div>
+        <div class="card plan-a"><h4>方案A(定存)</h4><label>年利率 (%)</label><input type="number" id="rateA" value="1.5"></div>
+        <div class="card plan-b"><h4>方案B(ETF)</h4><label>年利率 (%)</label><input type="number" id="rateB" value="6"></div>
+        <div class="card plan-c"><h4>方案C(積極)</h4><label>年利率 (%)</label><input type="number" id="rateC" value="10"></div>
+        <div class="card inflation"><h4>⚠️全局通膨</h4><label>年通膨 (%)</label><input type="number" id="rateInf" value="3" style="color:#ea4335; font-weight:bold;"><label>年數</label><input type="number" id="years" value="35"></div>
     </div>
 
     <div style="margin-bottom: 20px;">
         <label>初始本金 (萬元)：</label>
-        <input type="number" id="principal" value="100" style="width: 200px;">
+        <input type="number" id="principal" value="100" style="width: 200px; font-weight: bold;">
     </div>
 
-    <button onclick="updateComparisonChart()">即時分析實質財富變動</button>
+    <button onclick="updateComparisonChart()">開始計算</button>
 
     <div id="summaryReport" class="summary-box" style="display:none;">
-        <h3>📊智慧分析摘要</h3>
+        <h3>📊分析摘要</h3>
         <div id="summaryContent"></div>
     </div>
 
     <div class="chart-container"><canvas id="compChart"></canvas></div>
 
-    <div class="knowledge-base">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>📘72 法則深度解析</h2>
-            <a href="https://drive.google.com/file/d/1Lp3iPBmWRkoDQGOWY4qatXjCzYY7YlVe/view?usp=sharing" target="_blank" class="ref-link">🔗 說明文件</a>
+    <div class="notes-section">
+        <div class="notes-header">
+            <h2>💡 72 法則使用備註與行動建議</h2>
+            <a href="https://drive.google.com/file/d/1Lp3iPBmWRkoDQGOWY4qatXjCzYY7YlVe/view?usp=sharing" target="_blank" class="ref-link">🔗 查看完整說明</a>
         </div>
+        
         <div class="formula-box">翻倍年數 ≈ 72 ÷ 年化報酬率 (%)</div>
+
+        <ul class="notes-list">
+            <li><strong>1. 複利是前提：</strong> 必須是利息不提領、持續「利滾利」的情況下，此法則才準確。</li>
+            <li><strong>2. 適用範圍：</strong> 經過數學測算，利率在 <strong>6% - 10%</strong> 之間時，72法則的準確度最高。</li>
+            <li><strong>3. 行動建議：</strong> 
+                <br>• 投資時：圖表中若有顯示<strong>金色圓點</strong>，代表該年資產翻倍。
+                <br>• 儲蓄時：若實質價值曲線（彩色線）低於基準線（黑色虛線），代表通膨正在侵蝕您的本金。
+            </li>
+        </ul>
     </div>
 </div>
 
@@ -78,7 +114,8 @@
     function updateComparisonChart() {
         const p = parseFloat(document.getElementById('principal').value);
         const y = parseInt(document.getElementById('years').value);
-        const infRate = parseFloat(document.getElementById('rateInf').value) / 100;
+        const infRateInput = parseFloat(document.getElementById('rateInf').value);
+        const infRate = infRateInput / 100;
         
         const rates = [
             { id: 'rateA', name: '方案 A', color: '#34a853' },
@@ -90,20 +127,51 @@
         const reportData = [];
 
         const datasets = rates.map(r => {
-            const rVal = parseFloat(document.getElementById(r.id).value) / 100;
+            const rValInput = parseFloat(document.getElementById(r.id).value);
+            const rVal = rValInput / 100;
+            const doubleYear = rValInput > 0 ? 72 / rValInput : null; // 計算翻倍年
+            
             const data = [];
+            const pointRadius = [];
+            const pointColors = []; // 用於儲存每個點的顏色
+            
             for(let i=0; i<=y; i++) {
+                // 實質價值公式
                 const realVal = p * Math.pow((1 + rVal) / (1 + infRate), i);
                 data.push(realVal.toFixed(2));
+
+                // 判斷是否為翻倍年 (容許誤差 0.5 年)
+                const isDoublePoint = doubleYear && Math.abs(i - doubleYear) < 0.5 && i > 0;
+
+                if (isDoublePoint) {
+                    pointRadius.push(8); // 翻倍點半徑加大
+                    pointColors.push('#FFD700'); // ★ 強制顯示為金色 ★
+                } else {
+                    pointRadius.push(0);
+                    pointColors.push(r.color);
+                }
             }
-            reportData.push({ name: r.name, final: data[y], rate: rVal * 100 });
+            
+            reportData.push({ name: r.name, final: data[y], rate: rValInput, doubleYear });
+
+            // ★ 圖例增強：直接顯示翻倍年 ★
+            let labelText = `${r.name}`;
+            if (doubleYear) {
+                labelText += ` (翻倍: 約${doubleYear.toFixed(1)}年)`;
+            } else {
+                labelText += ` (無法翻倍)`;
+            }
 
             return {
-                label: `${r.name} (實質利率: ${(rVal*100 - infRate*100).toFixed(1)}%)`,
+                label: labelText,
                 data: data,
                 borderColor: r.color,
-                pointRadius: 0,
-                pointHoverRadius: 10,
+                backgroundColor: r.color, 
+                pointBackgroundColor: pointColors, // 使用自定義顏色陣列
+                pointRadius: pointRadius,
+                pointHoverRadius: 12,
+                pointHitRadius: 20,
+                borderWidth: 3,
                 tension: 0.3,
                 fill: false
             };
@@ -111,19 +179,18 @@
 
         // 基準線
         datasets.push({
-            label: '購買力基準線',
+            label: '購買力持平基準線',
             data: Array(y+1).fill(p),
-            borderColor: '#000',
-            borderDash: [5, 5],
-            borderWidth: 1,
+            borderColor: '#333',
+            borderDash: [8, 8],
             pointRadius: 0,
             fill: false
         });
 
-        renderSummary(reportData, p, y);
-
+        // 渲染圖表
         const ctx = document.getElementById('compChart').getContext('2d');
         if (compChart) compChart.destroy();
+
         compChart = new Chart(ctx, {
             type: 'line',
             data: { labels, datasets },
@@ -133,35 +200,48 @@
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
                     tooltip: {
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
                         titleColor: '#000',
                         bodyColor: '#333',
-                        borderColor: '#ddd',
+                        borderColor: '#999',
                         borderWidth: 1,
-                        callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw} 萬` }
-                    }
+                        callbacks: { 
+                            label: (ctx) => {
+                                const val = parseFloat(ctx.raw);
+                                const diff = (val - p).toFixed(2);
+                                const sign = val >= p ? '+' : '';
+                                return ` ${ctx.dataset.label.split('(')[0]}: ${val}萬 (${sign}${diff})`; 
+                            }
+                        }
+                    },
+                    legend: { labels: { font: { size: 13 }, boxWidth: 12 } }
+                },
+                scales: {
+                    y: { title: { display: true, text: '實質價值 (換算為今日萬元)' } }
                 }
             }
         });
+
+        renderSummary(reportData, p, y);
     }
 
     function renderSummary(data, p, y) {
-        const reportDiv = document.getElementById('summaryReport');
         const contentDiv = document.getElementById('summaryContent');
-        reportDiv.style.display = 'block';
+        document.getElementById('summaryReport').style.display = 'block';
 
         let html = "";
+        data.sort((a, b) => b.final - a.final);
+
         data.forEach(item => {
-            const diff = (item.final - p).toFixed(1);
+            const diff = (parseFloat(item.final) - p).toFixed(2);
             const isIncreasing = parseFloat(diff) >= 0;
-            
-            // 關鍵修改：增加顯示為紅色 (alert-increase)，減少顯示為綠色 (alert-decrease)
             const colorClass = isIncreasing ? 'alert-increase' : 'alert-decrease';
-            const statusText = isIncreasing ? '實質增值' : '實質萎縮';
-            
-            html += `<div class="summary-item">📍 <strong>${item.name}</strong>：在 ${y} 年後，您的購買力${statusText}了 <span class="${colorClass}">${Math.abs(diff)} 萬</span>。`;
-            if(item.rate > 0) html += ` (名目翻倍需 ${(72/item.rate).toFixed(1)} 年)`;
-            html += `</div>`;
+            const statusText = isIncreasing ? '增值' : '萎縮';
+            const icon = isIncreasing ? '📈' : '📉';
+
+            html += `<div class="summary-item">
+                        ${icon} <strong>${item.name}</strong>：${y}年後實質購買力${statusText} <span class="${colorClass}">${Math.abs(diff)} 萬</span>。
+                     </div>`;
         });
         contentDiv.innerHTML = html;
     }
