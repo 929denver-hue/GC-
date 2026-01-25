@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>理財方案對比工具 - 72法則實測</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: #f4f6f9; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 1000px; margin: auto; }
+        
+        /* 輸入區卡片佈局 */
+        .input-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .card { padding: 15px; border-radius: 10px; border: 1px solid #ddd; background: #fff; }
+        .card.plan-a { border-top: 5px solid #34a853; }
+        .card.plan-b { border-top: 5px solid #4285f4; }
+        .card.plan-c { border-top: 5px solid #fabc05; }
+        .card.inflation { border-top: 5px solid #ea4335; background: #fff5f5; }
+        
+        label { font-size: 0.85rem; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        button { width: 100%; padding: 15px; background: #202124; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
+        button:hover { background: #444; }
+
+        .chart-container { height: 500px; margin-top: 30px; position: relative; }
+
+        /* 知識庫與連結樣式 */
+        .knowledge-base { margin-top: 40px; padding: 25px; background: #f8faff; border: 1px solid #e8f0fe; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .knowledge-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .formula-box { background: #1a73e8; color: #fff; text-align: center; padding: 15px; font-size: 1.5rem; font-weight: bold; border-radius: 8px; margin: 20px 0; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .ref-link { padding: 8px 16px; background-color: #fff; color: #1a73e8; border: 2px solid #1a73e8; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .ref-link:hover { background-color: #1a73e8; color: white; }
+        h2, h3, h4 { margin: 0; color: #202124; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="text-align:center;">多組理財方案對比 (含 72 法則標記)</h1>
+    
+    <div class="input-card-grid">
+        <div class="card plan-a">
+            <h4>方案 A (如：定存)</h4>
+            <label>年化利率 (%)</label>
+            <input type="number" id="rateA" value="1.5">
+        </div>
+        <div class="card plan-b">
+            <h4>方案 B (如：ETF)</h4>
+            <label>年化利率 (%)</label>
+            <input type="number" id="rateB" value="6">
+        </div>
+        <div class="card plan-c">
+            <h4>方案 C (如：積極型)</h4>
+            <label>年化利率 (%)</label>
+            <input type="number" id="rateC" value="10">
+        </div>
+        <div class="card inflation">
+            <h4>⚠️ 通膨參數</h4>
+            <label>年通膨率 (%)</label>
+            <input type="number" id="rateInf" value="3">
+            <label>模擬年數</label>
+            <input type="number" id="years" value="35">
+        </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <label>初始本金 (萬元)：</label>
+        <input type="number" id="principal" value="100" style="width: 200px;">
+    </div>
+
+    <button onclick="updateComparisonChart()">即時對比方案數據</button>
+
+    <div class="chart-container">
+        <canvas id="compChart"></canvas>
+    </div>
+
+    <div class="knowledge-base">
+        <div class="knowledge-header">
+            <h2>📘 72 法則深度解析</h2>
+            <a href="https://drive.google.com/file/d/1Lp3iPBmWRkoDQGOWY4qatXjCzYY7YlVe/view?usp=sharing" 
+               target="_blank" class="ref-link">🔗 查看詳細說明文件</a>
+        </div>
+        
+        <p>72 法則是理財中最直覺的「心算工具」，能快速估算出資產翻倍所需的時間。圖表上的<strong>圓圈標記</strong>即為翻倍發生的年份。</p>
+        
+        <div class="formula-box">翻倍年數 ≈ 72 ÷ 年化報酬率 (%)</div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <h4>🤔 為什麼是 72？</h4>
+                <p>數學上翻倍精確值是 69.3，但 72 有更多公因數（2, 3, 4, 6, 8, 9, 12），最適合日常口算，且利率在 6%-10% 時最準確。</p>
+            </div>
+            <div class="info-item">
+                <h4>🚀 複利與行動建議</h4>
+                <p>1. <strong>複利是前提：</strong> 必須是「利滾利」才準確。<br>
+                   2. <strong>警惕通膨：</strong> 當投資利率低於通膨率時，實質購買力正在縮水。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let compChart = null;
+
+    function updateComparisonChart() {
+        const p = parseFloat(document.getElementById('principal').value);
+        const y = parseInt(document.getElementById('years').value);
+        const rates = [
+            { id: 'rateA', name: '方案 A', color: '#34a853' },
+            { id: 'rateB', name: '方案 B', color: '#4285f4' },
+            { id: 'rateC', name: '方案 C', color: '#fabc05' }
+        ];
+        const infRate = parseFloat(document.getElementById('rateInf').value) / 100;
+
+        const labels = Array.from({length: y + 1}, (_, i) => `第 ${i} 年`);
+        const datasets = rates.map(r => {
+            const rateVal = parseFloat(document.getElementById(r.id).value);
+            const doubleYear = rateVal > 0 ? 72 / rateVal : null;
+            const data = [];
+            const pointRadius = [];
+            
+            for(let i=0; i<=y; i++) {
+                data.push((p * Math.pow(1 + rateVal/100, i)).toFixed(2));
+                // 標記最接近翻倍年的點 (且要在模擬範圍內)
+                pointRadius.push(doubleYear && Math.abs(i - doubleYear) < 0.5 && i > 0 ? 8 : 0);
+            }
+            
+            return {
+                label: `${r.name} (${rateVal}%)`,
+                data: data,
+                borderColor: r.color,
+                pointBackgroundColor: r.color,
+                pointRadius: pointRadius,
+                tension: 0.3,
+                fill: false
+            };
+        });
+
+        const infData = labels.map((_, i) => (p * Math.pow(1 - infRate, i)).toFixed(2));
+        datasets.push({
+            label: `購買力貶值 (${(infRate*100).toFixed(1)}%)`,
+            data: infData,
+            borderColor: '#ea4335',
+            borderDash: [5, 5],
+            pointRadius: 0,
+            fill: false
+        });
+
+        const ctx = document.getElementById('compChart').getContext('2d');
+        if (compChart) compChart.destroy();
+        compChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    tooltip: {
+                        callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw} 萬` }
+                    }
+                },
+                scales: { y: { title: { display: true, text: '金額 (萬元)' } } }
+            }
+        });
+    }
+    window.onload = updateComparisonChart;
+</script>
+</body>
+</html>
