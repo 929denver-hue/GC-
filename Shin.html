@@ -14,7 +14,7 @@
     --text-muted: #9ca3af;
     --border-soft: rgba(148, 163, 184, 0.4);
     
-    /* ==== 新增：修復時光專用 (暗夜文青色系) ==== */
+    /* ==== 修復時光 & 心得分享 專用 (暗夜暖調) ==== */
     --wq-bg-dark-warm: #1c1917; 
     --wq-text-silk: #e7e5e4;
     --wq-accent-clay: #d6a2ad;
@@ -131,7 +131,7 @@
     opacity: 0.97;
   }
 
-  /* 控制模組區塊 */
+  /* 模組區塊 */
   .modules-section {
     padding: 60px 20px 80px;
     max-width: 1080px;
@@ -173,7 +173,8 @@
     animation: fadeUp 0.8s ease-out forwards;
   }
   
-  /* 卡片動畫延遲 */
+  .module-card:nth-child(n) { animation-delay: calc(0.1s * var(--i, 1)); }
+  /* 手動設定延遲確保相容性 */
   .module-card:nth-child(1) { animation-delay: 0.1s; }
   .module-card:nth-child(2) { animation-delay: 0.2s; }
   .module-card:nth-child(3) { animation-delay: 0.3s; }
@@ -192,25 +193,21 @@
   .module-title { font-size: 1.1rem; color: #e5e7eb; margin-bottom: 4px; }
   .module-desc { font-size: 0.92rem; color: var(--text-muted); }
 
-  /* ==== 修復時光 & 心得分享 區塊樣式 ==== */
-  .relax-section, .share-section {
-    position: relative;
-    padding: 100px 20px;
-    background: linear-gradient(to bottom, var(--bg-dark), var(--wq-bg-dark-warm));
+  /* ==== 修復時光 & 心得分享 混合區塊 ==== */
+  .wenqing-container {
+    background: linear-gradient(to bottom, var(--bg-dark) 0%, var(--wq-bg-dark-warm) 100%);
     color: var(--wq-text-silk);
+    padding-bottom: 120px;
   }
 
-  .share-section {
-    padding-top: 50px;
-    padding-bottom: 120px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  .relax-section, .share-section {
+    position: relative;
+    padding: 80px 20px 40px;
+    text-align: center;
   }
 
   .relax-title-wrapper {
-    text-align: center;
-    margin-bottom: 60px;
-    position: relative;
-    z-index: 2;
+    margin-bottom: 50px;
   }
 
   .relax-title {
@@ -221,9 +218,7 @@
     text-transform: uppercase;
     color: var(--wq-text-silk);
     display: inline-block;
-    position: relative;
-    margin: 0;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
     text-shadow: 0 0 20px rgba(231, 229, 228, 0.2);
   }
   
@@ -231,8 +226,8 @@
     content: "";
     display: block;
     width: 1px; 
-    height: 40px;
-    background: linear-gradient(to bottom, rgba(231, 229, 228, 0.5), transparent);
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(231, 229, 228, 0.4), transparent);
     margin: 10px auto 0;
   }
 
@@ -240,26 +235,21 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 25px;
     max-width: 1000px;
     margin: 0 auto;
-    position: relative;
-    z-index: 2;
   }
 
   .wenqing-btn {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 260px;
-    height: 70px;
+    height: 65px;
     text-decoration: none;
     font-size: 1.05rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
+    letter-spacing: 0.2em;
     border-radius: 4px;
-    font-weight: 400;
     transition: all 0.5s ease;
     background-color: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -271,18 +261,18 @@
   .btn-relax-3 { color: var(--wq-accent-mist); border-color: rgba(168, 179, 198, 0.3); }
 
   .wenqing-btn:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     background-color: rgba(255, 255, 255, 0.05);
-    letter-spacing: 0.3em;
+    letter-spacing: 0.25em;
   }
   
-  .btn-relax-1:hover { border-color: var(--wq-accent-clay); box-shadow: 0 0 20px rgba(214, 162, 173, 0.15); }
-  .btn-relax-2:hover { border-color: var(--wq-accent-sage); box-shadow: 0 0 20px rgba(182, 201, 187, 0.15); }
-  .btn-relax-3:hover { border-color: var(--wq-accent-mist); box-shadow: 0 0 20px rgba(168, 179, 198, 0.15); }
+  .btn-relax-1:hover { border-color: var(--wq-accent-clay); box-shadow: 0 0 15px rgba(214, 162, 173, 0.1); }
+  .btn-relax-2:hover { border-color: var(--wq-accent-sage); box-shadow: 0 0 15px rgba(182, 201, 187, 0.1); }
+  .btn-relax-3:hover { border-color: var(--wq-accent-mist); box-shadow: 0 0 15px rgba(168, 179, 198, 0.1); }
 
   @media (max-width: 640px) {
-    .hero-title { font-size: 2.2rem; letter-spacing: 0.12em; }
-    .relax-title { font-size: 1.6rem; letter-spacing: 0.2em; }
+    .hero-title { font-size: 2.2rem; }
+    .relax-title { font-size: 1.6rem; }
     .wenqing-btn { width: 100%; max-width: 300px; }
   }
 </style>
@@ -303,95 +293,41 @@
   <p class="modules-subtitle">集中模組，一站式掌握。</p>
 
   <div class="modules-grid">
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://929denver-hue.github.io/GC-/money.html" target="_blank">物流系統</a></div>
-      <div class="module-desc"><a href="https://929denver-hue.github.io/GC-/money.html" target="_blank">了解每一筆金流成本</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://929denver-hue.github.io/GC-/ibox.html" target="_blank">i郵箱數據</a></div>
-      <div class="module-desc"><a href="https://929denver-hue.github.io/GC-/ibox.html" target="_blank">Ibox每月相關數據</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://929denver-hue.github.io/GC-/pumpkin.html" target="_blank">南瓜計畫</a></div>
-      <div class="module-desc"><a href="https://929denver-hue.github.io/GC-/pumpkin.html" target="_blank">清楚分析利害關係心法</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://script.google.com/macros/s/AKfycbyFT-kPvqeVbA0LTF83DZbruj_vyO2R00KQTyzSn38oIyS1ycf5ArSiQqfQXCNjf1YK/exec" target="_blank">社福雷達圖</a></div>
-      <div class="module-desc"><a href="https://script.google.com/macros/s/AKfycbyFT-kPvqeVbA0LTF83DZbruj_vyO2R00KQTyzSn38oIyS1ycf5ArSiQqfQXCNjf1YK/exec" target="_blank">南瓜計畫｜社福評分系統</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://929denver-hue.github.io/GC-/index.html" target="_blank">包裹異常通報</a></div>
-      <div class="module-desc"><a href="https://929denver-hue.github.io/GC-/index.html" target="_blank">包裹異常通報與進度查詢</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://929denver-hue.github.io/GC-/money-1.html" target="_blank">包裹試算分析</a></div>
-      <div class="module-desc"><a href="https://929denver-hue.github.io/GC-/money-1.html" target="_blank">包裹成本、利潤試算</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://script.google.com/macros/s/AKfycbyTg99UI2graqlfxuKmj5d719Xea6O_k3-fo2zNvhcPm14U5ZcliWQzxFGXAjExyeHCrg/exec" target="_blank">請寫下需求許願單</a></div>
-      <div class="module-desc"><a href="https://script.google.com/macros/s/AKfycbyTg99UI2graqlfxuKmj5d719Xea6O_k3-fo2zNvhcPm14U5ZcliWQzxFGXAjExyeHCrg/exec" target="_blank">請寫下需求許願單</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://script.google.com/macros/s/AKfycbxqDHgTikVbU3EbQQDzPN-aibXuxtAlB8hlF1Bx3jxNikDnmF9omdtIh1-OXiUgGcFL-Q/exec?page=admin" target="_blank">隨時查看需求進度</a></div>
-      <div class="module-desc"><a href="https://script.google.com/macros/s/AKfycbxqDHgTikVbU3EbQQDzPN-aibXuxtAlB8hlF1Bx3jxNikDnmF9omdtIh1-OXiUgGcFL-Q/exec?page=admin" target="_blank">隨時查看需求進度</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://docs.google.com/document/d/1IyPX6DWTM0PTAM-_UjcquLcXWUV41Y3fEGP71-ZZbew/edit?usp=sharing" target="_blank">心願分析步驟</a></div>
-      <div class="module-desc"><a href="https://docs.google.com/document/d/1IyPX6DWTM0PTAM-_UjcquLcXWUV41Y3fEGP71-ZZbew/edit?usp=sharing" target="_blank">心願分析步驟</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://929denver-hue.github.io/GC-/donation.html" target="_blank">貴人捐贈評估表</a></div>
-      <div class="module-desc"><a href="https://929denver-hue.github.io/GC-/donation.html" target="_blank">貴人捐贈評估表</a></div>
-    </div>
-    <div class="module-card">
-      <div class="module-index">&nbsp;</div>
-      <div class="module-title"><a href="https://929denver-hue.github.io/GC-/NPO.html" target="_blank">GC 四季，送愛一起</a></div>
-      <div class="module-desc"><a href="https://929denver-hue.github.io/GC-/NPO.html" target="_blank">公益串聯與愛心行動</a></div>
-    </div>
+    <div class="module-card"><div class="module-title"><a href="https://929denver-hue.github.io/GC-/money.html" target="_blank">物流系統</a></div><div class="module-desc">了解每一筆金流成本</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://929denver-hue.github.io/GC-/ibox.html" target="_blank">i郵箱數據</a></div><div class="module-desc">Ibox每月相關數據</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://929denver-hue.github.io/GC-/pumpkin.html" target="_blank">南瓜計畫</a></div><div class="module-desc">清楚分析利害關係心法</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://script.google.com/macros/s/AKfycbyFT-kPvqeVbA0LTF83DZbruj_vyO2R00KQTyzSn38oIyS1ycf5ArSiQqfQXCNjf1YK/exec" target="_blank">社福雷達圖</a></div><div class="module-desc">南瓜計畫｜社福評分系統</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://929denver-hue.github.io/GC-/index.html" target="_blank">包裹異常通報</a></div><div class="module-desc">包裹異常通報與進度查詢</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://929denver-hue.github.io/GC-/money-1.html" target="_blank">包裹試算分析</a></div><div class="module-desc">包裹成本、利潤試算</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://script.google.com/macros/s/AKfycbyTg99UI2graqlfxuKmj5d719Xea6O_k3-fo2zNvhcPm14U5ZcliWQzxFGXAjExyeHCrg/exec" target="_blank">請寫下需求許願單</a></div><div class="module-desc">請寫下需求許願單</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://script.google.com/macros/s/AKfycbxqDHgTikVbU3EbQQDzPN-aibXuxtAlB8hlF1Bx3jxNikDnmF9omdtIh1-OXiUgGcFL-Q/exec?page=admin" target="_blank">隨時查看需求進度</a></div><div class="module-desc">隨時查看需求進度</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://docs.google.com/document/d/1IyPX6DWTM0PTAM-_UjcquLcXWUV41Y3fEGP71-ZZbew/edit?usp=sharing" target="_blank">心願分析步驟</a></div><div class="module-desc">心願分析步驟</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://929denver-hue.github.io/GC-/donation.html" target="_blank">貴人捐贈評估表</a></div><div class="module-desc">貴人捐贈評估表</div></div>
+    <div class="module-card"><div class="module-title"><a href="https://929denver-hue.github.io/GC-/NPO.html" target="_blank">GC 四季，送愛一起</a></div><div class="module-desc">公益串聯與愛心行動</div></div>
   </div>
 </section>
 
-<section class="relax-section" id="relax">
-  <div class="relax-title-wrapper">
-    <h2 class="relax-title">修復時光</h2>
-  </div>
+<div class="wenqing-container">
+  <section class="relax-section" id="relax">
+    <div class="relax-title-wrapper">
+      <h2 class="relax-title">修復時光</h2>
+    </div>
+    <div class="relax-grid">
+      <a href="https://929denver-hue.github.io/GC-/relaxshinbooking.html?key=2026FEB" class="wenqing-btn btn-relax-1" target="_blank">專屬預約</a>
+      <a href="https://929denver-hue.github.io/GC-/relaxshinq.html" class="wenqing-btn btn-relax-2" target="_blank">行前諮詢</a>
+      <a href="https://929denver-hue.github.io/GC-/relaxshin.html" class="wenqing-btn btn-relax-3" target="_blank">互惠之約</a>
+    </div>
+  </section>
 
-  <div class="relax-grid">
-    <a href="https://929denver-hue.github.io/GC-/relaxshinbooking.html?key=2026FEB" class="wenqing-btn btn-relax-1" target="_blank">
-      <span class="btn-text">專屬預約</span>
-    </a>
-
-    <a href="https://929denver-hue.github.io/GC-/relaxshinq.html" class="wenqing-btn btn-relax-2" target="_blank">
-      <span class="btn-text">行前諮詢</span>
-    </a>
-
-    <a href="https://929denver-hue.github.io/GC-/relaxshin.html" class="wenqing-btn btn-relax-3" target="_blank">
-      <span class="btn-text">互惠之約</span>
-    </a>
-  </div>
-</section>
-
-<section class="share-section" id="share">
-  <div class="relax-title-wrapper">
-    <h2 class="relax-title">心得分享</h2>
-  </div>
-
-  <div class="relax-grid">
-    <a href="https://929denver-hue.github.io/GC-/NPO.html" class="wenqing-btn" style="color: var(--wq-text-silk); border-color: rgba(255, 255, 255, 0.2);" target="_blank">
-      <span class="btn-text">72法則</span>
-    </a>
-  </div>
-</section>
+  <section class="share-section" id="share">
+    <div class="relax-title-wrapper">
+      <h2 class="relax-title">心得分享</h2>
+    </div>
+    <div class="relax-grid">
+      <a href="https://929denver-hue.github.io/GC-/72.html" class="wenqing-btn" style="color: var(--wq-text-silk); border-color: rgba(255, 255, 255, 0.15);" target="_blank">72法則</a>
+    </div>
+  </section>
+</div>
 
 </body>
 </html>
