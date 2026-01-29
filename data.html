@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>GC贈物網 物流月度營運看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .kpi-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .kpi-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+        .kpi-card h3 { margin: 0; color: #7f8c8d; font-size: 0.9rem; }
+        .kpi-value { font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #2c3e50; }
+        .chart-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #34495e; color: white; }
+        .tag-ibox { color: #3498db; font-weight: bold; }
+        .tag-hilife { color: #e67e22; font-weight: bold; }
+        .tag-fami { color: #27ae60; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📊 物流營運月度看板</h1>
+        <button onclick="fetchData()" style="padding: 10px 20px; cursor: pointer;">重新整理數據</button>
+    </div>
+
+    <div class="kpi-container">
+        <div class="kpi-card"><h3>本月總利潤 (預估)</h3><div id="kpi-profit" class="kpi-value">$0</div></div>
+        <div class="kpi-card"><h3>總物流量</h3><div id="kpi-vol" class="kpi-value">0</div></div>
+        <div class="kpi-card"><h3>最高利潤通路</h3><div id="kpi-best" class="kpi-value">-</div></div>
+    </div>
+
+    <div class="chart-card">
+        <h3>📈 各月物流損益趨勢</h3>
+        <canvas id="trendChart" height="100"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>📋 當月明細資料</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>月份</th>
+                    <th>物流商</th>
+                    <th>件數</th>
+                    <th>單件淨利 (CM)</th>
+                    <th>小計利潤</th>
+                </tr>
+            </thead>
+            <tbody id="data-table">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'YOUR_API_URL_HERE'; // 填入你的 Google Apps Script URL
+
+    async function fetchData() {
+        try {
+            const response = await fetch(API_URL);
+            const rawData = await response.json();
+            processAndRender(rawData);
+        } catch (e) {
+            alert('無法獲取資料，請檢查 API URL 或 Google Sheets 權限');
+        }
+    }
+
+    function processAndRender(data) {
+        const tableBody = document.getElementById('data-table');
+        tableBody.innerHTML = '';
+        
+        let totalProfit = 0;
+        let totalVol = 0;
+        let providerStats = {};
+
+        // 整理歷史圖表需要的標籤
+        const months = [...new Set(data.map(d => d.Month))].sort();
+        const trendData = {
+            ibox: months.map(m => calcProfit(data.find(d => d.Month === m && d.Provider === 'ibox'))),
+            hilife: months.map(m => calcProfit(data.find(d => d.Month === m && d.Provider === 'hilife'))),
+            fami: months.map(m => calcProfit(data.find(d => d.Month === m && d.Provider === 'fami')))
+        };
+
+        data.forEach(item => {
+            const cm = (item.Revenue + item.Rebate) / 1.05 - (item.Revenue * 0.022) - item.Cost - item.Subsidy;
+            const subProfit = cm * item.Volume;
+            
+            totalProfit += subProfit;
+            totalVol += item.Volume;
+
+            const row = `<tr>
+                <td>${item.Month}</td>
+                <td class="tag-${item.Provider}">${item.Provider.toUpperCase()}</td>
+                <td>${item.Volume.toLocaleString()}</td>
+                <td>$${cm.toFixed(1)}</td>
+                <td>$${Math.round(subProfit).toLocaleString()}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+
+        document.getElementById('kpi-profit').innerText = `$${Math.round(totalProfit).toLocaleString()}`;
+        document.getElementById('kpi-vol').innerText = totalVol.toLocaleString();
+        
+        renderChart(months, trendData);
+    }
+
+    function calcProfit(d) {
+        if (!d) return 0;
+        const cm = (d.Revenue + d.Rebate) / 1.05 - (d.Revenue * 0.022) - d.Cost - d.Subsidy;
+        return Math.round(cm * d.Volume);
+    }
+
+    function renderChart(labels, trendData) {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        if (window.myChart) window.myChart.destroy();
+        window.myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: 'iBOX', data: trendData.ibox, borderColor: '#3498db', tension: 0.3 },
+                    { label: '萊爾富', data: trendData.hilife, borderColor: '#e67e22', tension: 0.3 },
+                    { label: '全家', data: trendData.fami, borderColor: '#27ae60', tension: 0.3 }
+                ]
+            }
+        });
+    }
+
+    fetchData(); // 頁面載入時執行
+</script>
+</body>
+</html>
