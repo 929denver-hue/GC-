@@ -2,23 +2,29 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>GC贈物網 | 物流寄件量監控</title>
+    <title>GC贈物網 | 物流監控看板</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --ibox: #3498db; --hilife: #e67e22; --fami: #2ecc71; --bg: #f8f9fa; }
-        body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
+        :root { --ibox: #3498db; --hilife: #e67e22; --fami: #27ae60; --bg: #f8f9fa; }
+        body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
         .container { max-width: 1000px; margin: auto; }
+        
+        /* 頁籤樣式 */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+        .tab-btn { padding: 10px 25px; border: none; background: #eee; cursor: pointer; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        .tab-btn.active { background: #34495e; color: white; }
+        .tab-btn:hover { background: #ddd; }
+
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .kpi-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
-        .kpi-label { color: #7f8c8d; font-size: 0.9rem; margin-bottom: 5px; }
-        .kpi-value { font-size: 2rem; font-weight: bold; }
+        .kpi-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+        
         .chart-main { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
         .data-list { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #34495e; color: white; border-radius: 4px; }
-        .refresh-btn { background: #34495e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+        th { background: #34495e; color: white; }
     </style>
 </head>
 <body>
@@ -26,38 +32,45 @@
 <div class="container">
     <div class="header">
         <h1>📦 物流寄件量監控看板</h1>
-        <button class="refresh-btn" onclick="loadData()">🔄 刷新最新件數</button>
+        <button onclick="loadData()" style="padding: 10px; cursor:pointer;">🔄 刷新數據</button>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('all', this)">總覽</button>
+        <button class="tab-btn" onclick="switchTab('ibox', this)">iBOX</button>
+        <button class="tab-btn" onclick="switchTab('hilife', this)">萊爾富</button>
+        <button class="tab-btn" onclick="switchTab('fami', this)">全家</button>
     </div>
 
     <div class="kpi-row">
-        <div class="kpi-card"><div class="kpi-label">累計總寄件量</div><div id="total-vol" class="kpi-value">0</div></div>
-        <div class="kpi-card"><div class="kpi-label">本月寄件量</div><div id="current-month-vol" class="kpi-value">0</div></div>
-        <div class="kpi-card"><div class="kpi-label">主力物流</div><div id="top-provider" class="kpi-value">-</div></div>
+        <div class="kpi-card"><div>當前篩選總量</div><div id="kpi-vol" class="kpi-value">0</div></div>
+        <div class="kpi-card"><div>資料筆數</div><div id="kpi-count" class="kpi-value">0</div></div>
     </div>
 
     <div class="chart-main">
-        <h3>📈 物流寄件量趨勢 (Monthly Volume Trend)</h3>
+        <h3 id="chart-title">📈 寄件趨勢</h3>
         <canvas id="volChart" height="100"></canvas>
     </div>
 
     <div class="data-list">
-        <h3>📋 月度數據明細</h3>
-        <table>
+        <h3>📋 資料明細</h3>
+        <table id="data-table">
             <thead>
                 <tr>
-                    <th>月份</th>
+                    <th>日期 (年月日)</th>
                     <th>物流商</th>
-                    <th>寄件量 (件數)</th>
-                    <th>較上月增長</th>
+                    <th>寄件量</th>
                 </tr>
             </thead>
-            <tbody id="table-body"></tbody>
+            <tbody></tbody>
         </table>
     </div>
 </div>
 
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbywzx0zJx8hS41vX9BAsX-vGvImKFh6HZUyS6XqiyiMbhX3i4l_idcZVunMLAbc-IW8WQ/exec';
+    let allRawData = [];
+    let currentTab = 'all';
     let volChart;
 
     async function loadData() {
@@ -65,78 +78,98 @@
             const res = await fetch(API_URL);
             const data = await res.json();
             
-            // 數據標準化：確保 Volume 是數字
-            const cleanData = data.map(d => ({
-                Month: d.Month || d.month || 'N/A',
-                Provider: (d.Provider || d.provider || '').toLowerCase().trim(),
-                Volume: parseInt(String(d.Volume).replace(/[^\d]/g, '')) || 0
-            })).filter(d => d.Volume > 0);
+            // 資料清洗：處理時間與數字
+            allRawData = data.map(d => ({
+                // 核心修復：強制轉化為 YYYY-MM-DD
+                Date: formatDate(d.Month || d.Date), 
+                Provider: (d.Provider || "").toLowerCase().trim(),
+                Volume: parseInt(d.Volume) || 0
+            })).filter(d => d.Date !== "Invalid Date");
 
-            render(cleanData);
+            render();
         } catch (e) {
-            console.error(e);
-            alert("資料讀取失敗，請確認 Google Sheet 中已有件數數據。");
+            alert("資料載入失敗，請檢查 API URL");
         }
     }
 
-    function render(data) {
-        const months = [...new Set(data.map(d => d.Month))].sort();
-        const providers = {
-            ibox: { name: 'iBOX', color: '#3498db', data: [] },
-            hilife: { name: '萊爾富', color: '#e67e22', data: [] },
-            fami: { name: '全家', color: '#27ae60', data: [] }
-        };
+    // 時間處理函式：確保只顯示年月日
+    function formatDate(dateStr) {
+        if (!dateStr) return "Invalid Date";
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr; // 如果本來就是文字則直接回傳
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
-        let totalVol = 0;
-        const tbody = document.getElementById('table-body');
+    function switchTab(tab, btn) {
+        currentTab = tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+    }
+
+    function render() {
+        // 篩選資料
+        const filteredData = currentTab === 'all' 
+            ? allRawData 
+            : allRawData.filter(d => d.Provider === currentTab);
+
+        // 更新 KPI
+        const totalVol = filteredData.reduce((sum, d) => sum + d.Volume, 0);
+        document.getElementById('kpi-vol').innerText = totalVol.toLocaleString();
+        document.getElementById('kpi-count').innerText = filteredData.length;
+
+        // 更新表格
+        const tbody = document.querySelector('#data-table tbody');
         tbody.innerHTML = '';
-
-        // 計算趨勢圖資料
-        months.forEach(m => {
-            Object.keys(providers).forEach(p => {
-                const entry = data.find(d => d.Month === m && d.Provider === p);
-                const vol = entry ? entry.Volume : 0;
-                providers[p].data.push(vol);
-                totalVol += vol;
-            });
-        });
-
-        // 渲染表格
-        data.sort((a,b) => b.Month.localeCompare(a.Month)).forEach(d => {
+        filteredData.sort((a,b) => b.Date.localeCompare(a.Date)).forEach(d => {
             tbody.innerHTML += `<tr>
-                <td>${d.Month}</td>
-                <td style="color:${providers[d.Provider]?.color || '#333'}">${d.Provider.toUpperCase()}</td>
+                <td>${d.Date}</td>
+                <td>${d.Provider.toUpperCase()}</td>
                 <td><b>${d.Volume.toLocaleString()}</b> 件</td>
-                <td>-</td>
             </tr>`;
         });
 
-        // 更新 KPI
-        document.getElementById('total-vol').innerText = totalVol.toLocaleString();
-        document.getElementById('top-provider').innerText = Object.keys(providers).reduce((a, b) => 
-            providers[a].data.reduce((s,v)=>s+v,0) > providers[b].data.reduce((s,v)=>s+v,0) ? a : b
-        ).toUpperCase();
-
-        updateChart(months, providers);
+        updateChart(filteredData);
     }
 
-    function updateChart(months, providers) {
+    function updateChart(data) {
         const ctx = document.getElementById('volChart').getContext('2d');
         if (volChart) volChart.destroy();
+
+        // 依日期排序
+        const sortedData = [...data].sort((a, b) => a.Date.localeCompare(b.Date));
+        const labels = [...new Set(sortedData.map(d => d.Date))];
+
+        let datasets = [];
+        if (currentTab === 'all') {
+            const providers = ['ibox', 'hilife', 'fami'];
+            const colors = { ibox: '#3498db', hilife: '#e67e22', fami: '#27ae60' };
+            datasets = providers.map(p => ({
+                label: p.toUpperCase(),
+                data: labels.map(l => {
+                    const found = sortedData.find(d => d.Date === l && d.Provider === p);
+                    return found ? found.Volume : 0;
+                }),
+                backgroundColor: colors[p]
+            }));
+        } else {
+            datasets = [{
+                label: currentTab.toUpperCase(),
+                data: labels.map(l => {
+                    const found = sortedData.find(d => d.Date === l);
+                    return found ? found.Volume : 0;
+                }),
+                backgroundColor: '#34495e'
+            }];
+        }
+
         volChart = new Chart(ctx, {
-            type: 'bar', // 改用長條圖看每月件數對比更清晰
-            data: {
-                labels: months,
-                datasets: Object.keys(providers).map(p => ({
-                    label: providers[p].name,
-                    data: providers[p].data,
-                    backgroundColor: providers[p].color
-                }))
-            },
-            options: { 
-                responsive: true,
-                scales: { y: { beginAtZero: true, title: { display: true, text: '件數' } } }
-            }
+            type: 'bar',
+            data: { labels, datasets },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
         });
     }
 
