@@ -2,78 +2,65 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>GC贈物網 | 物流數據決策看板</title>
+    <title>GC贈物網 | 物流營運淨利分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --ibox: #90ee90; --hilife: #e74c3c; --fami: #add8e6; --bg: #f0f2f5; }
-        body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
+        :root { --ibox: #90ee90; --hilife: #e74c3c; --fami: #add8e6; --bg: #f4f7f9; }
+        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
         .container { max-width: 1200px; margin: auto; }
         
-        /* 佈局 */
-        .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
-        
         /* 側邊篩選區 */
-        .filter-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: sticky; top: 20px; }
+        .layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+        .sidebar { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); height: fit-content; position: sticky; top: 20px; }
         .filter-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .filter-group h4 { margin: 0 0 10px 0; font-size: 1rem; color: #34495e; border-left: 4px solid #34495e; padding-left: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .select-all { font-size: 0.75rem; color: #3498db; cursor: pointer; text-decoration: underline; font-weight: normal; }
-        
-        .filter-option { display: flex; align-items: center; margin-bottom: 10px; cursor: pointer; font-size: 0.95rem; }
-        .filter-option input { margin-right: 10px; width: 16px; height: 16px; }
+        .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; }
+        .select-all { font-size: 12px; color: #3498db; cursor: pointer; font-weight: normal; }
 
-        /* 按鈕樣式 */
-        .btn { width: 100%; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 10px; transition: 0.2s; }
-        .btn-primary { background: #3498db; color: white; font-size: 1rem; border: 2px solid #2980b9; }
-        .btn-primary:hover { background: #2980b9; }
-        .btn-refresh { background: #f8f9fa; color: #7f8c8d; border: 1px solid #ddd; font-size: 0.85rem; }
-
-        /* 主顯示區 */
+        /* KPI 卡片 */
         .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
         .kpi-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
         .kpi-value { font-size: 1.8rem; font-weight: bold; margin: 5px 0; }
         .kpi-diff { font-size: 0.9rem; color: #7f8c8d; }
         .up { color: #27ae60; } .down { color: #e74c3c; }
 
-        .chart-main { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .data-table-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; }
+        /* 圖表與表格 */
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         th { background: #34495e; color: white; }
+
+        .btn-main { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+        .btn-refresh { width: 100%; padding: 8px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>📊 物流營運決策看板</h1>
-    </div>
-
-    <div class="dashboard-layout">
-        <aside class="filter-card">
-            <button class="btn btn-refresh" onclick="loadData(true)">🔄 同步雲端最新數據</button>
+    <div class="layout">
+        <aside class="sidebar">
+            <button class="btn-refresh" onclick="loadData(true)">🔄 同步雲端最新數據</button>
             
             <div class="filter-group">
-                <h4>1. 物流商 <span class="select-all" onclick="toggleAll('.prov-check')">全選/全取消</span></h4>
-                <label class="filter-option"><input type="checkbox" class="prov-check" value="ibox" checked> i郵箱 (淺綠)</label>
-                <label class="filter-option"><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富 (紅色)</label>
-                <label class="filter-option"><input type="checkbox" class="prov-check" value="fami" checked> 全家 (淺藍)</label>
-            </div>
-            
-            <div class="filter-group">
-                <h4>2. 時間區間 <span class="select-all" onclick="toggleAll('.date-check')">全選/全取消</span></h4>
-                <div id="date-filters" style="max-height: 250px; overflow-y: auto; padding-right: 5px;">
-                    </div>
+                <div class="filter-header">1. 物流商 <span class="select-all" onclick="toggleAll('.prov-check')">全選/取消</span></div>
+                <label><input type="checkbox" class="prov-check" value="ibox" checked> i郵箱 (淺綠)</label><br>
+                <label><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富 (紅色)</label><br>
+                <label><input type="checkbox" class="prov-check" value="fami" checked> 全家 (淺藍)</label>
             </div>
 
-            <button class="btn btn-primary" onclick="render()">🚀 執行篩選比較</button>
+            <div class="filter-group">
+                <div class="filter-header">2. 選擇日期 <span class="select-all" onclick="toggleAll('.date-check')">全選/取消</span></div>
+                <div id="date-list" style="max-height: 300px; overflow-y: auto;"></div>
+            </div>
+
+            <button class="btn-main" onclick="render()">🚀 執行數據分析</button>
         </aside>
 
-        <main class="main-content">
+        <main>
             <div class="kpi-row">
                 <div class="kpi-card">
-                    <div>篩選總寄件量</div>
-                    <div id="kpi-vol" class="kpi-value">0</div>
-                    <div class="kpi-diff">選中範圍累計件數</div>
+                    <div>總預計淨利</div>
+                    <div id="kpi-profit" class="kpi-value">$0</div>
+                    <div class="kpi-diff">已扣除金流與稅金</div>
                 </div>
                 <div class="kpi-card">
                     <div>與上個月比較</div>
@@ -87,14 +74,16 @@
                 </div>
             </div>
 
-            <div class="chart-main">
-                <canvas id="volChart" height="110"></canvas>
+            <div class="card">
+                <h3>📈 物流淨利趨勢對比</h3>
+                <canvas id="profitChart" height="110"></canvas>
             </div>
 
-            <div class="data-table-card">
+            <div class="card">
+                <h3>📋 營運數據明細表</h3>
                 <table id="data-table">
                     <thead>
-                        <tr><th>日期</th><th>物流</th><th>件數 (件)</th></tr>
+                        <tr><th>日期</th><th>物流</th><th>件數</th><th>預算淨利</th></tr>
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -106,114 +95,132 @@
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbywzx0zJx8hS41vX9BAsX-vGvImKFh6HZUyS6XqiyiMbhX3i4l_idcZVunMLAbc-IW8WQ/exec';
     let allRawData = [];
-    let volChart;
+    let profitChart;
 
-    async function loadData(isRefresh = false) {
-        const url = isRefresh ? `${API_URL}?cache=none&t=${new Date().getTime()}` : API_URL;
-        try {
-            const res = await fetch(url);
-            const data = await res.json();
-            allRawData = data.map(d => ({
-                Date: formatDate(d.Month || d.Date),
-                Provider: (d.Provider || "").toLowerCase().trim(),
-                Volume: parseInt(d.Volume) || 0
-            })).filter(d => d.Date !== "Invalid Date");
+    async function loadData(refresh = false) {
+        const url = refresh ? `${API_URL}?t=${Date.now()}` : API_URL;
+        const res = await fetch(url);
+        allRawData = await res.json();
+        
+        // 初始化日期篩選器
+        const dates = [...new Set(allRawData.map(d => formatDate(d.Month || d.Date)))].sort().reverse();
+        document.getElementById('date-list').innerHTML = dates.map(d => 
+            `<label style="display:block; margin-bottom:8px;"><input type="checkbox" class="date-check" value="${d}" checked> ${d}</label>`
+        ).join('');
+        
+        render();
+        if(refresh) alert("雲端數據同步完成！");
+    }
 
-            initDateFilters();
-            render();
-            if(isRefresh) alert("已更新！");
-        } catch (e) {
-            alert("讀取失敗，請確認 API 連結與權限。");
+    function formatDate(s) {
+        const d = new Date(s);
+        return isNaN(d.getTime()) ? s : `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    // --- 核心財務引擎：依據 money-1.html 數據套用 ---
+    function calcProfit(provider, volume, revenue = 60) {
+        const payFeePct = 0.022; // 金流費 2.2%
+        const taxRate = 0.05;   // 5% 營業稅
+        let rebate = 0;
+        let hasPayFee = true;
+
+        switch(provider.toLowerCase().trim()) {
+            case 'fami':
+                rebate = 1; 
+                hasPayFee = false; // 全家不走金流成本
+                break;
+            case 'hilife':
+                rebate = 12; // 萊爾富回饋 12 元
+                hasPayFee = true;
+                break;
+            case 'ibox':
+                hasPayFee = true;
+                // iBOX 級距回饋邏輯 (範例)
+                if (volume >= 2000) rebate = 7;
+                else if (volume >= 1000) rebate = 5;
+                else rebate = 2;
+                break;
+            default: return 0;
         }
+
+        const transFee = hasPayFee ? (revenue * payFeePct) : 0;
+        const tax = (rebate * taxRate);
+        const unitProfit = rebate - (transFee + tax);
+        return unitProfit * volume;
     }
 
-    function formatDate(dateStr) {
-        const d = new Date(dateStr);
-        return isNaN(d.getTime()) ? dateStr : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    }
-
-    // 全選/取消全選功能
     function toggleAll(selector) {
-        const checks = document.querySelectorAll(selector);
-        const allChecked = Array.from(checks).every(c => c.checked);
-        checks.forEach(c => c.checked = !allChecked);
-    }
-
-    function initDateFilters() {
-        const dates = [...new Set(allRawData.map(d => d.Date))].sort().reverse();
-        const container = document.getElementById('date-filters');
-        container.innerHTML = dates.map(d => `
-            <label class="filter-option">
-                <input type="checkbox" class="date-check" value="${d}" checked> ${d}
-            </label>
-        `).join('');
+        const el = document.querySelectorAll(selector);
+        const all = Array.from(el).every(c => c.checked);
+        el.forEach(c => c.checked = !all);
     }
 
     function render() {
-        const selectedProvs = Array.from(document.querySelectorAll('.prov-check:checked')).map(c => c.value);
-        const selectedDates = Array.from(document.querySelectorAll('.date-check:checked')).map(c => c.value);
+        const provs = Array.from(document.querySelectorAll('.prov-check:checked')).map(c => c.value);
+        const dates = Array.from(document.querySelectorAll('.date-check:checked')).map(c => c.value);
+        const filtered = allRawData.filter(d => provs.includes(d.Provider.toLowerCase()) && dates.includes(formatDate(d.Month || d.Date)));
 
-        const filteredData = allRawData.filter(d => 
-            selectedProvs.includes(d.Provider) && selectedDates.includes(d.Date)
-        );
-
-        const monthlySum = {};
-        filteredData.forEach(d => monthlySum[d.Date] = (monthlySum[d.Date] || 0) + d.Volume);
-        const sortedMonths = Object.keys(monthlySum).sort();
-        
-        const latestKey = sortedMonths[sortedMonths.length-1];
-        const prevKey = sortedMonths[sortedMonths.length-2];
-        const curDate = new Date(latestKey);
-        const yoyKey = `${curDate.getFullYear()-1}-${String(curDate.getMonth()+1).padStart(2, '0')}`;
-
-        document.getElementById('kpi-vol').innerText = Object.values(monthlySum).reduce((a,b)=>a+b, 0).toLocaleString();
-        
-        updateKPI('mom', monthlySum[latestKey], monthlySum[prevKey]);
-        updateKPI('yoy', monthlySum[latestKey], monthlySum[yoyKey]);
-
+        const monthlySummary = {};
         const tbody = document.querySelector('#data-table tbody');
-        tbody.innerHTML = filteredData.sort((a,b)=>b.Date.localeCompare(a.Date))
-            .map(d => `<tr><td>${d.Date}</td><td>${d.Provider.toUpperCase()}</td><td>${d.Volume.toLocaleString()}</td></tr>`).join('');
+        tbody.innerHTML = '';
 
-        updateChart(sortedMonths, selectedProvs, allRawData);
+        filtered.sort((a,b) => formatDate(b.Month).localeCompare(formatDate(a.Month))).forEach(d => {
+            const pVal = calcProfit(d.Provider, d.Volume, d.Revenue || 60);
+            const dKey = formatDate(d.Month || d.Date);
+            monthlySummary[dKey] = (monthlySummary[dKey] || 0) + pVal;
+
+            tbody.innerHTML += `<tr>
+                <td>${dKey}</td>
+                <td style="color:var(--${d.Provider.toLowerCase()})">${d.Provider.toUpperCase()}</td>
+                <td>${d.Volume.toLocaleString()}</td>
+                <td class="${pVal >=0 ? 'up':'down'}">$${Math.round(pVal).toLocaleString()}</td>
+            </tr>`;
+        });
+
+        // KPI 邏輯
+        const sortedMonths = Object.keys(monthlySummary).sort();
+        const latest = monthlySummary[sortedMonths[sortedMonths.length-1]] || 0;
+        const prev = monthlySummary[sortedMonths[sortedMonths.length-2]] || 0;
+        const curDate = new Date(sortedMonths[sortedMonths.length-1]);
+        const yoyKey = `${curDate.getFullYear()-1}-${String(curDate.getMonth()+1).padStart(2,'0')}-${String(curDate.getDate()).padStart(2,'0')}`;
+        const yoyVal = monthlySummary[yoyKey] || 0;
+
+        document.getElementById('kpi-profit').innerText = `$${Math.round(latest).toLocaleString()}`;
+        updateKPI('mom', latest, prev);
+        updateKPI('yoy', latest, yoyVal);
+
+        updateChart(sortedMonths, provs, filtered);
     }
 
-    function updateKPI(prefix, current, target) {
-        const pctEl = document.getElementById(`kpi-${prefix}-pct`);
-        const numEl = document.getElementById(`kpi-${prefix}-num`);
-        if(!current || !target) {
-            pctEl.innerText = "N/A";
-            numEl.innerText = "缺乏同期數據";
-            pctEl.className = "kpi-value";
-            return;
-        }
-        const diffNum = current - target;
-        const diffPct = ((diffNum / target) * 100).toFixed(1);
-        pctEl.innerText = (diffPct > 0 ? "+" : "") + diffPct + "%";
-        pctEl.className = "kpi-value " + (diffNum >= 0 ? "up" : "down");
-        numEl.innerText = `${diffNum >= 0 ? '增加' : '減少'} ${Math.abs(diffNum).toLocaleString()} 件`;
+    function updateKPI(id, cur, pre) {
+        const pctEl = document.getElementById(`kpi-${id}-pct`);
+        const numEl = document.getElementById(`kpi-${id}-num`);
+        if(!pre) { pctEl.innerText = "-"; numEl.innerText = "缺乏同期數據"; return; }
+        const diff = cur - pre;
+        const pct = ((diff / pre) * 100).toFixed(1);
+        pctEl.innerText = `${diff >= 0 ? '+' : ''}${pct}%`;
+        pctEl.className = `kpi-value ${diff >= 0 ? 'up' : 'down'}`;
+        numEl.innerText = `${diff >= 0 ? '增加' : '減少'} $${Math.abs(Math.round(diff)).toLocaleString()}`;
     }
 
-    function updateChart(labels, provs, raw) {
-        const ctx = document.getElementById('volChart').getContext('2d');
-        if (volChart) volChart.destroy();
+    function updateChart(labels, provs, data) {
+        const ctx = document.getElementById('profitChart').getContext('2d');
+        if (profitChart) profitChart.destroy();
         const colors = { ibox: '#90ee90', hilife: '#e74c3c', fami: '#add8e6' };
-        const datasets = provs.map(p => ({
-            label: p.toUpperCase(),
-            backgroundColor: colors[p],
-            data: labels.map(m => {
-                const found = raw.find(d => d.Date === m && d.Provider === p);
-                return found ? found.Volume : 0;
-            })
-        }));
-        volChart = new Chart(ctx, {
+        profitChart = new Chart(ctx, {
             type: 'bar',
-            data: { labels, datasets },
-            options: { 
-                responsive: true,
-                plugins: { legend: { position: 'bottom' } },
-                scales: { y: { beginAtZero: true } }
-            }
+            data: {
+                labels,
+                datasets: provs.map(p => ({
+                    label: p.toUpperCase(),
+                    backgroundColor: colors[p],
+                    data: labels.map(m => {
+                        const d = data.find(x => formatDate(x.Month || x.Date) === m && x.Provider.toLowerCase() === p);
+                        return d ? Math.round(calcProfit(p, d.Volume, d.Revenue || 60)) : 0;
+                    })
+                }))
+            },
+            options: { plugins: { legend: { position: 'bottom' } } }
         });
     }
 
