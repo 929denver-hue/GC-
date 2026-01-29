@@ -5,21 +5,27 @@
     <title>GC贈物網 | 物流監控看板</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --ibox: #3498db; --hilife: #e67e22; --fami: #27ae60; --bg: #f8f9fa; }
+        :root { 
+            --ibox: #90ee90;   /* 淺綠色 */
+            --hilife: #e74c3c; /* 紅色 */
+            --fami: #add8e6;   /* 淺藍色 */
+            --bg: #f8f9fa; 
+        }
         body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; }
+        .container { max-width: 1100px; margin: auto; }
         
-        /* 頁籤樣式 */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
-        .tab-btn { padding: 10px 25px; border: none; background: #eee; cursor: pointer; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        .tab-btn { padding: 10px 25px; border: none; background: #eee; cursor: pointer; border-radius: 8px; font-weight: bold; }
         .tab-btn.active { background: #34495e; color: white; }
-        .tab-btn:hover { background: #ddd; }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
         .kpi-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
-        .kpi-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+        .kpi-value { font-size: 1.8rem; font-weight: bold; color: #2c3e50; margin: 5px 0; }
+        .kpi-sub { font-size: 0.85rem; }
         
+        .up { color: #27ae60; font-weight: bold; }
+        .down { color: #e74c3c; font-weight: bold; }
+
         .chart-main { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
         .data-list { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         table { width: 100%; border-collapse: collapse; }
@@ -30,36 +36,48 @@
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>📦 物流寄件量監控看板</h1>
-        <button onclick="loadData()" style="padding: 10px; cursor:pointer;">🔄 刷新數據</button>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>📦 物流數據監控 (含增長對比)</h1>
+        <button onclick="loadData()" style="padding: 8px 15px; cursor: pointer;">🔄 刷新數據</button>
     </div>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('all', this)">總覽</button>
-        <button class="tab-btn" onclick="switchTab('ibox', this)">iBOX</button>
+        <button class="tab-btn" onclick="switchTab('ibox', this)">i郵箱</button>
         <button class="tab-btn" onclick="switchTab('hilife', this)">萊爾富</button>
         <button class="tab-btn" onclick="switchTab('fami', this)">全家</button>
     </div>
 
     <div class="kpi-row">
-        <div class="kpi-card"><div>當前篩選總量</div><div id="kpi-vol" class="kpi-value">0</div></div>
-        <div class="kpi-card"><div>資料筆數</div><div id="kpi-count" class="kpi-value">0</div></div>
+        <div class="kpi-card">
+            <div>當前篩選總量</div>
+            <div id="kpi-vol" class="kpi-value">0</div>
+        </div>
+        <div class="kpi-card">
+            <div>與上個月對比 (MoM)</div>
+            <div id="kpi-mom" class="kpi-value">-</div>
+            <div id="mom-detail" class="kpi-sub">--</div>
+        </div>
+        <div class="kpi-card">
+            <div>去年同期對比 (YoY)</div>
+            <div id="kpi-yoy" class="kpi-value">-</div>
+            <div id="yoy-detail" class="kpi-sub">--</div>
+        </div>
     </div>
 
     <div class="chart-main">
-        <h3 id="chart-title">📈 寄件趨勢</h3>
         <canvas id="volChart" height="100"></canvas>
     </div>
 
     <div class="data-list">
-        <h3>📋 資料明細</h3>
+        <h3>📋 月度數據明細</h3>
         <table id="data-table">
             <thead>
                 <tr>
-                    <th>日期 (年月日)</th>
+                    <th>日期 (年月)</th>
                     <th>物流商</th>
                     <th>寄件量</th>
+                    <th>較上月</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -74,33 +92,21 @@
     let volChart;
 
     async function loadData() {
-        try {
-            const res = await fetch(API_URL);
-            const data = await res.json();
-            
-            // 資料清洗：處理時間與數字
-            allRawData = data.map(d => ({
-                // 核心修復：強制轉化為 YYYY-MM-DD
-                Date: formatDate(d.Month || d.Date), 
-                Provider: (d.Provider || "").toLowerCase().trim(),
-                Volume: parseInt(d.Volume) || 0
-            })).filter(d => d.Date !== "Invalid Date");
-
-            render();
-        } catch (e) {
-            alert("資料載入失敗，請檢查 API URL");
-        }
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        allRawData = data.map(d => ({
+            Date: formatDate(d.Month || d.Date),
+            Provider: (d.Provider || "").toLowerCase().trim(),
+            Volume: parseInt(d.Volume) || 0
+        })).filter(d => d.Date !== "Invalid Date");
+        render();
     }
 
-    // 時間處理函式：確保只顯示年月日
     function formatDate(dateStr) {
         if (!dateStr) return "Invalid Date";
         const d = new Date(dateStr);
-        if (isNaN(d.getTime())) return dateStr; // 如果本來就是文字則直接回傳
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        if (isNaN(d.getTime())) return dateStr;
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
     }
 
     function switchTab(tab, btn) {
@@ -111,58 +117,78 @@
     }
 
     function render() {
-        // 篩選資料
-        const filteredData = currentTab === 'all' 
-            ? allRawData 
-            : allRawData.filter(d => d.Provider === currentTab);
+        const filteredData = currentTab === 'all' ? allRawData : allRawData.filter(d => d.Provider === currentTab);
+        
+        // 分月加總
+        const monthlySum = {};
+        filteredData.forEach(d => {
+            monthlySum[d.Date] = (monthlySum[d.Date] || 0) + d.Volume;
+        });
 
-        // 更新 KPI
-        const totalVol = filteredData.reduce((sum, d) => sum + d.Volume, 0);
-        document.getElementById('kpi-vol').innerText = totalVol.toLocaleString();
-        document.getElementById('kpi-count').innerText = filteredData.length;
+        const sortedMonths = Object.keys(monthlySum).sort();
+        const latestMonth = sortedMonths[sortedMonths.length - 1];
+        const lastMonth = sortedMonths[sortedMonths.length - 2];
+        
+        // 尋找去年同期
+        const latestDate = new Date(latestMonth);
+        const yoyMonth = `${latestDate.getFullYear()-1}-${String(latestDate.getMonth()+1).padStart(2, '0')}`;
+
+        // 計算 KPI
+        updateKPI('mom', monthlySum[latestMonth], monthlySum[lastMonth], 'mom-detail');
+        updateKPI('yoy', monthlySum[latestMonth], monthlySum[yoyMonth], 'yoy-detail');
+        document.getElementById('kpi-vol').innerText = (monthlySum[latestMonth] || 0).toLocaleString();
 
         // 更新表格
         const tbody = document.querySelector('#data-table tbody');
         tbody.innerHTML = '';
-        filteredData.sort((a,b) => b.Date.localeCompare(a.Date)).forEach(d => {
+        sortedMonths.reverse().forEach(m => {
+            const currentVol = monthlySum[m];
+            const prevMonth = `${new Date(m).getFullYear()}-${String(new Date(m).getMonth()).padStart(2, '0')}`; // 簡化邏輯
             tbody.innerHTML += `<tr>
-                <td>${d.Date}</td>
-                <td>${d.Provider.toUpperCase()}</td>
-                <td><b>${d.Volume.toLocaleString()}</b> 件</td>
+                <td>${m}</td>
+                <td>${currentTab.toUpperCase()}</td>
+                <td><b>${currentVol.toLocaleString()}</b> 件</td>
+                <td>-</td>
             </tr>`;
         });
 
-        updateChart(filteredData);
+        updateChart(sortedMonths.reverse(), monthlySum);
     }
 
-    function updateChart(data) {
+    function updateKPI(id, current, prev, detailId) {
+        const el = document.getElementById('kpi-' + id);
+        const detail = document.getElementById(detailId);
+        if (!current || !prev) {
+            el.innerText = "N/A";
+            detail.innerText = "資料不足";
+            return;
+        }
+        const diff = ((current - prev) / prev * 100).toFixed(1);
+        el.innerText = (diff > 0 ? "+" : "") + diff + "%";
+        el.className = "kpi-value " + (diff >= 0 ? "up" : "down");
+        detail.innerText = `對比前期: ${prev.toLocaleString()}`;
+    }
+
+    function updateChart(labels, monthlySum) {
         const ctx = document.getElementById('volChart').getContext('2d');
         if (volChart) volChart.destroy();
 
-        // 依日期排序
-        const sortedData = [...data].sort((a, b) => a.Date.localeCompare(b.Date));
-        const labels = [...new Set(sortedData.map(d => d.Date))];
-
+        const colors = { ibox: '#90ee90', hilife: '#e74c3c', fami: '#add8e6' };
         let datasets = [];
+
         if (currentTab === 'all') {
-            const providers = ['ibox', 'hilife', 'fami'];
-            const colors = { ibox: '#3498db', hilife: '#e67e22', fami: '#27ae60' };
-            datasets = providers.map(p => ({
+            datasets = ['ibox', 'hilife', 'fami'].map(p => ({
                 label: p.toUpperCase(),
-                data: labels.map(l => {
-                    const found = sortedData.find(d => d.Date === l && d.Provider === p);
-                    return found ? found.Volume : 0;
-                }),
-                backgroundColor: colors[p]
+                backgroundColor: colors[p],
+                data: labels.map(m => {
+                    return allRawData.filter(d => d.Date === m && d.Provider === p).reduce((s,v)=>s+v.Volume, 0);
+                })
             }));
         } else {
             datasets = [{
                 label: currentTab.toUpperCase(),
-                data: labels.map(l => {
-                    const found = sortedData.find(d => d.Date === l);
-                    return found ? found.Volume : 0;
-                }),
-                backgroundColor: '#34495e'
+                backgroundColor: colors[currentTab],
+                data: labels.map(m => monthlySum[m])
             }];
         }
 
