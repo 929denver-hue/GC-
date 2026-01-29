@@ -24,12 +24,8 @@
         table { width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         th { background: #34495e; color: white; }
-        .btn-main { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-main:hover { background: #2980b9; }
-        .btn-refresh { width: 100%; padding: 8px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 15px; cursor: pointer; border-radius: 6px; font-size: 12px; }
-        
-        /* 時間列表優化：捲軸設計 */
-        #date-list { max-height: 250px; overflow-y: auto; padding-right: 5px; margin-top: 10px; }
+        .btn-main { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        #date-list { max-height: 250px; overflow-y: auto; padding-right: 5px; }
         #date-list::-webkit-scrollbar { width: 4px; }
         #date-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
     </style>
@@ -39,16 +35,16 @@
 <div class="container">
     <div class="layout">
         <aside class="sidebar">
-            <button class="btn-refresh" onclick="loadData(true)">🔄 強制同步雲端數據</button>
+            <button class="btn-refresh" onclick="loadData(true)" style="width:100%; padding:8px; margin-bottom:15px; cursor:pointer;">🔄 同步雲端數據</button>
             <div class="filter-group">
                 <div class="filter-header">1. 物流商 <span class="select-all" onclick="toggleAll('.prov-check')">全選/反選</span></div>
-                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="ibox" checked> i郵箱 (淺綠)</label>
-                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富 (紅色)</label>
-                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="fami" checked> 全家 (淺藍)</label>
+                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="ibox" checked> i郵箱</label>
+                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富</label>
+                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="fami" checked> 全家</label>
             </div>
             <div class="filter-group">
                 <div class="filter-header">2. 時間區間 <span class="select-all" onclick="toggleAll('.date-check')">全選/反選</span></div>
-                <div id="date-list">載入中...</div>
+                <div id="date-list"></div>
             </div>
             <button class="btn-main" onclick="render()">🚀 執行數據分析</button>
         </aside>
@@ -56,25 +52,19 @@
         <main>
             <div class="kpi-row">
                 <div class="kpi-card"><div>選中總件數</div><div id="kpi-total-vol" class="kpi-value">0</div></div>
-                <div class="kpi-card"><div>與前一期比較 (MoM)</div><div id="kpi-mom-pct" class="kpi-value">-</div><div id="kpi-mom-num" style="font-size:0.85rem; color:#7f8c8d;">--</div></div>
-                <div class="kpi-card"><div>數據狀態</div><div id="kpi-status" class="kpi-value" style="font-size:1.2rem; color:#3498db;">已預設選取最新月</div></div>
+                <div class="kpi-card"><div>與前月比較</div><div id="kpi-mom-pct" class="kpi-value">-</div><div id="kpi-mom-num" style="font-size:0.85rem; color:#7f8c8d;">--</div></div>
+                <div class="kpi-card"><div>與去年同期比較</div><div id="kpi-yoy-pct" class="kpi-value">-</div><div id="kpi-yoy-num" style="font-size:0.85rem; color:#7f8c8d;">--</div></div>
             </div>
 
             <div class="chart-grid">
-                <div class="card">
-                    <h3>📈 寄件量趨勢對比</h3>
-                    <div class="chart-container"><canvas id="volChart"></canvas></div>
-                </div>
-                <div class="card">
-                    <h3>🍕 篩選範圍佔比</h3>
-                    <div class="chart-container"><canvas id="pieChart"></canvas></div>
-                </div>
+                <div class="card"><h3>寄件量趨勢</h3><div class="chart-container"><canvas id="volChart"></canvas></div></div>
+                <div class="card"><h3>篩選佔比</h3><div class="chart-container"><canvas id="pieChart"></canvas></div></div>
             </div>
 
             <div class="card">
-                <h3>📋 數據明細</h3>
+                <h3>📋數據明細</h3>
                 <table id="data-table">
-                    <thead><tr><th>日期</th><th>物流</th><th>件數</th><th>佔比</th></tr></thead>
+                    <thead><tr><th>日期</th><th>物流</th><th>件數</th><th>當月佔比</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -91,26 +81,16 @@
 
     async function loadData(refresh = false) {
         const url = refresh ? `${API_URL}?t=${Date.now()}` : API_URL;
-        try {
-            const res = await fetch(url);
-            allRawData = await res.json();
-            
-            // 排序最新日期在前
-            const dates = [...new Set(allRawData.map(d => formatDate(d.Month || d.Date)))].sort().reverse();
-            
-            // 預設僅勾選第一個 (最新月份)
-            const dateListContainer = document.getElementById('date-list');
-            dateListContainer.innerHTML = dates.map((d, index) => `
-                <label style="display:block; margin-bottom:8px; cursor:pointer;">
-                    <input type="checkbox" class="date-check" value="${d}" ${index === 0 ? 'checked' : ''}> ${d}
-                </label>
-            `).join('');
-            
-            render();
-        } catch (error) {
-            console.error("載入失敗:", error);
-            document.getElementById('date-list').innerText = "連線失敗，請檢查 API。";
-        }
+        const res = await fetch(url);
+        allRawData = await res.json();
+        const dates = [...new Set(allRawData.map(d => formatDate(d.Month || d.Date)))].sort().reverse();
+        
+        document.getElementById('date-list').innerHTML = dates.map((d, index) => `
+            <label style="display:block; margin-bottom:8px; cursor:pointer;">
+                <input type="checkbox" class="date-check" value="${d}" ${index === 0 ? 'checked' : ''}> ${d}
+            </label>
+        `).join('');
+        render();
     }
 
     function formatDate(s) {
@@ -126,64 +106,81 @@
 
     function render() {
         const provs = Array.from(document.querySelectorAll('.prov-check:checked')).map(c => c.value);
-        const dates = Array.from(document.querySelectorAll('.date-check:checked')).map(c => c.value);
+        const selectedDates = Array.from(document.querySelectorAll('.date-check:checked')).map(c => c.value);
         
-        const filtered = allRawData.filter(d => 
-            provs.includes(d.Provider.toLowerCase().trim()) && 
-            dates.includes(formatDate(d.Month || d.Date))
-        );
+        // 篩選數據
+        const filtered = allRawData.filter(d => provs.includes(d.Provider.toLowerCase().trim()) && selectedDates.includes(formatDate(d.Month || d.Date)));
 
         let totalVol = 0;
         const providerSum = { ibox: 0, hilife: 0, fami: 0 };
         const monthlySum = {};
-        const tbody = document.querySelector('#data-table tbody');
-        tbody.innerHTML = '';
-
+        
+        // 先算目前篩選範圍內的總數
         filtered.forEach(d => {
             const p = d.Provider.toLowerCase().trim();
             const vol = parseInt(d.Volume) || 0;
             const dKey = formatDate(d.Month || d.Date);
-            providerSum[p] = (providerSum[p] || 0) + vol;
+            providerSum[p] += vol;
             monthlySum[dKey] = (monthlySum[dKey] || 0) + vol;
             totalVol += vol;
         });
 
-        // KPI 更新
-        document.getElementById('kpi-total-vol').innerText = totalVol.toLocaleString() + ' 件';
-        
-        const sortedMonths = Object.keys(monthlySum).sort();
-        const latest = monthlySum[sortedMonths[sortedMonths.length-1]] || 0;
-        const prev = monthlySum[sortedMonths[sortedMonths.length-2]] || 0;
-        updateKPI('mom', latest, prev);
+        document.getElementById('kpi-total-vol').innerText = totalVol.toLocaleString();
 
-        // 表格渲染
+        // --- MoM & YoY 邏輯 ---
+        // 取得所有資料的月份總結 (用於對照)
+        const globalMonthlySum = {};
+        allRawData.filter(d => provs.includes(d.Provider.toLowerCase().trim())).forEach(d => {
+            const dKey = formatDate(d.Month || d.Date);
+            globalMonthlySum[dKey] = (globalMonthlySum[dKey] || 0) + (parseInt(d.Volume) || 0);
+        });
+
+        const latestMonth = selectedDates[0]; // 勾選清單中的最新月
+        if (latestMonth) {
+            const curVal = globalMonthlySum[latestMonth] || 0;
+            
+            // MoM (上個月)
+            const dMoM = new Date(latestMonth);
+            dMoM.setMonth(dMoM.getMonth() - 1);
+            const prevMonthKey = formatDate(dMoM);
+            updateKPI('mom', curVal, globalMonthlySum[prevMonthKey]);
+
+            // YoY (去年同月)
+            const dYoY = new Date(latestMonth);
+            dYoY.setFullYear(dYoY.getFullYear() - 1);
+            const lastYearKey = formatDate(dYoY);
+            updateKPI('yoy', curVal, globalMonthlySum[lastYearKey]);
+        }
+
+        // 明細表格
+        const tbody = document.querySelector('#data-table tbody');
+        tbody.innerHTML = '';
         filtered.sort((a,b) => formatDate(b.Month || b.Date).localeCompare(formatDate(a.Month || a.Date))).forEach(d => {
             const dKey = formatDate(d.Month || d.Date);
             const vol = parseInt(d.Volume) || 0;
             const share = monthlySum[dKey] > 0 ? ((vol / monthlySum[dKey]) * 100).toFixed(1) : 0;
-            tbody.innerHTML += `<tr><td>${dKey}</td><td style="color:var(--${d.Provider.toLowerCase().trim()}); font-weight:bold;">${d.Provider.toUpperCase()}</td><td>${vol.toLocaleString()} 件</td><td>${share}%</td></tr>`;
+            tbody.innerHTML += `<tr><td>${dKey}</td><td>${d.Provider.toUpperCase()}</td><td>${vol.toLocaleString()}</td><td>${share}%</td></tr>`;
         });
 
-        updateCharts(sortedMonths, provs, filtered, providerSum);
+        updateCharts(Object.keys(monthlySum).sort(), provs, filtered, providerSum);
     }
 
     function updateKPI(id, cur, pre) {
         const pctEl = document.getElementById(`kpi-${id}-pct`);
         const numEl = document.getElementById(`kpi-${id}-num`);
-        if(!pre) { pctEl.innerText = "-"; numEl.innerText = "需勾選至少兩期進行比較"; return; }
+        if(!pre) { pctEl.innerText = "-"; numEl.innerText = "查無前期數據"; return; }
         const diff = cur - pre;
         const pct = ((diff / pre) * 100).toFixed(1);
-        pctEl.innerText = `${diff >= 0 ? '+' : ''}${pct}%`;
-        pctEl.className = `kpi-value ${diff >= 0 ? 'up' : 'down'}`;
-        numEl.innerText = `${diff >= 0 ? '增加' : '減少'} ${Math.abs(diff).toLocaleString()} 件`;
+        pctEl.innerText = (diff >= 0 ? '+' : '') + pct + '%';
+        pctEl.className = 'kpi-value ' + (diff >= 0 ? 'up' : 'down');
+        numEl.innerText = (diff >= 0 ? '增加 ' : '減少 ') + Math.abs(diff).toLocaleString() + ' 件';
     }
 
     function updateCharts(labels, provs, data, pSum) {
         const colors = { ibox: '#90ee90', hilife: '#e74c3c', fami: '#add8e6' };
-        
-        const ctxVol = document.getElementById('volChart').getContext('2d');
+        const ctxV = document.getElementById('volChart').getContext('2d');
         if (volChart) volChart.destroy();
-        volChart = new Chart(ctxVol, {
+        volChart = new Chart(ctxV, {
             type: 'bar',
             data: { labels, datasets: provs.map(p => ({ label: p.toUpperCase(), backgroundColor: colors[p], data: labels.map(m => {
                 const found = data.find(x => formatDate(x.Month || x.Date) === m && x.Provider.toLowerCase().trim() === p);
@@ -192,13 +189,13 @@
             options: { maintainAspectRatio: false, plugins: { datalabels: { display: false } } }
         });
 
-        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        const ctxP = document.getElementById('pieChart').getContext('2d');
         if (pieChart) pieChart.destroy();
-        const total = provs.reduce((acc, p) => acc + (pSum[p] || 0), 0);
-        pieChart = new Chart(ctxPie, {
+        const total = Object.values(pSum).reduce((a, b) => a + b, 0);
+        pieChart = new Chart(ctxP, {
             type: 'pie',
-            data: { labels: provs.map(p => p.toUpperCase()), datasets: [{ backgroundColor: provs.map(p => colors[p]), data: provs.map(p => pSum[p] || 0) }] },
-            options: { maintainAspectRatio: false, plugins: { datalabels: { formatter: (val) => total === 0 ? '0%' : ((val / total) * 100).toFixed(1) + '%' } } }
+            data: { labels: provs.map(p => p.toUpperCase()), datasets: [{ backgroundColor: provs.map(p => colors[p]), data: provs.map(p => pSum[p]) }] },
+            options: { maintainAspectRatio: false, plugins: { datalabels: { formatter: (v) => total === 0 ? '0%' : (v/total*100).toFixed(1) + '%' } } }
         });
     }
 
