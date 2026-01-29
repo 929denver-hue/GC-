@@ -2,35 +2,31 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>GC贈物網 | 物流件數與損益分析</title>
+    <title>GC贈物網 | 物流包裹量監控</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --ibox: #90ee90; --hilife: #e74c3c; --fami: #add8e6; --bg: #f4f7f9; }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
         .container { max-width: 1200px; margin: auto; }
-        
-        /* 側邊篩選區 */
         .layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
         .sidebar { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); height: fit-content; position: sticky; top: 20px; }
         .filter-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; }
-        .select-all { font-size: 12px; color: #3498db; cursor: pointer; font-weight: normal; }
+        .select-all { font-size: 12px; color: #3498db; cursor: pointer; text-decoration: underline; }
 
-        /* KPI 卡片 */
-        .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
-        .kpi-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
-        .kpi-value { font-size: 1.6rem; font-weight: bold; margin: 5px 0; }
-        .kpi-diff { font-size: 0.85rem; color: #7f8c8d; }
-        .up { color: #27ae60; } .down { color: #e74c3c; }
+        .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .kpi-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid #34495e; }
+        .kpi-value { font-size: 2.2rem; font-weight: bold; margin: 5px 0; color: #2c3e50; }
+        .kpi-diff { font-size: 0.9rem; color: #7f8c8d; }
+        .up { color: #27ae60; font-weight: bold; } .down { color: #e74c3c; font-weight: bold; }
 
-        /* 圖表與表格 */
         .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         th { background: #34495e; color: white; }
 
         .btn-main { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
-        .btn-refresh { width: 100%; padding: 8px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-size: 12px; }
+        .btn-refresh { width: 100%; padding: 8px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 15px; cursor: pointer; border-radius: 6px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -38,62 +34,53 @@
 <div class="container">
     <div class="layout">
         <aside class="sidebar">
-            <button class="btn-refresh" onclick="loadData(true)">🔄 強制同步雲端數據</button>
-            
+            <button class="btn-refresh" onclick="loadData(true)">🔄 同步最新包裹數據</button>
             <div class="filter-group">
                 <div class="filter-header">1. 物流商 <span class="select-all" onclick="toggleAll('.prov-check')">全選/取消</span></div>
-                <label><input type="checkbox" class="prov-check" value="ibox" checked> i郵箱 (淺綠)</label><br>
-                <label><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富 (紅色)</label><br>
-                <label><input type="checkbox" class="prov-check" value="fami" checked> 全家 (淺藍)</label>
+                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="ibox" checked> i郵箱 (淺綠)</label>
+                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富 (紅色)</label>
+                <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="fami" checked> 全家 (淺藍)</label>
             </div>
-
             <div class="filter-group">
-                <div class="filter-header">2. 選擇日期 <span class="select-all" onclick="toggleAll('.date-check')">全選/取消</span></div>
+                <div class="filter-header">2. 時間區間 <span class="select-all" onclick="toggleAll('.date-check')">全選/取消</span></div>
                 <div id="date-list" style="max-height: 250px; overflow-y: auto;"></div>
             </div>
-
-            <button class="btn-main" onclick="render()">🚀 執行深度分析</button>
+            <button class="btn-main" onclick="render()">🚀 執行篩選對比</button>
         </aside>
 
         <main>
             <div class="kpi-row">
                 <div class="kpi-card">
-                    <div style="font-size: 0.9rem; color: #666;">總寄件量</div>
+                    <div style="color: #666;">選中範圍總件數</div>
                     <div id="kpi-total-vol" class="kpi-value">0</div>
-                    <div class="kpi-diff">單位：件</div>
+                    <div class="kpi-diff">單位：包裹 (pcs)</div>
                 </div>
                 <div class="kpi-card">
-                    <div style="font-size: 0.9rem; color: #666;">預計總利潤</div>
-                    <div id="kpi-profit" class="kpi-value">$0</div>
-                    <div id="profit-diff" class="kpi-diff">已扣金流/稅</div>
-                </div>
-                <div class="kpi-card">
-                    <div style="font-size: 0.9rem; color: #666;">與上月比較</div>
+                    <div style="color: #666;">與上個月比較</div>
                     <div id="kpi-mom-pct" class="kpi-value">-</div>
                     <div id="kpi-mom-num" class="kpi-diff">--</div>
                 </div>
                 <div class="kpi-card">
-                    <div style="font-size: 0.9rem; color: #666;">與去年同期</div>
+                    <div style="color: #666;">與去年同期比較</div>
                     <div id="kpi-yoy-pct" class="kpi-value">-</div>
                     <div id="kpi-yoy-num" class="kpi-diff">--</div>
                 </div>
             </div>
 
             <div class="card">
-                <h3>📈 物流件數與利潤趨勢 (雙維度)</h3>
-                <canvas id="mixedChart" height="110"></canvas>
+                <h3>📈 包裹寄件量趨勢對比</h3>
+                <canvas id="volChart" height="110"></canvas>
             </div>
 
             <div class="card">
-                <h3>📋 營運與包裹數據明細</h3>
+                <h3>📋 月度包裹數據明細</h3>
                 <table id="data-table">
                     <thead>
                         <tr>
-                            <th>日期</th>
-                            <th>物流商</th>
+                            <th>日期 (年月日)</th>
+                            <th>物流商名稱</th>
                             <th>包裹件數</th>
-                            <th>單件利潤</th>
-                            <th>預計淨利</th>
+                            <th>通路佔比</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -106,7 +93,7 @@
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbywzx0zJx8hS41vX9BAsX-vGvImKFh6HZUyS6XqiyiMbhX3i4l_idcZVunMLAbc-IW8WQ/exec';
     let allRawData = [];
-    let mixedChart;
+    let volChart;
 
     async function loadData(refresh = false) {
         const url = refresh ? `${API_URL}?t=${Date.now()}` : API_URL;
@@ -119,41 +106,12 @@
         ).join('');
         
         render();
-        if(refresh) alert("數據已更新至最新狀態！");
+        if(refresh) alert("包裹數據已完成同步！");
     }
 
     function formatDate(s) {
         const d = new Date(s);
         return isNaN(d.getTime()) ? s : `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    }
-
-    // 依據規則計算利潤
-    function calcProfitInfo(provider, volume, revenue = 60) {
-        const payFeePct = 0.022; 
-        const taxRate = 0.05;   
-        let rebate = 0;
-        let hasPayFee = true;
-
-        switch(provider.toLowerCase().trim()) {
-            case 'fami':
-                rebate = 1; hasPayFee = false;
-                break;
-            case 'hilife':
-                rebate = 12; hasPayFee = true;
-                break;
-            case 'ibox':
-                hasPayFee = true;
-                if (volume >= 2000) rebate = 7;
-                else if (volume >= 1000) rebate = 5;
-                else rebate = 2;
-                break;
-            default: return { unit: 0, total: 0 };
-        }
-
-        const transFee = hasPayFee ? (revenue * payFeePct) : 0;
-        const tax = (rebate * taxRate);
-        const unitProfit = rebate - (transFee + tax);
-        return { unit: unitProfit, total: unitProfit * volume };
     }
 
     function toggleAll(selector) {
@@ -167,77 +125,80 @@
         const dates = Array.from(document.querySelectorAll('.date-check:checked')).map(c => c.value);
         const filtered = allRawData.filter(d => provs.includes(d.Provider.toLowerCase()) && dates.includes(formatDate(d.Month || d.Date)));
 
-        let grandVol = 0, grandProfit = 0;
-        const monthlySummary = {};
+        let totalVolSum = 0;
+        const monthlySum = {};
         const tbody = document.querySelector('#data-table tbody');
         tbody.innerHTML = '';
 
+        // 計算每月總計
+        filtered.forEach(d => {
+            const dateKey = formatDate(d.Month || d.Date);
+            if(!monthlySum[dateKey]) monthlySum[dateKey] = 0;
+            monthlySum[dateKey] += d.Volume;
+            totalVolSum += d.Volume;
+        });
+
         filtered.sort((a,b) => formatDate(b.Month).localeCompare(formatDate(a.Month))).forEach(d => {
-            const info = calcProfitInfo(d.Provider, d.Volume, d.Revenue || 60);
-            const dKey = formatDate(d.Month || d.Date);
-            
-            if(!monthlySummary[dKey]) monthlySummary[dKey] = { vol: 0, profit: 0 };
-            monthlySummary[dKey].vol += d.Volume;
-            monthlySummary[dKey].profit += info.total;
-            
-            grandVol += d.Volume;
-            grandProfit += info.total;
+            const dateKey = formatDate(d.Month || d.Date);
+            const share = ((d.Volume / monthlySum[dateKey]) * 100).toFixed(1);
 
             tbody.innerHTML += `<tr>
-                <td>${dKey}</td>
+                <td>${dateKey}</td>
                 <td style="color:var(--${d.Provider.toLowerCase()}); font-weight:bold;">${d.Provider.toUpperCase()}</td>
-                <td>${d.Volume.toLocaleString()}</td>
-                <td>$${info.unit.toFixed(1)}</td>
-                <td class="${info.total >=0 ? 'up':'down'}">$${Math.round(info.total).toLocaleString()}</td>
+                <td><b>${d.Volume.toLocaleString()}</b> 件</td>
+                <td>${share}%</td>
             </tr>`;
         });
 
-        // KPI
-        document.getElementById('kpi-total-vol').innerText = grandVol.toLocaleString();
-        document.getElementById('kpi-profit').innerText = `$${Math.round(grandProfit).toLocaleString()}`;
+        // 更新 KPI
+        document.getElementById('kpi-total-vol').innerText = totalVolSum.toLocaleString();
         
-        const sortedMonths = Object.keys(monthlySummary).sort();
-        const latest = monthlySummary[sortedMonths[sortedMonths.length-1]] || {vol:0, profit:0};
-        const prev = monthlySummary[sortedMonths[sortedMonths.length-2]] || {vol:0, profit:0};
-        
-        updateKPI('mom', latest.profit, prev.profit);
+        const sortedMonths = Object.keys(monthlySum).sort();
+        const latestKey = sortedMonths[sortedMonths.length-1];
+        const prevKey = sortedMonths[sortedMonths.length-2];
+        const curDate = new Date(latestKey);
+        const yoyKey = `${curDate.getFullYear()-1}-${String(curDate.getMonth()+1).padStart(2,'0')}-${String(curDate.getDate()).padStart(2,'0')}`;
+
+        updateKPI('mom', monthlySum[latestKey], monthlySum[prevKey]);
+        updateKPI('yoy', monthlySum[latestKey], monthlySum[yoyKey]);
 
         updateChart(sortedMonths, provs, filtered);
     }
 
-    function updateKPI(id, cur, pre) {
+    function updateKPI(id, cur, target) {
         const pctEl = document.getElementById(`kpi-${id}-pct`);
         const numEl = document.getElementById(`kpi-${id}-num`);
-        if(!pre || pre === 0) { pctEl.innerText = "-"; numEl.innerText = "缺乏前期數據"; return; }
-        const diff = cur - pre;
-        const pct = ((diff / pre) * 100).toFixed(1);
+        if(!target) {
+            pctEl.innerText = "-"; numEl.innerText = "缺乏同期數據"; return;
+        }
+        const diff = cur - target;
+        const pct = ((diff / target) * 100).toFixed(1);
         pctEl.innerText = `${diff >= 0 ? '+' : ''}${pct}%`;
         pctEl.className = `kpi-value ${diff >= 0 ? 'up' : 'down'}`;
-        numEl.innerText = `${diff >= 0 ? '增加' : '減少'} $${Math.abs(Math.round(diff)).toLocaleString()}`;
+        numEl.innerText = `${diff >= 0 ? '增加' : '減少'} ${Math.abs(diff).toLocaleString()} 件`;
     }
 
     function updateChart(labels, provs, data) {
-        const ctx = document.getElementById('mixedChart').getContext('2d');
-        if (mixedChart) mixedChart.destroy();
+        const ctx = document.getElementById('volChart').getContext('2d');
+        if (volChart) volChart.destroy();
         const colors = { ibox: '#90ee90', hilife: '#e74c3c', fami: '#add8e6' };
         
-        // 生成件數與利潤的混合數據
-        mixedChart = new Chart(ctx, {
+        volChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels,
                 datasets: provs.map(p => ({
-                    label: p.toUpperCase() + ' 利潤',
+                    label: p.toUpperCase(),
                     backgroundColor: colors[p],
                     data: labels.map(m => {
                         const d = data.find(x => formatDate(x.Month || x.Date) === m && x.Provider.toLowerCase() === p);
-                        return d ? Math.round(calcProfitInfo(p, d.Volume, d.Revenue || 60).total) : 0;
+                        return d ? d.Volume : 0;
                     })
                 }))
             },
             options: { 
-                plugins: { legend: { position: 'bottom' }, tooltip: { mode: 'index' } },
-                scales: { y: { title: { display: true, text: '淨利 ($)' } } }
+                plugins: { legend: { position: 'bottom' } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: '包裹件數 (pcs)' } } }
             }
         });
     }
