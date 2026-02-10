@@ -14,212 +14,167 @@
             --soft-bg: #FFF8E1;
             --text-dark: #2c2c2c;
             --console-bg: #5D4037;
-            --insta-bg: #fff;
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
         
         body {
-            margin: 0;
-            font-family: 'Noto Sans TC', sans-serif;
-            color: var(--text-dark);
-            background-color: var(--soft-bg);
+            margin: 0; font-family: 'Noto Sans TC', sans-serif;
+            color: var(--text-dark); background-color: var(--soft-bg);
         }
 
-        /* =========================================
-           1. 前導區 (Hero)
-           ========================================= */
+        /* 1. Hero Section */
         #hero-section {
             min-height: 90vh;
-            background: linear-gradient(rgba(60, 40, 30, 0.3), rgba(60, 40, 30, 0.6)), url('https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=1600&q=80');
+            background: linear-gradient(rgba(60, 40, 30, 0.4), rgba(60, 40, 30, 0.7)), url('https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1600&q=80');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; color: #fff; padding: 40px 20px;
         }
-
         .main-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .poetry-box { 
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); 
             padding: 30px; border-left: 4px solid var(--hope-yellow); max-width: 600px; 
-            text-align: left; margin-bottom: 30px; line-height: 1.8; font-weight: 300;
+            text-align: left; margin-bottom: 30px; line-height: 1.8; 
         }
         .hp-bar-container {
             width: 100%; max-width: 600px; background: rgba(0,0,0,0.8);
             padding: 15px; border-radius: 8px; border: 2px solid #aaa;
         }
-        .hp-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; color: var(--hope-yellow); font-family: 'Press Start 2P'; }
         .hp-track { width: 100%; height: 20px; background: #222; border-radius: 10px; overflow: hidden; }
-        .hp-fill { height: 100%; width: 78%; background: linear-gradient(90deg, #FF9800, #FFD54F); box-shadow: 0 0 10px #FF9800; }
+        .hp-fill { height: 100%; width: 78%; background: linear-gradient(90deg, #FF9800, #FFD54F); }
         .scroll-down-btn {
             background: var(--warm-orange); color: #fff; padding: 12px 30px;
             border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 30px;
             box-shadow: 0 4px 15px rgba(230, 81, 0, 0.4);
         }
 
-        /* =========================================
-           2. 每日任務 (Game)
-           ========================================= */
+        /* 2. Game Section */
         #game-section {
-            padding: 50px 20px;
-            background-color: #3E2723;
+            padding: 50px 20px; background-color: #3E2723;
             background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
             display: flex; flex-direction: column; align-items: center;
             font-family: 'Press Start 2P', cursive; color: #fff;
         }
-
-        /* 跑馬燈 */
-        .arcade-marquee {
-            width: 100%; max-width: 500px; background: #000; border: 4px solid #555; border-bottom: none;
-            height: 30px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center;
-        }
-        .ticker-text {
-            display: inline-block; padding-left: 100%; animation: ticker 20s linear infinite;
-            color: #00FF00; font-size: 10px; font-family: 'Press Start 2P';
-        }
-        @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-
-        /* 遊戲機 */
         .game-console {
             background-color: #F57F17; padding: 20px; 
             border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
-            width: 100%; max-width: 500px; border-radius: 0 0 8px 8px; position: relative;
+            width: 100%; max-width: 500px; border-radius: 8px; position: relative;
         }
-
         .screen {
-            background: #fff; border: 4px solid #222; min-height: 520px; /* 加高給 Smart Input */
+            background: #fff; border: 4px solid #222; min-height: 550px;
             padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center;
             border-radius: 4px; margin-bottom: 15px; position: relative;
         }
 
-        /* 狀態 */
-        .state-idle, .state-spinning { text-align: center; margin-top: 100px; }
+        /* States */
+        .state-idle, .state-spinning { text-align: center; margin-top: 120px; }
         .state-spinning { display: none; }
         .state-quest { display: none; width: 100%; text-align: left; }
 
-        /* 真實照片 */
         .real-photo-frame {
             width: 100%; height: 140px; background: #000; margin-bottom: 10px;
             border: 2px solid #333; overflow: hidden;
         }
         .real-photo { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 互動區 */
+        /* Inputs */
         .interaction-area { font-family: 'Noto Sans TC'; margin-top: 10px; }
         .input-group { margin-bottom: 15px; }
         .input-group label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; font-weight: bold; }
-
-        /* Tags */
+        
         .tag-row { display: flex; gap: 5px; flex-wrap: wrap; }
-        .tag-btn { 
-            font-size: 12px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; transition: 0.2s;
-        }
-        .tag-btn:hover { background: #eee; }
+        .tag-btn { font-size: 12px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; }
         .tag-btn.active { background: var(--warm-orange); color: #fff; border-color: var(--warm-orange); }
 
-        /* Smart Input 膠囊 (重點功能) */
-        .smart-chips {
-            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 5px;
+        .smart-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 5px; }
+        .smart-chip { 
+            background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 4px 10px; 
+            border-radius: 4px; font-size: 11px; white-space: nowrap; cursor: pointer; 
         }
-        .smart-chip {
-            background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80;
-            padding: 4px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; cursor: pointer;
-            transition: all 0.2s;
+        textarea, input[type="text"] {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC';
         }
-        .smart-chip:hover { background: #FFE0B2; transform: translateY(-2px); }
-        .smart-chip::before { content: "+ "; opacity: 0.5; }
 
-        textarea {
-            width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 6px;
-            font-family: 'Noto Sans TC'; font-size: 14px; resize: none;
-            transition: border 0.2s;
+        /* 照片上傳按鈕 */
+        .upload-btn-wrapper {
+            position: relative; overflow: hidden; display: inline-block; width: 100%;
         }
-        textarea:focus { border-color: var(--warm-orange); outline: none; }
+        .btn-upload {
+            border: 2px dashed #ccc; color: #666; background-color: white; padding: 8px 20px;
+            border-radius: 8px; font-size: 14px; font-weight: bold; width: 100%; cursor: pointer;
+            text-align: center; transition: 0.2s;
+        }
+        .btn-upload:hover { border-color: var(--warm-orange); color: var(--warm-orange); background: #FFF3E0; }
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer;
+        }
+        .file-name-display { font-size: 10px; color: #888; margin-top: 4px; text-align: center; }
+
+        /* 投幣動畫 (Coin Physics) */
+        .coin-area { display: flex; justify-content: flex-end; height: 60px; position: relative; margin-bottom: 10px; }
+        .coin-slot { 
+            width: 16px; height: 45px; background: #111; border: 2px solid #666; 
+            border-radius: 4px; position: relative; z-index: 1; top: 10px;
+            box-shadow: inset 0 0 5px #000;
+        }
+        .heart-token { 
+            font-size: 40px; color: #FF1744; position: absolute; right: 30px; top: 0; 
+            cursor: pointer; animation: float 2s infinite; z-index: 10; 
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+        }
         
-        input[type="text"] {
-            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;
+        @keyframes float { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-8px);} }
+        
+        /* 投幣動作：彈起 -> 掉入 -> 縮小消失 */
+        @keyframes insertCoin { 
+            0% { top: 0; right: 30px; transform: scale(1); opacity: 1; }
+            20% { top: -20px; right: 10px; transform: scale(1.1); opacity: 1; } /* 彈起 */
+            50% { top: 15px; right: 0px; transform: scale(0.8); opacity: 1; } /* 對準孔位 */
+            100% { top: 30px; right: 0px; transform: scale(0.2); opacity: 0; } /* 進入 */
         }
+        .inserting { animation: insertCoin 0.8s forwards ease-in; }
 
-        /* 投幣 & 按鈕 */
-        .coin-area { display: flex; justify-content: flex-end; height: 50px; position: relative; margin-bottom: 10px; }
-        .heart-token { font-size: 40px; color: #FF1744; position: absolute; right: 20px; cursor: pointer; animation: bounce 1s infinite; z-index: 5; }
-        .coin-slot { width: 15px; height: 40px; background: #222; border: 2px solid #555; }
         .btn-main {
             background: #999; color: #ccc; border: 4px solid #555; padding: 15px; width: 100%;
             font-family: 'Press Start 2P'; font-size: 12px; cursor: not-allowed; pointer-events: none;
         }
         .btn-unlocked {
             background: #FF1744; color: #fff; border-color: #880E4F; cursor: pointer; pointer-events: auto;
-            box-shadow: 0 4px 0 #880E4F;
+            box-shadow: 0 4px 0 #880E4F; animation: pulse 2s infinite;
         }
-        .btn-unlocked:active { transform: translateY(4px); box-shadow: none; }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
 
-        /* =========================================
-           3. 文青風圖卡預覽 (Shareability)
-           ========================================= */
+        /* 3. 搜尋致敬區 */
+        #search-section { padding: 60px 20px; background: #ECEFF1; text-align: center; border-top: 8px dashed #aaa; }
+        .db-console { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .search-bar { display: flex; gap: 10px; margin-top: 20px; }
+        .search-input { flex: 1; padding: 12px; border: 1px solid #aaa; border-radius: 5px; }
+        .search-btn { background: #5D4037; color: #fff; border: none; padding: 0 20px; border-radius: 5px; cursor: pointer; }
+
+        /* 4. 贊助商區 */
+        #sponsor-section { padding: 40px 20px; background: #fff; text-align: center; }
+        .sponsor-grid { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
+        .sponsor-logo { 
+            width: 100px; height: 100px; background: #f5f5f5; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; color: #888; font-weight: bold;
+            border: 2px solid #eee;
+        }
+
+        /* Modal Preview */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center;
-            padding: 20px;
+            background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; padding: 20px;
         }
-        
-        /* 模擬 IG 限動比例的卡片容器 */
-        .card-preview-container {
-            width: 100%; max-width: 320px; background: transparent; text-align: center;
-        }
-
-        /* 實際要被截圖的區域 (Instagenic Card) */
         #capture-target {
-            background: #fff;
-            width: 300px;
-            /* IG Story 比例或拍立得風格 */
-            padding: 20px 20px 40px 20px; 
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: left;
-            position: relative;
-            margin: 0 auto;
-            font-family: 'Noto Serif TC', serif; /* 文青字體 */
+            background: #fff; width: 300px; padding: 20px; border-radius: 4px; margin: 0 auto;
+            font-family: 'Noto Serif TC', serif; text-align: left;
         }
-
-        /* 卡片內容樣式 */
-        .card-brand { 
-            font-family: 'Noto Sans TC'; font-size: 10px; color: #999; letter-spacing: 1px; 
-            text-transform: uppercase; margin-bottom: 15px; display: flex; justify-content: space-between;
-        }
-        .card-img-box {
-            width: 100%; height: 250px; overflow: hidden; margin-bottom: 20px;
-            filter: grayscale(20%) contrast(110%); /* 文青濾鏡 */
-        }
-        .card-img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .card-tag {
-            background: #000; color: #fff; padding: 4px 8px; font-size: 10px; 
-            display: inline-block; margin-bottom: 10px; font-family: 'Noto Sans TC';
-        }
-        
-        .card-msg-text {
-            font-size: 1.1rem; line-height: 1.6; color: #222; margin-bottom: 20px;
-            font-weight: 600; min-height: 60px;
-        }
-        
-        .card-footer-info {
-            border-top: 1px solid #eee; padding-top: 15px;
-            font-size: 0.8rem; color: #666; font-family: 'Noto Sans TC';
-            display: flex; justify-content: space-between; align-items: flex-end;
-        }
-        .card-footer-info strong { color: #000; font-size: 0.9rem; }
-
-        /* 按鈕區 */
-        .modal-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        
-        .action-btn {
-            padding: 12px; border: none; border-radius: 50px; font-size: 14px; font-weight: bold; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .btn-download { background: #E65100; color: #fff; box-shadow: 0 4px 10px rgba(230, 81, 0, 0.4); }
+        .card-img-box { width: 100%; height: 250px; overflow: hidden; margin-bottom: 20px; background: #eee; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; filter: sepia(20%); }
+        .action-btn { padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; border: none; margin-top: 10px;}
+        .btn-download { background: #E65100; color: #fff; }
         .btn-back { background: transparent; color: #ccc; border: 1px solid #555; }
-
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
     </style>
 </head>
@@ -240,23 +195,12 @@
     </section>
 
     <section id="game-section">
-        <div class="arcade-marquee">
-            <div class="ticker-text">
-                User123 給了 勵馨基金會 一個讚 ❤️ 林志豪 留言給 華山基金會：辛苦了！ ❤️ 匿名勇者 獲得 鼎王湯底...
-            </div>
-        </div>
-
         <div class="game-console">
             <div class="screen">
                 
                 <div id="state-idle" class="state-idle">
                     <div style="font-size: 40px; margin-bottom: 20px;">🛡️</div>
                     <div>PIXEL QUEST<br><span style="font-size:10px; color:#666;">投入愛心，遇見守護者</span></div>
-                </div>
-
-                <div id="state-spinning" class="state-spinning">
-                    <div>CONNECTING...</div>
-                    <div id="spin-icon" style="font-size: 40px; margin-top: 20px;">❤️</div>
                 </div>
 
                 <div id="state-quest" class="state-quest">
@@ -267,30 +211,35 @@
                     
                     <div class="interaction-area">
                         <div class="input-group">
-                            <label>1. 選擇最適合他們的標籤：</label>
+                            <label>1. 選擇標籤 (必選)：</label>
                             <div class="tag-row" id="tag-container"></div>
                         </div>
 
                         <div class="input-group">
-                            <label>2. 寫下你的鼓勵 (可點選快速金句)：</label>
-                            
-                            <div class="smart-chips">
-                                <div class="smart-chip" onclick="fillInput('辛苦了，謝謝你們的溫柔！')">辛苦了，謝謝你！</div>
-                                <div class="smart-chip" onclick="fillInput('謝謝你們接住了受傷的人。')">接住受傷的人</div>
-                                <div class="smart-chip" onclick="fillInput('記得好好吃飯，照顧自己。')">記得好好吃飯</div>
-                                <div class="smart-chip" onclick="fillInput('你們是台灣最美的風景。')">最美的風景</div>
+                            <label>2. 選擇卡片照片 (可留空，使用預設暖圖)：</label>
+                            <div class="upload-btn-wrapper">
+                                <button class="btn-upload">📷 上傳一張照片 (或預設)</button>
+                                <input type="file" id="user-photo-upload" accept="image/*" onchange="previewUserPhoto()">
                             </div>
+                            <div id="file-name" class="file-name-display">尚未選擇 (將使用系統暖心插畫)</div>
+                        </div>
 
+                        <div class="input-group">
+                            <label>3. 寫下鼓勵 (可選金句)：</label>
+                            <div class="smart-chips">
+                                <div class="smart-chip" onclick="fillInput('辛苦了，謝謝你們！')">辛苦了</div>
+                                <div class="smart-chip" onclick="fillInput('謝謝你們接住了受傷的人。')">接住受傷的人</div>
+                                <div class="smart-chip" onclick="fillInput('記得好好吃飯。')">記得吃飯</div>
+                            </div>
                             <textarea id="msg-input" rows="2" placeholder="也可以自己寫喔..."></textarea>
                         </div>
 
                         <div class="input-group">
-                            <label>3. 署名 (將顯示在卡片上)：</label>
-                            <input type="text" id="sign-input" placeholder="例如：王小明 / 匿名勇者">
+                            <label>4. 署名：</label>
+                            <input type="text" id="sign-input" placeholder="例如：王小明">
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="coin-area">
@@ -304,66 +253,81 @@
         <div style="font-size: 10px; margin-top: 10px; color: #ccc;">今日剩餘愛心：3 / 3</div>
     </section>
 
+    <section id="search-section">
+        <div class="db-console">
+            <h3 style="color:#5D4037; margin:0 0 10px 0;">🔍 尋找更多光芒</h3>
+            <p style="color:#666; font-size: 0.9rem;">
+                想鼓勵的單位不在遊戲機裡？<br>
+                GC 站內 <strong>640 間</strong> 公益單位，輸入名稱或 ID 都能傳達心意。
+            </p>
+            <div class="search-bar">
+                <input type="text" id="search-input" class="search-input" placeholder="例如：勵馨、芒草心...">
+                <button class="search-btn" onclick="alert('搜尋功能示意：將彈出與上方相同的留言視窗，對象為您搜尋的單位。')">搜尋</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="sponsor-section">
+        <h4 style="color:#999; letter-spacing: 2px; margin-bottom: 20px;">感謝榮譽夥伴讓愛成真</h4>
+        <div class="sponsor-grid">
+            <div class="sponsor-logo" style="border-color:#ffb6c1; color:#ffb6c1;">蓓朵娜</div>
+            <div class="sponsor-logo" style="border-color:#81c784; color:#81c784;">艾瑪絲</div>
+            <div class="sponsor-logo" style="border-color:#e57373; color:#e57373;">鼎王</div>
+        </div>
+    </section>
+
     <div id="preview-modal" class="modal-overlay">
-        <div class="card-preview-container">
-            
+        <div style="width: 100%; max-width: 320px;">
             <div id="capture-target">
-                <div class="card-brand">
-                    <span>GC GIVE CIRCLE</span>
-                    <span>2026</span>
+                <div style="font-size: 10px; color: #999; margin-bottom: 10px; display:flex; justify-content:space-between;">
+                    <span>GC GIVE CIRCLE</span><span>2026</span>
                 </div>
-                <div class="card-img-box">
-                    <img id="card-img" class="card-img" src="">
-                </div>
-                <div id="card-tag" class="card-tag">#TAG</div>
-                <div id="card-msg" class="card-msg-text">
-                    這裡會顯示使用者的留言...
-                </div>
-                <div class="card-footer-info">
-                    <div>
-                        To: <strong id="card-to">單位名稱</strong>
-                    </div>
-                    <div>
-                        From: <span id="card-from">署名</span>
-                    </div>
+                <div class="card-img-box"><img id="card-img" class="card-img" src=""></div>
+                <div id="card-tag" style="background:#000; color:#fff; font-size:10px; padding:2px 5px; display:inline-block;">#TAG</div>
+                <div id="card-msg" style="font-size:1.1rem; font-weight:bold; margin:15px 0; color:#222;">留言...</div>
+                <div style="border-top:1px solid #eee; padding-top:10px; font-size:0.8rem; color:#666;">
+                    To: <strong id="card-to">單位</strong><br>
+                    From: <span id="card-from">我</span>
                 </div>
             </div>
-
-            <div class="modal-actions">
-                <button id="btn-download" class="action-btn btn-download">
-                    <span>⬇️</span> 下載美圖 (分享至 IG 限動)
-                </button>
-                <button onclick="closeModal()" class="action-btn btn-back">
-                    返回修改
-                </button>
-                <p style="color:#aaa; font-size:10px;">下載後，請上傳至 IG Story 並 Tag 我們！</p>
+            <div class="modal-actions" style="margin-top:20px;">
+                <button id="btn-download" class="action-btn btn-download">⬇️ 下載美圖 (分享至 IG)</button>
+                <button onclick="closeModal()" class="action-btn btn-back">返回修改</button>
             </div>
         </div>
     </div>
 
     <script>
         const units = [
-            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80", tags: ["#深夜燈塔", "#憨兒依靠"] },
-            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80", tags: ["#便當快遞", "#聽故事的人"] }
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600", tags: ["#深夜燈塔", "#憨兒依靠"] },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?w=600", tags: ["#便當快遞", "#聽故事的人"] }
+        ];
+
+        // 預設暖圖 (如果用戶沒上傳照片)
+        const defaultWarmImages = [
+            "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600", // Cloud Heart
+            "https://images.unsplash.com/photo-1499209974431-2761388a123d?w=600", // Sun
+            "https://images.unsplash.com/photo-1618588507085-c79565432917?w=600"  // Hands
         ];
 
         let isCoinInserted = false;
         let currentUnit = null;
         let selectedTag = "";
+        let userUploadedDataURL = null;
 
         const heartToken = document.getElementById('heart-token');
         const btnAction = document.getElementById('btn-action');
         const stateIdle = document.getElementById('state-idle');
-        const stateSpinning = document.getElementById('state-spinning');
         const stateQuest = document.getElementById('state-quest');
         const tagContainer = document.getElementById('tag-container');
         const modal = document.getElementById('preview-modal');
-        const msgInput = document.getElementById('msg-input');
 
-        // 1. 投幣
+        // 1. 投幣動畫 (Coin Physics)
         heartToken.addEventListener('click', () => {
             if(isCoinInserted) return;
-            heartToken.classList.add('inserting-anim');
+            heartToken.classList.remove('heart-token'); // stop bouncing
+            heartToken.classList.add('heart-token', 'inserting'); // start inserting animation
+            
             setTimeout(() => {
                 isCoinInserted = true;
                 btnAction.innerText = "轉動緣分 (START)";
@@ -373,37 +337,23 @@
             }, 800);
         });
 
-        // 2. 轉動 / 預覽
+        // 2. 按鈕動作
         btnAction.addEventListener('click', () => {
             if(!isCoinInserted) return;
             if(stateQuest.style.display !== 'block') {
-                startSpin();
+                // 模擬轉動
+                stateIdle.style.display = 'none';
+                showQuest();
             } else {
                 generateCard();
             }
         });
 
-        function startSpin() {
-            stateIdle.style.display = 'none';
-            stateSpinning.style.display = 'block';
-            btnAction.style.display = 'none';
-
-            let spinInterval = setInterval(() => { 
-                document.getElementById('spin-icon').innerText = ['❤️','🛡️','🎁'][Math.floor(Math.random()*3)]; 
-            }, 100);
-
-            setTimeout(() => { 
-                clearInterval(spinInterval); 
-                showQuest(); 
-            }, 1500);
-        }
-
         function showQuest() {
             currentUnit = units[Math.floor(Math.random() * units.length)];
             document.getElementById('quest-img').src = currentUnit.img;
             document.getElementById('quest-name').innerText = currentUnit.name;
-
-            // Generate Tags
+            
             tagContainer.innerHTML = '';
             currentUnit.tags.forEach(tag => {
                 const btn = document.createElement('div');
@@ -417,31 +367,43 @@
                 tagContainer.appendChild(btn);
             });
 
-            stateSpinning.style.display = 'none';
             stateQuest.style.display = 'block';
-            btnAction.style.display = 'block';
             btnAction.innerText = "預覽祝福卡片 (NEXT)";
         }
 
-        // Smart Input Function (金句填入)
-        function fillInput(text) {
-            msgInput.value = text;
-            // 加上閃爍效果提示已填入
-            msgInput.style.borderColor = "#E65100";
-            setTimeout(() => { msgInput.style.borderColor = "#ddd"; }, 300);
+        function fillInput(text) { document.getElementById('msg-input').value = text; }
+
+        // 3. 處理照片上傳
+        function previewUserPhoto() {
+            const file = document.getElementById('user-photo-upload').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    userUploadedDataURL = e.target.result;
+                    document.getElementById('file-name').innerText = "✅ 已選擇：" + file.name;
+                }
+                reader.readAsDataURL(file);
+            }
         }
 
-        // 3. 生成卡片 & 開啟 Modal
+        // 4. 生成卡片 (邏輯判斷)
         function generateCard() {
-            const msg = msgInput.value;
+            const msg = document.getElementById('msg-input').value;
             const sign = document.getElementById('sign-input').value;
 
-            if(!selectedTag) return alert("請選擇一個標籤！");
-            if(!msg) return alert("請寫下鼓勵的話！");
-            if(!sign) return alert("請留下您的署名！");
+            if(!selectedTag) return alert("請選擇標籤！");
+            if(!msg) return alert("請寫下鼓勵！");
+            if(!sign) return alert("請署名！");
 
-            // 填入資料到預覽卡片 DOM
-            document.getElementById('card-img').src = currentUnit.img;
+            // 決定圖片：用戶上傳 > 隨機預設暖圖
+            let finalImg = "";
+            if(userUploadedDataURL) {
+                finalImg = userUploadedDataURL;
+            } else {
+                finalImg = defaultWarmImages[Math.floor(Math.random() * defaultWarmImages.length)];
+            }
+
+            document.getElementById('card-img').src = finalImg;
             document.getElementById('card-tag').innerText = selectedTag;
             document.getElementById('card-msg').innerText = msg;
             document.getElementById('card-to').innerText = currentUnit.name;
@@ -450,39 +412,21 @@
             modal.style.display = 'flex';
         }
 
-        function closeModal() {
-            modal.style.display = 'none';
-        }
+        function closeModal() { modal.style.display = 'none'; }
 
-        // 4. 下載功能 (使用 html2canvas)
+        // 5. 下載
         document.getElementById('btn-download').addEventListener('click', () => {
-            const target = document.getElementById('capture-target');
-            
-            // 視覺回饋：按鈕變 loading
             const btn = document.getElementById('btn-download');
-            const originalText = btn.innerHTML;
             btn.innerHTML = "生成中...";
-
-            html2canvas(target, {
-                scale: 2, // 提高解析度
-                backgroundColor: "#ffffff" // 確保背景是白的
-            }).then(canvas => {
-                // 建立下載連結
+            html2canvas(document.getElementById('capture-target'), { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `GC_LoveCard_${Date.now()}.png`;
+                link.download = `GC_Card_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
-
-                // 恢復按鈕
-                btn.innerHTML = "✅ 下載成功！";
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    alert("卡片已下載！快去 IG 限動 Tag #給社工愛的鼓勵 吧！");
-                    location.reload(); // 完成任務，重整頁面
-                }, 1500);
+                btn.innerHTML = "✅ 下載成功";
+                setTimeout(() => { location.reload(); }, 1500);
             });
         });
-
     </script>
 </body>
 </html>
