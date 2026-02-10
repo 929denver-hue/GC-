@@ -3,299 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第七屆 給社工愛的鼓勵 - 像素守護者 (V2)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>第七屆 給社工愛的鼓勵 - 現實與像素</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
             --gc-orange: #FF8C00;
-            --gc-yellow: #FFD700;
             --pixel-bg: #2C2C2C;
-            --text-color: #333;
             --white: #fff;
-            --heart-red: #FF4444;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Press Start 2P', cursive;
-            background-color: var(--pixel-bg);
-            color: var(--white);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* --- Boss 血條 --- */
-        .boss-bar-container {
-            width: 100%;
-            max-width: 500px;
-            margin-bottom: 20px;
-        }
-        .health-bar-frame {
-            border: 4px solid var(--white);
-            height: 25px;
-            background: #000;
-            padding: 2px;
-        }
-        .health-bar-fill {
-            height: 100%;
-            background: #FF4444;
-            width: 40%;
-            transition: width 0.5s;
-        }
-
-        /* --- 遊戲主機 --- */
-        .game-console {
-            background-color: var(--gc-orange);
-            padding: 20px;
-            border: 4px solid #000;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 400px; /* 手機友善寬度 */
-            border-radius: 4px;
-            position: relative;
-        }
-
-        /* 螢幕 */
-        .screen {
-            background-color: #fff;
-            border: 4px solid #333;
-            height: 320px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            color: var(--text-color);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        /* --- 投幣口區域 (新增) --- */
-        .coin-slot-area {
-            display: flex;
-            justify-content: flex-end; /* 靠右放 */
-            margin-bottom: 10px;
-            position: relative;
-            height: 50px;
-        }
-
-        .coin-slot {
-            width: 15px;
-            height: 40px;
-            background: #000;
-            border: 2px solid #555;
-            border-radius: 2px;
-            box-shadow: inset 0 0 5px #222;
-            position: relative;
         }
         
-        .coin-slot::after {
-            content: "INSERT";
-            position: absolute;
-            top: 45px;
-            left: -15px;
-            font-size: 8px;
-            color: #000;
-            width: 50px;
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            margin: 0;
+            font-family: 'Noto Sans TC', sans-serif; /* 全站預設：正經黑體 */
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        /* --- 第一區：正經前導 (Hero Section) --- */
+        header {
+            min-height: 100vh; /* 佔滿一整頁 */
+            /* 背景圖：建議換成一張很有張力的社工背影照 */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542810634-71277d95dc24?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            color: #fff;
+            padding: 20px;
         }
 
-        /* 愛心代幣 (按鈕) */
-        .heart-token {
-            font-size: 30px;
-            color: var(--heart-red);
-            cursor: pointer;
-            position: absolute;
-            right: 40px; /* 初始位置 */
-            top: 5px;
-            text-shadow: 2px 2px 0 #000;
-            animation: bounce 1s infinite;
-            z-index: 10;
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
         }
 
-        .heart-token:hover {
-            transform: scale(1.1);
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: #ddd;
         }
 
-        /* 愛心投入動畫 Class */
-        .inserting-anim {
-            animation: insertMove 1s forwards !important; /* 覆蓋 bounce */
+        .intro-text-box {
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1); /* 半透明框 */
+            padding: 30px;
+            border-left: 4px solid var(--gc-orange);
+            text-align: left;
+            backdrop-filter: blur(5px);
         }
 
-        @keyframes insertMove {
-            0% { right: 40px; top: 5px; opacity: 1; transform: scale(1); }
-            50% { right: 0px; top: 5px; opacity: 1; transform: scale(0.5); }
-            100% { right: 0px; top: 5px; opacity: 0; transform: scale(0.1); }
+        /* 轉場按鈕 */
+        .scroll-btn {
+            background-color: var(--gc-orange);
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.6);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .scroll-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.9);
         }
 
-        /* 投幣提示文字 */
-        .insert-hint {
-            position: absolute;
-            right: 80px;
-            top: 15px;
-            font-size: 10px;
-            color: #000;
-            animation: blink 1s infinite;
+        /* --- 第二區：像素遊戲區 (Game Section) --- */
+        #game-section {
+            background-color: var(--pixel-bg);
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* 進入遊戲區，切換字體 */
+            font-family: 'Press Start 2P', cursive; 
         }
 
-        /* --- 狀態顯示 --- */
+        .section-title {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1.5;
+            text-shadow: 4px 4px 0 #000;
+        }
+
+        .section-desc {
+            color: #aaa;
+            font-size: 12px;
+            margin-bottom: 40px;
+            text-align: center;
+            font-family: 'Noto Sans TC', sans-serif; /* 說明文字維持黑體易讀 */
+        }
+
+        /* --- (以下是遊戲機 CSS，保持原樣) --- */
+        .boss-bar-container { width: 100%; max-width: 500px; margin-bottom: 20px; }
+        .health-bar-frame { border: 4px solid #fff; height: 25px; background: #000; padding: 2px; }
+        .health-bar-fill { height: 100%; background: #FF4444; width: 40%; transition: width 0.5s; }
+        .game-console { background-color: var(--gc-orange); padding: 20px; border: 4px solid #000; box-shadow: 8px 8px 0px rgba(0,0,0,0.5); width: 100%; max-width: 400px; border-radius: 4px; position: relative; }
+        .screen { background-color: #fff; border: 4px solid #333; height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; color: #333; position: relative; overflow: hidden; margin-bottom: 20px; }
+        .coin-slot-area { display: flex; justify-content: flex-end; margin-bottom: 10px; position: relative; height: 50px; }
+        .coin-slot { width: 15px; height: 40px; background: #000; border: 2px solid #555; position: relative; }
+        .coin-slot::after { content: "INSERT"; position: absolute; top: 45px; left: -15px; font-size: 8px; color: #fff; width: 50px; text-align: center; font-family: sans-serif; }
+        .heart-token { font-size: 30px; color: #FF4444; cursor: pointer; position: absolute; right: 40px; top: 5px; animation: bounce 1s infinite; z-index: 10; }
+        .inserting-anim { animation: insertMove 1s forwards !important; }
+        @keyframes insertMove { 0% { right: 40px; top: 5px; opacity: 1; transform: scale(1); } 50% { right: 0px; top: 5px; opacity: 1; transform: scale(0.5); } 100% { right: 0px; top: 5px; opacity: 0; transform: scale(0.1); } }
+        .insert-hint { position: absolute; right: 80px; top: 15px; font-size: 10px; color: #fff; animation: blink 1s infinite; }
         .state-idle { text-align: center; }
         .state-spinning { display: none; font-size: 20px; }
-        
-        /* 真實故事顯示區 */
-        .state-quest { 
-            display: none; width: 100%; text-align: left; 
-        }
-        .real-photo-frame {
-            width: 100%; height: 160px;
-            background: #000;
-            margin-bottom: 10px;
-            overflow: hidden;
-            border: 2px solid #000;
-        }
+        .state-quest { display: none; width: 100%; text-align: left; }
+        .real-photo-frame { width: 100%; height: 160px; background: #000; margin-bottom: 10px; overflow: hidden; border: 2px solid #000; }
         .real-photo { width: 100%; height: 100%; object-fit: cover; }
-        .quest-tag { 
-            background: var(--gc-orange); color: #fff; 
-            padding: 2px 6px; font-size: 10px; display: inline-block; 
-        }
+        .quest-tag { background: var(--gc-orange); color: #fff; padding: 2px 6px; font-size: 10px; display: inline-block; }
+        .btn-main { background-color: #888; color: #ccc; border: 4px solid #555; padding: 15px 0; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: not-allowed; pointer-events: none; transition: all 0.3s; }
+        .btn-unlocked { background-color: #FF4444; color: #fff; border-color: #8B0000; cursor: pointer; pointer-events: auto; box-shadow: 0 4px 0 #8B0000; animation: pulse 1s infinite; }
+        .btn-unlocked:active { transform: translateY(4px); box-shadow: none; }
+        .message-area { display: none; margin-top: 15px; }
+        textarea { width: 100%; height: 60px; border: 2px solid #000; padding: 5px; font-family: sans-serif; font-size: 14px; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-        /* --- 按鈕控制區 --- */
-        .controls { text-align: center; }
-
-        .btn-main {
-            background-color: #888; /* 預設灰色(未解鎖) */
-            color: #ccc;
-            border: 4px solid #555;
-            padding: 15px 0;
-            width: 100%;
-            font-family: 'Press Start 2P';
-            font-size: 12px;
-            cursor: not-allowed;
-            pointer-events: none; /* 禁止點擊 */
-            box-shadow: none;
-            transition: all 0.3s;
-        }
-
-        /* 解鎖狀態 */
-        .btn-unlocked {
-            background-color: #FF4444;
-            color: #fff;
-            border-color: #8B0000;
-            cursor: pointer;
-            pointer-events: auto;
-            box-shadow: 0 4px 0 #8B0000;
-            animation: pulse 1s infinite; /* 解鎖後呼吸燈效果 */
+        /* --- 第三區：頁尾 (Footer) --- */
+        footer {
+            background-color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+            font-family: 'Noto Sans TC', sans-serif;
         }
         
-        .btn-unlocked:active {
-            transform: translateY(4px);
-            box-shadow: none;
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        /* 留言區 */
-        .message-area { display: none; margin-top: 15px; }
-        textarea {
-            width: 100%; height: 60px;
-            border: 2px solid #000; padding: 5px;
-            font-family: sans-serif; font-size: 14px;
-        }
-
-        /* --- 動畫關鍵影格 --- */
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+        .sponsor-list {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
         }
 
     </style>
 </head>
 <body>
 
-    <div class="boss-bar-container">
-        <div style="font-size: 10px; margin-bottom:5px; text-align:center;">
-            全服累積鼓勵值 (Lv.7)
-        </div>
-        <div class="health-bar-frame">
-            <div class="health-bar-fill" id="boss-hp"></div>
-        </div>
-    </div>
-
-    <div class="game-console">
+    <header>
+        <h1 class="hero-title">第七屆 給社工愛的鼓勵</h1>
+        <div class="hero-subtitle">看不見的守護，看得見的溫度</div>
         
-        <div class="screen">
-            <div id="state-idle" class="state-idle">
-                <div style="font-size: 40px; margin-bottom: 20px;">🛡️</div>
-                <div style="line-height: 1.5;">
-                    PIXEL HERO<br>
-                    <span style="font-size: 10px; color: #888;">請投入愛心啟動</span>
+        <div class="intro-text-box">
+            <p>
+                社工是社會的安全網，但在這張網子承受不住之前，往往沒人注意。<br><br>
+                現實很沈重，但我們可以用輕盈的方式，傳遞支持。<br>
+                今年，GC 贈物網將 30 個真實的社工故事，化為像素世界的任務。<br><br>
+                <b>現在，請你投下一顆愛心，為現實世界的英雄補血。</b>
+            </p>
+        </div>
+
+        <a href="#game-section" class="scroll-btn">
+            <span>👾</span> 進入像素世界 (START)
+        </a>
+    </header>
+
+    <section id="game-section">
+        
+        <div class="section-title">MISSION START</div>
+        <div class="section-desc">↓ 請點擊愛心，啟動您的善意 ↓</div>
+
+        <div class="boss-bar-container">
+            <div style="font-size: 10px; margin-bottom:5px; text-align:center; color:#fff;">
+                全服累積鼓勵值 (Lv.7)
+            </div>
+            <div class="health-bar-frame">
+                <div class="health-bar-fill" id="boss-hp"></div>
+            </div>
+        </div>
+
+        <div class="game-console">
+            <div class="screen">
+                <div id="state-idle" class="state-idle">
+                    <div style="font-size: 40px; margin-bottom: 20px;">🛡️</div>
+                    <div style="line-height: 1.5;">
+                        PIXEL HERO<br>
+                        <span style="font-size: 10px; color: #888;">請投入愛心啟動</span>
+                    </div>
+                </div>
+                <div id="state-spinning" class="state-spinning">
+                    <div>CONNECTING...</div>
+                    <div id="spin-icon" style="font-size: 40px; margin-top: 20px;">❤️</div>
+                </div>
+                <div id="state-quest" class="state-quest">
+                    <div class="real-photo-frame">
+                        <img id="quest-img" class="real-photo" src="">
+                    </div>
+                    <div class="quest-tag" id="quest-tag">TAG</div>
+                    <div style="font-size: 12px; margin: 5px 0; font-weight: bold;" id="quest-name">NAME</div>
+                    <div style="font-size: 10px; line-height: 1.4; color: #555;" id="quest-story">STORY</div>
                 </div>
             </div>
 
-            <div id="state-spinning" class="state-spinning">
-                <div>CONNECTING...</div>
-                <div id="spin-icon" style="font-size: 40px; margin-top: 20px;">❤️</div>
+            <div class="coin-slot-area">
+                <div id="insert-hint" class="insert-hint">點擊投入愛心 ▶</div>
+                <div id="heart-token" class="heart-token">❤️</div>
+                <div class="coin-slot"></div>
             </div>
 
-            <div id="state-quest" class="state-quest">
-                <div class="real-photo-frame">
-                    <img id="quest-img" class="real-photo" src="">
+            <div class="controls">
+                <button id="btn-spin" class="btn-main">請先投幣 (INSERT LOVE)</button>
+                <div id="message-area" class="message-area">
+                    <textarea id="msg-input" placeholder="寫下您的鼓勵..."></textarea>
+                    <button id="btn-send" class="btn-main btn-unlocked" style="margin-top:10px; background:#FF8C00;">發送溫暖</button>
                 </div>
-                <div class="quest-tag" id="quest-tag">TAG</div>
-                <div style="font-size: 12px; margin: 5px 0; font-weight: bold;" id="quest-name">NAME</div>
-                <div style="font-size: 10px; line-height: 1.4; color: #555;" id="quest-story">STORY</div>
             </div>
         </div>
 
-        <div class="coin-slot-area">
-            <div id="insert-hint" class="insert-hint">點擊投入愛心 ▶</div>
-            <div id="heart-token" class="heart-token">❤️</div>
-            <div class="coin-slot"></div>
+        <div style="margin-top: 20px; font-size: 10px; color: #aaa;">
+            我的抽獎券: <span id="ticket-count" style="color:#fff; font-size:14px;">0</span> 張
         </div>
 
-        <div class="controls">
-            <button id="btn-spin" class="btn-main">請先投幣 (INSERT LOVE)</button>
+    </section>
 
-            <div id="message-area" class="message-area">
-                <textarea id="msg-input" placeholder="寫下您的鼓勵..."></textarea>
-                <button id="btn-send" class="btn-main btn-unlocked" style="margin-top:10px; background:#FF8C00;">發送溫暖</button>
+    <footer>
+        <div class="footer-content">
+            <h3>還有更多光芒值得被看見</h3>
+            <p style="color:#666; font-size:14px;">
+                那 30 間只是代表，台灣還有無數個角落有人在默默付出。<br>
+                如果您想感謝的單位不在名單內，請使用下方搜尋。
+            </p>
+            
+            <div style="margin: 20px 0;">
+                <input type="text" placeholder="輸入單位名稱..." style="padding:10px; width:70%; border:1px solid #ccc; border-radius:5px;">
+                <button style="padding:10px 20px; background:#666; color:#fff; border:none; border-radius:5px;">搜尋</button>
             </div>
+
+            <div class="sponsor-list">
+                <p style="font-size:12px; color:#999;">感謝以下品牌贊助支持</p>
+                <div style="display:flex; justify-content:center; gap:20px; margin-top:10px; color:#888;">
+                    <span>[ 蓓朵娜 ]</span>
+                    <span>[ 艾瑪絲 ]</span>
+                    <span>[ 鼎王 ]</span>
+                </div>
+            </div>
+            
+            <p style="margin-top:40px; font-size:12px; color:#ccc;">&copy; 2024 GC 贈物網 | 台北市社會局</p>
         </div>
-
-    </div>
-
-    <div style="margin-top: 20px; font-size: 10px; color: #aaa;">
-        我的抽獎券: <span id="ticket-count" style="color:#fff; font-size:14px;">0</span> 張
-    </div>
+    </footer>
 
     <script>
-        // 資料庫
         const units = [
-            {
-                name: "屏東伯大尼之家",
-                tag: "#深夜的燈塔",
-                story: "「孩子半夜哭醒時，第一個抱住他們的，通常不是爸媽，而是值班的我們。」",
-                img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                name: "華山基金會",
-                tag: "#時間的陪伴者",
-                story: "「有時候，阿公阿嬤等的不是那個便當，而是送便當的那個人，能跟他說說話。」",
-                img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80"
-            }
+            { name: "屏東伯大尼之家", tag: "#深夜的燈塔", story: "「孩子半夜哭醒時，第一個抱住他們的，通常不是爸媽，而是值班的我們。」", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80" },
+            { name: "華山基金會", tag: "#時間的陪伴者", story: "「有時候，阿公阿嬤等的不是那個便當，而是送便當的那個人，能跟他說說話。」", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80" }
         ];
 
-        // 元素
         const heartToken = document.getElementById('heart-token');
         const insertHint = document.getElementById('insert-hint');
         const btnSpin = document.getElementById('btn-spin');
@@ -309,104 +284,66 @@
         let isCoinInserted = false;
         let tickets = 0;
 
-        // 1. 投入愛心 (儀式感關鍵)
+        // 投入愛心
         heartToken.addEventListener('click', () => {
-            if(isCoinInserted) return; // 避免重複點擊
-
-            // 播放動畫：愛心飛進去
+            if(isCoinInserted) return;
             heartToken.classList.add('inserting-anim');
             insertHint.style.display = 'none';
-
-            // 模擬投幣音效延遲
             setTimeout(() => {
                 isCoinInserted = true;
-                
-                // 解鎖拉桿按鈕
                 btnSpin.innerText = "轉動緣分 (START)";
-                btnSpin.classList.remove('btn-main'); // 移除灰色樣式
-                btnSpin.classList.add('btn-main', 'btn-unlocked'); // 加入紅色樣式
-                
-                // 螢幕文字變化
+                btnSpin.classList.remove('btn-main');
+                btnSpin.classList.add('btn-main', 'btn-unlocked');
                 stateIdle.innerHTML = '<div style="font-size:30px; margin-bottom:10px;">READY!</div><div style="font-size:10px;">緣分已連線</div>';
-                
-            }, 800); // 配合 CSS 動畫時間
+            }, 800);
         });
 
-        // 2. 轉動拉霸
+        // 轉動
         btnSpin.addEventListener('click', () => {
             if(!isCoinInserted) return;
-
-            // 切換畫面
             stateIdle.style.display = 'none';
             stateSpinning.style.display = 'block';
-            btnSpin.style.display = 'none'; // 隱藏按鈕，進入任務模式
-
-            // 轉動動畫
+            btnSpin.style.display = 'none';
             let icons = ['❤️', '🛡️', '🎁', '⚡'];
-            let spinInterval = setInterval(() => {
-                document.getElementById('spin-icon').innerText = icons[Math.floor(Math.random()*icons.length)];
-            }, 100);
-
-            // 停止並顯示結果
-            setTimeout(() => {
-                clearInterval(spinInterval);
-                showQuest();
-            }, 1500);
+            let spinInterval = setInterval(() => { document.getElementById('spin-icon').innerText = icons[Math.floor(Math.random()*icons.length)]; }, 100);
+            setTimeout(() => { clearInterval(spinInterval); showQuest(); }, 1500);
         });
 
-        // 3. 顯示真實故事
+        // 顯示任務
         function showQuest() {
             const unit = units[Math.floor(Math.random() * units.length)];
-            
             document.getElementById('quest-img').src = unit.img;
             document.getElementById('quest-tag').innerText = unit.tag;
             document.getElementById('quest-name').innerText = unit.name;
             document.getElementById('quest-story').innerText = unit.story;
-
             stateSpinning.style.display = 'none';
             stateQuest.style.display = 'block';
-            msgArea.style.display = 'block'; // 顯示留言框
+            msgArea.style.display = 'block';
         }
 
-        // 4. 送出鼓勵 (Reset 機制)
+        // 送出
         btnSend.addEventListener('click', () => {
             const input = document.getElementById('msg-input');
-            if(input.value.trim() === "") {
-                alert("請寫下一句鼓勵的話喔！");
-                return;
-            }
-
-            // 更新數據
+            if(input.value.trim() === "") { alert("請寫下一句鼓勵的話喔！"); return; }
             tickets++;
             ticketCount.innerText = tickets;
             input.value = "";
-
             alert("溫暖已送達！獲得抽獎券 x1");
-
-            // 重置遊戲狀態 (讓使用者可以再玩一次)
             resetGame();
         });
 
         function resetGame() {
-            // 回復變數
             isCoinInserted = false;
-
-            // 回復愛心位置
             heartToken.classList.remove('inserting-anim');
             insertHint.style.display = 'block';
-
-            // 回復螢幕
             stateQuest.style.display = 'none';
             msgArea.style.display = 'none';
             stateIdle.style.display = 'block';
             stateIdle.innerHTML = '<div style="font-size: 40px; margin-bottom: 20px;">🛡️</div><div style="line-height: 1.5;">PIXEL HERO<br><span style="font-size: 10px; color: #888;">請投入愛心啟動</span></div>';
-
-            // 鎖定按鈕
             btnSpin.style.display = 'block';
             btnSpin.innerText = "請先投幣 (INSERT LOVE)";
             btnSpin.classList.remove('btn-unlocked');
         }
-
     </script>
 </body>
 </html>
