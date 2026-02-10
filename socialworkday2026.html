@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 給社工愛的鼓勵 - 第七屆</title>
+    <title>2026 給社工愛的鼓勵 - 陽光篇</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gc-orange: #FF8C00;
-            --pixel-bg: #2C2C2C;
-            --white: #fff;
+            --sky-blue: #87CEEB;
+            --cloud-white: #FFFFFF;
+            --grass-green: #90EE90;
+            --sun-yellow: #FFD700;
+            --mario-red: #FF5E5E;
             --text-dark: #333;
         }
         
@@ -20,14 +22,13 @@
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--text-dark);
             background-color: #f9f9f9;
-            line-height: 1.6;
         }
 
-        /* --- 1. 感性前導區 (Hero Section) --- */
+        /* --- 1. 感性前導 (Hero) - 保持情感深度 --- */
         header {
-            min-height: 100vh;
-            /* 背景圖：建議換成一張溫暖、微光、社工背影或專注神情的照片 */
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=1600&q=80');
+            min-height: 90vh;
+            /* 換成一張有陽光灑落、溫暖色調的真實照片 */
+            background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -37,102 +38,99 @@
             text-align: center;
             color: #fff;
             padding: 40px 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.6);
         }
 
         .edition-tag {
-            background: rgba(255, 140, 0, 0.9);
-            color: #fff;
-            padding: 5px 15px;
+            background: var(--sun-yellow);
+            color: #333;
+            padding: 8px 20px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            font-weight: 700;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        /* 文案區塊 */
-        .intro-poetry {
-            max-width: 600px;
-            font-size: 1.15rem;
-            font-weight: 300;
-            line-height: 2;
-            margin-bottom: 40px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-        }
-
-        .highlight-text {
-            color: var(--gc-orange);
             font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
         }
 
-        /* CTA 按鈕 */
+        .intro-poetry {
+            background: rgba(0, 0, 0, 0.4); /* 增加一點底色讓文字好讀 */
+            padding: 40px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            max-width: 700px;
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
         .scroll-btn {
-            background-color: var(--white);
-            color: var(--text-dark);
+            background-color: var(--mario-red);
+            color: #fff;
             padding: 15px 40px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.2rem;
+            margin-top: 30px;
+            box-shadow: 0 5px 0 #b30000; /* 遊戲按鈕的立體感 */
+            transition: transform 0.1s;
+            font-family: 'Press Start 2P', cursive;
         }
         
-        .scroll-btn:hover {
-            transform: translateY(-3px);
-            background-color: var(--gc-orange);
-            color: #fff;
+        .scroll-btn:active {
+            transform: translateY(5px);
+            box-shadow: none;
         }
 
-        /* --- 2. 遊戲互動區 (Game Section) --- */
+        /* --- 2. 陽光像素遊戲區 (Sky Theme) --- */
         #game-section {
-            background-color: var(--pixel-bg);
+            /* 藍天白雲背景 */
+            background-color: var(--sky-blue);
+            background-image: 
+                radial-gradient(circle at 20% 20%, white 10%, transparent 11%),
+                radial-gradient(circle at 80% 10%, white 15%, transparent 16%);
+            background-size: 100% 100%;
             padding: 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: 'Press Start 2P', cursive; /* 切換像素字體 */
+            font-family: 'Press Start 2P', cursive;
+            position: relative;
+        }
+
+        /* 裝飾用的像素雲 */
+        .pixel-cloud {
+            position: absolute;
+            background: #fff;
+            width: 100px; height: 40px;
+            top: 50px; left: 10%;
+            opacity: 0.8;
+            box-shadow: 20px 20px 0 0 #fff; /* 用陰影畫雲 */
         }
 
         .section-header {
             color: #fff;
+            text-shadow: 4px 4px 0 rgba(0,0,0,0.2);
             text-align: center;
             margin-bottom: 30px;
-        }
-        
-        .section-header p {
-            font-family: 'Noto Sans TC', sans-serif; /* 說明文字維持黑體 */
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-top: 10px;
+            z-index: 2;
         }
 
-        /* --- 遊戲機樣式 (復用之前的邏輯) --- */
+        /* 遊戲機本體 (改為明亮配色) */
         .game-console {
-            background-color: var(--gc-orange);
+            background-color: var(--sun-yellow); /* 明亮的黃色機身 */
             padding: 20px;
-            border: 4px solid #000;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+            border: 6px solid #333;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
             width: 100%;
-            max-width: 500px; /* 加寬一點以容納選項 */
-            border-radius: 4px;
+            max-width: 500px;
+            border-radius: 10px;
             position: relative;
+            z-index: 2;
         }
 
         .screen {
             background-color: #fff;
             border: 4px solid #333;
-            min-height: 400px; /* 加高以容納選項 */
+            min-height: 420px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -141,174 +139,203 @@
             position: relative;
             overflow: hidden;
             margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        /* 狀態畫面 */
+        .state-idle { margin-top: 60px; text-align: center; }
+        .state-spinning { display: none; text-align: center; margin-top: 80px; }
+        .state-quest { display: none; width: 100%; text-align: left; }
+
+        /* 真實照片 */
+        .real-photo-frame { 
+            width: 100%; height: 160px; 
+            background: #eee; margin-bottom: 15px; 
+            border: 3px solid #333; overflow: hidden; 
+            border-radius: 4px;
+        }
+        .real-photo { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 留言引導模組 (對話框風格) */
+        .message-guide {
+            display: none; width: 100%;
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #f0f8ff; /* 淡藍色底 */
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px dashed #87CEEB;
+        }
+
+        .guide-title {
+            font-size: 14px; font-weight: bold; color: #333;
+            margin-bottom: 8px; display: block;
+        }
+
+        /* 選項按鈕化 */
+        .radio-option {
+            display: block; margin-bottom: 8px; cursor: pointer;
+            font-size: 13px; background: #fff; padding: 10px;
+            border-radius: 5px; border: 2px solid #ddd;
+            transition: all 0.2s; position: relative;
+            padding-left: 35px; /* 給圓點留空間 */
+        }
+        
+        .radio-option:hover { border-color: var(--sky-blue); transform: translateX(2px); }
+        .radio-option input { position: absolute; left: 10px; top: 12px; }
+        
+        .radio-option.selected {
+            background: #fffbe6; border-color: var(--sun-yellow);
+            color: #b8860b; font-weight: bold;
+        }
+
+        #custom-text-area {
+            display: none; width: 100%; margin-top: 5px; padding: 10px;
+            border: 2px solid #ddd; border-radius: 5px;
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         /* 投幣區 */
-        .coin-slot-area { display: flex; justify-content: flex-end; margin-bottom: 10px; height: 40px; position: relative; }
-        .heart-token { font-size: 30px; color: #FF4444; cursor: pointer; position: absolute; right: 40px; top: 0; animation: bounce 1s infinite; z-index: 10; }
-        .coin-slot { width: 15px; height: 35px; background: #000; border: 2px solid #555; position: relative; }
+        .coin-slot-area { display: flex; justify-content: flex-end; margin-bottom: 10px; height: 50px; position: relative; }
+        .heart-token { font-size: 40px; color: var(--mario-red); cursor: pointer; position: absolute; right: 30px; top: -5px; animation: bounce 1s infinite; z-index: 10; filter: drop-shadow(2px 2px 0 #333); }
+        .coin-slot { width: 20px; height: 45px; background: #333; border-radius: 10px; border: 2px solid #fff; position: relative; }
         .inserting-anim { animation: insertMove 1s forwards !important; }
-        @keyframes insertMove { 0% { right: 40px; top: 0; opacity: 1; transform: scale(1); } 50% { right: 0; top: 0; opacity: 1; transform: scale(0.5); } 100% { right: 0; top: 0; opacity: 0; transform: scale(0.1); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-        /* 狀態畫面 */
-        .state-idle, .state-spinning { text-align: center; margin-top: 50px; }
-        .state-spinning { display: none; }
-        .state-quest { display: none; width: 100%; text-align: left; }
-
-        /* 真實照片與故事 */
-        .real-photo-frame { width: 100%; height: 150px; background: #000; margin-bottom: 10px; overflow: hidden; border: 2px solid #000; }
-        .real-photo { width: 100%; height: 100%; object-fit: cover; }
-        .quest-info { font-family: 'Noto Sans TC', sans-serif; font-size: 14px; margin-bottom: 15px; border-bottom: 2px dashed #ccc; padding-bottom: 10px; }
-        
-        /* --- 留言引導模組 (核心修改) --- */
-        .message-guide {
-            display: none; /* 任務開始後顯示 */
-            width: 100%;
-            font-family: 'Noto Sans TC', sans-serif;
-        }
-        
-        .guide-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--gc-orange);
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .guide-intro {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-
-        /* 選項樣式 (像RPG對話框) */
-        .radio-option {
-            display: block;
-            margin-bottom: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            background: #f0f0f0;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            transition: all 0.2s;
-        }
-        
-        .radio-option:hover { background: #e0e0e0; border-color: #999; }
-        .radio-option input { margin-right: 8px; }
-        
-        /* 選中狀態 */
-        .radio-option.selected {
-            background: #FFF3E0;
-            border-color: var(--gc-orange);
-            color: #B86500;
-            font-weight: bold;
-        }
-
-        /* 自填框 */
-        #custom-text-area {
-            display: none;
-            width: 100%;
-            margin-top: 5px;
-            padding: 8px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 14px;
-        }
+        @keyframes insertMove { 0% { right: 30px; top: -5px; opacity: 1; transform: scale(1); } 50% { right: 0; top: 0; opacity: 1; transform: scale(0.5); } 100% { right: 0; top: 0; opacity: 0; transform: scale(0.1); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
         /* 按鈕 */
         .btn-main {
-            background-color: #888; color: #ccc; border: 4px solid #555; padding: 15px 0; width: 100%; 
-            font-family: 'Press Start 2P'; font-size: 12px; cursor: not-allowed; pointer-events: none; margin-top: 10px;
+            background-color: #ccc; color: #666; border: 4px solid #666;
+            padding: 15px 0; width: 100%; font-family: 'Press Start 2P';
+            font-size: 12px; cursor: not-allowed; pointer-events: none;
+            border-radius: 8px;
         }
         .btn-unlocked {
-            background-color: #FF4444; color: #fff; border-color: #8B0000; cursor: pointer; pointer-events: auto; 
-            box-shadow: 0 4px 0 #8B0000; animation: pulse 1s infinite;
+            background-color: var(--mario-red); color: #fff; border-color: #8b0000;
+            cursor: pointer; pointer-events: auto;
+            box-shadow: 0 6px 0 #8b0000;
         }
-        .btn-unlocked:active { transform: translateY(4px); box-shadow: none; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        .btn-unlocked:active { transform: translateY(6px); box-shadow: none; }
 
-        /* --- Footer --- */
-        footer {
-            background: #fff;
-            padding: 40px 20px;
+        /* --- 3. 致敬區 (Tribute Section) - 佈告欄風格 --- */
+        #tribute-section {
+            background-color: var(--grass-green); /* 草地 */
+            padding: 60px 20px;
+            font-family: 'Noto Sans TC', sans-serif;
             text-align: center;
-            font-size: 0.9rem;
-            color: #666;
+            border-top: 10px dashed #fff; /* 縫線效果 */
         }
 
+        .board-container {
+            max-width: 700px; margin: 0 auto;
+            background: #DEB887; /* 木頭色 */
+            padding: 20px; border: 4px solid #8B4513;
+            border-radius: 10px;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        /* 圖釘裝飾 */
+        .pin {
+            width: 15px; height: 15px; border-radius: 50%;
+            background: #FF4444; position: absolute;
+            top: 10px; left: 50%; transform: translateX(-50%);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .board-paper {
+            background: #fff; padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        .search-box {
+            display: flex; gap: 10px; margin-top: 20px;
+        }
+        
+        .search-box input {
+            flex: 1; padding: 12px; border: 2px solid #ccc;
+            border-radius: 5px; font-size: 1rem;
+        }
+        
+        .search-box button {
+            background: #333; color: #fff; border: none;
+            padding: 0 25px; border-radius: 5px; cursor: pointer;
+            font-weight: bold;
+        }
+
+        .board-title {
+            font-family: 'Press Start 2P'; font-size: 1.2rem;
+            color: #8B4513; text-align: center; margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333; color: #fff; padding: 40px; text-align: center;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
     <header>
         <div class="edition-tag">2026 第七屆</div>
-        <h1>給社工愛的鼓勵</h1>
+        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">給社工愛的鼓勵</h1>
         
         <div class="intro-poetry">
             <p>有些人，長期站在最前線，</p>
-            <p>接住別人最難的時候，</p>
-            <p>卻很少被問一句：「你還好嗎？」</p>
-            <p style="margin-top: 20px;">社工，是這樣的一群人。</p>
+            <p>接住別人最難的時候，卻很少被問一句：「你還好嗎？」</p>
             <br>
-            <p>今年，GC 贈物網舉辦第七屆【給社工愛的鼓勵】，</p>
-            <p>我們想邀請你，</p>
-            <p class="highlight-text">不用捐錢、不用完成任務，</p>
-            <p class="highlight-text">只留下一句真心的話。</p>
+            <p>今年，GC 贈物網邀請你，</p>
+            <p style="color:var(--sun-yellow); font-weight:bold;">不用捐錢、不用完成任務，</p>
+            <p style="color:var(--sun-yellow); font-weight:bold;">只留下一句真心的話。</p>
             <br>
-            <p>這一句話，會被整理成鼓勵卡，</p>
-            <p>送到社工與社福單位手中，</p>
-            <p>成為他們繼續走下去的一點力量。</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">
+                這份鼓勵，會被整理成卡片，送到社工手中。<br>
+                成為他們繼續走下去的一點力量。
+            </p>
         </div>
 
         <a href="#game-section" class="scroll-btn">
-            <span>❤️</span> 留下給社工的一句話 (GO)
+            👇 進入陽光世界 (GO)
         </a>
     </header>
 
     <section id="game-section">
+        <div class="pixel-cloud"></div>
         
         <div class="section-header">
-            <div style="font-size: 1.2rem; color: #FFD700;">MISSION START</div>
-            <p>只要三十秒，替正在努力的人，多支持一下。</p>
+            <div style="font-size: 1rem; color: var(--sun-yellow);">MISSION START</div>
+            <h2 style="font-size: 1.5rem; margin: 10px 0;">轉動希望，投遞溫暖</h2>
         </div>
 
         <div class="game-console">
-            
             <div class="screen">
                 <div id="state-idle" class="state-idle">
-                    <div style="font-size: 40px; margin-bottom: 20px;">🛡️</div>
-                    <div style="line-height: 1.6;">
-                        PIXEL HERO<br>
-                        <span style="font-size: 10px; color: #888;">請投入愛心，啟動緣分</span>
+                    <div style="font-size: 50px; margin-bottom: 20px;">☀️</div>
+                    <div style="line-height: 1.8;">
+                        PIXEL HOPE<br>
+                        <span style="font-size: 12px; color: #888;">請投入愛心啟動</span>
                     </div>
                 </div>
 
                 <div id="state-spinning" class="state-spinning">
                     <div>SEARCHING...</div>
-                    <div id="spin-icon" style="font-size: 40px; margin-top: 20px;">❤️</div>
+                    <div id="spin-icon" style="font-size: 50px; margin-top: 20px;">❤️</div>
                 </div>
 
                 <div id="state-quest" class="state-quest">
                     <div class="real-photo-frame">
                         <img id="quest-img" class="real-photo" src="">
                     </div>
-                    <div class="quest-info">
-                        <span style="background:#FF8C00; color:#fff; padding:2px 5px; font-size:10px;">TAG</span>
-                        <strong id="quest-name">單位名稱</strong>
-                        <div style="font-size:12px; color:#555; margin-top:4px;" id="quest-story">故事引言...</div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="background:var(--sky-blue); color:#fff; padding:2px 6px; font-size:10px; border-radius:3px;">TAG</span>
+                        <strong id="quest-name" style="font-size:14px;">單位名稱</strong>
                     </div>
-
+                    
                     <div class="message-guide">
                         <label class="guide-title">💬 選擇一句最接近你心裡的感覺：</label>
-                        <div class="guide-intro">
-                            也許你曾被幫助過，也許只是單純想說聲謝謝...
-                            <br>(這句話會被整理後送到社工手中)
-                        </div>
-
+                        
                         <label class="radio-option">
                             <input type="radio" name="msg-opt" value="謝謝你一直在，撐住很多人的世界">
                             謝謝你一直在，撐住很多人的世界
@@ -322,7 +349,7 @@
                             謝謝你沒有放棄任何一個人
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="msg-opt" value="custom" id="opt-custom">
+                            <input type="radio" name="msg-opt" value="custom">
                             我想自己寫一句...
                         </label>
                         
@@ -332,33 +359,51 @@
             </div>
 
             <div class="coin-slot-area">
+                <div style="margin-right: 15px; margin-top: 15px; font-size: 10px; color: #333;">點擊愛心 ▶</div>
                 <div id="heart-token" class="heart-token">❤️</div>
                 <div class="coin-slot"></div>
             </div>
 
             <button id="btn-action" class="btn-main">請先投幣 (INSERT LOVE)</button>
-
         </div>
+    </section>
 
-        <div style="margin-top: 20px; font-size: 10px; color: #aaa;">
-            你的鼓勵，將成為今年社工日的一份真實力量。
+    <section id="tribute-section">
+        <div class="board-container">
+            <div class="pin"></div>
+            <div class="board-paper">
+                <div class="board-title">📜 尋找更多光芒</div>
+                <p style="color:#666; font-size: 0.95rem; line-height: 1.6;">
+                    那 30 間只是代表，台灣還有無數個角落有人在默默付出。<br>
+                    如果您想感謝的單位不在遊戲機內，請在這裡搜尋並留言，<br>
+                    我們一樣會將這份心意送達。
+                </p>
+
+                <div class="search-box">
+                    <input type="text" placeholder="輸入單位名稱 (如：勵馨、家扶...)">
+                    <button>搜尋</button>
+                </div>
+
+                <div style="margin-top: 20px; font-size: 12px; color: #888; border-top: 1px dashed #ccc; padding-top: 10px;">
+                    🔥 最新致敬：王小明 留言給 [芒草心協會]...
+                </div>
+            </div>
         </div>
-
     </section>
 
     <footer>
-        &copy; 2026 GC 贈物網 | 第七屆給社工愛的鼓勵<br>
-        讓善意成為循環
+        <div style="opacity: 0.7; margin-bottom: 20px;">
+            感謝贊助夥伴： [ 蓓朵娜 ]  [ 艾瑪絲 ]  [ 鼎王 ]
+        </div>
+        &copy; 2026 GC 贈物網 | 讓愛循環
     </footer>
 
     <script>
-        // 資料庫
         const units = [
-            { name: "屏東伯大尼之家", story: "孩子半夜哭醒時，第一個抱住他們的，通常是值班的我們。", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80" },
-            { name: "華山基金會", story: "便當暖的是胃，我們那幾分鐘的閒聊，暖的是心。", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80" }
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80" },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80" }
         ];
 
-        // DOM 元素
         const heartToken = document.getElementById('heart-token');
         const btnAction = document.getElementById('btn-action');
         const stateIdle = document.getElementById('state-idle');
@@ -372,29 +417,26 @@
         let isCoinInserted = false;
         let finalMessage = "";
 
-        // 1. 投幣邏輯
+        // 1. 投幣
         heartToken.addEventListener('click', () => {
             if(isCoinInserted) return;
             heartToken.classList.add('inserting-anim');
             setTimeout(() => {
                 isCoinInserted = true;
-                btnAction.innerText = "搜尋守護者 (START)";
+                btnAction.innerText = "轉動希望 (START)";
                 btnAction.classList.remove('btn-main');
                 btnAction.classList.add('btn-main', 'btn-unlocked');
-                stateIdle.innerHTML = '<div style="font-size:24px; margin-bottom:10px;">READY!</div><div style="font-size:10px;">準備連結緣分...</div>';
+                stateIdle.innerHTML = '<div style="font-size:24px; margin-bottom:10px; color:#333;">READY!</div><div style="font-size:12px;">準備傳遞溫暖</div>';
             }, 800);
         });
 
-        // 2. 按鈕邏輯 (轉動 -> 送出)
+        // 2. 按鈕動作
         btnAction.addEventListener('click', () => {
             if(!isCoinInserted) return;
 
-            // 如果是在"轉動前"的狀態
             if(stateQuest.style.display !== 'block') {
                 startSpin();
-            } 
-            // 如果是在"留言中"的狀態
-            else {
+            } else {
                 submitMessage();
             }
         });
@@ -402,9 +444,9 @@
         function startSpin() {
             stateIdle.style.display = 'none';
             stateSpinning.style.display = 'block';
-            btnAction.style.display = 'none'; // 轉動時隱藏按鈕
+            btnAction.style.display = 'none';
 
-            let icons = ['❤️', '🛡️', '🎁', '⚡'];
+            let icons = ['❤️', '☀️', '🎁', '✨'];
             let spinInterval = setInterval(() => { 
                 document.getElementById('spin-icon').innerText = icons[Math.floor(Math.random()*icons.length)]; 
             }, 100);
@@ -419,25 +461,21 @@
             const unit = units[Math.floor(Math.random() * units.length)];
             document.getElementById('quest-img').src = unit.img;
             document.getElementById('quest-name').innerText = unit.name;
-            document.getElementById('quest-story').innerText = unit.story;
 
             stateSpinning.style.display = 'none';
             stateQuest.style.display = 'block';
             msgGuide.style.display = 'block';
 
-            // 變更按鈕功能為"送出"
             btnAction.style.display = 'block';
             btnAction.innerText = "發送真實鼓勵 (SEND)";
         }
 
-        // 3. 選項互動邏輯
+        // 3. 選項互動
         radioOptions.forEach(radio => {
             radio.addEventListener('change', (e) => {
-                // 視覺樣式切換
                 optionLabels.forEach(label => label.classList.remove('selected'));
                 e.target.parentElement.classList.add('selected');
 
-                // 處理自填框
                 if(e.target.value === 'custom') {
                     customArea.style.display = 'block';
                     customArea.focus();
@@ -448,31 +486,16 @@
             });
         });
 
-        // 4. 送出邏輯
         function submitMessage() {
-            // 檢查是否有選
             const selected = document.querySelector('input[name="msg-opt"]:checked');
-            if(!selected) {
-                alert("請選擇一句想說的話喔！");
-                return;
-            }
-
-            // 獲取內容
+            if(!selected) { alert("請選擇一句想說的話喔！"); return; }
             if(selected.value === 'custom') {
                 finalMessage = customArea.value.trim();
-                if(finalMessage === "") {
-                    alert("請寫下您的鼓勵！");
-                    return;
-                }
+                if(finalMessage === "") { alert("請寫下您的鼓勵！"); return; }
             }
-
-            // 模擬送出成功
-            alert("💌 鼓勵已收到！\n內容：" + finalMessage + "\n\n這句話將會印在卡片上，送到社工手中。");
-            
-            // 重置遊戲
-            location.reload(); // 簡單重整頁面，或寫 reset 函式
+            alert("💌 鼓勵已收到！\n我們將把這句話送到社工手中。");
+            location.reload();
         }
-
     </script>
 </body>
 </html>
