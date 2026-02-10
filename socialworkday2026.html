@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第七屆 給社工愛的鼓勵 - 像素守護者</title>
+    <title>第七屆 給社工愛的鼓勵 - 像素守護者 (V2)</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,14 +12,13 @@
             --pixel-bg: #2C2C2C;
             --text-color: #333;
             --white: #fff;
+            --heart-red: #FF4444;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
-            font-family: 'Press Start 2P', cursive; /* 核心像素字體 */
+            font-family: 'Press Start 2P', cursive;
             background-color: var(--pixel-bg);
             color: var(--white);
             margin: 0;
@@ -30,63 +29,42 @@
             min-height: 100vh;
         }
 
-        /* --- 頂部 Boss 血條區域 --- */
+        /* --- Boss 血條 --- */
         .boss-bar-container {
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             margin-bottom: 20px;
         }
-        
-        .boss-label {
-            font-size: 12px;
-            margin-bottom: 5px;
-            color: #FF6B6B;
-            text-align: center;
-        }
-
         .health-bar-frame {
             border: 4px solid var(--white);
-            height: 30px;
+            height: 25px;
             background: #000;
-            position: relative;
+            padding: 2px;
         }
-
         .health-bar-fill {
             height: 100%;
-            background: #FF4444; /* Boss 血條顏色 */
-            width: 40%; /* 模擬目前進度，剩餘血量 */
+            background: #FF4444;
+            width: 40%;
             transition: width 0.5s;
         }
 
-        /* --- 道具欄 (Inventory) --- */
-        .inventory {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 10px;
-            font-size: 12px;
-            color: var(--gc-yellow);
-        }
-
-        /* --- 主遊戲機介面 (Game Console) --- */
+        /* --- 遊戲主機 --- */
         .game-console {
             background-color: var(--gc-orange);
             padding: 20px;
             border: 4px solid #000;
-            box-shadow: 8px 8px 0px #000; /* 像素陰影效果 */
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
             width: 100%;
-            max-width: 500px;
+            max-width: 400px; /* 手機友善寬度 */
             border-radius: 4px;
             position: relative;
         }
 
-        /* 螢幕區域 */
+        /* 螢幕 */
         .screen {
-            background-color: #E0F8CF; /* 類似 GameBoy 的綠底色，或改用純白 */
             background-color: #fff;
             border: 4px solid #333;
-            height: 350px;
+            height: 320px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -95,186 +73,149 @@
             color: var(--text-color);
             position: relative;
             overflow: hidden;
-        }
-
-        /* 裝飾用的像素點 */
-        .decor-pixel {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 20px;
-            height: 20px;
-            background: #ccc;
-            box-shadow: -4px 4px 0 #999;
-        }
-
-        /* --- 內容動態切換區 --- */
-        
-        /* 1. 待機畫面 */
-        .state-idle {
-            text-align: center;
-            display: flex; /* JS控制切換 */
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .pixel-hero-icon {
-            font-size: 50px;
             margin-bottom: 20px;
         }
 
-        /* 2. 轉動畫面 (Spinning) */
-        .state-spinning {
-            display: none;
-            font-size: 20px;
-            animation: blink 0.5s infinite;
-        }
-
-        /* 3. 結果/任務畫面 (Quest) */
-        .state-quest {
-            display: none; 
-            width: 100%;
-            text-align: left;
-        }
-
-        /* 真實照片容器 (核心感動點) */
-        .real-photo-frame {
-            width: 100%;
-            height: 180px;
-            background-color: #333;
+        /* --- 投幣口區域 (新增) --- */
+        .coin-slot-area {
+            display: flex;
+            justify-content: flex-end; /* 靠右放 */
             margin-bottom: 10px;
-            border: 4px solid #000;
-            overflow: hidden;
+            position: relative;
+            height: 50px;
+        }
+
+        .coin-slot {
+            width: 15px;
+            height: 40px;
+            background: #000;
+            border: 2px solid #555;
+            border-radius: 2px;
+            box-shadow: inset 0 0 5px #222;
             position: relative;
         }
-
-        .real-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* 預設帶一點點像素濾鏡，任務解鎖時移除 */
-            /* filter: grayscale(100%); */ 
-        }
-
-        .quest-info {
-            font-family: 'Helvetica', sans-serif; /* 內文改用黑體易讀 */
-            font-size: 14px;
-            line-height: 1.4;
-        }
         
-        .quest-tag {
-            background: var(--gc-orange);
-            color: #fff;
-            padding: 2px 6px;
-            font-size: 10px;
-            display: inline-block;
-            margin-bottom: 5px;
-            font-family: 'Press Start 2P';
-        }
-
-        .quest-story {
-            margin-bottom: 10px;
-            border-left: 3px solid var(--gc-orange);
-            padding-left: 8px;
-            color: #555;
-            font-style: italic;
-        }
-
-        /* --- 操作區 --- */
-        .controls {
-            margin-top: 20px;
+        .coin-slot::after {
+            content: "INSERT";
+            position: absolute;
+            top: 45px;
+            left: -15px;
+            font-size: 8px;
+            color: #000;
+            width: 50px;
             text-align: center;
         }
+
+        /* 愛心代幣 (按鈕) */
+        .heart-token {
+            font-size: 30px;
+            color: var(--heart-red);
+            cursor: pointer;
+            position: absolute;
+            right: 40px; /* 初始位置 */
+            top: 5px;
+            text-shadow: 2px 2px 0 #000;
+            animation: bounce 1s infinite;
+            z-index: 10;
+        }
+
+        .heart-token:hover {
+            transform: scale(1.1);
+        }
+
+        /* 愛心投入動畫 Class */
+        .inserting-anim {
+            animation: insertMove 1s forwards !important; /* 覆蓋 bounce */
+        }
+
+        @keyframes insertMove {
+            0% { right: 40px; top: 5px; opacity: 1; transform: scale(1); }
+            50% { right: 0px; top: 5px; opacity: 1; transform: scale(0.5); }
+            100% { right: 0px; top: 5px; opacity: 0; transform: scale(0.1); }
+        }
+
+        /* 投幣提示文字 */
+        .insert-hint {
+            position: absolute;
+            right: 80px;
+            top: 15px;
+            font-size: 10px;
+            color: #000;
+            animation: blink 1s infinite;
+        }
+
+        /* --- 狀態顯示 --- */
+        .state-idle { text-align: center; }
+        .state-spinning { display: none; font-size: 20px; }
+        
+        /* 真實故事顯示區 */
+        .state-quest { 
+            display: none; width: 100%; text-align: left; 
+        }
+        .real-photo-frame {
+            width: 100%; height: 160px;
+            background: #000;
+            margin-bottom: 10px;
+            overflow: hidden;
+            border: 2px solid #000;
+        }
+        .real-photo { width: 100%; height: 100%; object-fit: cover; }
+        .quest-tag { 
+            background: var(--gc-orange); color: #fff; 
+            padding: 2px 6px; font-size: 10px; display: inline-block; 
+        }
+
+        /* --- 按鈕控制區 --- */
+        .controls { text-align: center; }
 
         .btn-main {
+            background-color: #888; /* 預設灰色(未解鎖) */
+            color: #ccc;
+            border: 4px solid #555;
+            padding: 15px 0;
+            width: 100%;
+            font-family: 'Press Start 2P';
+            font-size: 12px;
+            cursor: not-allowed;
+            pointer-events: none; /* 禁止點擊 */
+            box-shadow: none;
+            transition: all 0.3s;
+        }
+
+        /* 解鎖狀態 */
+        .btn-unlocked {
             background-color: #FF4444;
             color: #fff;
-            border: 4px solid #8B0000;
-            padding: 15px 20px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 14px;
+            border-color: #8B0000;
             cursor: pointer;
+            pointer-events: auto;
             box-shadow: 0 4px 0 #8B0000;
-            transition: transform 0.1s;
-            width: 100%;
+            animation: pulse 1s infinite; /* 解鎖後呼吸燈效果 */
         }
-
-        .btn-main:active {
+        
+        .btn-unlocked:active {
             transform: translateY(4px);
-            box-shadow: 0 0 0 #8B0000;
+            box-shadow: none;
         }
 
-        .btn-disabled {
-            background-color: #ccc;
-            border-color: #999;
-            box-shadow: 0 4px 0 #999;
-            cursor: not-allowed;
-        }
-
-        /* 留言輸入框 */
-        .message-input-area {
-            display: none; /* 任務開始後才顯示 */
-            width: 100%;
-            margin-top: 10px;
-        }
-
+        /* 留言區 */
+        .message-area { display: none; margin-top: 15px; }
         textarea {
-            width: 100%;
-            height: 60px;
-            border: 2px solid #000;
-            padding: 8px;
-            font-family: sans-serif;
-            font-size: 14px;
-            resize: none;
+            width: 100%; height: 60px;
+            border: 2px solid #000; padding: 5px;
+            font-family: sans-serif; font-size: 14px;
         }
 
-        /* --- 彈窗 (Loot Drop) --- */
-        .loot-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--white);
-            border: 4px solid var(--gc-yellow);
-            box-shadow: 0 0 0 1000px rgba(0,0,0,0.7);
-            padding: 20px;
-            text-align: center;
-            z-index: 999;
-            display: none;
-            width: 80%;
-            max-width: 300px;
-            color: #000;
-        }
-
-        .loot-icon {
-            font-size: 40px;
-            margin: 10px 0;
-            animation: bounce 1s infinite;
-        }
-        
-        .item-card {
-            border: 2px dashed #ccc;
-            padding: 10px;
-            margin: 10px 0;
-            background: #f9f9f9;
-        }
-
-        /* --- 動畫 --- */
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        
+        /* --- 動畫關鍵影格 --- */
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-5px); }
         }
-
-        /* RWD */
-        @media (max-width: 400px) {
-            .btn-main { font-size: 10px; }
-            .boss-label { font-size: 10px; }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
     </style>
@@ -282,208 +223,189 @@
 <body>
 
     <div class="boss-bar-container">
-        <div class="boss-label">BOSS：冷漠魔王 (HP 剩餘 40%)</div>
+        <div style="font-size: 10px; margin-bottom:5px; text-align:center;">
+            全服累積鼓勵值 (Lv.7)
+        </div>
         <div class="health-bar-frame">
             <div class="health-bar-fill" id="boss-hp"></div>
         </div>
     </div>
 
-    <div class="inventory">
-        <span>PLAYER: 您</span>
-        <span>🎫 抽獎券: <span id="ticket-count" style="color:#fff;">0</span> 張</span>
-    </div>
-
     <div class="game-console">
+        
         <div class="screen">
-            <div class="decor-pixel"></div>
-
-            <div id="screen-idle" class="state-idle">
-                <div class="pixel-hero-icon">🛡️</div>
-                <div style="line-height: 1.6; margin-bottom: 20px;">
-                    PIXEL GUARDIANS<br>
-                    <span style="font-size: 10px; color: #666;">INSERT LOVE TO START</span>
-                </div>
-                <div style="font-size: 10px;">
-                    今天，命運會帶你遇見<br>哪一位守護者？
+            <div id="state-idle" class="state-idle">
+                <div style="font-size: 40px; margin-bottom: 20px;">🛡️</div>
+                <div style="line-height: 1.5;">
+                    PIXEL HERO<br>
+                    <span style="font-size: 10px; color: #888;">請投入愛心啟動</span>
                 </div>
             </div>
 
-            <div id="screen-spinning" class="state-spinning">
-                SEARCHING...<br>
-                <div id="spin-text" style="margin-top:20px; font-size: 30px;">🔍</div>
+            <div id="state-spinning" class="state-spinning">
+                <div>CONNECTING...</div>
+                <div id="spin-icon" style="font-size: 40px; margin-top: 20px;">❤️</div>
             </div>
 
-            <div id="screen-quest" class="state-quest">
+            <div id="state-quest" class="state-quest">
                 <div class="real-photo-frame">
-                    <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=600&q=80" alt="社工照片" class="real-photo" id="quest-img">
+                    <img id="quest-img" class="real-photo" src="">
                 </div>
-                
-                <div class="quest-info">
-                    <div class="quest-tag" id="quest-tag">#深夜的燈塔</div>
-                    <div style="font-weight:bold; margin-bottom:5px;" id="quest-name">屏東伯大尼之家</div>
-                    <div class="quest-story" id="quest-story">
-                        「孩子半夜哭醒時，第一個抱住他們的，通常不是爸媽，而是值班的我們。」
-                    </div>
-                    <div style="font-size: 10px; color: #888;">
-                        狀態: HP 低落 (人力短缺)<br>
-                        技能: 無限耐心 Lv.99
-                    </div>
-                </div>
+                <div class="quest-tag" id="quest-tag">TAG</div>
+                <div style="font-size: 12px; margin: 5px 0; font-weight: bold;" id="quest-name">NAME</div>
+                <div style="font-size: 10px; line-height: 1.4; color: #555;" id="quest-story">STORY</div>
             </div>
+        </div>
+
+        <div class="coin-slot-area">
+            <div id="insert-hint" class="insert-hint">點擊投入愛心 ▶</div>
+            <div id="heart-token" class="heart-token">❤️</div>
+            <div class="coin-slot"></div>
         </div>
 
         <div class="controls">
-            <button id="btn-spin" class="btn-main">轉動緣分 (PUSH)</button>
-            
-            <div id="message-area" class="message-input-area">
-                <textarea id="msg-input" placeholder="請輸入給社工的鼓勵... (例如：辛苦了，謝謝你們的溫柔)"></textarea>
-                <button id="btn-submit" class="btn-main" style="margin-top: 10px; background-color: var(--gc-orange); border-color: #B86500;">發送補血魔法</button>
+            <button id="btn-spin" class="btn-main">請先投幣 (INSERT LOVE)</button>
+
+            <div id="message-area" class="message-area">
+                <textarea id="msg-input" placeholder="寫下您的鼓勵..."></textarea>
+                <button id="btn-send" class="btn-main btn-unlocked" style="margin-top:10px; background:#FF8C00;">發送溫暖</button>
             </div>
         </div>
+
     </div>
 
-    <div id="loot-popup" class="loot-popup">
-        <h3 style="color: var(--gc-orange); font-size: 14px;">任務完成！</h3>
-        <div style="font-size: 10px; margin-bottom: 10px;">社工 HP +1000</div>
-        
-        <div class="item-card">
-            <div class="loot-icon">🎫</div>
-            <div style="font-size: 12px; font-weight: bold;">傳說抽獎券 x1</div>
-            <div style="font-size: 10px; color: #666; margin-top:5px;">已存入道具欄</div>
-        </div>
-
-        <div style="font-size: 10px; color: #888; margin-top: 10px;">
-            有機會獲得：<br>
-            [SSR] 鼎王麻辣湯底<br>
-            [SR] 艾瑪絲淨化液
-        </div>
-
-        <button id="btn-close-popup" class="btn-main" style="margin-top: 15px; font-size: 10px; padding: 10px;">繼續累積 (還有 2 次)</button>
+    <div style="margin-top: 20px; font-size: 10px; color: #aaa;">
+        我的抽獎券: <span id="ticket-count" style="color:#fff; font-size:14px;">0</span> 張
     </div>
 
     <script>
-        // 模擬 30 間單位的資料庫 (JSON)
-        const unitsData = [
+        // 資料庫
+        const units = [
             {
                 name: "屏東伯大尼之家",
                 tag: "#深夜的燈塔",
                 story: "「孩子半夜哭醒時，第一個抱住他們的，通常不是爸媽，而是值班的我們。」",
-                img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80" // 示意圖
+                img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80"
             },
             {
-                name: "華山基金會 (花蓮站)",
+                name: "華山基金會",
                 tag: "#時間的陪伴者",
                 story: "「有時候，阿公阿嬤等的不是那個便當，而是送便當的那個人，能跟他說說話。」",
                 img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                name: "芒草心慈善協會",
-                tag: "#平視的溫柔",
-                story: "「蹲下來，不是因為腿痠。而是只有當視線平行的時候，對話才真正開始。」",
-                img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80"
             }
         ];
 
-        // 變數
-        let ticketCount = 0;
+        // 元素
+        const heartToken = document.getElementById('heart-token');
+        const insertHint = document.getElementById('insert-hint');
         const btnSpin = document.getElementById('btn-spin');
-        const screenIdle = document.getElementById('screen-idle');
-        const screenSpinning = document.getElementById('screen-spinning');
-        const screenQuest = document.getElementById('screen-quest');
-        const spinText = document.getElementById('spin-text');
-        const messageArea = document.getElementById('message-area');
-        const btnSubmit = document.getElementById('btn-submit');
-        const lootPopup = document.getElementById('loot-popup');
-        const btnClosePopup = document.getElementById('btn-close-popup');
-        const ticketDisplay = document.getElementById('ticket-count');
-        const bossHp = document.getElementById('boss-hp');
+        const stateIdle = document.getElementById('state-idle');
+        const stateSpinning = document.getElementById('state-spinning');
+        const stateQuest = document.getElementById('state-quest');
+        const msgArea = document.getElementById('message-area');
+        const btnSend = document.getElementById('btn-send');
+        const ticketCount = document.getElementById('ticket-count');
 
-        // 1. 點擊「轉動緣分」
+        let isCoinInserted = false;
+        let tickets = 0;
+
+        // 1. 投入愛心 (儀式感關鍵)
+        heartToken.addEventListener('click', () => {
+            if(isCoinInserted) return; // 避免重複點擊
+
+            // 播放動畫：愛心飛進去
+            heartToken.classList.add('inserting-anim');
+            insertHint.style.display = 'none';
+
+            // 模擬投幣音效延遲
+            setTimeout(() => {
+                isCoinInserted = true;
+                
+                // 解鎖拉桿按鈕
+                btnSpin.innerText = "轉動緣分 (START)";
+                btnSpin.classList.remove('btn-main'); // 移除灰色樣式
+                btnSpin.classList.add('btn-main', 'btn-unlocked'); // 加入紅色樣式
+                
+                // 螢幕文字變化
+                stateIdle.innerHTML = '<div style="font-size:30px; margin-bottom:10px;">READY!</div><div style="font-size:10px;">緣分已連線</div>';
+                
+            }, 800); // 配合 CSS 動畫時間
+        });
+
+        // 2. 轉動拉霸
         btnSpin.addEventListener('click', () => {
-            // 切換狀態 -> 轉動中
-            screenIdle.style.display = 'none';
-            screenQuest.style.display = 'none';
-            messageArea.style.display = 'none';
-            screenSpinning.style.display = 'block';
-            btnSpin.innerText = "搜尋守護者中...";
-            btnSpin.classList.add('btn-disabled');
-            
-            // 模擬轉動動畫 (圖示跳動)
+            if(!isCoinInserted) return;
+
+            // 切換畫面
+            stateIdle.style.display = 'none';
+            stateSpinning.style.display = 'block';
+            btnSpin.style.display = 'none'; // 隱藏按鈕，進入任務模式
+
+            // 轉動動畫
+            let icons = ['❤️', '🛡️', '🎁', '⚡'];
             let spinInterval = setInterval(() => {
-                const icons = ['🛡️', '❤️', '🎁', '⚡'];
-                spinText.innerText = icons[Math.floor(Math.random() * icons.length)];
+                document.getElementById('spin-icon').innerText = icons[Math.floor(Math.random()*icons.length)];
             }, 100);
 
-            // 1.5秒後停下，顯示隨機單位
+            // 停止並顯示結果
             setTimeout(() => {
                 clearInterval(spinInterval);
-                showRandomQuest();
+                showQuest();
             }, 1500);
         });
 
-        // 2. 顯示任務 (真實故事)
-        function showRandomQuest() {
-            // 隨機選一個單位
-            const unit = unitsData[Math.floor(Math.random() * unitsData.length)];
+        // 3. 顯示真實故事
+        function showQuest() {
+            const unit = units[Math.floor(Math.random() * units.length)];
             
-            // 填入資料
-            document.getElementById('quest-name').innerText = unit.name;
-            document.getElementById('quest-tag').innerText = unit.tag;
-            document.getElementById('quest-story').innerText = unit.story;
             document.getElementById('quest-img').src = unit.img;
+            document.getElementById('quest-tag').innerText = unit.tag;
+            document.getElementById('quest-name').innerText = unit.name;
+            document.getElementById('quest-story').innerText = unit.story;
 
-            // 切換畫面
-            screenSpinning.style.display = 'none';
-            screenQuest.style.display = 'block';
-            
-            // 解鎖留言區
-            btnSpin.style.display = 'none'; // 隱藏轉動按鈕
-            messageArea.style.display = 'block'; // 顯示留言區
+            stateSpinning.style.display = 'none';
+            stateQuest.style.display = 'block';
+            msgArea.style.display = 'block'; // 顯示留言框
         }
 
-        // 3. 送出留言
-        btnSubmit.addEventListener('click', () => {
+        // 4. 送出鼓勵 (Reset 機制)
+        btnSend.addEventListener('click', () => {
             const input = document.getElementById('msg-input');
             if(input.value.trim() === "") {
-                alert("請輸入一句鼓勵的話，社工才收得到喔！");
+                alert("請寫下一句鼓勵的話喔！");
                 return;
             }
 
-            // 這裡可以加入 AJAX 傳送留言到後端
-            // console.log("留言送出:", input.value);
-
-            // 顯示掉寶彈窗
-            lootPopup.style.display = 'block';
-            
-            // 更新道具欄
-            ticketCount++;
-            ticketDisplay.innerText = ticketCount;
-
-            // 更新 Boss 血條 (視覺效果)
-            // 假設每次扣一點血
-            const currentWidth = parseFloat(getComputedStyle(bossHp).width);
-            const parentWidth = parseFloat(getComputedStyle(bossHp.parentElement).width);
-            let newPercent = ((currentWidth - 20) / parentWidth) * 100;
-            if(newPercent < 0) newPercent = 0;
-            bossHp.style.width = newPercent + "%";
-            
-            // 清空輸入框
+            // 更新數據
+            tickets++;
+            ticketCount.innerText = tickets;
             input.value = "";
+
+            alert("溫暖已送達！獲得抽獎券 x1");
+
+            // 重置遊戲狀態 (讓使用者可以再玩一次)
+            resetGame();
         });
 
-        // 4. 關閉彈窗，重置遊戲
-        btnClosePopup.addEventListener('click', () => {
-            lootPopup.style.display = 'none';
-            
-            // 回到待機畫面，或者直接顯示按鈕讓使用者再轉
-            screenQuest.style.display = 'none';
-            messageArea.style.display = 'none';
-            screenIdle.style.display = 'flex';
-            
+        function resetGame() {
+            // 回復變數
+            isCoinInserted = false;
+
+            // 回復愛心位置
+            heartToken.classList.remove('inserting-anim');
+            insertHint.style.display = 'block';
+
+            // 回復螢幕
+            stateQuest.style.display = 'none';
+            msgArea.style.display = 'none';
+            stateIdle.style.display = 'block';
+            stateIdle.innerHTML = '<div style="font-size: 40px; margin-bottom: 20px;">🛡️</div><div style="line-height: 1.5;">PIXEL HERO<br><span style="font-size: 10px; color: #888;">請投入愛心啟動</span></div>';
+
+            // 鎖定按鈕
             btnSpin.style.display = 'block';
-            btnSpin.classList.remove('btn-disabled');
-            btnSpin.innerText = "再轉一次 (還有 2 次)";
-        });
+            btnSpin.innerText = "請先投幣 (INSERT LOVE)";
+            btnSpin.classList.remove('btn-unlocked');
+        }
 
     </script>
 </body>
