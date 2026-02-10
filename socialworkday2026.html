@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 給社工愛的鼓勵 - 陽光篇</title>
+    <title>2026 給社工愛的鼓勵 - 讓愛循環</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sky-blue: #87CEEB;
-            --cloud-white: #FFFFFF;
-            --grass-green: #90EE90;
-            --sun-yellow: #FFD700;
-            --mario-red: #FF5E5E;
-            --text-dark: #333;
+            --warm-orange: #E65100;
+            --hope-yellow: #FFD54F;
+            --soft-bg: #FFF8E1;
+            --text-dark: #2c2c2c;
+            --pixel-dark: #3E2723;
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
@@ -21,14 +20,16 @@
             margin: 0;
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--text-dark);
-            background-color: #f9f9f9;
+            background-color: var(--soft-bg);
         }
 
-        /* --- 1. 感性前導 (Hero) - 保持情感深度 --- */
-        header {
-            min-height: 90vh;
-            /* 換成一張有陽光灑落、溫暖色調的真實照片 */
-            background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1600&q=80');
+        /* =========================================
+           Section 1: 質感前導 & 集氣血量
+           ========================================= */
+        #hero-section {
+            min-height: 100vh;
+            /* 背景：更換為高質感、溫暖、有希望的晨曦/微光圖片 */
+            background: linear-gradient(rgba(62, 39, 35, 0.4), rgba(62, 39, 35, 0.6)), url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -38,284 +39,284 @@
             text-align: center;
             color: #fff;
             padding: 40px 20px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.6);
         }
 
-        .edition-tag {
-            background: var(--sun-yellow);
-            color: #333;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: bold;
+        .main-title {
+            font-size: 2.8rem;
+            font-weight: 700;
             margin-bottom: 20px;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
         }
 
-        .intro-poetry {
-            background: rgba(0, 0, 0, 0.4); /* 增加一點底色讓文字好讀 */
-            padding: 40px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-            max-width: 700px;
-            line-height: 2;
+        .poetry-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            padding: 30px;
+            border-left: 4px solid var(--hope-yellow);
+            max-width: 600px;
+            text-align: left;
+            margin-bottom: 40px;
             font-size: 1.1rem;
+            line-height: 1.8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .scroll-btn {
-            background-color: var(--mario-red);
-            color: #fff;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 30px;
-            box-shadow: 0 5px 0 #b30000; /* 遊戲按鈕的立體感 */
-            transition: transform 0.1s;
-            font-family: 'Press Start 2P', cursive;
+        /* --- 集氣血量條 (HP Bar) --- */
+        .hp-bar-container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(0,0,0,0.6);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .hp-info {
+            display: flex; justify-content: space-between;
+            font-size: 0.9rem; margin-bottom: 8px; color: var(--hope-yellow);
+            font-weight: bold; font-family: 'Press Start 2P';
+        }
+
+        .hp-track {
+            width: 100%; height: 25px;
+            background: #222; border-radius: 15px;
+            overflow: hidden; border: 2px solid #555;
+        }
+
+        .hp-fill {
+            height: 100%; width: 65%; /* 預設進度 */
+            background: linear-gradient(90deg, #FF9800, #FFD54F);
+            box-shadow: 0 0 10px #FF9800;
+            transition: width 1s ease-in-out;
+            position: relative;
         }
         
-        .scroll-btn:active {
-            transform: translateY(5px);
-            box-shadow: none;
+        /* 增加光澤感 */
+        .hp-fill::after {
+            content: ''; position: absolute; top:0; left:0; bottom:0; right:0;
+            background: linear-gradient(45deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%);
         }
 
-        /* --- 2. 陽光像素遊戲區 (Sky Theme) --- */
+        .scroll-down-btn {
+            background: var(--warm-orange);
+            color: #fff; padding: 12px 30px;
+            border-radius: 30px; text-decoration: none;
+            font-weight: bold; margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(230, 81, 0, 0.4);
+            transition: transform 0.2s;
+        }
+        .scroll-down-btn:hover { transform: translateY(-3px); }
+
+
+        /* =========================================
+           Section 2: 每日任務 (Pixel Game)
+           ========================================= */
         #game-section {
-            /* 藍天白雲背景 */
-            background-color: var(--sky-blue);
-            background-image: 
-                radial-gradient(circle at 20% 20%, white 10%, transparent 11%),
-                radial-gradient(circle at 80% 10%, white 15%, transparent 16%);
-            background-size: 100% 100%;
             padding: 60px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-color: #3E2723; /* 深棕色，類似木質感，更沈穩 */
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            display: flex; flex-direction: column; align-items: center;
             font-family: 'Press Start 2P', cursive;
-            position: relative;
-        }
-
-        /* 裝飾用的像素雲 */
-        .pixel-cloud {
-            position: absolute;
-            background: #fff;
-            width: 100px; height: 40px;
-            top: 50px; left: 10%;
-            opacity: 0.8;
-            box-shadow: 20px 20px 0 0 #fff; /* 用陰影畫雲 */
-        }
-
-        .section-header {
             color: #fff;
-            text-shadow: 4px 4px 0 rgba(0,0,0,0.2);
-            text-align: center;
-            margin-bottom: 30px;
-            z-index: 2;
         }
 
-        /* 遊戲機本體 (改為明亮配色) */
+        .daily-limit-badge {
+            background: #FF5252; color: #fff;
+            padding: 8px 15px; border-radius: 5px;
+            font-size: 10px; margin-bottom: 20px;
+            box-shadow: 0 4px 0 #8B0000;
+            animation: pulse 2s infinite;
+        }
+
         .game-console {
-            background-color: var(--sun-yellow); /* 明亮的黃色機身 */
-            padding: 20px;
-            border: 6px solid #333;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 500px;
-            border-radius: 10px;
-            position: relative;
-            z-index: 2;
+            background-color: #F57F17; /* 復古橘 */
+            padding: 20px; border: 6px solid #222;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+            width: 100%; max-width: 500px;
+            border-radius: 8px; position: relative;
         }
 
         .screen {
-            background-color: #fff;
-            border: 4px solid #333;
-            min-height: 420px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            color: #333;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 10px;
-            border-radius: 4px;
+            background: #fff; border: 4px solid #222;
+            min-height: 450px; /* 拉高以容納更多互動 */
+            padding: 15px; color: #333;
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; overflow: hidden;
+            border-radius: 4px; margin-bottom: 15px;
         }
 
-        /* 狀態畫面 */
-        .state-idle { margin-top: 60px; text-align: center; }
+        /* 遊戲狀態 */
+        .state-idle { text-align: center; margin-top: 60px; }
         .state-spinning { display: none; text-align: center; margin-top: 80px; }
         .state-quest { display: none; width: 100%; text-align: left; }
 
         /* 真實照片 */
-        .real-photo-frame { 
-            width: 100%; height: 160px; 
-            background: #eee; margin-bottom: 15px; 
-            border: 3px solid #333; overflow: hidden; 
-            border-radius: 4px;
+        .real-photo-frame {
+            width: 100%; height: 140px; background: #000;
+            margin-bottom: 10px; border: 2px solid #333;
         }
         .real-photo { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* 留言引導模組 (對話框風格) */
-        .message-guide {
-            display: none; width: 100%;
+
+        /* 核心互動：Tag 選擇 -> 留言 */
+        .quest-interaction {
             font-family: 'Noto Sans TC', sans-serif;
-            background: #f0f8ff; /* 淡藍色底 */
-            padding: 10px;
-            border-radius: 8px;
-            border: 2px dashed #87CEEB;
+            margin-top: 10px;
         }
 
-        .guide-title {
-            font-size: 14px; font-weight: bold; color: #333;
-            margin-bottom: 8px; display: block;
-        }
-
-        /* 選項按鈕化 */
-        .radio-option {
-            display: block; margin-bottom: 8px; cursor: pointer;
-            font-size: 13px; background: #fff; padding: 10px;
-            border-radius: 5px; border: 2px solid #ddd;
-            transition: all 0.2s; position: relative;
-            padding-left: 35px; /* 給圓點留空間 */
+        .tag-container {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;
         }
         
-        .radio-option:hover { border-color: var(--sky-blue); transform: translateX(2px); }
-        .radio-option input { position: absolute; left: 10px; top: 12px; }
+        .unit-tag {
+            font-size: 12px; padding: 5px 10px;
+            background: #eee; border: 1px solid #ccc; border-radius: 15px;
+            cursor: pointer; transition: all 0.2s; color: #555;
+        }
         
-        .radio-option.selected {
-            background: #fffbe6; border-color: var(--sun-yellow);
-            color: #b8860b; font-weight: bold;
+        .unit-tag:hover { background: #e0e0e0; }
+        .unit-tag.active {
+            background: var(--warm-orange); color: #fff; border-color: var(--warm-orange);
+            transform: scale(1.05);
         }
 
-        #custom-text-area {
-            display: none; width: 100%; margin-top: 5px; padding: 10px;
-            border: 2px solid #ddd; border-radius: 5px;
-            font-family: 'Noto Sans TC', sans-serif;
+        .message-input-area {
+            display: none; /* 選完 Tag 才顯示 */
+            background: #FFF8E1; padding: 10px; border-radius: 5px; border: 1px dashed #ccc;
         }
 
-        /* 投幣區 */
-        .coin-slot-area { display: flex; justify-content: flex-end; margin-bottom: 10px; height: 50px; position: relative; }
-        .heart-token { font-size: 40px; color: var(--mario-red); cursor: pointer; position: absolute; right: 30px; top: -5px; animation: bounce 1s infinite; z-index: 10; filter: drop-shadow(2px 2px 0 #333); }
-        .coin-slot { width: 20px; height: 45px; background: #333; border-radius: 10px; border: 2px solid #fff; position: relative; }
-        .inserting-anim { animation: insertMove 1s forwards !important; }
+        textarea {
+            width: 100%; border: 1px solid #ccc; padding: 8px;
+            border-radius: 4px; font-family: 'Noto Sans TC'; font-size: 14px;
+            margin-top: 5px;
+        }
 
-        @keyframes insertMove { 0% { right: 30px; top: -5px; opacity: 1; transform: scale(1); } 50% { right: 0; top: 0; opacity: 1; transform: scale(0.5); } 100% { right: 0; top: 0; opacity: 0; transform: scale(0.1); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .quick-replies {
+            display: flex; gap: 5px; margin-top: 5px; overflow-x: auto;
+        }
+        .reply-chip {
+            font-size: 11px; padding: 4px 8px; background: #fff; border: 1px solid #ddd;
+            border-radius: 10px; white-space: nowrap; cursor: pointer;
+        }
 
-        /* 按鈕 */
+        /* 投幣與按鈕 */
+        .coin-area { display: flex; justify-content: flex-end; height: 50px; position: relative; margin-bottom: 10px; }
+        .heart-token { font-size: 40px; color: #FF1744; position: absolute; right: 20px; top: 0; cursor: pointer; animation: bounce 1s infinite; z-index: 5; }
+        .coin-slot { width: 15px; height: 40px; background: #222; border: 2px solid #555; position: relative; }
+        
         .btn-main {
-            background-color: #ccc; color: #666; border: 4px solid #666;
-            padding: 15px 0; width: 100%; font-family: 'Press Start 2P';
-            font-size: 12px; cursor: not-allowed; pointer-events: none;
-            border-radius: 8px;
+            background: #999; color: #ccc; border: 4px solid #555;
+            padding: 15px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px;
+            cursor: not-allowed; pointer-events: none;
         }
         .btn-unlocked {
-            background-color: var(--mario-red); color: #fff; border-color: #8b0000;
-            cursor: pointer; pointer-events: auto;
-            box-shadow: 0 6px 0 #8b0000;
+            background: #FF1744; color: #fff; border-color: #880E4F;
+            cursor: pointer; pointer-events: auto; box-shadow: 0 4px 0 #880E4F;
         }
-        .btn-unlocked:active { transform: translateY(6px); box-shadow: none; }
+        .btn-unlocked:active { transform: translateY(4px); box-shadow: none; }
 
-        /* --- 3. 致敬區 (Tribute Section) - 佈告欄風格 --- */
-        #tribute-section {
-            background-color: var(--grass-green); /* 草地 */
+        /* =========================================
+           Section 3: 善意流動 (Message Wall)
+           ========================================= */
+        #wall-section {
             padding: 60px 20px;
-            font-family: 'Noto Sans TC', sans-serif;
+            background: #FFF3E0;
             text-align: center;
-            border-top: 10px dashed #fff; /* 縫線效果 */
         }
 
-        .board-container {
-            max-width: 700px; margin: 0 auto;
-            background: #DEB887; /* 木頭色 */
-            padding: 20px; border: 4px solid #8B4513;
-            border-radius: 10px;
-            box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
-            position: relative;
+        .wall-container {
+            max-width: 800px; margin: 0 auto;
+            background: #fff; border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden; padding: 20px;
         }
 
-        /* 圖釘裝飾 */
-        .pin {
-            width: 15px; height: 15px; border-radius: 50%;
-            background: #FF4444; position: absolute;
-            top: 10px; left: 50%; transform: translateX(-50%);
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        .marquee-wrapper {
+            height: 300px; overflow: hidden; position: relative;
+            background: #fafafa; border: 1px solid #eee; margin: 20px 0;
+            border-radius: 5px;
         }
 
-        .board-paper {
-            background: #fff; padding: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: left;
+        .marquee-content {
+            display: flex; flex-direction: column; gap: 15px; padding: 10px;
+            animation: scrollUp 20s linear infinite;
         }
 
-        .search-box {
-            display: flex; gap: 10px; margin-top: 20px;
-        }
-        
-        .search-box input {
-            flex: 1; padding: 12px; border: 2px solid #ccc;
-            border-radius: 5px; font-size: 1rem;
-        }
-        
-        .search-box button {
-            background: #333; color: #fff; border: none;
-            padding: 0 25px; border-radius: 5px; cursor: pointer;
-            font-weight: bold;
+        .msg-card {
+            background: #fff; padding: 15px; border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: left;
+            border-left: 4px solid var(--hope-yellow);
         }
 
-        .board-title {
-            font-family: 'Press Start 2P'; font-size: 1.2rem;
-            color: #8B4513; text-align: center; margin-bottom: 10px;
+        .msg-header { font-size: 0.8rem; color: #888; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .msg-body { font-size: 1rem; color: #333; line-height: 1.4; }
+
+        /* 致敬搜尋區 */
+        .tribute-search {
+            margin-top: 40px; padding-top: 40px; border-top: 1px dashed #ccc;
         }
+        .search-input { padding: 10px; width: 60%; border: 1px solid #ccc; border-radius: 4px; }
+        .search-btn { padding: 10px 20px; background: #5D4037; color: #fff; border: none; border-radius: 4px; }
 
         /* Footer */
-        footer {
-            background: #333; color: #fff; padding: 40px; text-align: center;
-            font-size: 0.9rem;
-        }
+        footer { background: #3E2723; color: #aaa; padding: 40px; text-align: center; font-size: 0.8rem; }
+
+        /* Animations */
+        @keyframes insertMove { 0% { right: 20px; opacity: 1; transform: scale(1); } 100% { right: 0; opacity: 0; transform: scale(0.2); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes scrollUp { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="edition-tag">2026 第七屆</div>
-        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">給社工愛的鼓勵</h1>
+    <section id="hero-section">
+        <h1 class="main-title">2026 給社工愛的鼓勵</h1>
         
-        <div class="intro-poetry">
-            <p>有些人，長期站在最前線，</p>
-            <p>接住別人最難的時候，卻很少被問一句：「你還好嗎？」</p>
+        <div class="poetry-box">
+            <p>有些人，長期站在最前線，接住別人最難的時候，卻很少被問一句：「你還好嗎？」</p>
             <br>
-            <p>今年，GC 贈物網邀請你，</p>
-            <p style="color:var(--sun-yellow); font-weight:bold;">不用捐錢、不用完成任務，</p>
-            <p style="color:var(--sun-yellow); font-weight:bold;">只留下一句真心的話。</p>
-            <br>
-            <p style="font-size: 0.9rem; margin-top: 10px;">
-                這份鼓勵，會被整理成卡片，送到社工手中。<br>
-                成為他們繼續走下去的一點力量。
-            </p>
+            <p>今年，GC 贈物網邀請你，<strong>不用捐錢、不用完成任務，只留下一句真心的話。</strong></p>
+            <p>這句話會成為他們的集氣裝備，讓他們知道，自己並不孤單。</p>
         </div>
 
-        <a href="#game-section" class="scroll-btn">
-            👇 進入陽光世界 (GO)
-        </a>
-    </header>
+        <div class="hp-bar-container">
+            <div class="hp-info">
+                <span>GLOBAL LOVE ENERGY</span>
+                <span>LV. 78</span>
+            </div>
+            <div class="hp-track">
+                <div class="hp-fill"></div>
+            </div>
+            <div style="margin-top:10px; font-size:0.8rem; color:#ccc; font-family:'Noto Sans TC';">
+                全台累積 12,540 則鼓勵 | 目標解鎖：GC 執行長一日社工體驗
+            </div>
+        </div>
+
+        <a href="#game-section" class="scroll-down-btn">進入集氣任務 ▼</a>
+    </section>
+
 
     <section id="game-section">
-        <div class="pixel-cloud"></div>
         
-        <div class="section-header">
-            <div style="font-size: 1rem; color: var(--sun-yellow);">MISSION START</div>
-            <h2 style="font-size: 1.5rem; margin: 10px 0;">轉動希望，投遞溫暖</h2>
+        <div class="daily-limit-badge">
+            今日剩餘愛心：<span id="daily-count">3</span> / 3
+        </div>
+
+        <div style="margin-bottom: 20px; text-align: center; line-height: 1.5;">
+            <div style="color:var(--hope-yellow); font-size:12px;">DAILY QUEST</div>
+            留言次數越多，中獎率越高
         </div>
 
         <div class="game-console">
             <div class="screen">
                 <div id="state-idle" class="state-idle">
-                    <div style="font-size: 50px; margin-bottom: 20px;">☀️</div>
+                    <div style="font-size: 50px; margin-bottom: 20px;">🛡️</div>
                     <div style="line-height: 1.8;">
-                        PIXEL HOPE<br>
-                        <span style="font-size: 12px; color: #888;">請投入愛心啟動</span>
+                        PIXEL QUEST<br>
+                        <span style="font-size: 12px; color: #666;">投入愛心，遇見守護者</span>
                     </div>
                 </div>
 
@@ -328,38 +329,30 @@
                     <div class="real-photo-frame">
                         <img id="quest-img" class="real-photo" src="">
                     </div>
-                    <div style="margin-bottom: 10px;">
-                        <span style="background:var(--sky-blue); color:#fff; padding:2px 6px; font-size:10px; border-radius:3px;">TAG</span>
-                        <strong id="quest-name" style="font-size:14px;">單位名稱</strong>
-                    </div>
+                    <strong id="quest-name" style="font-size:16px; display:block; margin-bottom:5px;">單位名稱</strong>
                     
-                    <div class="message-guide">
-                        <label class="guide-title">💬 選擇一句最接近你心裡的感覺：</label>
-                        
-                        <label class="radio-option">
-                            <input type="radio" name="msg-opt" value="謝謝你一直在，撐住很多人的世界">
-                            謝謝你一直在，撐住很多人的世界
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="msg-opt" value="謝謝你替別人接住最難的時候">
-                            謝謝你替別人接住最難的時候
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="msg-opt" value="謝謝你沒有放棄任何一個人">
-                            謝謝你沒有放棄任何一個人
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="msg-opt" value="custom">
-                            我想自己寫一句...
-                        </label>
-                        
-                        <textarea id="custom-text-area" rows="2" placeholder="請寫下您的鼓勵..."></textarea>
+                    <div class="quest-interaction">
+                        <p style="font-size:12px; color:#666; margin-bottom:5px;">1. 他們是怎樣的社工？(點選標籤)</p>
+                        <div class="tag-container" id="tag-container">
+                            </div>
+
+                        <div id="msg-input-box" class="message-input-area">
+                            <p style="font-size:12px; color:#555; margin-bottom:5px;">2. 寫下你的鼓勵：</p>
+                            
+                            <div class="quick-replies">
+                                <div class="reply-chip" onclick="fillMsg('謝謝你一直在！')">謝謝你一直在！</div>
+                                <div class="reply-chip" onclick="fillMsg('辛苦了，加油！')">辛苦了，加油！</div>
+                                <div class="reply-chip" onclick="fillMsg('記得好好吃飯。')">記得好好吃飯。</div>
+                            </div>
+                            
+                            <textarea id="custom-msg" rows="2" placeholder="在這裡寫下溫暖..."></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="coin-slot-area">
-                <div style="margin-right: 15px; margin-top: 15px; font-size: 10px; color: #333;">點擊愛心 ▶</div>
+            <div class="coin-area">
+                <div style="margin-right: 15px; margin-top: 15px; font-size: 10px; color: #fff;">點擊愛心 ▶</div>
                 <div id="heart-token" class="heart-token">❤️</div>
                 <div class="coin-slot"></div>
             </div>
@@ -368,69 +361,91 @@
         </div>
     </section>
 
-    <section id="tribute-section">
-        <div class="board-container">
-            <div class="pin"></div>
-            <div class="board-paper">
-                <div class="board-title">📜 尋找更多光芒</div>
-                <p style="color:#666; font-size: 0.95rem; line-height: 1.6;">
-                    那 30 間只是代表，台灣還有無數個角落有人在默默付出。<br>
-                    如果您想感謝的單位不在遊戲機內，請在這裡搜尋並留言，<br>
-                    我們一樣會將這份心意送達。
-                </p>
 
-                <div class="search-box">
-                    <input type="text" placeholder="輸入單位名稱 (如：勵馨、家扶...)">
-                    <button>搜尋</button>
+    <section id="wall-section">
+        <h2 style="color:#5D4037; margin-bottom: 10px;">大家的愛心留言</h2>
+        <p style="color:#888; font-size: 0.9rem; margin-bottom: 20px;">每一則留言，都是一份力量</p>
+
+        <div class="wall-container">
+            <div class="marquee-wrapper">
+                <div class="marquee-content" id="marquee-content">
+                    <div class="msg-card">
+                        <div class="msg-header"><span>王小明</span> <span>給 屏東伯大尼之家</span></div>
+                        <div class="msg-body">謝謝你們照顧那些孩子，你們是真正的天使！</div>
+                    </div>
+                    <div class="msg-card">
+                        <div class="msg-header"><span>Chen Sarah</span> <span>給 芒草心</span></div>
+                        <div class="msg-body">天氣冷了，社工們外訪也要注意保暖喔。</div>
+                    </div>
+                    <div class="msg-card">
+                        <div class="msg-header"><span>林志豪</span> <span>給 勵馨基金會</span></div>
+                        <div class="msg-body">謝謝你們接住了受傷的人，這社會有你們真好。</div>
+                    </div>
+                     <div class="msg-card">
+                        <div class="msg-header"><span>匿名勇者</span> <span>給 華山基金會</span></div>
+                        <div class="msg-body">送餐的路上請小心騎車，平安第一！</div>
+                    </div>
                 </div>
+            </div>
 
-                <div style="margin-top: 20px; font-size: 12px; color: #888; border-top: 1px dashed #ccc; padding-top: 10px;">
-                    🔥 最新致敬：王小明 留言給 [芒草心協會]...
+            <div class="tribute-search">
+                <h3 style="color:#5D4037; font-size: 1.1rem;">還有想鼓勵的單位嗎？</h3>
+                <p style="color:#888; font-size: 0.9rem;">搜尋並留下你的話，我們一樣會傳達。</p>
+                <div style="margin-top: 15px;">
+                    <input type="text" class="search-input" placeholder="輸入單位名稱...">
+                    <button class="search-btn">搜尋</button>
                 </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <div style="opacity: 0.7; margin-bottom: 20px;">
-            感謝贊助夥伴： [ 蓓朵娜 ]  [ 艾瑪絲 ]  [ 鼎王 ]
-        </div>
-        &copy; 2026 GC 贈物網 | 讓愛循環
+        <p>特別感謝： [ 蓓朵娜 ] [ 艾瑪絲 ] [ 鼎王 ]</p>
+        <p>&copy; 2026 GC 贈物網 | 讓愛循環</p>
     </footer>
 
     <script>
+        // 資料
         const units = [
-            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80" },
-            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80" }
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80", tags: ["#深夜燈塔", "#憨兒依靠", "#24H守護"] },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=600&q=80", tags: ["#便當快遞", "#聽故事的人", "#獨老守護"] },
+            { name: "芒草心慈善協會", img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80", tags: ["#平視溫柔", "#街頭戰友", "#重返社會"] }
         ];
 
+        // 狀態變數
+        let dailyLimit = 3;
+        let isCoinInserted = false;
+        
+        // DOM
         const heartToken = document.getElementById('heart-token');
         const btnAction = document.getElementById('btn-action');
         const stateIdle = document.getElementById('state-idle');
         const stateSpinning = document.getElementById('state-spinning');
         const stateQuest = document.getElementById('state-quest');
-        const msgGuide = document.querySelector('.message-guide');
-        const customArea = document.getElementById('custom-text-area');
-        const radioOptions = document.querySelectorAll('input[name="msg-opt"]');
-        const optionLabels = document.querySelectorAll('.radio-option');
+        const dailyDisplay = document.getElementById('daily-count');
+        const msgInputBox = document.getElementById('msg-input-box');
+        const tagContainer = document.getElementById('tag-container');
+        const marqueeContent = document.getElementById('marquee-content');
 
-        let isCoinInserted = false;
-        let finalMessage = "";
-
-        // 1. 投幣
+        // 1. 投幣 (檢查次數)
         heartToken.addEventListener('click', () => {
+            if(dailyLimit <= 0) {
+                alert("今天的愛心額度已用完！請明天再來累積中獎率 ❤️");
+                return;
+            }
             if(isCoinInserted) return;
+
             heartToken.classList.add('inserting-anim');
             setTimeout(() => {
                 isCoinInserted = true;
-                btnAction.innerText = "轉動希望 (START)";
+                btnAction.innerText = "轉動緣分 (START)";
                 btnAction.classList.remove('btn-main');
                 btnAction.classList.add('btn-main', 'btn-unlocked');
-                stateIdle.innerHTML = '<div style="font-size:24px; margin-bottom:10px; color:#333;">READY!</div><div style="font-size:12px;">準備傳遞溫暖</div>';
+                stateIdle.innerHTML = '<div style="font-size:20px; margin-bottom:10px;">READY!</div><div style="font-size:12px;">準備連結...</div>';
             }, 800);
         });
 
-        // 2. 按鈕動作
+        // 2. 按鈕行為
         btnAction.addEventListener('click', () => {
             if(!isCoinInserted) return;
 
@@ -446,7 +461,7 @@
             stateSpinning.style.display = 'block';
             btnAction.style.display = 'none';
 
-            let icons = ['❤️', '☀️', '🎁', '✨'];
+            let icons = ['❤️', '🛡️', '🎁', '✨'];
             let spinInterval = setInterval(() => { 
                 document.getElementById('spin-icon').innerText = icons[Math.floor(Math.random()*icons.length)]; 
             }, 100);
@@ -457,44 +472,69 @@
             }, 1500);
         }
 
+        // 3. 顯示任務 + 生成 Tags
         function showQuest() {
             const unit = units[Math.floor(Math.random() * units.length)];
             document.getElementById('quest-img').src = unit.img;
             document.getElementById('quest-name').innerText = unit.name;
+            
+            // 生成 Tags
+            tagContainer.innerHTML = '';
+            unit.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'unit-tag';
+                span.innerText = tag;
+                span.onclick = function() {
+                    // Tag 點擊效果
+                    document.querySelectorAll('.unit-tag').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    // 顯示輸入框
+                    msgInputBox.style.display = 'block';
+                };
+                tagContainer.appendChild(span);
+            });
 
             stateSpinning.style.display = 'none';
             stateQuest.style.display = 'block';
-            msgGuide.style.display = 'block';
-
+            
+            // 按鈕變身
             btnAction.style.display = 'block';
-            btnAction.innerText = "發送真實鼓勵 (SEND)";
+            btnAction.innerText = "確認發送 (SEND)";
         }
 
-        // 3. 選項互動
-        radioOptions.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                optionLabels.forEach(label => label.classList.remove('selected'));
-                e.target.parentElement.classList.add('selected');
+        // 輔助功能：填入罐頭語
+        function fillMsg(text) {
+            document.getElementById('custom-msg').value = text;
+        }
 
-                if(e.target.value === 'custom') {
-                    customArea.style.display = 'block';
-                    customArea.focus();
-                } else {
-                    customArea.style.display = 'none';
-                    finalMessage = e.target.value;
-                }
-            });
-        });
-
+        // 4. 送出留言
         function submitMessage() {
-            const selected = document.querySelector('input[name="msg-opt"]:checked');
-            if(!selected) { alert("請選擇一句想說的話喔！"); return; }
-            if(selected.value === 'custom') {
-                finalMessage = customArea.value.trim();
-                if(finalMessage === "") { alert("請寫下您的鼓勵！"); return; }
+            const msg = document.getElementById('custom-msg').value;
+            const activeTag = document.querySelector('.unit-tag.active');
+
+            if(!activeTag) {
+                alert("請先點選一個最符合該單位的標籤 (Tag) 喔！");
+                return;
             }
-            alert("💌 鼓勵已收到！\n我們將把這句話送到社工手中。");
-            location.reload();
+            if(msg.trim() === "") {
+                alert("請留下一句鼓勵的話，讓社工感受到溫暖！");
+                return;
+            }
+
+            // 扣除次數
+            dailyLimit--;
+            dailyDisplay.innerText = dailyLimit;
+            
+            // 模擬新增留言到牆上
+            const newCard = document.createElement('div');
+            newCard.className = 'msg-card';
+            newCard.innerHTML = `<div class="msg-header"><span>我</span> <span>剛剛</span></div><div class="msg-body">${msg}</div>`;
+            marqueeContent.prepend(newCard); // 加到最前面
+
+            alert(`💌 暖心已送達！\n今日剩餘次數：${dailyLimit}\n多留言一次，中獎機率越高！`);
+            
+            // 重置
+            location.reload(); 
         }
     </script>
 </body>
