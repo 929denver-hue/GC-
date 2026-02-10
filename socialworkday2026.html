@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 給社工愛的鼓勵 - 讓愛循環</title>
+    <title>2026 給社工愛的鼓勵 - 像素守護者 (最終版)</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Press+Start+2P&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -38,8 +38,10 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; color: #fff; padding: 40px 20px; position: relative;
         }
+        .edition-tag { background: var(--hope-yellow); color: #333; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 20px; font-size: 0.9rem; }
         .main-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .poetry-box { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); padding: 30px; border-left: 4px solid var(--hope-yellow); max-width: 600px; text-align: left; margin-bottom: 40px; line-height: 1.8; font-weight: 300; }
+        
         .hp-bar-container { width: 100%; max-width: 600px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 2px solid #aaa; margin-bottom: 20px; }
         .hp-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; color: var(--hope-yellow); font-family: 'Press Start 2P'; }
         .hp-track { width: 100%; height: 20px; background: #222; border-radius: 10px; overflow: hidden; }
@@ -48,13 +50,18 @@
 
         /* --- 2. Game Section --- */
         #game-section { padding: 50px 20px; background-color: var(--console-dark); background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); display: flex; flex-direction: column; align-items: center; font-family: 'Press Start 2P', cursive; color: #fff; }
-        .daily-limit-badge { background: #000; color: #00FF00; padding: 8px 15px; border-radius: 5px; margin-bottom: 20px; border: 2px solid #555; font-size: 10px; text-shadow: 0 0 5px #00FF00; }
+        
+        .daily-limit-badge {
+            background: #000; color: #00FF00; padding: 8px 15px; border-radius: 5px; 
+            margin-bottom: 20px; border: 2px solid #555; font-size: 10px; text-shadow: 0 0 5px #00FF00;
+        }
+
         .arcade-marquee { width: 100%; max-width: 500px; background: #000; border: 4px solid #555; border-bottom: none; border-radius: 8px 8px 0 0; height: 36px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
         .ticker-text { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; color: #00FF00; font-size: 10px; font-family: 'Press Start 2P'; text-shadow: 0 0 5px #00FF00; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
         .game-console { background-color: var(--console-body); padding: 20px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 500px; border-radius: 0 0 8px 8px; position: relative; }
-        .screen { background: #fff; border: 4px solid #222; min-height: 700px; /* 增加高度以容納長文案 */ padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; position: relative; }
+        .screen { background: #fff; border: 4px solid #222; min-height: 700px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; position: relative; }
 
         .state-idle, .state-spinning { text-align: center; margin-top: 200px; }
         .state-spinning { display: none; }
@@ -70,8 +77,8 @@
         .tag-btn { font-size: 12px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; transition: 0.2s; }
         .tag-btn.active { background: var(--warm-orange); color: #fff; border-color: var(--warm-orange); }
 
-        /* --- 贊助道具 (優化版文案) --- */
-        .supply-grid { display: flex; flex-direction: column; gap: 8px; } /* 改為垂直排列以容納文案 */
+        /* --- 贊助道具 (Grid) --- */
+        .supply-grid { display: flex; flex-direction: column; gap: 8px; }
         .supply-item { 
             border: 1px solid #ddd; border-radius: 8px; padding: 10px; 
             cursor: pointer; transition: 0.2s; background: #fafafa;
@@ -88,17 +95,16 @@
         .supply-desc { font-size: 11px; color: #555; line-height: 1.3; }
         .supply-brand { font-size: 10px; color: #999; margin-top: 2px; }
 
-        /* Inputs */
-        .smart-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 5px; }
-        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 4px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; cursor: pointer; }
-        textarea, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; }
-        
-        /* Upload */
+        /* Upload & Input */
         .upload-wrapper { position: relative; width: 100%; }
         .btn-upload { border: 2px dashed #ccc; background: #fff; color: #888; padding: 8px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; }
         .btn-upload:hover { border-color: var(--warm-orange); color: var(--warm-orange); background: #FFF3E0; }
         .upload-input { position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
         .file-status { font-size: 10px; color: #888; margin-top: 4px; text-align: center; }
+
+        .smart-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 5px; }
+        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 4px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; cursor: pointer; }
+        textarea, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; }
 
         /* Coin */
         .coin-area { display: flex; justify-content: flex-end; height: 60px; position: relative; margin-bottom: 10px; }
@@ -111,7 +117,7 @@
         .btn-unlocked { background: #FF1744; color: #fff; border-color: #880E4F; cursor: pointer; pointer-events: auto; box-shadow: 0 4px 0 #880E4F; animation: pulse 2s infinite; }
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
 
-        /* Search & Footer */
+        /* 3. Search & Footer */
         #search-section { padding: 60px 20px; background: #ECEFF1; text-align: center; border-top: 8px dashed #aaa; }
         .db-console { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .search-bar { display: flex; gap: 10px; margin-top: 20px; }
@@ -119,7 +125,10 @@
         .search-btn { background: var(--console-dark); color: #fff; border: none; padding: 0 20px; border-radius: 5px; cursor: pointer; }
         
         #footer-section { padding: 40px 20px; background: #fff; text-align: center; font-size: 0.9rem; color: #666; }
-        .sw-link { color: #ccc; font-size: 10px; text-decoration: none; margin-top: 20px; display: inline-block; }
+        .sponsor-list { display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
+        .sponsor-badge { border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; font-weight: bold; color: #888; font-size: 0.8rem; }
+        .sw-link { color: #ccc; font-size: 12px; text-decoration: none; margin-top: 20px; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; padding: 5px 10px; border: 1px dashed #ddd; border-radius: 4px; }
+        .sw-link:hover { color: var(--warm-orange); border-color: var(--warm-orange); }
 
         /* --- Modals (Common) --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
@@ -149,17 +158,24 @@
         .ticket-msg-preview { font-size: 13px; color: #555; margin: 8px 0; font-style: italic; line-height: 1.4; }
         .ticket-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px dashed #eee; padding-top: 8px; }
         .ticket-prop { font-size: 11px; color: #E65100; background: #FFF3E0; padding: 2px 6px; border-radius: 4px; }
-        .btn-share-text { background: #333; color: #fff; border: none; padding: 4px 10px; border-radius: 20px; font-size: 10px; cursor: pointer; }
+        
+        /* 轉發分享按鈕 */
+        .btn-share-action { 
+            background: #E65100; color: #fff; border: none; padding: 5px 12px; border-radius: 20px; 
+            font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; 
+        }
+        .btn-share-action:hover { background: #FF6F00; }
+
         .empty-state { text-align: center; color: #999; margin-top: 50px; font-size: 14px; }
 
         /* --- Social Worker Modal (社工專屬層) --- */
         .sw-box { background: #fff; width: 100%; max-width: 500px; padding: 30px; border-radius: 10px; text-align: center; font-family: 'Noto Serif TC', serif; }
         .sw-title { font-size: 1.5rem; color: var(--console-dark); margin-bottom: 20px; font-weight: bold; }
         .sw-intro { color: #555; line-height: 1.8; margin-bottom: 30px; font-size: 1.1rem; }
-        .sw-highlight { color: #E65100; font-weight: bold; }
+        .sw-highlight { color: #E65100; font-weight: bold; background: #FFF3E0; padding: 0 5px; }
         .ranking-list { text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
-        .ranking-item { margin-bottom: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
-        .ranking-badge { background: #000; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 5px; }
+        .ranking-item { margin-bottom: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; font-family: 'Noto Sans TC'; color: #333; }
+        .ranking-badge { background: #333; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 8px; }
 
     </style>
 </head>
@@ -176,7 +192,7 @@
         <h1 class="main-title">給社工愛的鼓勵</h1>
         <div class="poetry-box">
             <p>有些人，長期站在最前線，卻很少被問一句：「你還好嗎？」</p>
-            <p>今年，GC 贈物網邀請你，<strong>投下一枚愛心幣，把一句溫柔送進社工的日常。</strong></p>
+            <p>今年，GC 贈物網邀請你，<strong>不用捐錢，只留下一句真心的話。</strong></p>
         </div>
         <div class="hp-bar-container">
             <div class="hp-info"><span>GLOBAL LOVE ENERGY</span><span>LV. 78</span></div>
@@ -298,7 +314,7 @@
             <span class="sponsor-badge">鼎王</span>
         </div>
         <div style="margin-top:20px;">&copy; 2026 GC 贈物網 | 讓愛循環</div>
-        <a href="#" class="sw-link" onclick="openSWLayer()">[社工專屬入口]</a>
+        <div onclick="openSWLayer()" class="sw-link">🔒 社工夥伴專屬通道</div>
     </section>
 
     <div id="preview-modal" class="modal-overlay">
@@ -333,11 +349,11 @@
             <div class="sw-title">致 親愛的夥伴</div>
             <div class="sw-intro">
                 這些祝福來自真實民眾，<br>
-                每一枚愛心幣，都代表<span class="sw-highlight">有人停下來想到你</span>。<br>
+                每一枚愛心幣，都代表<br><span class="sw-highlight">有人停下來想到你</span>。<br>
                 請收下這些溫暖，繼續照亮社會角落。
             </div>
             <div class="ranking-list">
-                <h4 style="margin:0 0 15px 0;">🏆 民眾票選・最想對你說的話：</h4>
+                <h4 style="margin:0 0 15px 0; font-size:14px;">🏆 民眾票選・最想對你說的話：</h4>
                 <div class="ranking-item"><span class="ranking-badge">1</span> 辛苦了，謝謝你們一直都在！ (3,240次)</div>
                 <div class="ranking-item"><span class="ranking-badge">2</span> 謝謝你們接住了受傷的人。 (2,105次)</div>
                 <div class="ranking-item"><span class="ranking-badge">3</span> 希望世界對你，也能溫柔一點。 (1,890次)</div>
@@ -493,7 +509,9 @@
                         <div class="ticket-msg-preview">"${r.msg}"</div>
                         <div class="ticket-footer">
                             ${r.prop !== "無" ? `<div class="ticket-prop">🎁 贈送: ${r.prop}</div>` : '<div></div>'}
-                            <button class="btn-share-text" onclick="shareTicket('${r.msg}')">複製留言</button>
+                            <button class="btn-share-action" onclick='shareRecord(${JSON.stringify(r)})'>
+                                📤 轉發分享
+                            </button>
                         </div>`;
                     list.appendChild(div);
                 });
@@ -501,7 +519,20 @@
             inventoryModal.style.display = 'flex';
         }
 
-        function shareTicket(msg) { navigator.clipboard.writeText(msg).then(() => alert("留言已複製！快去貼文分享吧！")); }
+        function shareRecord(record) {
+            // 使用 Web Share API 喚起原生分享
+            if (navigator.share) {
+                navigator.share({
+                    title: '給社工愛的鼓勵',
+                    text: `我在【${record.unit}】留下了這句話：「${record.msg}」。邀請你也來為社工補血！ #像素守護者`,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // 電腦版或不支援時的備案
+                alert("請截圖此畫面分享，或是複製網址邀請朋友！");
+            }
+        }
+
         function openSWLayer() { swModal.style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
