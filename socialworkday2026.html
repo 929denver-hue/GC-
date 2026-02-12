@@ -26,7 +26,7 @@
             background-image: radial-gradient(circle at 50% 50%, #2a1a0a 0%, #000 100%);
         }
 
-        /* --- [新增] 能量核心視覺 (全服集氣背景) --- */
+        /* --- 能量核心視覺 --- */
         .energy-core-container {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 400px; height: 400px; z-index: -1; pointer-events: none; opacity: 0.5;
@@ -46,7 +46,7 @@
         @keyframes pulseCore { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; } }
         @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        /* --- 0. 前導層 --- */
+        /* --- Intro --- */
         #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #050505; z-index: 999; display: flex; flex-direction: column;
@@ -67,7 +67,6 @@
         .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
         .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
         .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px; }
-        .highlight { color: var(--neon-amber); font-weight: bold; border-bottom: 1px solid var(--neon-amber); }
 
         .btn-start-mission {
             width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
@@ -78,7 +77,7 @@
         .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber); }
         @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
 
-        /* --- 0.5 過場層 (Scanning) --- */
+        /* --- Scanning --- */
         #scanning-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 998; display: none; flex-direction: column;
@@ -102,12 +101,12 @@
         .scan-progress-bar { width: 200px; height: 4px; background: #333; margin-top: 15px; border-radius: 2px; overflow: hidden; }
         .scan-progress-fill { height: 100%; width: 0%; background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); transition: width 0.2s linear; }
 
-        /* --- 主介面 --- */
+        /* --- Main Interface --- */
         #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; }
         .warm-grid { position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background-image: linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(500px) rotateX(60deg); z-index: -1; animation: gridMove 30s linear infinite; pointer-events: none; }
         @keyframes gridMove { from { transform: perspective(500px) rotateX(60deg) translateY(0); } to { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
 
-        /* --- [新增] HUD 電池與背包計數 --- */
+        /* --- HUD --- */
         .nav-hud { position: absolute; top: 0; left: 0; width: 100%; padding: 15px; z-index: 50; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(255, 179, 0, 0.1); background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
         .hud-label { font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); letter-spacing: 1px; }
         .hud-value { font-size: 16px; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--neon-amber); }
@@ -140,12 +139,10 @@
         .panel-body { flex: 1; padding: 20px; overflow-y: auto; }
         .section-label { font-size: 11px; color: #888; margin-bottom: 10px; display: block; font-weight: bold; }
         
-        /* 標籤 */
         .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
         .tech-tag { background: transparent; border: 1px solid #555; color: #aaa; padding: 8px 15px; font-size: 12px; cursor: pointer; border-radius: 2px; transition: 0.2s; }
         .tech-tag.active { border-color: var(--neon-amber); color: #000; background: var(--neon-amber); box-shadow: 0 0 10px rgba(255, 179, 0, 0.5); font-weight: bold; }
 
-        /* 贊助商 */
         .sponsor-list { display: flex; flex-direction: column; gap: 10px; }
         .tech-card { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #333; cursor: pointer; transition: 0.2s; }
         .tech-card.selected { border-color: var(--neon-orange); background: rgba(255, 87, 34, 0.1); box-shadow: inset 0 0 10px rgba(255, 87, 34, 0.2); }
@@ -156,7 +153,6 @@
         .tech-check { color: var(--neon-orange); font-size: 14px; opacity: 0; }
         .tech-card.selected .tech-check { opacity: 1; }
 
-        /* 留言區 */
         .msg-presets { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
         .preset-chip { background: #222; border: 1px solid #444; color: #aaa; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; transition: 0.2s; }
         .preset-chip:hover { border-color: var(--neon-amber); color: var(--neon-amber); }
@@ -194,7 +190,6 @@
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
-        /* --- [新增] 回饋層與身分驗證層 --- */
         #feedback-layer { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; }
         
         .login-box { width: 300px; background: #111; border: 1px solid var(--neon-orange); padding: 25px; text-align: center; box-shadow: 0 0 30px rgba(255, 87, 34, 0.3); }
@@ -204,9 +199,8 @@
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         .common-box { background: #111; border: 1px solid var(--neon-amber); padding: 20px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; color: #fff; }
-        .ranking-item { border-bottom: 1px solid #333; padding: 10px 0; font-size: 13px; display: flex; justify-content: space-between; }
+        .ranking-item { border-bottom: 1px solid #333; padding: 10px 0; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* SW Modal Styles */
         .sw-box { background: #1a1a1a; width: 100%; max-width: 500px; padding: 25px; border: 1px solid var(--neon-amber); border-radius: 8px; color: #e0e0e0; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
         .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .sw-photo-frame { width: 100%; height: 180px; overflow: hidden; border-radius: 4px; margin-bottom: 20px; border: 1px solid #333; }
@@ -220,6 +214,31 @@
         #msg-modal-list { max-height: 300px; overflow-y: auto; }
         .msg-option { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; color: #ccc; font-size: 13px; }
         .msg-option:hover { color: var(--neon-amber); background: rgba(255,255,255,0.05); }
+
+        /* --- [NEW] Gallery & Social Features Styles --- */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding-bottom: 20px;
+        }
+        .gallery-card {
+            background: #1a1a1a; border: 1px solid #333; border-radius: 4px; overflow: hidden; transition: 0.2s;
+        }
+        .gallery-card:hover { border-color: var(--neon-amber); transform: translateY(-3px); }
+        .g-img { width: 100%; height: 100px; object-fit: cover; filter: grayscale(50%); }
+        .g-content { padding: 10px; }
+        .g-msg { font-size: 11px; color: #ccc; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 5px; min-height: 32px;}
+        .g-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; padding-top: 5px; margin-top: 5px; }
+        .g-sign { font-size: 9px; color: var(--neon-orange); font-family: 'Orbitron'; }
+        .action-btn { background: transparent; border: none; color: #666; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 3px; }
+        .action-btn.liked { color: #e91e63; }
+        .action-btn:hover { color: #fff; }
+        
+        .inv-item { display: flex; gap: 10px; border-bottom: 1px solid #333; padding: 10px 0; align-items: center; }
+        .inv-thumb { width: 50px; height: 50px; background: #222; object-fit: cover; border-radius: 4px; }
+        .inv-info { flex: 1; }
+        .inv-unit { color: var(--neon-amber); font-size: 12px; font-weight: bold; }
+        .inv-date { font-size: 10px; color: #666; margin-top: 3px; }
+        .btn-share-mini { background: #333; color: #fff; border: 1px solid #555; font-size: 10px; padding: 4px 8px; cursor: pointer; border-radius: 3px; }
+        .btn-share-mini:hover { border-color: var(--neon-amber); color: var(--neon-amber); }
 
     </style>
 </head>
@@ -317,7 +336,7 @@
 
         <div class="footer-nav">
             <span class="footer-link" onclick="openSearch()">SEARCH UNIT</span>
-            <span class="footer-link" onclick="openSW('demo')">SOCIAL WORKER CHANNEL</span>
+            <span class="footer-link" onclick="openGallery()">GALLERY</span> <span class="footer-link" onclick="openSW('demo')">SOCIAL WORKER CHANNEL</span>
             <div style="margin-top:5px;">&copy; 2026 PROJECT NEON</div>
         </div>
     </div>
@@ -393,6 +412,14 @@
         <div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT (背包)</h3><div id="inventory-list"></div></div>
     </div>
 
+    <div id="gallery-modal" class="modal-overlay">
+        <div class="common-box" style="width: 100%; max-width: 600px; height: 85vh;">
+            <div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('gallery-modal')">✕</div>
+            <h3 style="color:var(--neon-amber); margin-top:0;">🌍 GUARDIAN GALLERY (全服留言牆)</h3>
+            <div class="gallery-grid" id="gallery-content"></div>
+        </div>
+    </div>
+
     <script>
         const units = [
             { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛...", tags: ["#堅韌防線", "#慢飛天使"] },
@@ -401,20 +428,27 @@
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         const fullQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。", "加油！你們的付出我們都看在眼裡。", "黑暗中總有光，而你們就是那道光。"];
 
+        // [新增] 模擬的公開留言牆資料
+        let galleryData = [
+            { id: 1, unit: '華山基金會', msg: '謝謝你們接住了受傷的人。', sign: 'UserA', likes: 120, img: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200' },
+            { id: 2, unit: '屏東伯大尼之家', msg: '世界因為有你們而溫柔。', sign: 'UserB', likes: 85, img: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=200' },
+            { id: 3, unit: '全體站內社工', msg: '加油！', sign: 'UserC', likes: 230, img: 'https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=200' },
+        ];
+
         let currentUnit = null;
         let selectedTag = null;
         let selectedProp = null;
         let userPhoto = null;
         let dailyCount = 0;
-        let totalParticipations = 0; // [新增] 參與次數
-        let isAuthenticated = false; // [新增] 驗證狀態
+        let totalParticipations = 0;
+        let isAuthenticated = false;
         let myTeam = new URLSearchParams(window.location.search).get('team');
 
         window.onload = function() {
-            localStorage.setItem('gc_daily', 0); // 測試用
+            localStorage.setItem('gc_daily', 0); // 測試用重置
             checkDaily();
             
-            // [新增] 讀取背包紀錄
+            // 讀取背包紀錄
             totalParticipations = parseInt(localStorage.getItem('gc_total') || 0);
             document.getElementById('pack-count').innerText = totalParticipations;
             
@@ -426,11 +460,8 @@
             checkGlobalTarget();
         }
 
-        function checkDaily() { 
-            dailyCount = parseInt(localStorage.getItem('gc_daily') || 0);
-        }
+        function checkDaily() { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
 
-        // [新增] 電池扣除邏輯
         function updateBatteryVisual() {
             for(let i=1; i<=3; i++) {
                 const cell = document.getElementById(`batt-${i}`);
@@ -441,7 +472,6 @@
             }
         }
 
-        // [新增] 能量達標解鎖判斷
         function checkGlobalTarget() {
             let globalCount = 4998 + totalParticipations;
             let target = 5000;
@@ -462,8 +492,6 @@
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
                 document.getElementById('scanning-layer').style.display = 'flex';
-                
-                // Animation logic
                 let i = 0;
                 const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
                 const interval = setInterval(() => {
@@ -509,7 +537,6 @@
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            // Auto select first tag if none
             if(step === 3 && !selectedTag) {
                 const tags = document.querySelectorAll('.tech-tag');
                 if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
@@ -544,7 +571,6 @@
             }
         }
 
-        // --- [新增] 註冊攔截 ---
         function preSubmitCheck() {
             if (isAuthenticated) {
                 generatePreview();
@@ -570,12 +596,10 @@
 
             const codeName = `NEON-${Math.floor(1000 + Math.random() * 9000)}`;
             
-            // Image Fallback
             let finalImg = userPhoto;
             if(!finalImg && currentUnit && currentUnit.img) finalImg = currentUnit.img;
             if(!finalImg) finalImg = defaultImgs[0];
 
-            // DOM Binding
             document.getElementById('card-img').src = finalImg;
             document.getElementById('code-main').innerText = codeName;
             document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
@@ -583,7 +607,6 @@
             document.getElementById('card-unit-name').innerText = currentUnit ? currentUnit.name : "SEARCH TARGET";
             document.getElementById('card-sign').innerText = sign.toUpperCase();
 
-            // Sponsor & Icon
             if(selectedProp) {
                 document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
                 document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : '☀️';
@@ -596,7 +619,6 @@
         }
 
         function finalSubmit() {
-            // [新增] 扣除次數、寫入背包
             dailyCount++;
             localStorage.setItem('gc_daily', dailyCount);
             
@@ -604,6 +626,25 @@
                 totalParticipations++;
                 localStorage.setItem('gc_total', totalParticipations);
                 document.getElementById('pack-count').innerText = totalParticipations;
+                
+                // [新增] 將資料存入個人背包與公開留言牆
+                const newPost = {
+                    id: Date.now(),
+                    unit: document.getElementById('card-unit-name').innerText,
+                    msg: document.getElementById('card-msg').innerText,
+                    sign: document.getElementById('card-sign').innerText,
+                    img: document.getElementById('card-img').src,
+                    likes: 0,
+                    date: new Date().toLocaleDateString()
+                };
+
+                // 存入背包
+                let myInventory = JSON.parse(localStorage.getItem('gc_inventory') || "[]");
+                myInventory.unshift(newPost);
+                localStorage.setItem('gc_inventory', JSON.stringify(myInventory));
+
+                // 存入公開牆 (模擬)
+                galleryData.unshift(newPost);
             }
             
             updateBatteryVisual();
@@ -620,7 +661,6 @@
             });
         }
 
-        // Search Logic
         function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
         function executeSearch(keyword) {
             if(!keyword) return alert("請輸入關鍵字");
@@ -632,7 +672,6 @@
                 document.getElementById('scanning-layer').style.display = 'none';
                 document.getElementById('main-interface').style.opacity = 1;
                 
-                // Set fallback data for search result
                 currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
                 selectedTag = "#搜索結果";
                 selectedProp = null; 
@@ -642,23 +681,78 @@
             }, 1500); 
         }
 
-        // SW & Utils
         function openSW(unitName) {
             document.getElementById('sw-target-name').innerText = unitName;
-            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了！ (3,240)</div>`; // 使用者指定的SW維持結構
+            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了！ (3,240)</div>`; 
             document.getElementById('sw-modal').style.display = 'flex';
         }
         
-        // [新增] 背包內紀錄展開與達標提示
+        // [新增] 渲染 Gallery
+        function openGallery() {
+            const container = document.getElementById('gallery-content');
+            container.innerHTML = "";
+            galleryData.forEach(item => {
+                container.innerHTML += `
+                    <div class="gallery-card">
+                        <img src="${item.img}" class="g-img">
+                        <div class="g-content">
+                            <div class="g-msg">${item.msg}</div>
+                            <div class="g-sign">${item.sign}</div>
+                            <div class="g-footer">
+                                <button class="action-btn" onclick="toggleLike(this, ${item.id})">
+                                    ❤️ <span class="like-count">${item.likes}</span>
+                                </button>
+                                <button class="action-btn" onclick="sharePost()">🚀</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('gallery-modal').style.display = 'flex';
+        }
+
+        // [新增] 按讚邏輯
+        function toggleLike(btn, id) {
+            btn.classList.toggle('liked');
+            let countSpan = btn.querySelector('.like-count');
+            let count = parseInt(countSpan.innerText);
+            if(btn.classList.contains('liked')) {
+                count++;
+            } else {
+                count--;
+            }
+            countSpan.innerText = count;
+            // 這裡可以加入寫回 galleryData 的邏輯
+        }
+
+        // [新增] 轉發邏輯 (Mock)
+        function sharePost() {
+            alert("已複製連結，準備轉發！");
+        }
+
+        // [修改] 背包功能增強
         function openInventory() { 
             const list = document.getElementById('inventory-list');
+            let myInventory = JSON.parse(localStorage.getItem('gc_inventory') || "[]");
             list.innerHTML = "";
-            if (totalParticipations === 0) {
+            
+            if (myInventory.length === 0) {
                 list.innerHTML = "<p style='color:#888; font-size:12px;'>目前無參與紀錄</p>";
             } else {
-                for(let i=1; i<=totalParticipations; i++) {
-                    list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`;
-                }
+                myInventory.forEach(item => {
+                    list.innerHTML += `
+                        <div class="inv-item">
+                            <img src="${item.img}" class="inv-thumb">
+                            <div class="inv-info">
+                                <div class="inv-unit">${item.unit}</div>
+                                <div style="font-size:11px; color:#ccc;">${item.msg.substring(0, 15)}...</div>
+                                <div class="inv-date">${item.date}</div>
+                            </div>
+                            <button class="btn-share-mini" onclick="sharePost()">SHARE</button>
+                        </div>
+                    `;
+                });
+                
                 if ((4998 + totalParticipations) >= 5000) {
                     list.innerHTML = `<h4 style="color:var(--neon-orange); margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML;
                 }
