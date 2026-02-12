@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON</title>
+    <title>2026 給社工愛的鼓勵 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -27,7 +27,7 @@
             background-image: radial-gradient(circle at 50% 50%, #2a1a0a 0%, #000 100%);
         }
 
-        /* --- 0. 前導層 (Mission Briefing) - 大幅優化 --- */
+        /* --- 0. 前導層 (Mission Briefing) --- */
         #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #050505; z-index: 999; display: flex; flex-direction: column;
@@ -39,41 +39,28 @@
         
         .briefing-card {
             max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
-            background: rgba(20, 20, 20, 0.9); padding: 30px 20px;
+            background: rgba(20, 20, 20, 0.9); padding: 40px 20px;
             box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
-            position: relative; overflow: hidden;
+            position: relative; overflow: hidden; text-align: center;
         }
         /* 裝飾線條 */
         .briefing-card::before { content: ''; position: absolute; top:0; left:0; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
         .briefing-card::after { content: ''; position: absolute; bottom:0; right:0; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
 
-        .mission-header {
-            font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 2px;
-            margin-bottom: 20px; border-bottom: 1px dashed #333; padding-bottom: 10px;
-            display: flex; justify-content: space-between;
-        }
-        
-        .intro-title { 
+        .main-logo-text {
             font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; 
-            text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); 
+            text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px;
+        }
+        .sub-logo-text {
+            font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px;
+            margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block;
         }
         
         .intro-text { 
             font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; 
-            font-family: 'Noto Serif TC'; text-align: justify;
+            font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px;
         }
         .highlight { color: var(--neon-amber); font-weight: bold; border-bottom: 1px solid var(--neon-amber); }
-
-        /* 玩法圖示說明 */
-        .mission-steps { display: flex; justify-content: space-between; margin-bottom: 30px; text-align: center; }
-        .m-step { flex: 1; position: relative; }
-        .m-icon { font-size: 24px; margin-bottom: 5px; display: block; animation: float 3s infinite ease-in-out; }
-        .m-label { font-size: 10px; color: var(--neon-orange); font-family: 'Orbitron'; display: block; margin-bottom: 2px; }
-        .m-desc { font-size: 11px; color: #888; }
-        /* 箭頭 */
-        .m-step:not(:last-child)::after {
-            content: '>'; position: absolute; right: -5px; top: 10px; color: #333; font-family: 'Orbitron';
-        }
 
         .btn-start-mission {
             width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
@@ -81,15 +68,45 @@
             font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
             text-transform: uppercase; font-weight: bold;
             clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            animation: pulseBtn 2s infinite;
         }
         .btn-start-mission:hover {
             background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber);
         }
+        @keyframes pulseBtn { 0% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} }
 
-        /* --- 1. 主介面 (Game Interface) --- */
+        /* --- 0.5 過場層 (Scanning Layer) - 新增 --- */
+        #scanning-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 998; display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        /* 雷達掃描動畫 */
+        .radar-box { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .radar-ring {
+            position: absolute; border: 1px solid var(--neon-orange); border-radius: 50%; opacity: 0;
+            animation: radarRipple 2s infinite linear;
+        }
+        .radar-ring:nth-child(1) { width: 50px; height: 50px; animation-delay: 0s; }
+        .radar-ring:nth-child(2) { width: 100px; height: 100px; animation-delay: 0.5s; }
+        .radar-ring:nth-child(3) { width: 150px; height: 150px; animation-delay: 1s; }
+        
+        .central-heart { font-size: 40px; animation: heartBeat 1s infinite; z-index: 10; }
+        @keyframes radarRipple { 0% { transform: scale(0.5); opacity: 0; border-width: 4px; } 50% { opacity: 0.5; } 100% { transform: scale(1.5); opacity: 0; border-width: 0px; } }
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+        .scan-text {
+            margin-top: 30px; font-family: 'Orbitron'; font-size: 14px; color: var(--neon-amber); letter-spacing: 2px;
+            animation: blinkText 1s infinite;
+        }
+        @keyframes blinkText { 50% { opacity: 0.3; } }
+
+
+        /* --- 1. 主介面 (Main Interface) --- */
         #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; }
 
-        /* 背景動態網格 (保留科技感但變暖) */
+        /* 背景動態網格 */
         .warm-grid {
             position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
             background-image: linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px);
@@ -313,36 +330,26 @@
 
     <div id="intro-layer">
         <div class="briefing-card">
-            <div class="mission-header">
-                <span>MISSION: PROJECT NEON</span>
-                <span>STATUS: WAITING</span>
-            </div>
-            <div class="intro-title">啟動暖光行動</div>
+            <span class="sub-logo-text">PROJECT NEON // 2026</span>
+            <div class="main-logo-text">2026 給社工愛的鼓勵</div>
+            
             <div class="intro-text">
                 在這座城市的光影背後，有一群人默默承接了所有的脆弱。他們是<span class="highlight">社工</span>，社會的安全網，卻往往耗盡了自己的能量。<br><br>
-                系統偵測到全台社工能量低落。<br>我們需要你——成為「像素守護者」。
+                系統偵測到全台社工能量低落。<br>我們需要你——啟動連線，成為「像素守護者」。
             </div>
             
-            <div class="mission-steps">
-                <div class="m-step">
-                    <span class="m-icon">📡</span>
-                    <span class="m-label">LINK</span>
-                    <span class="m-desc">隨機連結</span>
-                </div>
-                <div class="m-step">
-                    <span class="m-icon">📦</span>
-                    <span class="m-label">EQUIP</span>
-                    <span class="m-desc">選擇裝備</span>
-                </div>
-                <div class="m-step">
-                    <span class="m-icon">⚡</span>
-                    <span class="m-label">SYNC</span>
-                    <span class="m-desc">傳輸能量</span>
-                </div>
-            </div>
-
-            <button class="btn-start-mission" onclick="startMission()">INITIALIZE SYSTEM (啟動)</button>
+            <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
         </div>
+    </div>
+
+    <div id="scanning-layer">
+        <div class="radar-box">
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="central-heart">❤️</div>
+        </div>
+        <div class="scan-text" id="scan-status">SEARCHING FOR SIGNALS...</div>
     </div>
 
     <div id="main-interface">
@@ -555,27 +562,42 @@
             document.getElementById('daily-text').innerText = Math.max(0, 3 - dailyCount);
         }
 
-        // Logic: Flow Control
-        function startMission() {
+        // Logic 1: Intro -> Scanning -> Main
+        function startScanning() {
+            // Hide Intro
             document.getElementById('intro-layer').style.opacity = 0;
+            
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
-                document.getElementById('main-interface').style.opacity = 1;
+                // Show Scanning
+                const scan = document.getElementById('scanning-layer');
+                scan.style.display = 'flex';
+                
+                // Text update simulation
+                setTimeout(() => { document.getElementById('scan-status').innerText = "CONNECTING..." }, 1500);
+                setTimeout(() => { document.getElementById('scan-status').innerText = "SIGNAL LOCKED"; }, 2500);
+
+                // Show Main
+                setTimeout(() => {
+                    scan.style.opacity = 0;
+                    setTimeout(() => {
+                        scan.style.display = 'none';
+                        document.getElementById('main-interface').style.opacity = 1;
+                    }, 500);
+                }, 3000); // 3 seconds scan
             }, 800);
         }
 
         function insertCoin() {
             if(dailyCount >= 3) return alert("ENERGY DEPLETED. COME BACK TOMORROW.");
             
-            // Random Unit
+            // Populate Step 1 & Move
             currentUnit = units[Math.floor(Math.random() * units.length)];
             
-            // Populate Step 1
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
-            document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`; // 100字文案
+            document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`; 
             
-            // Populate Step 2 (Tags)
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
             currentUnit.tags.forEach(tag => {
@@ -594,17 +616,12 @@
         }
 
         function nextStep(step) {
-            // Hide all steps
             document.querySelectorAll('.state-idle, .step-container').forEach(el => el.style.display = 'none');
             
-            // Validation
-            if(step === 2) { /* No specific validation for Step 1 -> 2 */ }
             if(step === 3) {
                 if(!selectedTag) { alert("請選擇同步頻率 (標籤)"); nextStep(2); return; }
-                // Prop is optional, but logic requires check? Let's say prop optional.
             }
 
-            // Show target step
             document.getElementById(`step-${step}`).style.display = 'flex';
         }
 
