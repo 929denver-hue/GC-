@@ -58,18 +58,14 @@
         .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber); }
         @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
 
-        /* --- 0.5 過場層 (Scanning Layer - 科技感強化) --- */
+        /* --- 0.5 過場層 (Scanning) --- */
         #scanning-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 998; display: none; flex-direction: column;
             align-items: center; justify-content: center;
             transition: opacity 0.5s ease;
         }
-        /* 指令流特效 */
-        .cmd-log {
-            position: absolute; top: 20px; left: 20px; font-family: 'Orbitron', monospace; font-size: 10px; color: rgba(0, 255, 0, 0.5);
-            text-align: left; line-height: 1.5; opacity: 0.7; pointer-events: none;
-        }
+        .cmd-log { position: absolute; top: 20px; left: 20px; font-family: 'Orbitron', monospace; font-size: 10px; color: rgba(0, 255, 0, 0.5); text-align: left; line-height: 1.5; opacity: 0.7; pointer-events: none; }
         .radar-box { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; }
         .radar-ring {
             position: absolute; border: 2px solid var(--neon-orange); border-radius: 50%; opacity: 0;
@@ -204,10 +200,12 @@
         <div class="briefing-card">
             <span class="sub-logo-text">PROJECT NEON // 2026</span>
             <div class="main-logo-text">2026 給社工愛的鼓勵</div>
+            
             <div class="intro-text">
                 在這座城市的光影背後，有一群人默默承接了所有的脆弱。他們是<span class="highlight">社工</span>，社會的安全網，卻往往耗盡了自己的能量。<br><br>
                 系統偵測到全台社工能量低落。<br>我們需要你——啟動連線，成為「像素守護者」。
             </div>
+            
             <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
         </div>
     </div>
@@ -215,7 +213,9 @@
     <div id="scanning-layer">
         <div class="cmd-log" id="scan-log">SYSTEM BOOT...<br>LOADING MODULES...</div>
         <div class="radar-box">
-            <div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
             <div class="central-heart">❤️</div>
         </div>
         <div class="scan-text" id="scan-status">INITIATING SCAN...</div>
@@ -391,12 +391,17 @@
 
         // 1. Scanning Logic (Optimized for Fun)
         function startScanning() {
-            if(dailyCount >= 3) return alert("ENERGY DEPLETED");
+            if(dailyCount >= 3) return alert("ENERGY DEPLETED. COME BACK TOMORROW.");
+
+            // 1. Hide Intro
             document.getElementById('intro-layer').style.opacity = 0;
             
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
-                document.getElementById('scanning-layer').style.display = 'flex';
+                
+                // 2. Show Scanning with Dynamic Text
+                const scan = document.getElementById('scanning-layer');
+                scan.style.display = 'flex';
                 
                 // Fun Logs
                 const logs = ["CONNECTING TO SERVER...", "BYPASSING FIREWALL...", "SEARCHING SECTOR 7...", "ANALYZING SIGNAL...", "TARGET LOCKED"];
@@ -479,33 +484,60 @@
             closeModal('msg-modal');
         }
 
-        function previewPhoto() { /* ... */ }
+        function previewPhoto() {
+            const file = document.getElementById('upload-photo').files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => { 
+                    userPhoto = e.target.result; 
+                    document.getElementById('photo-status').innerText = "IMAGE: READY";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
+        // Logic 2: Generate Cool Card
         function generatePreview() {
             const msg = document.getElementById('msg-input').value;
             const sign = document.getElementById('sign-input').value || "UNKNOWN";
             if(!msg) return alert("請輸入傳輸訊息");
 
             const randomCode = Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('card-img').src = userPhoto || defaultImgs[Math.floor(Math.random() * defaultImgs.length)];
-            document.getElementById('code-main').innerText = `NEON-${randomCode}`;
+            const codeName = `NEON-${randomCode}`;
+            
+            // Render Card
+            document.getElementById('card-img').src = userPhoto || (currentUnit.img || defaultImgs[0]);
+            document.getElementById('code-main').innerText = codeName;
             document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
             document.getElementById('card-msg').innerText = msg;
             
             if(selectedProp) {
-                document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : '☀️';
+                document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
+            } else {
+                document.getElementById('card-sponsor').innerText = "SUPPLY: STANDARD"; // Fallback for Search mode
             }
+
             document.getElementById('preview-modal').style.display = 'flex';
         }
 
+        // Logic 3: Share Benefit
         function finalSubmit() {
-            document.getElementById('feedback-layer').style.display = 'flex';
+            // Show Feedback Overlay inside the card preview
+            const feedback = document.getElementById('feedback-layer');
+            feedback.style.display = 'flex';
+            
+            // Simulate Download/Share
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `MISSION_REPORT_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
-                setTimeout(() => { alert("任務回報完成！"); location.reload(); }, 2000);
+                
+                // Delay for effect, then reload
+                setTimeout(() => {
+                    alert("任務回報完成！裝備已存入背包。");
+                    location.reload();
+                }, 2000);
             });
         }
 
@@ -515,7 +547,27 @@
         function executeSearch(keyword) {
             if(!keyword) return alert("請輸入關鍵字");
             closeModal('search-modal');
-            openSW(keyword);
+            
+            // 1. Simulate Scan
+            document.getElementById('main-interface').style.opacity = 0; // Hide Main momentarily
+            document.getElementById('scanning-layer').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('scanning-layer').style.display = 'none';
+                document.getElementById('main-interface').style.opacity = 1;
+                
+                // 2. Set Unit Data (Search Result)
+                currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
+                
+                // 3. Auto-Select Default Tag & Skip Step 2
+                selectedTag = "#搜索結果";
+                selectedProp = null; // No sponsor for search result (fast track)
+                
+                // 4. Force Jump to Step 3
+                document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
+                document.getElementById('step-3').style.display = 'flex';
+                
+            }, 1500); // Fast Scan
         }
 
         function openSW(unitName = '親愛的夥伴') {
