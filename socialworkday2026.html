@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON</title>
+    <title>2026 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -46,7 +46,7 @@
         @keyframes pulseCore { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; } }
         @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        /* --- Intro --- */
+        /* --- Intro & Home Gallery --- */
         #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #050505; z-index: 999; display: flex; flex-direction: column;
@@ -57,22 +57,39 @@
         }
         .briefing-card {
             max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
-            background: rgba(20, 20, 20, 0.9); padding: 40px 20px;
+            background: rgba(20, 20, 20, 0.95); padding: 25px 20px;
             box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
             position: relative; overflow: hidden; text-align: center;
+            display: flex; flex-direction: column; max-height: 85vh;
         }
         .briefing-card::before, .briefing-card::after { content: ''; position: absolute; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
         .briefing-card::before { top:0; left:0; } .briefing-card::after { bottom:0; right:0; }
 
-        .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
-        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
-        .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px; }
+        .main-logo-text { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
+        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 11px; letter-spacing: 3px; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
+        
+        /* [新增] 首頁即時留言牆樣式 */
+        .home-gallery-wrapper {
+            flex: 1; overflow-y: auto; margin-bottom: 15px; padding: 10px;
+            background: rgba(0,0,0,0.4); border: 1px solid #333; border-radius: 4px;
+            text-align: left;
+        }
+        .home-gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .hg-title { font-size: 10px; color: var(--neon-amber); font-family: 'Orbitron'; font-weight: bold; }
+        .hg-more { font-size: 10px; color: #666; cursor: pointer; text-decoration: underline; }
+        
+        .hg-item { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #222; padding: 8px 0; }
+        .hg-avatar { width: 30px; height: 30px; border-radius: 50%; background: #333; object-fit: cover; }
+        .hg-content { flex: 1; }
+        .hg-msg { font-size: 11px; color: #ddd; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .hg-info { font-size: 9px; color: #666; margin-top: 2px; }
+        .hg-like { font-size: 10px; color: #e91e63; }
 
         .btn-start-mission {
             width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
-            padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
+            padding: 12px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
             text-transform: uppercase; font-weight: bold; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-            animation: pulseBtn 2s infinite;
+            animation: pulseBtn 2s infinite; margin-top: auto;
         }
         .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber); }
         @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
@@ -190,8 +207,13 @@
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
+        /* [新增] Success Actions */
         #feedback-layer { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; }
-        
+        .success-opts { display: flex; gap: 10px; margin-top: 20px; width: 100%; justify-content: center; }
+        .btn-opt { padding: 10px 20px; font-family: 'Orbitron'; cursor: pointer; border: 1px solid #555; background: #222; color: #fff; border-radius: 4px; flex: 1; max-width: 140px; font-size: 12px; }
+        .btn-opt.primary { border-color: var(--neon-amber); color: var(--neon-amber); }
+        .btn-opt:hover { background: #333; }
+
         .login-box { width: 300px; background: #111; border: 1px solid var(--neon-orange); padding: 25px; text-align: center; box-shadow: 0 0 30px rgba(255, 87, 34, 0.3); }
         .btn-auth { width: 100%; padding: 12px; background: var(--neon-amber); color: #000; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; font-family: 'Orbitron'; }
         .btn-guest { width: 100%; padding: 10px; background: transparent; color: #888; border: 1px solid #444; cursor: pointer; font-size: 12px; }
@@ -215,7 +237,7 @@
         .msg-option { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; color: #ccc; font-size: 13px; }
         .msg-option:hover { color: var(--neon-amber); background: rgba(255,255,255,0.05); }
 
-        /* --- [NEW] Gallery & Social Features Styles --- */
+        /* --- Gallery & Social Features Styles --- */
         .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding-bottom: 20px;
         }
@@ -253,8 +275,17 @@
         <div class="briefing-card">
             <span class="sub-logo-text">PROJECT NEON // 2026</span>
             <div class="main-logo-text">2026 給社工愛的鼓勵</div>
-            <div class="intro-text">
-                在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是社工，也是社會的安全網。<br><br>
+            
+            <div class="home-gallery-wrapper">
+                <div class="home-gallery-header">
+                    <span class="hg-title">🔴 LIVE FEED (即時應援)</span>
+                    <span class="hg-more" onclick="openGallery()">VIEW ALL ></span>
+                </div>
+                <div id="home-gallery-list">
+                    </div>
+            </div>
+
+            <div class="intro-text" style="font-size: 0.9rem; margin-bottom: 10px;">
                 系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
             </div>
             <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
@@ -336,7 +367,8 @@
 
         <div class="footer-nav">
             <span class="footer-link" onclick="openSearch()">SEARCH UNIT</span>
-            <span class="footer-link" onclick="openGallery()">GALLERY</span> <span class="footer-link" onclick="openSW('demo')">SOCIAL WORKER CHANNEL</span>
+            <span class="footer-link" onclick="openGallery()">GALLERY</span>
+            <span class="footer-link" onclick="openSW('demo')">SOCIAL WORKER CHANNEL</span>
             <div style="margin-top:5px;">&copy; 2026 PROJECT NEON</div>
         </div>
     </div>
@@ -367,6 +399,10 @@
                     <div style="text-align: center; animation: popIn 0.5s;">
                         <div style="font-family: 'Orbitron'; font-size: 24px; color: var(--neon-orange); font-weight: bold; margin-bottom: 10px; text-shadow: 0 0 20px var(--neon-orange);" id="feedback-title">TICKET GET!</div>
                         <div style="font-size: 12px; color: #fff;" id="feedback-desc">獲得 1 次抽獎機會，已存入背包</div>
+                        <div class="success-opts">
+                            <button class="btn-opt" onclick="downloadCanvas()">📥 下載小卡</button>
+                            <button class="btn-opt primary" onclick="continueMission()">🚀 繼續留言</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -428,11 +464,16 @@
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         const fullQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。", "加油！你們的付出我們都看在眼裡。", "黑暗中總有光，而你們就是那道光。"];
 
-        // [新增] 模擬的公開留言牆資料
+        // 模擬的公開留言牆資料
         let galleryData = [
             { id: 1, unit: '華山基金會', msg: '謝謝你們接住了受傷的人。', sign: 'UserA', likes: 120, img: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200' },
             { id: 2, unit: '屏東伯大尼之家', msg: '世界因為有你們而溫柔。', sign: 'UserB', likes: 85, img: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=200' },
             { id: 3, unit: '全體站內社工', msg: '加油！', sign: 'UserC', likes: 230, img: 'https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=200' },
+        ];
+
+        // [新增] 背包預設資料
+        const defaultInventory = [
+            { id: 999, unit: '系統贈禮', msg: '歡迎加入 NEON 守護者行列！', sign: 'SYSTEM', likes: 0, img: defaultImgs[0], date: '2026/01/01' }
         ];
 
         let currentUnit = null;
@@ -443,12 +484,11 @@
         let totalParticipations = 0;
         let isAuthenticated = false;
         let myTeam = new URLSearchParams(window.location.search).get('team');
+        let currentCanvas = null; // 暫存圖片
 
         window.onload = function() {
-            localStorage.setItem('gc_daily', 0); // 測試用重置
+            localStorage.setItem('gc_daily', 0); 
             checkDaily();
-            
-            // 讀取背包紀錄
             totalParticipations = parseInt(localStorage.getItem('gc_total') || 0);
             document.getElementById('pack-count').innerText = totalParticipations;
             
@@ -458,6 +498,7 @@
             }
             updateBatteryVisual();
             checkGlobalTarget();
+            renderHomeGallery(); // [新增]
         }
 
         function checkDaily() { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
@@ -484,6 +525,24 @@
                     hudVal.innerText = `${globalCount} / ${target}`;
                 }
             }
+        }
+
+        // [新增] 渲染首頁即時牆
+        function renderHomeGallery() {
+            const container = document.getElementById('home-gallery-list');
+            container.innerHTML = "";
+            galleryData.slice(0, 3).forEach(item => {
+                container.innerHTML += `
+                    <div class="hg-item" onclick="openGallery()">
+                        <img src="${item.img}" class="hg-avatar">
+                        <div class="hg-content">
+                            <div class="hg-msg">${item.msg}</div>
+                            <div class="hg-info">${item.sign} • ${item.unit}</div>
+                        </div>
+                        <div class="hg-like">❤️ ${item.likes}</div>
+                    </div>
+                `;
+            });
         }
 
         function startScanning() {
@@ -627,7 +686,6 @@
                 localStorage.setItem('gc_total', totalParticipations);
                 document.getElementById('pack-count').innerText = totalParticipations;
                 
-                // [新增] 將資料存入個人背包與公開留言牆
                 const newPost = {
                     id: Date.now(),
                     unit: document.getElementById('card-unit-name').innerText,
@@ -638,13 +696,13 @@
                     date: new Date().toLocaleDateString()
                 };
 
-                // 存入背包
                 let myInventory = JSON.parse(localStorage.getItem('gc_inventory') || "[]");
+                if(myInventory.length === 0) myInventory = defaultInventory; // 合併預設
                 myInventory.unshift(newPost);
                 localStorage.setItem('gc_inventory', JSON.stringify(myInventory));
 
-                // 存入公開牆 (模擬)
                 galleryData.unshift(newPost);
+                renderHomeGallery(); // 更新首頁
             }
             
             updateBatteryVisual();
@@ -653,12 +711,33 @@
             document.getElementById('feedback-layer').style.display = 'flex';
             
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
+                currentCanvas = canvas; // 暫存供下載用
+                // [修改] 不再自動下載與重整，顯示選項
+            });
+        }
+
+        // [新增] 下載邏輯
+        function downloadCanvas() {
+            if(currentCanvas) {
                 const link = document.createElement('a');
                 link.download = `MISSION_REPORT_${Date.now()}.png`;
-                link.href = canvas.toDataURL();
+                link.href = currentCanvas.toDataURL();
                 link.click();
-                setTimeout(() => { alert("任務回報完成！已記錄您的參與與抽獎次數。"); location.reload(); }, 2000);
-            });
+            }
+        }
+
+        // [新增] 繼續留言邏輯 (跳過動畫)
+        function continueMission() {
+            document.getElementById('feedback-layer').style.display = 'none';
+            document.getElementById('preview-modal').style.display = 'none';
+            // 清除狀態
+            selectedTag = null;
+            selectedProp = null;
+            userPhoto = null;
+            document.getElementById('msg-input').value = "";
+            document.getElementById('photo-status').innerText = "IMAGE: DEFAULT";
+            // 直接進入新回合
+            initGame();
         }
 
         function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
@@ -667,15 +746,12 @@
             closeModal('search-modal');
             document.getElementById('main-interface').style.opacity = 0; 
             document.getElementById('scanning-layer').style.display = 'flex';
-            
             setTimeout(() => {
                 document.getElementById('scanning-layer').style.display = 'none';
                 document.getElementById('main-interface').style.opacity = 1;
-                
                 currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
                 selectedTag = "#搜索結果";
                 selectedProp = null; 
-                
                 document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
                 document.getElementById('step-3').style.display = 'flex';
             }, 1500); 
@@ -687,7 +763,6 @@
             document.getElementById('sw-modal').style.display = 'flex';
         }
         
-        // [新增] 渲染 Gallery
         function openGallery() {
             const container = document.getElementById('gallery-content');
             container.innerHTML = "";
@@ -699,7 +774,7 @@
                             <div class="g-msg">${item.msg}</div>
                             <div class="g-sign">${item.sign}</div>
                             <div class="g-footer">
-                                <button class="action-btn" onclick="toggleLike(this, ${item.id})">
+                                <button class="action-btn" onclick="toggleLike(this)">
                                     ❤️ <span class="like-count">${item.likes}</span>
                                 </button>
                                 <button class="action-btn" onclick="sharePost()">🚀</button>
@@ -711,52 +786,60 @@
             document.getElementById('gallery-modal').style.display = 'flex';
         }
 
-        // [新增] 按讚邏輯
-        function toggleLike(btn, id) {
+        // [修改] 按讚需登入
+        function toggleLike(btn) {
+            if(!isAuthenticated) {
+                alert("請先登入才能按讚！");
+                document.getElementById('login-modal').style.display = 'flex';
+                return;
+            }
             btn.classList.toggle('liked');
             let countSpan = btn.querySelector('.like-count');
             let count = parseInt(countSpan.innerText);
-            if(btn.classList.contains('liked')) {
-                count++;
-            } else {
-                count--;
-            }
-            countSpan.innerText = count;
-            // 這裡可以加入寫回 galleryData 的邏輯
+            countSpan.innerText = btn.classList.contains('liked') ? count + 1 : count - 1;
         }
 
-        // [新增] 轉發邏輯 (Mock)
+        // [修改] 轉發不用登入
         function sharePost() {
             alert("已複製連結，準備轉發！");
         }
 
-        // [修改] 背包功能增強
+        // [修改] 背包預設與成就
         function openInventory() { 
             const list = document.getElementById('inventory-list');
             let myInventory = JSON.parse(localStorage.getItem('gc_inventory') || "[]");
+            
+            // 預設資料
+            if (myInventory.length === 0) {
+                myInventory = defaultInventory;
+            }
+
             list.innerHTML = "";
             
-            if (myInventory.length === 0) {
-                list.innerHTML = "<p style='color:#888; font-size:12px;'>目前無參與紀錄</p>";
-            } else {
-                myInventory.forEach(item => {
-                    list.innerHTML += `
-                        <div class="inv-item">
-                            <img src="${item.img}" class="inv-thumb">
-                            <div class="inv-info">
-                                <div class="inv-unit">${item.unit}</div>
-                                <div style="font-size:11px; color:#ccc;">${item.msg.substring(0, 15)}...</div>
-                                <div class="inv-date">${item.date}</div>
-                            </div>
-                            <button class="btn-share-mini" onclick="sharePost()">SHARE</button>
-                        </div>
-                    `;
-                });
-                
-                if ((4998 + totalParticipations) >= 5000) {
-                    list.innerHTML = `<h4 style="color:var(--neon-orange); margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML;
-                }
+            // [新增] 能量滿載成就
+            if ((4998 + totalParticipations) >= 5000) {
+                list.innerHTML += `
+                    <div style="background:rgba(255,179,0,0.1); border:1px solid var(--neon-amber); padding:10px; margin-bottom:15px; border-radius:4px; text-align:center;">
+                        <h4 style="color:var(--neon-amber); margin:0 0 5px;">🏆 成就解鎖：能源守護者</h4>
+                        <div style="font-size:11px; color:#fff;">已獲得「全服大獎」抽獎資格</div>
+                        <div style="font-size:10px; color:var(--neon-orange); margin-top:5px;">將於 2026/04/02 公布中獎名單</div>
+                    </div>
+                `;
             }
+
+            myInventory.forEach(item => {
+                list.innerHTML += `
+                    <div class="inv-item">
+                        <img src="${item.img}" class="inv-thumb">
+                        <div class="inv-info">
+                            <div class="inv-unit">${item.unit}</div>
+                            <div style="font-size:11px; color:#ccc;">${item.msg.substring(0, 15)}...</div>
+                            <div class="inv-date">${item.date}</div>
+                        </div>
+                        <button class="btn-share-mini" onclick="sharePost()">SHARE</button>
+                    </div>
+                `;
+            });
             document.getElementById('inventory-modal').style.display = 'flex'; 
         }
         
