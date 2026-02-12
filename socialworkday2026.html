@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON</title>
+    <title>2026 給社工愛的鼓勵 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -162,7 +162,10 @@
         .card-photo-container { position: relative; width: 100%; height: 280px; margin-bottom: 15px; overflow: hidden; border: 1px solid #222; }
         .card-photo-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); }
         .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); }
+        
+        /* 修正：卡片上的單位名稱位置 */
         .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 5; }
+        
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
@@ -203,8 +206,8 @@
             <div class="main-logo-text">2026 給社工愛的鼓勵</div>
             
             <div class="intro-text">
-                在這座城市的光影背後，有一群人默默承接了所有的脆弱。他們是<span class="highlight">社工</span>，社會的安全網，卻往往耗盡了自己的能量。<br><br>
-                系統偵測到全台社工能量低落。<br>我們需要你——啟動連線，成為「像素守護者」。
+                在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是<span class="highlight">社工</span>，社會的安全網，卻往往耗盡了自己的能量。<br><br>
+                系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
             </div>
             
             <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
