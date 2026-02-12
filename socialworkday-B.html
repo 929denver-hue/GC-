@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫</title>
+    <title>2026 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -366,6 +366,20 @@
         let myTeamName = new URLSearchParams(window.location.search).get('team');
         let currentQuoteList = quotesData.public; 
 
+        // [重要修復] 將填充函數提升至全局，確保不會因為 Scope 問題失效
+        function fillMsg(txt) {
+            const input = document.getElementById('msg-input');
+            if(input) {
+                input.value = txt;
+                input.focus();
+                // 視覺反饋：稍微閃爍一下邊框
+                input.style.borderColor = 'var(--neon-amber)';
+                setTimeout(() => { input.style.borderColor = '#444'; }, 200);
+            } else {
+                console.error("找不到 msg-input 元素");
+            }
+        }
+
         window.onload = function() {
             if(!localStorage.getItem('gc_daily')) localStorage.setItem('gc_daily', 0);
             
@@ -416,11 +430,14 @@
             const container = document.getElementById('dynamic-presets');
             container.innerHTML = '';
             
+            // [重要修復] 使用 addEventListener 綁定，避免 inline onclick 失效
             currentQuoteList.forEach(q => {
                 const chip = document.createElement('div');
                 chip.className = 'preset-chip';
                 chip.innerText = q;
-                chip.onclick = () => fillMsg(q);
+                chip.addEventListener('click', function() {
+                    fillMsg(q);
+                });
                 container.appendChild(chip);
             });
 
@@ -429,14 +446,6 @@
             moreBtn.innerText = '+ 更多 (10)';
             moreBtn.onclick = openMsgModal;
             container.appendChild(moreBtn);
-        }
-
-        function fillMsg(txt) {
-            const input = document.getElementById('msg-input');
-            if(input) {
-                input.value = txt;
-                input.focus();
-            }
         }
 
         function forceDemo(name) {
@@ -455,21 +464,19 @@
             
             const allQuotes = fullList.concat(["願世界對你們溫柔", "請記得照顧好自己", "你的付出，我們都看到了"]);
             
-            // 使用 createElement 避免引號導致的 onclick 失效
+            // [重要修復] 使用 addEventListener 綁定 Modal 選項點擊
             allQuotes.forEach(q => {
                 const div = document.createElement('div');
                 div.className = 'msg-option';
                 div.innerText = q;
-                div.onclick = function() { selectMessage(q); };
+                div.addEventListener('click', function() {
+                    fillMsg(q);
+                    closeModal('msg-modal');
+                });
                 list.appendChild(div);
             });
             
             document.getElementById('msg-modal').style.display = 'flex';
-        }
-
-        function selectMessage(msg) {
-            fillMsg(msg);
-            closeModal('msg-modal');
         }
 
         function updateBatteryVisual() {
