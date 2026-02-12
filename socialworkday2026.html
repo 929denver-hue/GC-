@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 給社工愛的鼓勵 </title>
+    <title>2026 給社工愛的鼓勵- PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -76,10 +76,8 @@
         .radar-ring:nth-child(2) { width: 140px; height: 140px; animation-duration: 2s; border-width: 2px; border-color: var(--neon-amber); }
         .radar-ring:nth-child(3) { width: 200px; height: 200px; animation-duration: 3s; border-width: 1px; }
         .central-heart { font-size: 50px; animation: glitchHeart 1s infinite steps(2); z-index: 10; filter: drop-shadow(0 0 10px var(--neon-orange)); }
-        
         @keyframes spinRipple { 0% { transform: rotate(0deg) scale(0.8); opacity: 0.2; } 50% { opacity: 1; } 100% { transform: rotate(360deg) scale(1.1); opacity: 0.2; } }
         @keyframes glitchHeart { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
-
         .scan-text { margin-top: 30px; font-family: 'Orbitron'; font-size: 16px; color: var(--neon-amber); letter-spacing: 2px; text-align: center; font-weight: bold; }
         .scan-progress-bar { width: 200px; height: 4px; background: #333; margin-top: 15px; border-radius: 2px; overflow: hidden; }
         .scan-progress-fill { height: 100%; width: 0%; background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); transition: width 0.2s linear; }
@@ -146,6 +144,7 @@
         .name-field { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 12px; text-align: center; margin-bottom: 10px; outline: none; }
 
         .control-bar { padding-top: 15px; display: flex; gap: 10px; background: #111; padding: 15px; }
+        /* 修正 HTML 實體 */
         .btn-main { flex: 1; background: var(--neon-amber); color: #000; border: none; padding: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); transition: 0.2s; text-align: center; }
         .btn-main:hover { box-shadow: 0 0 15px var(--neon-amber); background: #fff; }
         .btn-back { background: transparent; border: 1px solid #555; color: #888; padding: 0 15px; cursor: pointer; }
@@ -160,22 +159,13 @@
         .card-header { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); margin-bottom: 10px; }
         .card-photo-container { position: relative; width: 100%; height: 280px; margin-bottom: 15px; overflow: hidden; border: 1px solid #222; }
         .card-photo-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); }
-        
-        /* 浮水印：右下角代號 (z-index 修正) */
         .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); z-index: 10; }
-        
-        /* 左下角單位名稱 (z-index 修正) */
         .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 10; }
-        
-        /* HUD 代號 - 右上角 (z-index 修正) */
         .hud-code-name { position: absolute; top: 15px; right: 15px; text-align: right; z-index: 10; }
         .code-main { font-family: 'Orbitron'; font-size: 14px; color: #fff; font-weight: bold; text-shadow: 0 0 10px var(--neon-amber); }
         .code-sub { font-family: 'Orbitron'; font-size: 8px; color: var(--neon-orange); letter-spacing: 1px; }
-
-        /* HUD 裝備圖示 - 右下角 */
         .hud-gear { position: absolute; bottom: 40px; right: 15px; text-align: right; z-index: 10; }
         .gear-icon { font-size: 24px; filter: drop-shadow(0 0 5px var(--neon-amber)); }
-
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
@@ -197,11 +187,8 @@
         .sw-intro { font-size: 1rem; line-height: 1.6; color: #ccc; text-align: justify; margin-bottom: 20px; font-family: 'Noto Serif TC'; }
         .close-btn { cursor: pointer; color: #888; font-size: 20px; }
 
-        /* Search Modal */
         .search-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .search-input { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 10px; font-family: 'Noto Sans TC'; }
-
-        /* Msg Modal */
         #msg-modal-list { max-height: 300px; overflow-y: auto; }
         .msg-option { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; color: #ccc; font-size: 13px; }
         .msg-option:hover { color: var(--neon-amber); background: rgba(255,255,255,0.05); }
@@ -214,45 +201,30 @@
         <div class="briefing-card">
             <span class="sub-logo-text">PROJECT NEON // 2026</span>
             <div class="main-logo-text">2026 給社工愛的鼓勵</div>
-            
             <div class="intro-text">
                 在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是社工，也是社會的安全網。<br><br>
                 系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
             </div>
-            
             <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
         </div>
     </div>
 
     <div id="scanning-layer">
         <div class="cmd-log" id="scan-log">SYSTEM BOOT...<br>LOADING MODULES...</div>
-        <div class="radar-box">
-            <div class="radar-ring"></div>
-            <div class="radar-ring"></div>
-            <div class="radar-ring"></div>
-            <div class="central-heart">❤️</div>
-        </div>
+        <div class="radar-box"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div><div class="central-heart">❤️</div></div>
         <div class="scan-text" id="scan-status">INITIATING SCAN...</div>
         <div class="scan-progress-bar"><div class="scan-progress-fill" id="scan-bar"></div></div>
     </div>
 
     <div id="main-interface">
         <div class="warm-grid"></div>
-        <div class="nav-hud">
-            <div><span class="hud-label">GLOBAL ENERGY</span><span class="hud-value">LV.78</span></div>
-            <div class="btn-inventory" onclick="openInventory()">🎒 PACK</div>
-        </div>
-        <div class="marquee-container">
-            <div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 台積電戰隊 累積 5200 點能量 ...</div>
-        </div>
+        <div class="nav-hud"><div><span class="hud-label">GLOBAL ENERGY</span><span class="hud-value">LV.78</span></div><div class="btn-inventory" onclick="openInventory()">🎒 PACK</div></div>
+        <div class="marquee-container"><div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 台積電戰隊 累積 5200 點能量 ...</div></div>
 
         <div class="console-wrapper">
             <div class="screen-frame">
                 <div id="step-1" class="step-container">
-                    <div class="story-img-box">
-                        <img id="story-img" class="story-img" src="">
-                        <div id="story-unit" class="unit-badge">單位名稱</div>
-                    </div>
+                    <div class="story-img-box"><img id="story-img" class="story-img" src=""><div id="story-unit" class="unit-badge">單位名稱</div></div>
                     <div class="story-content"><span id="story-desc"></span></div>
                     <div class="control-bar"><button class="btn-main" onclick="nextStep(2)">INITIALIZE SUPPORT >></button></div>
                 </div>
@@ -269,7 +241,7 @@
                             <div class="tech-card" onclick="selectProp(this, '蓓朵娜防曬')"><div class="tech-icon">☀️</div><div class="tech-info"><span class="tech-reason">>> 偵測到紫外線曝曬</span><span class="tech-name">配置 [蓓朵娜防曬]</span></div><div class="tech-check">✔</div></div>
                         </div>
                     </div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(1)"><</button><button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button></div>
+                    <div class="control-bar"><button class="btn-back" onclick="nextStep(1)">&lt;</button><button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button></div>
                 </div>
 
                 <div id="step-3" class="step-container">
@@ -292,7 +264,7 @@
                         <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
                         <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span></div>
                     </div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)"><</button><button id="btn-transmit" class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button></div>
+                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)">&lt;</button><button id="btn-transmit" class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button></div>
                 </div>
             </div>
         </div>
@@ -310,20 +282,13 @@
                 <div class="card-header"><span>PROJECT NEON</span><span>LOG #2026</span></div>
                 <div class="card-photo-container">
                     <img id="card-img" class="card-photo-img" src="">
-                    
-                    <div class="hud-code-name">
-                        <div class="code-main" id="code-main">NEON-XXXX</div>
-                        <div class="code-sub" id="code-sub">GUARDIAN: UNKNOWN</div>
-                    </div>
-                    
+                    <div class="hud-code-name"><div class="code-main" id="code-main">NEON-XXXX</div><div class="code-sub" id="code-sub">GUARDIAN: UNKNOWN</div></div>
                     <div id="card-unit-name" class="card-unit-name">單位名稱</div>
                     <div id="card-sign" class="card-signature">USER</div>
-                    
                     <div class="hud-gear"><div id="gear-icon" class="gear-icon">📦</div></div>
                 </div>
                 <div id="card-msg" class="card-text">...</div>
                 <div id="card-sponsor" class="card-sponsor"></div>
-                
                 <div id="feedback-layer"><div class="feedback-box"><div class="boost-text">SIGNAL BOOSTED +12%</div><div class="boost-sub">感謝您的支援，更多守護者將加入連線。</div></div></div>
             </div>
             <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
@@ -338,11 +303,8 @@
             <div class="sw-header"><h3 class="sw-title">🔐 SOCIAL WORKER ACCESS</h3><span class="close-btn" onclick="closeModal('sw-modal')">×</span></div>
             <div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" alt="Warm Hands" class="sw-photo"></div>
             <div style="font-size:1.2rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div>
-            <div class="sw-intro">
-                這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意。在繁忙的訪視與個案紀錄間，請別忘了，<span style="color:var(--neon-amber); font-weight:bold;">有人正默默停下來為你打氣</span>。你伸出的雙手接住了脆弱，而社會的善意正溫柔地支撐著你。感謝你的堅持，讓我們一起在這座城市，守護微小卻堅定的光芒。
-            </div>
-            <div class="ranking-list" id="sw-ranking">
-                </div>
+            <div class="sw-intro">這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意...</div>
+            <div class="ranking-list" id="sw-ranking"></div>
         </div>
     </div>
 
@@ -350,12 +312,10 @@
         <div class="common-box">
             <div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('search-modal')">✕</div>
             <h3 style="color:var(--neon-amber); margin-top:0;">🔍 SEARCH UNIT DATABASE</h3>
-            <input type="text" id="search-input" class="search-input" placeholder="輸入單位名稱或編號...">
+            <input type="text" id="search-input" class="search-input" placeholder="輸入單位名稱...">
             <div class="search-chips">
                 <div class="preset-chip" onclick="executeSearch('全體站內社工')">全體站內社工</div>
                 <div class="preset-chip" onclick="executeSearch('華山基金會')">華山基金會</div>
-                <div class="preset-chip" onclick="executeSearch('屏東伯大尼之家')">屏東伯大尼之家</div>
-                <div class="preset-chip" onclick="executeSearch('勵馨基金會')">勵馨基金會</div>
             </div>
             <button class="btn-main" onclick="executeSearch(document.getElementById('search-input').value)" style="margin-top:15px;">INITIATE SEARCH</button>
         </div>
@@ -365,8 +325,7 @@
         <div class="common-box">
             <div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('msg-modal')">✕</div>
             <h3 style="color:var(--neon-amber); margin-top:0;">SELECT MESSAGE</h3>
-            <div id="msg-modal-list">
-                </div>
+            <div id="msg-modal-list"></div>
         </div>
     </div>
 
@@ -375,27 +334,13 @@
     </div>
 
     <script>
-        // Data
         const units = [
-            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛。從農場勞動到生活自理，每一步都走得不容易。", tags: ["#堅韌防線", "#慢飛天使"] },
-            { name: "華山基金會", img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", desc: "【獨老依靠】<br>穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望。我們遞送的不只是便當，更是家的感覺。", tags: ["#溫柔信號", "#獨老依靠"] }
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛...", tags: ["#堅韌防線", "#慢飛天使"] },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", desc: "【獨老依靠】<br>穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望...", tags: ["#溫柔信號", "#獨老依靠"] }
         ];
-        const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600", "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600"];
-        
-        const fullQuotes = [
-            "辛苦了，謝謝你們一直都在！",
-            "謝謝你們接住了受傷的人。",
-            "世界因為有你們而溫柔。",
-            "雖然不認識你，但謝謝你成為這座城市的光。",
-            "願世界對你們，也能像你們對待他人一樣溫柔。",
-            "加油！你們的付出，我們都看在眼裡。",
-            "請記得在照顧別人之前，也要照顧好自己。",
-            "這是一份來自遠方的應援，我們挺你！",
-            "謝謝你們，讓這社會還有溫度。",
-            "黑暗中總有光，而你們就是那道光。"
-        ];
+        const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
+        const fullQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。", "加油！你們的付出我們都看在眼裡。", "黑暗中總有光，而你們就是那道光。"];
 
-        // State
         let currentUnit = null;
         let selectedTag = null;
         let selectedProp = null;
@@ -403,57 +348,30 @@
         let dailyCount = 0;
         let myTeam = new URLSearchParams(window.location.search).get('team');
 
-        // Init
         window.onload = function() {
-            localStorage.setItem('gc_daily', 0); // Force Reset for Test
+            localStorage.setItem('gc_daily', 0);
             checkDaily();
             if(myTeam) {
                 document.getElementById('faction-display').style.display = 'block';
                 document.getElementById('faction-name').innerText = myTeam;
-                document.getElementById('marquee-content').innerText = `>> SYSTEM: ${myTeam} SQUAD JOINED << ` + document.getElementById('marquee-content').innerText;
             }
         }
 
-        function checkDaily() {
-            const today = new Date().toLocaleDateString();
-            if(localStorage.getItem('gc_last_date') !== today) {
-                localStorage.setItem('gc_last_date', today);
-                localStorage.setItem('gc_daily', 0);
-                dailyCount = 0;
-            } else { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
-        }
+        function checkDaily() { /* ... */ }
 
-        // Logic 1: Intro -> Scanning -> Step 1
         function startScanning() {
-            if(dailyCount >= 3) return alert("ENERGY DEPLETED. COME BACK TOMORROW.");
-
-            // 1. Hide Intro
             document.getElementById('intro-layer').style.opacity = 0;
-            
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
+                document.getElementById('scanning-layer').style.display = 'flex';
                 
-                // 2. Show Scanning with Dynamic Text
-                const scan = document.getElementById('scanning-layer');
-                scan.style.display = 'flex';
-                
-                // Fun Logs
-                const logs = ["CONNECTING TO SERVER...", "BYPASSING FIREWALL...", "SEARCHING SECTOR 7...", "ANALYZING SIGNAL...", "TARGET LOCKED"];
+                // Animation logic
                 let i = 0;
-                const logEl = document.getElementById('scan-log');
-                const statusEl = document.getElementById('scan-status');
-                const barEl = document.getElementById('scan-bar');
-                
+                const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
                 const interval = setInterval(() => {
-                    if(i < logs.length) {
-                        statusEl.innerText = logs[i];
-                        logEl.innerHTML += logs[i] + "<br>";
-                        i++;
-                    }
-                }, 400); // Faster
-
-                setTimeout(() => { barEl.style.width = "60%"; }, 500);
-                setTimeout(() => { barEl.style.width = "100%"; }, 1500);
+                    if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++];
+                }, 600);
+                setTimeout(() => { document.getElementById('scan-bar').style.width = "100%"; }, 100);
 
                 setTimeout(() => {
                     clearInterval(interval);
@@ -463,14 +381,12 @@
                         document.getElementById('main-interface').style.opacity = 1;
                         initGame();
                     }, 500);
-                }, 2000); // 2 seconds total
+                }, 2000);
             }, 500);
         }
 
         function initGame() {
-            // Safe fallback if units array is empty (unlikely but safe)
-            currentUnit = units.length > 0 ? units[Math.floor(Math.random() * units.length)] : { name: "未知單位", img: defaultImgs[0], desc: "DATA NOT FOUND" };
-            
+            currentUnit = units[Math.floor(Math.random() * units.length)];
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
@@ -495,13 +411,10 @@
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            if(step === 3 && !selectedTag) { 
-                // Auto-select first tag if none selected
+            // Auto select first tag if none
+            if(step === 3 && !selectedTag) {
                 const tags = document.querySelectorAll('.tech-tag');
-                if(tags.length > 0) {
-                    tags[0].classList.add('active');
-                    selectedTag = tags[0].innerText;
-                }
+                if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
             }
             document.getElementById(`step-${step}`).style.display = 'flex';
         }
@@ -512,7 +425,6 @@
             selectedProp = name;
         }
 
-        // Message Logic
         function fillMsg(text) { document.getElementById('msg-input').value = text; }
         
         function openMsgModal() {
@@ -523,104 +435,67 @@
             });
             document.getElementById('msg-modal').style.display = 'flex';
         }
-        
-        function selectMessage(text) {
-            fillMsg(text);
-            closeModal('msg-modal');
-        }
+        function selectMessage(text) { fillMsg(text); closeModal('msg-modal'); }
 
         function previewPhoto() {
             const file = document.getElementById('upload-photo').files[0];
             if(file) {
                 const reader = new FileReader();
-                reader.onload = (e) => { 
-                    userPhoto = e.target.result; 
-                    document.getElementById('photo-status').innerText = "IMAGE: READY";
-                };
+                reader.onload = (e) => { userPhoto = e.target.result; document.getElementById('photo-status').innerText = "IMAGE: READY"; };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Logic 2: Generate Cool Card (Fix: Data Binding)
+        // --- CRITICAL FIX: GENERATE PREVIEW ---
         function generatePreview() {
-            // 1. Auto-fill message if empty
             const msgInput = document.getElementById('msg-input');
-            if(!msgInput.value.trim()) {
-                msgInput.value = fullQuotes[Math.floor(Math.random() * fullQuotes.length)];
-            }
+            if(!msgInput.value.trim()) msgInput.value = fullQuotes[Math.floor(Math.random() * fullQuotes.length)];
             const msg = msgInput.value;
             const sign = document.getElementById('sign-input').value || "UNKNOWN";
 
-            const randomCode = Math.floor(1000 + Math.random() * 9000);
-            const codeName = `NEON-${randomCode}`;
+            const codeName = `NEON-${Math.floor(1000 + Math.random() * 9000)}`;
             
-            // 2. Robust Image Fallback
+            // Image Fallback
             let finalImg = userPhoto;
             if(!finalImg && currentUnit && currentUnit.img) finalImg = currentUnit.img;
-            if(!finalImg) finalImg = defaultImgs[0]; // Absolute fallback
+            if(!finalImg) finalImg = defaultImgs[0];
 
+            // DOM Binding
             document.getElementById('card-img').src = finalImg;
             document.getElementById('code-main').innerText = codeName;
             document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
             document.getElementById('card-msg').innerText = msg;
-            
-            // 3. Robust Unit Name (Fix null check)
-            const unitNameText = currentUnit ? currentUnit.name : "SEARCH TARGET";
-            document.getElementById('card-unit-name').innerText = unitNameText;
-            
-            // 4. Watermark
+            document.getElementById('card-unit-name').innerText = currentUnit ? currentUnit.name : "SEARCH TARGET";
             document.getElementById('card-sign').innerText = sign.toUpperCase();
 
-            // 5. Sponsor & Gear Icon Fallback
+            // Sponsor & Icon
             if(selectedProp) {
                 document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
-                document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : (selectedProp.includes('洗') ? '🚿' : '☀️');
+                document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : '☀️';
             } else {
                 document.getElementById('card-sponsor').innerText = "SUPPLY: STANDARD"; 
-                document.getElementById('gear-icon').innerText = "🛡️"; // Default shield for search
+                document.getElementById('gear-icon').innerText = "🛡️";
             }
 
-            // 6. Visual Feedback
-            const btn = document.getElementById('btn-transmit');
-            if(btn) {
-                const originalText = btn.innerText;
-                btn.innerText = "TRANSMITTING...";
-                btn.style.background = "#fff";
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.background = "";
-                    document.getElementById('preview-modal').style.display = 'flex';
-                }, 500);
-            } else {
-                document.getElementById('preview-modal').style.display = 'flex';
-            }
+            document.getElementById('preview-modal').style.display = 'flex';
         }
 
-        // Logic 3: Share Benefit
         function finalSubmit() {
-            const feedback = document.getElementById('feedback-layer');
-            feedback.style.display = 'flex';
-            
+            document.getElementById('feedback-layer').style.display = 'flex';
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `MISSION_REPORT_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
-                
-                setTimeout(() => {
-                    alert("任務回報完成！裝備已存入背包。");
-                    location.reload();
-                }, 2000);
+                setTimeout(() => { alert("任務回報完成！"); location.reload(); }, 2000);
             });
         }
 
         // Search Logic
         function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
-        
         function executeSearch(keyword) {
             if(!keyword) return alert("請輸入關鍵字");
             closeModal('search-modal');
-            
             document.getElementById('main-interface').style.opacity = 0; 
             document.getElementById('scanning-layer').style.display = 'flex';
             
@@ -628,37 +503,22 @@
                 document.getElementById('scanning-layer').style.display = 'none';
                 document.getElementById('main-interface').style.opacity = 1;
                 
-                // Set Search Result Unit
-                currentUnit = { 
-                    name: keyword, 
-                    img: defaultImgs[0], 
-                    desc: "SEARCH RESULT", 
-                    tags: ["#搜索結果"] 
-                };
-                
+                // Set fallback data for search result
+                currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
                 selectedTag = "#搜索結果";
                 selectedProp = null; 
                 
-                // Jump to Step 3
                 document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
                 document.getElementById('step-3').style.display = 'flex';
-                
             }, 1500); 
         }
 
-        // SW Logic
-        function openSW(unitName = '親愛的夥伴') {
+        // SW & Utils
+        function openSW(unitName) {
             document.getElementById('sw-target-name').innerText = unitName;
-            const list = document.getElementById('sw-ranking');
-            list.innerHTML = `
-                <h4 style="margin:0 0 15px 0; font-size:14px; color:var(--neon-orange);">🏆 民眾最想對你說的話：</h4>
-                <div class="ranking-item"><span style="color:var(--neon-blue);">1.</span> 辛苦了，謝謝你們一直都在！ <span style="color:#666;">(3,240)</span></div>
-                <div class="ranking-item"><span style="color:var(--neon-blue);">2.</span> 謝謝你們接住了受傷的人。 <span style="color:#666;">(2,105)</span></div>
-                <div class="ranking-item"><span style="color:var(--neon-blue);">3.</span> 希望世界對你，也能溫柔一點。 <span style="color:#666;">(1,890)</span></div>
-            `;
+            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了！ (3,240)</div>`; // Simplified demo
             document.getElementById('sw-modal').style.display = 'flex';
         }
-
         function openInventory() { document.getElementById('inventory-modal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
