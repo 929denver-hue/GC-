@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026- PROJECT NEON</title>
+    <title>2026 社工守護計畫 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -41,7 +41,7 @@
         .btn-start-mission { width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber); padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); animation: pulseBtn 2s infinite; }
         @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
 
-        /* Scanning (Classic Radar) */
+        /* Scanning */
         #scanning-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 998; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .radar-box { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; }
         .radar-ring { position: absolute; border: 1px solid var(--neon-orange); border-radius: 50%; opacity: 0; animation: radarRipple 2s infinite linear; }
@@ -70,7 +70,6 @@
         .enterprise-badge { font-size: 10px; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 2px 6px; border-radius: 3px; background: rgba(0, 188, 212, 0.1); margin-left: 5px; font-family: 'Orbitron'; animation: blinkBlue 2s infinite; display: none; }
         @keyframes blinkBlue { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--neon-blue); } 50% { opacity: 0.5; box-shadow: none; } }
 
-        /* Marquee Fix */
         .marquee-container { position: absolute; top: 70px; width: 100%; background: rgba(255, 87, 34, 0.1); border-top: 1px solid rgba(255, 87, 34, 0.3); border-bottom: 1px solid rgba(255, 87, 34, 0.3); height: 28px; overflow: hidden; white-space: nowrap; display: block; }
         .marquee-text { display: inline-block; font-size: 11px; color: var(--neon-orange); font-family: 'Orbitron'; padding-left: 100%; animation: scrollText 20s linear infinite; }
         @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
@@ -117,6 +116,8 @@
         /* Footer */
         .footer-nav { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 10px; color: #666; z-index: 10; }
         .footer-link { color: #888; text-decoration: none; border-bottom: 1px dashed #666; margin: 0 5px; cursor: pointer; }
+        .demo-bar { position: absolute; bottom: 40px; width: 100%; text-align: center; font-size: 10px; z-index: 100; opacity: 0.3; }
+        .demo-btn { background: #333; color: #fff; border: 1px solid #555; padding: 2px 5px; cursor: pointer; margin: 0 2px; }
 
         /* 企業 CSR 提示 */
         .csr-hint { font-size: 11px; color: var(--neon-blue); text-align: center; margin-bottom: 8px; font-family: 'Noto Sans TC'; border: 1px dashed var(--neon-blue); padding: 5px; border-radius: 4px; background: rgba(0, 188, 212, 0.1); animation: blinkText 3s infinite; display: none; }
@@ -133,6 +134,13 @@
         .hr-metric-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
         .close-dashboard { cursor: pointer; color: #fff; font-size: 24px; }
         .btn-download-report { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; }
+        .dna-bar-container { display: flex; height: 10px; width: 100%; background: #333; border-radius: 5px; overflow: hidden; margin-top: 5px; }
+        .dna-segment { height: 100%; }
+        .dna-legend { display: flex; gap: 10px; margin-top: 5px; font-size: 10px; color: #aaa; }
+        .dna-dot { width: 8px; height: 8px; display: inline-block; margin-right: 3px; border-radius: 50%; }
+        .sdg-box { display: flex; gap: 10px; }
+        .sdg-icon { width: 40px; height: 40px; background: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Orbitron'; color: #888; }
+        .sdg-icon.active { background: var(--neon-green); color: #000; box-shadow: 0 0 10px var(--neon-green); border: none; }
 
         /* Modals */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
@@ -276,6 +284,12 @@
                 <span class="footer-link" onclick="openSW('demo')">SOCIAL WORKER CHANNEL</span>
                 <span class="footer-link" onclick="openAdminLogin()">ADMIN ACCESS</span>
                 <div style="margin-top:5px;">&copy; 2026 PROJECT NEON</div>
+                <div class="demo-bar">
+                    <button class="demo-btn" onclick="forceDemo('台積電')">DEMO: TECH</button>
+                    <button class="demo-btn" onclick="forceDemo('富邦金控')">DEMO: FINANCE</button>
+                    <button class="demo-btn" onclick="forceDemo('星巴克')">DEMO: SERVICE</button>
+                    <button class="demo-btn" onclick="forceDemo('')">DEMO: RESET</button>
+                </div>
             </div>
         </div>
     </div>
@@ -348,12 +362,12 @@
 
     <script>
         const units = [
-            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛。從農場勞動到生活自理，每一步都走得不容易，但每一個進步都是生命最堅韌的證明。", tags: ["#堅韌防線", "#慢飛天使"] },
-            { name: "華山基金會", img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", desc: "【獨老依靠】<br>穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望。我們遞送的不只是便當，更是家的感覺。讓「老」不再是孤獨的代名詞。", tags: ["#溫柔信號", "#獨老依靠"] }
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛...", tags: ["#堅韌防線", "#慢飛天使"] },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", desc: "【獨老依靠】<br>穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望...", tags: ["#溫柔信號", "#獨老依靠"] }
         ];
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         
-        // --- [修正] 企業職人金句庫 (僅保留您指定的兩句，並將第一句當作默認) ---
+        // --- [修正] 企業職人金句庫 (嚴格鎖定內容) ---
         const publicQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。"];
         const corporateQuotes = {
             'tech': [
@@ -375,6 +389,7 @@
         let dailyCount = 0, totalParticipations = 0, isAuthenticated = false;
         let myTeam = new URLSearchParams(window.location.search).get('team');
         let myTeamName = new URLSearchParams(window.location.search).get('name') || myTeam;
+        let activeQuoteList = publicQuotes; // 當前使用的金句列表
 
         window.onload = function() {
             localStorage.setItem('gc_daily', 0); 
@@ -406,19 +421,23 @@
                 btn.classList.add('enterprise');
 
                 // 2. 金句偵測邏輯
-                let activeQuotes = null;
+                let quotes = null;
                 if (name.includes('台積電') || name.includes('聯發科') || name.includes('華碩') || name.includes('宏碁') || name.includes('鴻海') || name.includes('廣達')) {
-                    activeQuotes = corporateQuotes['tech'];
+                    quotes = corporateQuotes['tech'];
                 } else if (name.includes('富邦') || name.includes('國泰') || name.includes('中信') || name.includes('玉山') || name.includes('台新') || name.includes('元大')) {
-                    activeQuotes = corporateQuotes['finance'];
+                    quotes = corporateQuotes['finance'];
                 } else if (name.includes('麥當勞') || name.includes('星巴克') || name.includes('統一') || name.includes('王品') || name.includes('全家')) {
-                    activeQuotes = corporateQuotes['service'];
+                    quotes = corporateQuotes['service'];
                 }
                 
-                // 3. 只有偵測到特定產業才替換，否則保持一般
-                if (activeQuotes) {
-                    renderPresets(activeQuotes);
+                // 3. 只有偵測到特定產業才替換
+                if (quotes) {
+                    activeQuoteList = quotes; // 更新全域列表
+                    renderPresets(quotes);
                 }
+            } else {
+                activeQuoteList = publicQuotes; // Reset to public
+                renderPresets(publicQuotes); // Ensure render
             }
         }
 
@@ -439,6 +458,17 @@
             moreBtn.innerText = '+ 更多 (10)';
             moreBtn.onclick = openMsgModal;
             container.appendChild(moreBtn);
+        }
+
+        // 方便切換DEMO
+        function forceDemo(name) {
+            const newUrl = new URL(window.location.href);
+            if(name) newUrl.searchParams.set('team', name);
+            else newUrl.searchParams.delete('team');
+            window.history.pushState({}, '', newUrl);
+            myTeamName = name;
+            checkEnterpriseMode(); // Rerun logic
+            alert(`已切換至：${name || '一般民眾模式'}`);
         }
 
         function updateBatteryVisual() {
@@ -497,12 +527,19 @@
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
+            
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
             if (currentUnit.tags) {
                 currentUnit.tags.forEach(tag => {
-                    const btn = document.createElement('div'); btn.className = 'tech-tag'; btn.innerText = tag;
-                    btn.onclick = (e) => { document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); selectedTag = tag; };
+                    const btn = document.createElement('div');
+                    btn.className = 'tech-tag';
+                    btn.innerText = tag;
+                    btn.onclick = (e) => {
+                        document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        selectedTag = tag;
+                    };
                     tagContainer.appendChild(btn);
                 });
             }
@@ -511,7 +548,8 @@
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            if(step === 3 && !selectedTag) { 
+            // Auto select first tag if none
+            if(step === 3 && !selectedTag) {
                 const tags = document.querySelectorAll('.tech-tag');
                 if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
             }
@@ -529,7 +567,9 @@
         function openMsgModal() {
             const list = document.getElementById('msg-modal-list');
             list.innerHTML = "";
-            const currentList = (myTeamName) ? publicQuotes : publicQuotes.concat(["願世界對你們溫柔", "請記得照顧好自己", "我們與你同在"]);
+            // [修正] 優先顯示當前企業金句，再顯示通用金句
+            const currentList = (activeQuoteList !== publicQuotes) ? activeQuoteList.concat(publicQuotes) : publicQuotes;
+            
             currentList.forEach(q => {
                 list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
             });
@@ -628,7 +668,7 @@
         function downloadReport() { html2canvas(document.getElementById('hr-dashboard'), { backgroundColor: "#0a0a0a" }).then(canvas => { const link = document.createElement('a'); link.download = `ESG_REPORT.png`; link.href = canvas.toDataURL(); link.click(); }); }
         function openInventory() { 
             const list = document.getElementById('inventory-list'); list.innerHTML = "";
-            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>目前無參與紀錄</p>";
+            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>尚無紀錄</p>";
             else { for(let i=1; i<=totalParticipations; i++) list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`; if((4998+totalParticipations) >= 5000) list.innerHTML = `<h4 style="color:var(--neon-orange);margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML; }
             document.getElementById('inventory-modal').style.display = 'flex'; 
         }
