@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 守護計畫 - PROJECT NEON</title>
+    <title>2026 社工 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -11,6 +11,7 @@
         :root {
             --neon-amber: #FFB300;
             --neon-orange: #FF5722;
+            --neon-blue: #00bcd4;
             --tech-bg: #121212;
             --panel-bg: #1E1E1E;
             --text-main: #E0E0E0;
@@ -50,83 +51,53 @@
         #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #050505; z-index: 999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; 
+            align-items: center; justify-content: center; padding: 20px;
             transition: opacity 0.8s ease-in-out;
             background-image: linear-gradient(rgba(255, 179, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
         }
         
         .briefing-card {
-            max-width: 500px; width: 90%; border: 1px solid var(--neon-amber);
+            max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
             background: rgba(20, 20, 20, 0.95); padding: 40px 20px;
             box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
             position: relative; overflow: hidden; text-align: center;
-            margin-bottom: 60px; /* 留空間給底部 Gallery */
+            display: flex; flex-direction: column;
         }
         .briefing-card::before, .briefing-card::after { content: ''; position: absolute; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
         .briefing-card::before { top:0; left:0; } .briefing-card::after { bottom:0; right:0; }
 
         .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
         .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
-        .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px; }
+        .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 40px; font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px; }
 
+        /* [新增] 首頁按鈕群組 */
+        .intro-actions {
+            display: flex; flex-direction: column; gap: 15px; width: 100%;
+        }
+
+        .btn-start-mission, .btn-view-gallery {
+            width: 100%; padding: 15px; font-size: 14px; cursor: pointer;
+            font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
+            text-transform: uppercase; font-weight: bold;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+
+        /* 啟動按鈕 */
         .btn-start-mission {
-            width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
-            padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
-            text-transform: uppercase; font-weight: bold; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            background: var(--neon-amber); color: #000; border: none;
+            box-shadow: 0 0 15px var(--neon-amber);
             animation: pulseBtn 2s infinite;
         }
-        .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber); }
-        @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
+        .btn-start-mission:hover { background: #fff; }
 
-        /* [優化] 底部即時牆樣式 (置底、融合背景) */
-        .intro-gallery-bar {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: linear-gradient(to top, #000 10%, rgba(0,0,0,0.9) 60%, transparent 100%);
-            padding: 40px 20px 30px; 
-            z-index: 10;
-            display: flex; flex-direction: column;
+        /* 看留言按鈕 */
+        .btn-view-gallery {
+            background: transparent; color: var(--neon-blue); border: 1px solid var(--neon-blue);
         }
-        
-        .ig-header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 15px; 
-            padding-left: 5px; border-left: 3px solid var(--neon-orange);
-        }
-        .ig-title { 
-            font-size: 12px; color: var(--neon-amber); font-family: 'Orbitron'; 
-            font-weight: bold; letter-spacing: 1px; text-shadow: 0 0 5px rgba(255, 179, 0, 0.5);
-            animation: blinkText 3s infinite;
-        }
-        .ig-more { 
-            font-size: 10px; color: #888; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 1px;
-            border: 1px solid #444; padding: 2px 8px; border-radius: 10px;
-        }
-        .ig-more:hover { color: #fff; border-color: #fff; background: rgba(255,255,255,0.1); }
+        .btn-view-gallery:hover { background: rgba(0, 188, 212, 0.1); box-shadow: 0 0 15px var(--neon-blue); color: #fff; }
 
-        .ig-list { 
-            display: flex; gap: 15px; overflow-x: auto; 
-            padding-bottom: 10px; scrollbar-width: none; 
-            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-        }
-        .ig-list::-webkit-scrollbar { display: none; }
-        
-        .ig-item { 
-            min-width: 140px; cursor: pointer; transition: 0.3s; 
-            background: rgba(255,255,255,0.05); border: 1px solid #333; 
-            border-radius: 6px; overflow: hidden; position: relative;
-        }
-        .ig-item:hover { transform: translateY(-5px); border-color: var(--neon-amber); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        
-        .ig-img { width: 100%; height: 80px; object-fit: cover; filter: sepia(20%) opacity(0.8); transition: 0.3s; }
-        .ig-item:hover .ig-img { filter: sepia(0%) opacity(1); }
-        
-        .ig-content { padding: 8px; }
-        .ig-msg { font-size: 11px; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .ig-sub { font-size: 9px; color: var(--neon-orange); margin-top: 3px; font-family: 'Orbitron'; }
-
-        @keyframes blinkText { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.4);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.8);} }
 
         /* --- Scanning --- */
         #scanning-layer {
@@ -241,7 +212,7 @@
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
-        /* Feedback Layer */
+        /* Feedback Layer for Success Options */
         #feedback-layer { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; }
         .success-opts { display: flex; gap: 10px; margin-top: 20px; width: 100%; justify-content: center; }
         .btn-opt { padding: 10px 20px; font-family: 'Orbitron'; cursor: pointer; border: 1px solid #555; background: #222; color: #fff; border-radius: 4px; flex: 1; max-width: 140px; font-size: 12px; }
@@ -313,16 +284,11 @@
                 在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是社工，也是社會的安全網。<br><br>
                 系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
             </div>
-            <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
-        </div>
-
-        <div class="intro-gallery-bar" onclick="openGallery()">
-            <div class="ig-header">
-                <span class="ig-title">⚡ LIVE FEED (即時應援)</span>
-                <span class="ig-more">VIEW ALL ▾</span>
+            
+            <div class="intro-actions">
+                <button class="btn-start-mission" onclick="startScanning()">啟動連線 (START)</button>
+                <button class="btn-view-gallery" onclick="openGallery()">瀏覽留言 (GALLERY)</button>
             </div>
-            <div class="ig-list" id="intro-gallery-list">
-                </div>
         </div>
     </div>
 
@@ -532,7 +498,6 @@
             }
             updateBatteryVisual();
             checkGlobalTarget();
-            renderIntroGallery();
         }
 
         function checkDaily() { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
@@ -561,27 +526,11 @@
             }
         }
 
-        function renderIntroGallery() {
-            const container = document.getElementById('intro-gallery-list');
-            container.innerHTML = "";
-            galleryData.slice(0, 6).forEach(item => {
-                container.innerHTML += `
-                    <div class="ig-item">
-                        <img src="${item.img}" class="ig-img">
-                        <div class="ig-content">
-                            <div class="ig-msg">${item.msg}</div>
-                            <div class="ig-sub">❤️ ${item.likes}</div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
         function startScanning() {
             if(dailyCount >= 3) return alert("今日能量耗盡，請明天再來。");
             document.getElementById('intro-layer').style.opacity = 0;
             setTimeout(() => {
-                document.getElementById('intro-layer').style.display = 'none'; // 即時牆會隨 intro-layer 消失
+                document.getElementById('intro-layer').style.display = 'none';
                 document.getElementById('scanning-layer').style.display = 'flex';
                 let i = 0;
                 const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
@@ -734,7 +683,6 @@
                 localStorage.setItem('gc_inventory', JSON.stringify(myInventory));
 
                 galleryData.unshift(newPost);
-                renderIntroGallery();
             }
             
             updateBatteryVisual();
