@@ -366,7 +366,7 @@
         let myTeamName = new URLSearchParams(window.location.search).get('team');
         let currentQuoteList = quotesData.public; 
 
-        // [重要修復] 將填充函數提升至全局，確保不會因為 Scope 問題失效
+        // [核心修正] 將 fillMsg 放在最外層，確保 HTML onclick 能呼叫到
         function fillMsg(txt) {
             const input = document.getElementById('msg-input');
             if(input) {
@@ -378,6 +378,11 @@
             } else {
                 console.error("找不到 msg-input 元素");
             }
+        }
+
+        // [新增功能] 處理 Tag 點擊事件
+        function toggleTag(el) {
+            el.classList.toggle('active');
         }
 
         window.onload = function() {
@@ -430,14 +435,12 @@
             const container = document.getElementById('dynamic-presets');
             container.innerHTML = '';
             
-            // [重要修復] 使用 addEventListener 綁定，避免 inline onclick 失效
+            // [修正] 改用最穩定的 onclick 賦值方式，避免閉包或 EventListener 綁定問題
             currentQuoteList.forEach(q => {
                 const chip = document.createElement('div');
                 chip.className = 'preset-chip';
                 chip.innerText = q;
-                chip.addEventListener('click', function() {
-                    fillMsg(q);
-                });
+                chip.onclick = function() { fillMsg(q); };
                 container.appendChild(chip);
             });
 
@@ -464,15 +467,14 @@
             
             const allQuotes = fullList.concat(["願世界對你們溫柔", "請記得照顧好自己", "你的付出，我們都看到了"]);
             
-            // [重要修復] 使用 addEventListener 綁定 Modal 選項點擊
             allQuotes.forEach(q => {
                 const div = document.createElement('div');
                 div.className = 'msg-option';
                 div.innerText = q;
-                div.addEventListener('click', function() {
+                div.onclick = function() { 
                     fillMsg(q);
                     closeModal('msg-modal');
-                });
+                };
                 list.appendChild(div);
             });
             
@@ -516,8 +518,10 @@
             
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
+            
+            // [修正] 生成標籤時加入 onclick 事件
             currentUnit.tags.forEach(tag => {
-                tagContainer.innerHTML += `<div class="tech-tag">${tag}</div>`;
+                tagContainer.innerHTML += `<div class="tech-tag" onclick="toggleTag(this)">${tag}</div>`;
             });
 
             nextStep(1);
