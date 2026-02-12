@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON</title>
+    <title>2026 社工守護計畫</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -326,7 +326,10 @@
 
     <div id="hr-dashboard">
         <div class="hr-header"><div><div class="hr-title" id="hr-dash-title">NEON DASHBOARD</div><div class="hr-subtitle">企業 ESG 戰情室</div></div><div class="close-dashboard" onclick="closeDashboard()">✕</div></div>
-        <div class="hr-grid"><div class="hr-card"><span class="hr-metric-label">TOTAL</span><span class="hr-metric">1,248</span></div><div class="hr-card"><span class="hr-metric-label">FUND</span><span class="hr-metric">$12,480</span></div></div>
+        <div class="hr-grid">
+            <div class="hr-card"><span class="hr-metric-label">參與金句人數</span><span class="hr-metric" id="hr-p-count">1,248</span></div>
+            <div class="hr-card"><span class="hr-metric-label">累積鼓勵則數</span><span class="hr-metric" id="hr-msg-count">3,560</span></div>
+        </div>
         <div style="margin-top:20px;"><button class="btn-download-report" onclick="downloadReport()">DOWNLOAD REPORT</button></div>
     </div>
 
@@ -364,7 +367,6 @@
         let currentQuoteList = quotesData.public; 
 
         window.onload = function() {
-            // 初始化每日次數 (開發期間可重置: localStorage.setItem('gc_daily', 0))
             if(!localStorage.getItem('gc_daily')) localStorage.setItem('gc_daily', 0);
             
             checkDaily();
@@ -430,7 +432,11 @@
         }
 
         function fillMsg(txt) {
-            document.getElementById('msg-input').value = txt;
+            const input = document.getElementById('msg-input');
+            if(input) {
+                input.value = txt;
+                input.focus();
+            }
         }
 
         function forceDemo(name) {
@@ -446,9 +452,18 @@
             const list = document.getElementById('msg-modal-list');
             list.innerHTML = "";
             const fullList = (currentQuoteList !== quotesData.public) ? currentQuoteList.concat(quotesData.public) : quotesData.public;
-            fullList.concat(["願世界對你們溫柔", "請記得照顧好自己", "你的付出，我們都看到了"]).forEach(q => {
-                list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
+            
+            const allQuotes = fullList.concat(["願世界對你們溫柔", "請記得照顧好自己", "你的付出，我們都看到了"]);
+            
+            // 使用 createElement 避免引號導致的 onclick 失效
+            allQuotes.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'msg-option';
+                div.innerText = q;
+                div.onclick = function() { selectMessage(q); };
+                list.appendChild(div);
             });
+            
             document.getElementById('msg-modal').style.display = 'flex';
         }
 
@@ -486,36 +501,29 @@
         }
 
         function initGame() {
-            // 隨機選一個單位
             currentUnit = units[Math.floor(Math.random() * units.length)];
             
-            // 填入 Step 1 資料
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = currentUnit.desc;
             
-            // 填入 Step 2 Tags
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
             currentUnit.tags.forEach(tag => {
                 tagContainer.innerHTML += `<div class="tech-tag">${tag}</div>`;
             });
 
-            // 顯示 Step 1
             nextStep(1);
         }
 
         function nextStep(step) {
-            // 隱藏所有 Step
             document.querySelectorAll('.step-container').forEach(el => {
                 el.style.display = 'none';
             });
-            // 顯示目標 Step
             document.getElementById(`step-${step}`).style.display = 'flex';
         }
 
         function selectProp(el, name) {
-            // 移除其他選取狀態
             document.querySelectorAll('.tech-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             selectedPropName = name;
@@ -528,7 +536,6 @@
             
             if(!msg) return alert("請輸入鼓勵訊息");
 
-            // 填入預覽卡片資料
             document.getElementById('card-img').src = currentUnit.img;
             document.getElementById('card-unit-name').innerText = currentUnit.name;
             document.getElementById('card-msg').innerText = msg;
@@ -536,7 +543,6 @@
             document.getElementById('code-main').innerText = `NEON-${Math.floor(Math.random()*9000)+1000}`;
             document.getElementById('gear-icon').innerText = selectedIcon;
             
-            // 企業版顯示收據
             if(myTeamName) {
                 document.getElementById('ent-receipt').style.display = 'block';
                 document.getElementById('card-sponsor').innerText = `SPONSORED BY ${decodeURIComponent(myTeamName)}`;
@@ -554,29 +560,23 @@
 
         function finalSubmit() {
             const target = document.getElementById('capture-target');
-            
-            // 顯示回饋動畫
             document.getElementById('feedback-layer').style.display = 'flex';
             
-            // 生成圖片
             html2canvas(target, {
                 useCORS: true, 
                 backgroundColor: '#000000',
-                scale: 2 // 提高解析度
+                scale: 2
             }).then(canvas => {
-                // 下載圖片 (模擬分享)
                 const link = document.createElement('a');
                 link.download = `neon_support_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
 
-                // 扣除次數並儲存
                 dailyCount++;
                 totalParticipations++;
                 localStorage.setItem('gc_daily', dailyCount);
                 localStorage.setItem('gc_total', totalParticipations);
                 
-                // 紀錄到背包 (模擬)
                 let inventory = JSON.parse(localStorage.getItem('gc_inventory') || "[]");
                 inventory.push({
                     unit: currentUnit.name,
@@ -585,7 +585,6 @@
                 });
                 localStorage.setItem('gc_inventory', JSON.stringify(inventory));
 
-                // 2秒後重置
                 setTimeout(() => {
                     alert("傳輸成功！感謝您的守護。");
                     location.reload();
@@ -625,11 +624,20 @@
         
         function openSW() { document.getElementById('sw-modal').style.display = 'flex'; }
         
-        function openAdminLogin() { document.getElementById('hr-dashboard').style.display = 'block'; }
+        function openAdminLogin() { 
+            // 模擬戰情室數據更新
+            const baseP = 1200;
+            const baseM = 3500;
+            const added = parseInt(localStorage.getItem('gc_total') || 0);
+            document.getElementById('hr-p-count').innerText = (baseP + added).toLocaleString();
+            document.getElementById('hr-msg-count').innerText = (baseM + (added * 3)).toLocaleString();
+            
+            document.getElementById('hr-dashboard').style.display = 'block'; 
+        }
+        
         function closeDashboard() { document.getElementById('hr-dashboard').style.display = 'none'; }
         function downloadReport() { alert("下載企業 ESG 報表中..."); }
 
-        // Login Mock
         function simulateAuth() { alert("登入成功！"); closeModal('login-modal'); }
         function proceedAsGuest() { closeModal('login-modal'); }
 
