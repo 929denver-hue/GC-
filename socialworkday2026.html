@@ -32,7 +32,7 @@
 
         /* --- 1. Hero Section --- */
         #hero-section {
-            min-height: 95vh;
+            min-height: 90vh; /* 微調高度 */
             background: linear-gradient(rgba(60, 40, 30, 0.3), rgba(60, 40, 30, 0.7)), url('https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=1600&q=80');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -48,29 +48,37 @@
         .hp-fill { height: 100%; width: 78%; background: linear-gradient(90deg, #FF9800, #FFD54F); box-shadow: 0 0 10px #FF9800; }
         .scroll-down-btn { background: var(--warm-orange); color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 15px rgba(230, 81, 0, 0.4); }
 
-        /* --- 2. Game Section --- */
-        #game-section { padding: 50px 20px; background-color: var(--console-dark); background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); display: flex; flex-direction: column; align-items: center; font-family: 'Press Start 2P', cursive; color: #fff; }
+        /* --- 2. Game Section (優化高度與佈局) --- */
+        #game-section { padding: 40px 20px; background-color: var(--console-dark); background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); display: flex; flex-direction: column; align-items: center; font-family: 'Press Start 2P', cursive; color: #fff; }
         
         .daily-limit-badge {
             background: #000; color: #00FF00; padding: 8px 15px; border-radius: 5px; 
-            margin-bottom: 20px; border: 2px solid #555; font-size: 10px; text-shadow: 0 0 5px #00FF00;
+            margin-bottom: 15px; border: 2px solid #555; font-size: 10px; text-shadow: 0 0 5px #00FF00;
         }
 
-        .arcade-marquee { width: 100%; max-width: 500px; background: #000; border: 4px solid #555; border-bottom: none; border-radius: 8px 8px 0 0; height: 36px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
+        .arcade-marquee { width: 100%; max-width: 500px; background: #000; border: 4px solid #555; border-bottom: none; border-radius: 8px 8px 0 0; height: 30px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
         .ticker-text { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; color: #00FF00; font-size: 10px; font-family: 'Press Start 2P'; text-shadow: 0 0 5px #00FF00; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        .game-console { background-color: var(--console-body); padding: 20px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 500px; border-radius: 0 0 8px 8px; position: relative; }
-        .screen { background: #fff; border: 4px solid #222; min-height: 700px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; position: relative; }
+        /* 優化：移除固定高度，讓內容撐開 */
+        .game-console { background-color: var(--console-body); padding: 15px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 500px; border-radius: 0 0 8px 8px; position: relative; }
+        
+        /* 關鍵優化：初始高度縮減至 320px */
+        .screen { background: #fff; border: 4px solid #222; min-height: 320px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 10px; position: relative; transition: min-height 0.5s ease; }
 
-        .state-idle, .state-spinning { text-align: center; margin-top: 200px; }
+        .state-idle, .state-spinning { text-align: center; margin-top: 80px; } /* 調整 idle 位置 */
         .state-spinning { display: none; }
-        .state-quest { display: none; width: 100%; text-align: left; }
-        .real-photo-frame { width: 100%; height: 140px; background: #000; margin-bottom: 10px; border: 2px solid #333; overflow: hidden; }
-        .real-photo { width: 100%; height: 100%; object-fit: cover; }
+        .state-quest { display: none; width: 100%; text-align: left; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .real-photo-frame { width: 100%; height: 180px; background: #000; margin-bottom: 10px; border: 2px solid #333; overflow: hidden; position: relative; }
+        .real-photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); }
+        
+        /* 新增：單位介紹文案 */
+        .unit-desc { font-family: 'Noto Serif TC', serif; font-size: 13px; line-height: 1.8; color: #444; background: #f4f4f4; padding: 12px; border-left: 3px solid var(--warm-orange); margin-bottom: 15px; border-radius: 0 4px 4px 0; }
 
         /* Interactions */
-        .interaction-area { font-family: 'Noto Sans TC'; margin-top: 10px; }
+        .interaction-area { font-family: 'Noto Sans TC'; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 15px; }
         .input-group { margin-bottom: 15px; }
         .input-group label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; font-weight: bold; }
         .tag-row { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -106,14 +114,14 @@
         .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 4px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; cursor: pointer; }
         textarea, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; }
 
-        /* Coin */
-        .coin-area { display: flex; justify-content: flex-end; height: 60px; position: relative; margin-bottom: 10px; }
-        .coin-slot { width: 16px; height: 45px; background: #111; border: 2px solid #666; border-radius: 4px; position: relative; z-index: 1; top: 10px; box-shadow: inset 0 0 5px #000; }
-        .heart-token { font-size: 40px; color: #FF1744; position: absolute; right: 30px; top: 0; cursor: pointer; animation: float 2s infinite; z-index: 10; }
-        @keyframes insertCoin { 0% { top: 0; right: 30px; transform: scale(1); opacity: 1; } 50% { top: 15px; right: 0px; transform: scale(0.8); opacity: 1; } 100% { top: 35px; right: 0px; transform: scale(0.2); opacity: 0; } }
+        /* Coin Area - 優化佈局，更緊湊 */
+        .coin-area { display: flex; justify-content: flex-end; height: 50px; position: relative; margin-bottom: 8px; }
+        .coin-slot { width: 12px; height: 40px; background: #111; border: 2px solid #666; border-radius: 4px; position: relative; z-index: 1; top: 5px; box-shadow: inset 0 0 5px #000; }
+        .heart-token { font-size: 36px; color: #FF1744; position: absolute; right: 25px; top: 0; cursor: pointer; animation: float 2s infinite; z-index: 10; }
+        @keyframes insertCoin { 0% { top: 0; right: 25px; transform: scale(1); opacity: 1; } 50% { top: 10px; right: 0px; transform: scale(0.8); opacity: 1; } 100% { top: 25px; right: 0px; transform: scale(0.2); opacity: 0; } }
         @keyframes float { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-8px);} }
 
-        .btn-main { background: #999; color: #ccc; border: 4px solid #555; padding: 15px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: not-allowed; pointer-events: none; }
+        .btn-main { background: #999; color: #ccc; border: 4px solid #555; padding: 12px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: not-allowed; pointer-events: none; border-radius: 4px; }
         .btn-unlocked { background: #FF1744; color: #fff; border-color: #880E4F; cursor: pointer; pointer-events: auto; box-shadow: 0 4px 0 #880E4F; animation: pulse 2s infinite; }
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
 
@@ -222,8 +230,10 @@
                 </div>
                 <div id="state-quest" class="state-quest">
                     <div class="real-photo-frame"><img id="quest-img" class="real-photo" src=""></div>
-                    <div style="font-size:14px; font-weight:bold; margin-bottom:10px;" id="quest-name">單位名稱</div>
+                    <div style="font-size:14px; font-weight:bold; margin-bottom:5px;" id="quest-name">單位名稱</div>
                     
+                    <div id="quest-desc" class="unit-desc"></div>
+
                     <div class="interaction-area">
                         <div class="input-group">
                             <label>1. 💛 你想把哪一種形容，送給這個單位？ (必選)：</label>
@@ -369,10 +379,20 @@
     </div>
 
     <script>
-        // Data
+        // Data - 更新：加入深度文案(desc) 與 背影照片(img)
         const units = [
-            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600", tags: ["#深夜燈塔", "#憨兒依靠"] },
-            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?w=600", tags: ["#便當快遞", "#聽故事的人"] }
+            { 
+                name: "屏東伯大尼之家", 
+                img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", // 背影/同行
+                desc: "在國境之南的藍天白雲下，我們是一群「慢飛天使」的守護者。這裡不只是收容機構，更是 140 多位憨兒永遠的家。從農場勞動到生活自理，我們陪著孩子們慢慢走，雖然步履蹣跚，但每一個小小的進步，都是生命最堅韌的證明。",
+                tags: ["#深夜燈塔", "#憨兒依靠"] 
+            },
+            { 
+                name: "華山基金會", 
+                img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", // 陪伴老人背影
+                desc: "穿梭在偏鄉小巷，那件熟悉的背心是許多獨居長輩唯一的盼望。我們不只遞送熱騰騰的便當，更遞送「家」的感覺。當城市逐漸老化，我們選擇成為那雙扶持的手，陪著長輩走過孤單的黃昏，讓「老」不再是孤獨的代名詞，而是被溫柔對待的歲月。",
+                tags: ["#便當快遞", "#聽故事的人"] 
+            }
         ];
         const defaultImages = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600", "https://images.unsplash.com/photo-1499209974431-2761388a123d?w=600"];
 
@@ -392,6 +412,7 @@
         const previewModal = document.getElementById('preview-modal');
         const inventoryModal = document.getElementById('inventory-modal');
         const swModal = document.getElementById('sw-modal');
+        const questDesc = document.getElementById('quest-desc'); // Get desc element
 
         // Init
         window.onload = function() { checkDailyLimit(); }
@@ -438,13 +459,16 @@
             currentUnit = units[Math.floor(Math.random() * units.length)];
             document.getElementById('quest-img').src = currentUnit.img;
             document.getElementById('quest-name').innerText = currentUnit.name;
+            questDesc.innerText = currentUnit.desc; // Inject description
+            
             tagContainer.innerHTML = '';
             currentUnit.tags.forEach(tag => {
                 const btn = document.createElement('div'); btn.className = 'tag-btn'; btn.innerText = tag;
                 btn.onclick = () => { document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); selectedTag = tag; };
                 tagContainer.appendChild(btn);
             });
-            stateQuest.style.display = 'block'; btnAction.innerText = "預覽祝福 (NEXT)";
+            stateQuest.style.display = 'block'; 
+            btnAction.innerText = "預覽祝福 (NEXT)";
         }
 
         function selectProp(el, name, icon) {
