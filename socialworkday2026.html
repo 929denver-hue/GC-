@@ -170,12 +170,14 @@
 
         /* --- Social Worker Modal (社工專屬層) --- */
         .sw-box { background: #fff; width: 100%; max-width: 500px; padding: 30px; border-radius: 10px; text-align: center; font-family: 'Noto Serif TC', serif; }
-        .sw-title { font-size: 1.5rem; color: var(--console-dark); margin-bottom: 20px; font-weight: bold; }
-        .sw-intro { color: #555; line-height: 1.8; margin-bottom: 30px; font-size: 1.1rem; }
+        .sw-title { font-size: 1.5rem; color: var(--console-dark); margin-bottom: 15px; font-weight: bold; }
+        .sw-intro { color: #555; line-height: 1.8; margin-bottom: 25px; font-size: 1.05rem; text-align: justify; }
         .sw-highlight { color: #E65100; font-weight: bold; background: #FFF3E0; padding: 0 5px; }
         .ranking-list { text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
         .ranking-item { margin-bottom: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; font-family: 'Noto Sans TC'; color: #333; }
         .ranking-badge { background: #333; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 8px; }
+        .sw-photo-frame { width: 100%; height: 180px; border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+        .sw-photo { width: 100%; height: 100%; object-fit: cover; }
 
     </style>
 </head>
@@ -300,7 +302,7 @@
             <h3 style="color:#5D4037; margin:0 0 10px 0;">🔍 尋找更多光芒</h3>
             <p style="color:#666; font-size: 0.9rem;">GC 站內 <strong>640 間</strong> 公益單位，輸入名稱或 ID 都能傳達心意。</p>
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="例如：勵馨、芒草心...">
+                <input type="text" class="search-input" placeholder="例如：力馨、芒草心...">
                 <button class="search-btn" onclick="alert('搜尋功能示意：將開啟同樣的留言流程。')">搜尋</button>
             </div>
         </div>
@@ -346,12 +348,17 @@
     <div id="sw-modal" class="modal-overlay">
         <div class="sw-box">
             <div style="text-align:right; margin-bottom:10px;"><span class="close-btn" style="color:#999;" onclick="closeModal('sw-modal')">×</span></div>
-            <div class="sw-title">致 親愛的夥伴</div>
-            <div class="sw-intro">
-                這些祝福來自真實民眾，<br>
-                每一枚愛心幣，都代表<br><span class="sw-highlight">有人停下來想到你</span>。<br>
-                請收下這些溫暖，繼續照亮社會角落。
+            
+            <div class="sw-photo-frame">
+                <img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" alt="Warm Hands" class="sw-photo">
             </div>
+
+            <div class="sw-title">致 親愛的夥伴</div>
+            
+            <div class="sw-intro">
+                這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意。在繁忙的訪視與個案紀錄間，請別忘了，<span class="sw-highlight">有人正默默停下來為你打氣</span>。你伸出的雙手接住了脆弱，而社會的善意正溫柔地支撐著你。感謝你的堅持，讓我們一起在這座城市，守護微小卻堅定的光芒。
+            </div>
+
             <div class="ranking-list">
                 <h4 style="margin:0 0 15px 0; font-size:14px;">🏆 民眾票選・最想對你說的話：</h4>
                 <div class="ranking-item"><span class="ranking-badge">1</span> 辛苦了，謝謝你們一直都在！ (3,240次)</div>
@@ -520,7 +527,6 @@
         }
 
         function shareRecord(record) {
-            // 使用 Web Share API 喚起原生分享
             if (navigator.share) {
                 navigator.share({
                     title: '給社工愛的鼓勵',
@@ -528,7 +534,6 @@
                     url: window.location.href
                 }).catch(console.error);
             } else {
-                // 電腦版或不支援時的備案
                 alert("請截圖此畫面分享，或是複製網址邀請朋友！");
             }
         }
