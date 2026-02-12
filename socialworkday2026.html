@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 給社工愛的鼓勵- PROJECT NEON</title>
+    <title>2026 社工守護計畫 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -26,14 +26,45 @@
             background-image: radial-gradient(circle at 50% 50%, #2a1a0a 0%, #000 100%);
         }
 
-        /* --- 0. 前導層 --- */
+        /* --- Global Energy Core (背景核心) --- */
+        .energy-core-bg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vw; height: 60vw; max-width: 400px; max-height: 400px;
+            background: radial-gradient(circle, rgba(255, 179, 0, 0.15) 0%, transparent 70%);
+            border-radius: 50%; z-index: -1; pointer-events: none;
+            animation: pulseCore 4s infinite ease-in-out;
+        }
+        .core-ring-spin {
+            position: absolute; top: 50%; left: 50%; width: 50vw; height: 50vw; max-width: 350px; max-height: 350px;
+            border: 1px dashed rgba(255, 179, 0, 0.2); border-radius: 50%;
+            transform: translate(-50%, -50%); animation: spinRight 20s linear infinite; z-index: -1;
+        }
+        @keyframes pulseCore { 0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); } }
+        @keyframes spinRight { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* --- HUD (Top Bar) - 優化電池顯示 --- */
+        .nav-hud {
+            position: absolute; top: 0; left: 0; width: 100%; padding: 15px; z-index: 50;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255, 179, 0, 0.1);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+        }
+        .global-status { font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); letter-spacing: 1px; }
+        .global-progress { width: 100px; height: 6px; background: #333; margin-top: 4px; border-radius: 2px; overflow: hidden; position: relative; }
+        .global-fill { width: 78%; height: 100%; background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
+        
+        .user-battery { display: flex; gap: 4px; align-items: center; }
+        .battery-label { font-family: 'Orbitron'; font-size: 9px; color: #888; margin-right: 5px; }
+        .battery-cell { width: 12px; height: 20px; border: 1px solid var(--neon-amber); background: rgba(255, 179, 0, 0.2); transform: skewX(-10deg); transition: 0.3s; }
+        .battery-cell.active { background: var(--neon-amber); box-shadow: 0 0 8px var(--neon-amber); }
+        .battery-cell.empty { background: transparent; border-color: #444; box-shadow: none; }
+
+        /* --- Intro Layer --- */
         #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #050505; z-index: 999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; padding: 20px;
+            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); z-index: 999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
             transition: opacity 0.8s ease-in-out;
-            background-image: linear-gradient(rgba(255, 179, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
         }
         .briefing-card {
             max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
@@ -41,31 +72,23 @@
             box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
             position: relative; overflow: hidden; text-align: center;
         }
-        .briefing-card::before, .briefing-card::after { content: ''; position: absolute; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
-        .briefing-card::before { top:0; left:0; } .briefing-card::after { bottom:0; right:0; }
-
         .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
-        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
         .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px; }
         .highlight { color: var(--neon-amber); font-weight: bold; border-bottom: 1px solid var(--neon-amber); }
-
         .btn-start-mission {
             width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
-            padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
+            padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px;
             text-transform: uppercase; font-weight: bold; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
             animation: pulseBtn 2s infinite;
         }
-        .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber); }
         @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
 
-        /* --- 0.5 過場層 (Scanning) --- */
+        /* --- Scanning Layer --- */
         #scanning-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 998; display: none; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: opacity 0.5s ease;
+            align-items: center; justify-content: center; transition: opacity 0.5s ease;
         }
-        .cmd-log { position: absolute; top: 20px; left: 20px; font-family: 'Orbitron', monospace; font-size: 10px; color: rgba(0, 255, 0, 0.5); text-align: left; line-height: 1.5; opacity: 0.7; pointer-events: none; }
         .radar-box { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; }
         .radar-ring {
             position: absolute; border: 2px solid var(--neon-orange); border-radius: 50%; opacity: 0;
@@ -82,25 +105,13 @@
         .scan-progress-bar { width: 200px; height: 4px; background: #333; margin-top: 15px; border-radius: 2px; overflow: hidden; }
         .scan-progress-fill { height: 100%; width: 0%; background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); transition: width 0.2s linear; }
 
-        /* --- 主介面 --- */
-        #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; }
-        .warm-grid { position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background-image: linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(500px) rotateX(60deg); z-index: -1; animation: gridMove 30s linear infinite; pointer-events: none; }
-        @keyframes gridMove { from { transform: perspective(500px) rotateX(60deg) translateY(0); } to { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
-
-        .nav-hud { position: absolute; top: 0; left: 0; width: 100%; padding: 15px; z-index: 50; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(255, 179, 0, 0.1); background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
-        .hud-label { font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); letter-spacing: 1px; }
-        .hud-value { font-size: 16px; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--neon-amber); }
-        .btn-inventory { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Orbitron'; display: flex; align-items: center; gap: 5px; }
-
-        .marquee-container { position: absolute; top: 70px; width: 100%; background: rgba(255, 87, 34, 0.1); border-top: 1px solid rgba(255, 87, 34, 0.3); border-bottom: 1px solid rgba(255, 87, 34, 0.3); height: 28px; display: flex; align-items: center; overflow: hidden; }
-        .marquee-text { white-space: nowrap; font-size: 11px; color: var(--neon-orange); font-family: 'Orbitron'; animation: scrollText 20s linear infinite; padding-left: 100%; }
-        @keyframes scrollText { 100% { transform: translateX(-100%); } }
-
-        .console-wrapper { position: absolute; top: 110px; bottom: 60px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; padding: 0 10px; display: flex; flex-direction: column; }
-        .screen-frame { flex: 1; background: #000; border: 2px solid #333; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 179, 0, 0.1); display: flex; flex-direction: column; }
+        /* --- Main Interface --- */
+        #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; position: relative; z-index: 1; }
+        .console-wrapper { position: absolute; top: 80px; bottom: 60px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; padding: 0 10px; display: flex; flex-direction: column; }
+        .screen-frame { flex: 1; background: rgba(5, 5, 5, 0.85); border: 2px solid #333; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 179, 0, 0.1); display: flex; flex-direction: column; backdrop-filter: blur(5px); }
         .screen-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; pointer-events: none; z-index: 99; }
 
-        /* Step Styles */
+        /* Steps */
         .step-container { display: none; height: 100%; flex-direction: column; opacity: 0; animation: fadeIn 0.5s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
         
@@ -113,13 +124,9 @@
         .panel-header { padding: 15px; border-bottom: 1px solid #333; font-family: 'Orbitron'; color: var(--neon-amber); font-size: 12px; letter-spacing: 1px; }
         .panel-body { flex: 1; padding: 20px; overflow-y: auto; }
         .section-label { font-size: 11px; color: #888; margin-bottom: 10px; display: block; font-weight: bold; }
-        
-        /* 標籤 */
         .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
         .tech-tag { background: transparent; border: 1px solid #555; color: #aaa; padding: 8px 15px; font-size: 12px; cursor: pointer; border-radius: 2px; transition: 0.2s; }
         .tech-tag.active { border-color: var(--neon-amber); color: #000; background: var(--neon-amber); box-shadow: 0 0 10px rgba(255, 179, 0, 0.5); font-weight: bold; }
-
-        /* 贊助商 */
         .sponsor-list { display: flex; flex-direction: column; gap: 10px; }
         .tech-card { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #333; cursor: pointer; transition: 0.2s; }
         .tech-card.selected { border-color: var(--neon-orange); background: rgba(255, 87, 34, 0.1); box-shadow: inset 0 0 10px rgba(255, 87, 34, 0.2); }
@@ -130,21 +137,17 @@
         .tech-check { color: var(--neon-orange); font-size: 14px; opacity: 0; }
         .tech-card.selected .tech-check { opacity: 1; }
 
-        /* 留言區 */
         .msg-presets { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
         .preset-chip { background: #222; border: 1px solid #444; color: #aaa; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; transition: 0.2s; }
         .preset-chip:hover { border-color: var(--neon-amber); color: var(--neon-amber); }
         .preset-more-btn { background: var(--neon-orange); color: #000; border: none; padding: 6px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; cursor: pointer; }
-
         textarea { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 15px; font-family: 'Noto Sans TC'; font-size: 14px; border-radius: 4px; outline: none; resize: none; min-height: 100px; }
         textarea:focus { border-color: var(--neon-amber); }
-
         .photo-bar { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px; margin: 15px 0; border-radius: 4px; }
         .btn-upload-mini { border: 1px solid #555; background: transparent; color: #ccc; padding: 4px 10px; font-size: 10px; cursor: pointer; border-radius: 2px; }
         .name-field { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 12px; text-align: center; margin-bottom: 10px; outline: none; }
 
         .control-bar { padding-top: 15px; display: flex; gap: 10px; background: #111; padding: 15px; }
-        /* 修正 HTML 實體 */
         .btn-main { flex: 1; background: var(--neon-amber); color: #000; border: none; padding: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); transition: 0.2s; text-align: center; }
         .btn-main:hover { box-shadow: 0 0 15px var(--neon-amber); background: #fff; }
         .btn-back { background: transparent; border: 1px solid #555; color: #888; padding: 0 15px; cursor: pointer; }
@@ -154,7 +157,6 @@
 
         /* --- Modals --- */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
-        
         #capture-target { width: 320px; background: #000; border: 1px solid #333; padding: 15px; box-shadow: 0 0 40px rgba(255, 179, 0, 0.1); position: relative; }
         .card-header { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); margin-bottom: 10px; }
         .card-photo-container { position: relative; width: 100%; height: 280px; margin-bottom: 15px; overflow: hidden; border: 1px solid #222; }
@@ -169,16 +171,22 @@
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
+        /* Login Modal & Feedback */
+        .login-box { width: 300px; background: #111; border: 1px solid var(--neon-orange); padding: 25px; text-align: center; box-shadow: 0 0 30px rgba(255, 87, 34, 0.3); animation: popIn 0.3s; }
+        .login-title { font-size: 1.2rem; font-weight: bold; color: var(--neon-orange); margin-bottom: 10px; }
+        .login-desc { font-size: 0.9rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
+        .btn-login { width: 100%; padding: 12px; background: var(--neon-amber); color: #000; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
+        .btn-guest { width: 100%; padding: 10px; background: transparent; color: #888; border: 1px solid #444; cursor: pointer; font-size: 12px; }
+
         #feedback-layer { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; }
         .feedback-box { text-align: center; animation: popIn 0.5s; }
         .boost-text { font-family: 'Orbitron'; font-size: 24px; color: var(--neon-orange); font-weight: bold; margin-bottom: 10px; text-shadow: 0 0 20px var(--neon-orange); }
         .boost-sub { font-size: 12px; color: #fff; }
-        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
+        
         .common-box { background: #111; border: 1px solid var(--neon-amber); padding: 20px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; color: #fff; }
         .ranking-item { border-bottom: 1px solid #333; padding: 10px 0; font-size: 13px; display: flex; justify-content: space-between; }
         
-        /* SW Modal Styles */
+        /* SW Modal */
         .sw-box { background: #1a1a1a; width: 100%; max-width: 500px; padding: 25px; border: 1px solid var(--neon-amber); border-radius: 8px; color: #e0e0e0; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
         .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .sw-photo-frame { width: 100%; height: 180px; overflow: hidden; border-radius: 4px; margin-bottom: 20px; border: 1px solid #333; }
@@ -196,6 +204,9 @@
     </style>
 </head>
 <body>
+
+    <div class="energy-core-bg"></div>
+    <div class="core-ring-spin"></div>
 
     <div id="intro-layer">
         <div class="briefing-card">
@@ -217,8 +228,18 @@
     </div>
 
     <div id="main-interface">
-        <div class="warm-grid"></div>
-        <div class="nav-hud"><div><span class="hud-label">GLOBAL ENERGY</span><span class="hud-value">LV.78</span></div><div class="btn-inventory" onclick="openInventory()">🎒 PACK</div></div>
+        <div class="nav-hud">
+            <div>
+                <span class="global-status">GLOBAL: SURGING [78%]</span>
+                <div class="global-progress"><div class="global-fill"></div></div>
+            </div>
+            <div class="user-battery">
+                <span class="battery-label">DAILY CHARGE</span>
+                <div class="battery-cell active" id="batt-1"></div>
+                <div class="battery-cell active" id="batt-2"></div>
+                <div class="battery-cell active" id="batt-3"></div>
+            </div>
+        </div>
         <div class="marquee-container"><div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 台積電戰隊 累積 5200 點能量 ...</div></div>
 
         <div class="console-wrapper">
@@ -254,8 +275,7 @@
                             <div class="preset-chip" onclick="fillMsg(this.innerText)">世界因為有你們而溫柔。</div>
                             <button class="preset-more-btn" onclick="openMsgModal()">+ 更多 (10)</button>
                         </div>
-                        <textarea id="msg-input" placeholder="可點選上方祝福，或自行輸入..."></textarea>
-                        
+                        <textarea id="msg-input" placeholder="可選填上方金句，或自行輸入..."></textarea>
                         <div class="photo-bar">
                             <span style="font-size:11px;color:#888;" id="photo-status">IMAGE: DEFAULT</span>
                             <label class="btn-upload-mini">UPLOAD <input type="file" id="upload-photo" style="display:none;" onchange="previewPhoto()"></label>
@@ -264,7 +284,7 @@
                         <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
                         <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span></div>
                     </div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)">&lt;</button><button id="btn-transmit" class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button></div>
+                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)">&lt;</button><button id="btn-transmit" class="btn-main" onclick="preSubmitCheck()">EXECUTE TRANSMISSION</button></div>
                 </div>
             </div>
         </div>
@@ -289,7 +309,7 @@
                 </div>
                 <div id="card-msg" class="card-text">...</div>
                 <div id="card-sponsor" class="card-sponsor"></div>
-                <div id="feedback-layer"><div class="feedback-box"><div class="boost-text">SIGNAL BOOSTED +12%</div><div class="boost-sub">感謝您的支援，更多守護者將加入連線。</div></div></div>
+                <div id="feedback-layer"><div class="feedback-box"><div class="boost-text">IMPACT +100<br>TICKET GET!</div><div class="boost-sub">已獲得本週抽獎資格 (券號 #8821)</div></div></div>
             </div>
             <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
                 <button class="btn-main" onclick="closeModal('preview-modal')" style="background:transparent; border:1px solid #fff; color:#fff;">EDIT</button>
@@ -298,40 +318,35 @@
         </div>
     </div>
 
+    <div id="login-modal" class="modal-overlay">
+        <div class="login-box">
+            <div class="login-title">⚠️ IDENTITY CHECK</div>
+            <div class="login-desc">偵測到訪客訊號。<br>為了累積抽獎資格與戰隊積分，建議您驗證身分。</div>
+            <button class="btn-login" onclick="simulateLogin()">LOGIN / REGISTER (SAVE PROGRESS)</button>
+            <button class="btn-guest" onclick="proceedAsGuest()">CONTINUE AS GUEST (NO REWARDS)</button>
+        </div>
+    </div>
+
     <div id="sw-modal" class="modal-overlay">
         <div class="sw-box">
             <div class="sw-header"><h3 class="sw-title">🔐 SOCIAL WORKER ACCESS</h3><span class="close-btn" onclick="closeModal('sw-modal')">×</span></div>
             <div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" alt="Warm Hands" class="sw-photo"></div>
             <div style="font-size:1.2rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div>
-            <div class="sw-intro">這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意...</div>
+            <div class="sw-intro">這份祝福來自全台角落...</div>
             <div class="ranking-list" id="sw-ranking"></div>
         </div>
     </div>
-
     <div id="search-modal" class="modal-overlay">
         <div class="common-box">
             <div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('search-modal')">✕</div>
             <h3 style="color:var(--neon-amber); margin-top:0;">🔍 SEARCH UNIT DATABASE</h3>
             <input type="text" id="search-input" class="search-input" placeholder="輸入單位名稱...">
-            <div class="search-chips">
-                <div class="preset-chip" onclick="executeSearch('全體站內社工')">全體站內社工</div>
-                <div class="preset-chip" onclick="executeSearch('華山基金會')">華山基金會</div>
-            </div>
+            <div class="search-chips"><div class="preset-chip" onclick="executeSearch('全體站內社工')">全體站內社工</div></div>
             <button class="btn-main" onclick="executeSearch(document.getElementById('search-input').value)" style="margin-top:15px;">INITIATE SEARCH</button>
         </div>
     </div>
-
-    <div id="msg-modal" class="modal-overlay">
-        <div class="common-box">
-            <div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('msg-modal')">✕</div>
-            <h3 style="color:var(--neon-amber); margin-top:0;">SELECT MESSAGE</h3>
-            <div id="msg-modal-list"></div>
-        </div>
-    </div>
-
-    <div id="inventory-modal" class="modal-overlay">
-        <div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT (背包)</h3><div id="inventory-list"></div></div>
-    </div>
+    <div id="msg-modal" class="modal-overlay"><div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('msg-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">SELECT MESSAGE</h3><div id="msg-modal-list"></div></div></div>
+    <div id="inventory-modal" class="modal-overlay"><div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT</h3><div id="inventory-list"></div></div></div>
 
     <script>
         const units = [
@@ -346,33 +361,36 @@
         let selectedProp = null;
         let userPhoto = null;
         let dailyCount = 0;
+        let isLoggedIn = false; // Simulating login state
         let myTeam = new URLSearchParams(window.location.search).get('team');
 
         window.onload = function() {
             localStorage.setItem('gc_daily', 0);
-            checkDaily();
+            updateBattery(3);
             if(myTeam) {
                 document.getElementById('faction-display').style.display = 'block';
                 document.getElementById('faction-name').innerText = myTeam;
             }
         }
 
-        function checkDaily() { /* ... */ }
+        function updateBattery(count) {
+            // Visual logic: 3 cells. If count=2, cell 3 empty.
+            for(let i=1; i<=3; i++) {
+                const cell = document.getElementById(`batt-${i}`);
+                if(i <= count) { cell.classList.remove('empty'); cell.classList.add('active'); }
+                else { cell.classList.remove('active'); cell.classList.add('empty'); }
+            }
+        }
 
         function startScanning() {
             document.getElementById('intro-layer').style.opacity = 0;
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
                 document.getElementById('scanning-layer').style.display = 'flex';
-                
-                // Animation logic
                 let i = 0;
                 const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
-                const interval = setInterval(() => {
-                    if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++];
-                }, 600);
+                const interval = setInterval(() => { if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++]; }, 600);
                 setTimeout(() => { document.getElementById('scan-bar').style.width = "100%"; }, 100);
-
                 setTimeout(() => {
                     clearInterval(interval);
                     document.getElementById('scanning-layer').style.opacity = 0;
@@ -386,11 +404,10 @@
         }
 
         function initGame() {
-            currentUnit = units[Math.floor(Math.random() * units.length)];
+            currentUnit = units.length > 0 ? units[Math.floor(Math.random() * units.length)] : { name: "未知單位", img: defaultImgs[0], desc: "DATA NOT FOUND" };
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
-            
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
             if (currentUnit.tags) {
@@ -411,8 +428,7 @@
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            // Auto select first tag if none
-            if(step === 3 && !selectedTag) {
+            if(step === 3 && !selectedTag) { 
                 const tags = document.querySelectorAll('.tech-tag');
                 if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
             }
@@ -430,9 +446,7 @@
         function openMsgModal() {
             const list = document.getElementById('msg-modal-list');
             list.innerHTML = "";
-            fullQuotes.forEach(q => {
-                list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
-            });
+            fullQuotes.forEach(q => { list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`; });
             document.getElementById('msg-modal').style.display = 'flex';
         }
         function selectMessage(text) { fillMsg(text); closeModal('msg-modal'); }
@@ -446,21 +460,41 @@
             }
         }
 
-        // --- CRITICAL FIX: GENERATE PREVIEW ---
+        // --- NEW: LOGIN INTERCEPT LOGIC ---
+        function preSubmitCheck() {
+            if (isLoggedIn) {
+                generatePreview();
+            } else {
+                document.getElementById('login-modal').style.display = 'flex';
+            }
+        }
+
+        function simulateLogin() {
+            // Simulate Login Process
+            document.querySelector('.btn-login').innerText = "VERIFYING...";
+            setTimeout(() => {
+                isLoggedIn = true;
+                closeModal('login-modal');
+                generatePreview();
+            }, 1000);
+        }
+
+        function proceedAsGuest() {
+            closeModal('login-modal');
+            generatePreview();
+        }
+
         function generatePreview() {
             const msgInput = document.getElementById('msg-input');
             if(!msgInput.value.trim()) msgInput.value = fullQuotes[Math.floor(Math.random() * fullQuotes.length)];
             const msg = msgInput.value;
             const sign = document.getElementById('sign-input').value || "UNKNOWN";
-
             const codeName = `NEON-${Math.floor(1000 + Math.random() * 9000)}`;
             
-            // Image Fallback
             let finalImg = userPhoto;
             if(!finalImg && currentUnit && currentUnit.img) finalImg = currentUnit.img;
             if(!finalImg) finalImg = defaultImgs[0];
 
-            // DOM Binding
             document.getElementById('card-img').src = finalImg;
             document.getElementById('code-main').innerText = codeName;
             document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
@@ -468,7 +502,6 @@
             document.getElementById('card-unit-name').innerText = currentUnit ? currentUnit.name : "SEARCH TARGET";
             document.getElementById('card-sign').innerText = sign.toUpperCase();
 
-            // Sponsor & Icon
             if(selectedProp) {
                 document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
                 document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : '☀️';
@@ -477,46 +510,51 @@
                 document.getElementById('gear-icon').innerText = "🛡️";
             }
 
-            document.getElementById('preview-modal').style.display = 'flex';
+            const btn = document.getElementById('btn-transmit');
+            btn.innerText = "TRANSMITTING...";
+            btn.style.background = "#fff";
+            setTimeout(() => {
+                btn.innerText = "EXECUTE TRANSMISSION";
+                btn.style.background = "";
+                document.getElementById('preview-modal').style.display = 'flex';
+            }, 500);
         }
 
         function finalSubmit() {
+            // Deduct battery visual
+            dailyCount++;
+            updateBattery(3 - dailyCount);
+            
             document.getElementById('feedback-layer').style.display = 'flex';
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `MISSION_REPORT_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
-                setTimeout(() => { alert("任務回報完成！"); location.reload(); }, 2000);
+                setTimeout(() => { alert("任務回報完成！抽獎券已歸戶。"); location.reload(); }, 2000);
             });
         }
 
-        // Search Logic
         function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
         function executeSearch(keyword) {
             if(!keyword) return alert("請輸入關鍵字");
             closeModal('search-modal');
             document.getElementById('main-interface').style.opacity = 0; 
             document.getElementById('scanning-layer').style.display = 'flex';
-            
             setTimeout(() => {
                 document.getElementById('scanning-layer').style.display = 'none';
                 document.getElementById('main-interface').style.opacity = 1;
-                
-                // Set fallback data for search result
                 currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
                 selectedTag = "#搜索結果";
                 selectedProp = null; 
-                
                 document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
                 document.getElementById('step-3').style.display = 'flex';
             }, 1500); 
         }
 
-        // SW & Utils
         function openSW(unitName) {
             document.getElementById('sw-target-name').innerText = unitName;
-            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了！ (3,240)</div>`; // Simplified demo
+            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了！ (3,240)</div>`;
             document.getElementById('sw-modal').style.display = 'flex';
         }
         function openInventory() { document.getElementById('inventory-modal').style.display = 'flex'; }
