@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON</title>
+    <title>2026- PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -70,6 +70,7 @@
         .enterprise-badge { font-size: 10px; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 2px 6px; border-radius: 3px; background: rgba(0, 188, 212, 0.1); margin-left: 5px; font-family: 'Orbitron'; animation: blinkBlue 2s infinite; display: none; }
         @keyframes blinkBlue { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--neon-blue); } 50% { opacity: 0.5; box-shadow: none; } }
 
+        /* Marquee Fix */
         .marquee-container { position: absolute; top: 70px; width: 100%; background: rgba(255, 87, 34, 0.1); border-top: 1px solid rgba(255, 87, 34, 0.3); border-bottom: 1px solid rgba(255, 87, 34, 0.3); height: 28px; overflow: hidden; white-space: nowrap; display: block; }
         .marquee-text { display: inline-block; font-size: 11px; color: var(--neon-orange); font-family: 'Orbitron'; padding-left: 100%; animation: scrollText 20s linear infinite; }
         @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
@@ -132,13 +133,6 @@
         .hr-metric-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
         .close-dashboard { cursor: pointer; color: #fff; font-size: 24px; }
         .btn-download-report { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; }
-        .dna-bar-container { display: flex; height: 10px; width: 100%; background: #333; border-radius: 5px; overflow: hidden; margin-top: 5px; }
-        .dna-segment { height: 100%; }
-        .dna-legend { display: flex; gap: 10px; margin-top: 5px; font-size: 10px; color: #aaa; }
-        .dna-dot { width: 8px; height: 8px; display: inline-block; margin-right: 3px; border-radius: 50%; }
-        .sdg-box { display: flex; gap: 10px; }
-        .sdg-icon { width: 40px; height: 40px; background: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Orbitron'; color: #888; }
-        .sdg-icon.active { background: var(--neon-green); color: #000; box-shadow: 0 0 10px var(--neon-green); border: none; }
 
         /* Modals */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
@@ -180,6 +174,12 @@
         .sw-title { font-size: 1.4rem; font-weight: bold; color: var(--neon-amber); margin-bottom: 10px; font-family: 'Orbitron'; }
         .sw-intro { font-size: 1rem; line-height: 1.6; color: #ccc; text-align: justify; margin-bottom: 20px; font-family: 'Noto Serif TC'; }
         .close-btn { cursor: pointer; color: #888; font-size: 20px; }
+
+        .search-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .search-input { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 10px; font-family: 'Noto Sans TC'; }
+        #msg-modal-list { max-height: 300px; overflow-y: auto; }
+        .msg-option { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; color: #ccc; font-size: 13px; }
+        .msg-option:hover { color: var(--neon-amber); background: rgba(255,255,255,0.05); }
 
     </style>
 </head>
@@ -300,25 +300,6 @@
                 <span style="font-size:10px; color:#666;">企業累積提撥金</span>
             </div>
         </div>
-        <div class="hr-card">
-            <span class="hr-metric-label">CORPORATE EMPATHY DNA (員工價值觀分佈)</span>
-            <div class="dna-bar-container">
-                <div class="dna-segment" style="width:40%; background:#FF5722;" title="Survival"></div>
-                <div class="dna-segment" style="width:35%; background:#FFB300;" title="Morale"></div>
-                <div class="dna-segment" style="width:25%; background:#00bcd4;" title="Intel"></div>
-            </div>
-            <div class="dna-legend">
-                <span><span class="dna-dot" style="background:#FF5722;"></span>生命維持</span>
-                <span><span class="dna-dot" style="background:#FFB300;"></span>心靈護盾</span>
-                <span><span class="dna-dot" style="background:#00bcd4;"></span>智識升級</span>
-            </div>
-        </div>
-        <div class="hr-card" style="margin-top:15px;">
-            <span class="hr-metric-label">SDG CONTRIBUTION</span>
-            <div class="sdg-box">
-                <div class="sdg-icon active">01</div><div class="sdg-icon active">02</div><div class="sdg-icon">04</div><div class="sdg-icon active">12</div>
-            </div>
-        </div>
         <div style="margin-top:20px;">
             <button class="btn-download-report" onclick="downloadReport()">DOWNLOAD ESG REPORT (PNG)</button>
         </div>
@@ -372,7 +353,8 @@
         ];
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         
-        // --- [優化] 企業職人金句庫 ---
+        // --- [修正] 企業職人金句庫 (僅保留您指定的兩句，並將第一句當作默認) ---
+        const publicQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。"];
         const corporateQuotes = {
             'tech': [
                 "你們修復人心，就像我們修復 Bug 一樣堅持。", 
@@ -381,18 +363,11 @@
             ],
             'finance': [
                 "你們承擔風險守護弱勢，這次換我們守護你。", 
-                "這份愛的投資，我們保證長期持有。", 
-                "感謝你們為社會創造的無形資產。"
+                "這份愛的投資，我們保證長期持有。"
             ],
             'service': [
                 "服務人的累我們都懂，今天換我們服務你。", 
-                "微笑背後的辛苦，我們感同身受。", 
-                "用一杯咖啡的時間，為你加油。"
-            ],
-            'general': [
-                "辛苦了，謝謝你們一直都在！", 
-                "謝謝你們接住了受傷的人。", 
-                "世界因為有你們而溫柔。"
+                "微笑背後的辛苦，我們感同身受。"
             ]
         };
 
@@ -415,7 +390,6 @@
 
         // --- [核心] 企業模式與金句偵測 ---
         function checkEnterpriseMode() {
-            // 預設不執行任何變更 (保持 HTML 預設)
             if(myTeamName) {
                 const name = decodeURIComponent(myTeamName);
                 
@@ -432,17 +406,19 @@
                 btn.classList.add('enterprise');
 
                 // 2. 金句偵測邏輯
-                let activeQuotes = corporateQuotes['general']; // fallback
-                if (name.includes('台積電') || name.includes('聯發科') || name.includes('華碩') || name.includes('Google')) {
+                let activeQuotes = null;
+                if (name.includes('台積電') || name.includes('聯發科') || name.includes('華碩') || name.includes('宏碁') || name.includes('鴻海') || name.includes('廣達')) {
                     activeQuotes = corporateQuotes['tech'];
-                } else if (name.includes('富邦') || name.includes('國泰') || name.includes('中信') || name.includes('玉山')) {
+                } else if (name.includes('富邦') || name.includes('國泰') || name.includes('中信') || name.includes('玉山') || name.includes('台新') || name.includes('元大')) {
                     activeQuotes = corporateQuotes['finance'];
-                } else if (name.includes('麥當勞') || name.includes('星巴克') || name.includes('統一') || name.includes('王品')) {
+                } else if (name.includes('麥當勞') || name.includes('星巴克') || name.includes('統一') || name.includes('王品') || name.includes('全家')) {
                     activeQuotes = corporateQuotes['service'];
                 }
                 
-                // 3. 只有企業模式才去替換金句，一般民眾保持 HTML 預設
-                renderPresets(activeQuotes);
+                // 3. 只有偵測到特定產業才替換，否則保持一般
+                if (activeQuotes) {
+                    renderPresets(activeQuotes);
+                }
             }
         }
 
@@ -521,19 +497,12 @@
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
-            
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
             if (currentUnit.tags) {
                 currentUnit.tags.forEach(tag => {
-                    const btn = document.createElement('div');
-                    btn.className = 'tech-tag';
-                    btn.innerText = tag;
-                    btn.onclick = (e) => {
-                        document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active'));
-                        e.target.classList.add('active');
-                        selectedTag = tag;
-                    };
+                    const btn = document.createElement('div'); btn.className = 'tech-tag'; btn.innerText = tag;
+                    btn.onclick = (e) => { document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); selectedTag = tag; };
                     tagContainer.appendChild(btn);
                 });
             }
@@ -542,8 +511,7 @@
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            // Auto select first tag if none
-            if(step === 3 && !selectedTag) {
+            if(step === 3 && !selectedTag) { 
                 const tags = document.querySelectorAll('.tech-tag');
                 if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
             }
@@ -561,8 +529,8 @@
         function openMsgModal() {
             const list = document.getElementById('msg-modal-list');
             list.innerHTML = "";
-            // 通用金句+其他
-            corporateQuotes['general'].concat(["願世界對你們溫柔", "請記得照顧好自己"]).forEach(q => {
+            const currentList = (myTeamName) ? publicQuotes : publicQuotes.concat(["願世界對你們溫柔", "請記得照顧好自己", "我們與你同在"]);
+            currentList.forEach(q => {
                 list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
             });
             document.getElementById('msg-modal').style.display = 'flex';
@@ -646,6 +614,7 @@
 
         function openSW(unitName) {
             document.getElementById('sw-target-name').innerText = unitName === 'demo' ? '親愛的' : unitName;
+            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了，謝謝你們一直都在！ <span>(3,240)</span></div><div class="ranking-item">2. 謝謝你們接住了受傷的人。 <span>(2,105)</span></div><div class="ranking-item">3. 希望世界對你，也能溫柔一點。 <span>(1,890)</span></div>`;
             document.getElementById('sw-modal').style.display = 'flex';
         }
         function openAdminLogin() {
@@ -659,7 +628,7 @@
         function downloadReport() { html2canvas(document.getElementById('hr-dashboard'), { backgroundColor: "#0a0a0a" }).then(canvas => { const link = document.createElement('a'); link.download = `ESG_REPORT.png`; link.href = canvas.toDataURL(); link.click(); }); }
         function openInventory() { 
             const list = document.getElementById('inventory-list'); list.innerHTML = "";
-            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>尚無紀錄</p>";
+            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>目前無參與紀錄</p>";
             else { for(let i=1; i<=totalParticipations; i++) list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`; if((4998+totalParticipations) >= 5000) list.innerHTML = `<h4 style="color:var(--neon-orange);margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML; }
             document.getElementById('inventory-modal').style.display = 'flex'; 
         }
