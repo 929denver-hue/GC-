@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 - PROJECT NEON</title>
+    <title>2026 社工守護計畫 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -27,7 +27,7 @@
 
         /* 能量核心背景 */
         .energy-core-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; z-index: -1; pointer-events: none; opacity: 0.5; }
-        .energy-ball { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--neon-amber) 0%, transparent 70%); box-shadow: 0 0 60px var(--neon-orange); animation: pulseCore 4s infinite ease-in-out; }
+        .energy-ball { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--neon-amber) 0%, transparent 70%); box-shadow: 0 0 60px var(--neon-orange); animation: pulseCore 3s infinite ease-in-out; }
         .core-orbit { position: absolute; top: 50%; left: 50%; width: 280px; height: 280px; border: 1px dashed rgba(255, 179, 0, 0.2); border-radius: 50%; transform: translate(-50%, -50%); animation: spin 20s linear infinite; }
         @keyframes pulseCore { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; } }
         @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -66,7 +66,7 @@
         .battery-cell.empty { border-color: #444; background: transparent; }
         .btn-inventory { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Orbitron'; }
 
-        /* 企業模式標籤 (權力感) */
+        /* 企業模式標籤 */
         .enterprise-badge { font-size: 10px; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 2px 6px; border-radius: 3px; background: rgba(0, 188, 212, 0.1); margin-left: 5px; font-family: 'Orbitron'; animation: blinkBlue 2s infinite; display: none; }
         @keyframes blinkBlue { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--neon-blue); } 50% { opacity: 0.5; box-shadow: none; } }
 
@@ -132,6 +132,13 @@
         .hr-metric-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
         .close-dashboard { cursor: pointer; color: #fff; font-size: 24px; }
         .btn-download-report { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; }
+        .dna-bar-container { display: flex; height: 10px; width: 100%; background: #333; border-radius: 5px; overflow: hidden; margin-top: 5px; }
+        .dna-segment { height: 100%; }
+        .dna-legend { display: flex; gap: 10px; margin-top: 5px; font-size: 10px; color: #aaa; }
+        .dna-dot { width: 8px; height: 8px; display: inline-block; margin-right: 3px; border-radius: 50%; }
+        .sdg-box { display: flex; gap: 10px; }
+        .sdg-icon { width: 40px; height: 40px; background: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Orbitron'; color: #888; }
+        .sdg-icon.active { background: var(--neon-green); color: #000; box-shadow: 0 0 10px var(--neon-green); border: none; }
 
         /* Modals */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
@@ -141,6 +148,9 @@
         .card-photo-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); }
         .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); z-index: 10; }
         .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 10; }
+        .hud-code-name { position: absolute; top: 15px; right: 15px; text-align: right; z-index: 10; }
+        .code-main { font-family: 'Orbitron'; font-size: 14px; color: #fff; font-weight: bold; text-shadow: 0 0 10px var(--neon-amber); }
+        .code-sub { font-family: 'Orbitron'; font-size: 8px; color: var(--neon-orange); letter-spacing: 1px; }
         .hud-gear { position: absolute; bottom: 40px; right: 15px; text-align: right; z-index: 10; }
         .gear-icon { font-size: 24px; filter: drop-shadow(0 0 5px var(--neon-amber)); }
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
@@ -243,7 +253,12 @@
                         <div class="panel-header">STEP 3/3 : UPLOAD MESSAGE</div>
                         <div class="panel-body">
                             <span class="section-label">MESSAGE (傳輸訊息)</span>
-                            <div class="msg-presets" id="dynamic-presets"></div>
+                            <div class="msg-presets" id="dynamic-presets">
+                                <div class="preset-chip" onclick="fillMsg(this.innerText)">辛苦了，謝謝你們一直都在！</div>
+                                <div class="preset-chip" onclick="fillMsg(this.innerText)">謝謝你們接住了受傷的人。</div>
+                                <div class="preset-chip" onclick="fillMsg(this.innerText)">世界因為有你們而溫柔。</div>
+                                <button class="preset-more-btn" onclick="openMsgModal()">+ 更多 (10)</button>
+                            </div>
                             
                             <textarea id="msg-input" placeholder="寫下對他們的鼓勵..."></textarea>
                             <span class="section-label" style="margin-top:15px;">CODENAME (署名)</span>
@@ -283,6 +298,25 @@
                 <span class="hr-metric-label">MATCHING FUND</span>
                 <span class="hr-metric" style="color:var(--neon-blue);">$ 12,480</span>
                 <span style="font-size:10px; color:#666;">企業累積提撥金</span>
+            </div>
+        </div>
+        <div class="hr-card">
+            <span class="hr-metric-label">CORPORATE EMPATHY DNA (員工價值觀分佈)</span>
+            <div class="dna-bar-container">
+                <div class="dna-segment" style="width:40%; background:#FF5722;" title="Survival"></div>
+                <div class="dna-segment" style="width:35%; background:#FFB300;" title="Morale"></div>
+                <div class="dna-segment" style="width:25%; background:#00bcd4;" title="Intel"></div>
+            </div>
+            <div class="dna-legend">
+                <span><span class="dna-dot" style="background:#FF5722;"></span>生命維持</span>
+                <span><span class="dna-dot" style="background:#FFB300;"></span>心靈護盾</span>
+                <span><span class="dna-dot" style="background:#00bcd4;"></span>智識升級</span>
+            </div>
+        </div>
+        <div class="hr-card" style="margin-top:15px;">
+            <span class="hr-metric-label">SDG CONTRIBUTION</span>
+            <div class="sdg-box">
+                <div class="sdg-icon active">01</div><div class="sdg-icon active">02</div><div class="sdg-icon">04</div><div class="sdg-icon active">12</div>
             </div>
         </div>
         <div style="margin-top:20px;">
@@ -326,24 +360,40 @@
         </div>
     </div>
 
-    <div id="sw-modal" class="modal-overlay"><div class="sw-box"><div class="sw-header"><h3 class="sw-title">🔐 SOCIAL WORKER ACCESS</h3><span class="close-btn" onclick="closeModal('sw-modal')">×</span></div><div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" class="sw-photo"></div><div style="font-size:1.2rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div><div class="sw-intro">這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意。在繁忙的訪視與個案紀錄間，請別忘了，<span style="color:var(--neon-amber); font-weight:bold;">有人正默默停下來為你打氣</span>。你伸出的雙手接住了脆弱，而社會的善意正溫柔地支撐著你。感謝你的堅持，讓我們一起在這座城市，守護微小卻堅定的光芒。</div><div class="ranking-list" id="sw-ranking"><h4 style="margin:0 0 10px 0; color:var(--neon-orange); font-size:13px;">🏆 民眾最想對你說的話：</h4><div class="ranking-item">1. 辛苦了，謝謝你們一直都在！ <span>(3,240)</span></div><div class="ranking-item">2. 謝謝你們接住了受傷的人。 <span>(2,105)</span></div><div class="ranking-item">3. 希望世界對你，也能溫柔一點。 <span>(1,890)</span></div></div></div></div>
+    <div id="sw-modal" class="modal-overlay"><div class="sw-box"><div class="sw-header"><h3 class="sw-title">🔐 SOCIAL WORKER ACCESS</h3><span class="close-btn" onclick="closeModal('sw-modal')">×</span></div><div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" class="sw-photo"></div><div style="font-size:1.1rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div><div class="sw-intro">這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意。在繁忙的訪視與個案紀錄間，請別忘了，<span style="color:var(--neon-amber); font-weight:bold;">有人正默默停下來為你打氣</span>。你伸出的雙手接住了脆弱，而社會的善意正溫柔地支撐著你。感謝你的堅持，讓我們一起在這座城市，守護微小卻堅定的光芒。</div><div class="ranking-list" id="sw-ranking"><h4 style="margin:0 0 10px 0; color:var(--neon-orange); font-size:13px;">🏆 民眾最想對你說的話：</h4><div class="ranking-item">1. 辛苦了，謝謝你們一直都在！ <span>(3,240)</span></div><div class="ranking-item">2. 謝謝你們接住了受傷的人。 <span>(2,105)</span></div><div class="ranking-item">3. 希望世界對你，也能溫柔一點。 <span>(1,890)</span></div></div></div></div>
     <div id="search-modal" class="modal-overlay"><div class="common-box"><h3 style="color:var(--neon-amber);">🔍 SEARCH UNIT DATABASE</h3><input type="text" id="search-input" class="search-input" placeholder="輸入單位名稱..."><div class="search-chips"><div class="preset-chip" onclick="executeSearch('全體站內社工')">全體站內社工</div><div class="preset-chip" onclick="executeSearch('華山基金會')">華山基金會</div></div><button class="btn-main" onclick="executeSearch(document.getElementById('search-input').value)" style="margin-top:15px;">INITIATE SEARCH</button></div></div>
     <div id="msg-modal" class="modal-overlay"><div class="common-box"><h3 style="color:var(--neon-amber);">SELECT MESSAGE</h3><div id="msg-modal-list"></div></div></div>
     <div id="inventory-modal" class="modal-overlay"><div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT (背包)</h3><div id="inventory-list"></div></div></div>
 
     <script>
         const units = [
-            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛...", tags: ["#堅韌防線", "#慢飛天使"] },
-            { name: "華山基金會", img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", desc: "【獨老依靠】<br>穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望...", tags: ["#溫柔信號", "#獨老依靠"] }
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛。從農場勞動到生活自理，每一步都走得不容易，但每一個進步都是生命最堅韌的證明。", tags: ["#堅韌防線", "#慢飛天使"] },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", desc: "【獨老依靠】<br>穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望。我們遞送的不只是便當，更是家的感覺。讓「老」不再是孤獨的代名詞。", tags: ["#溫柔信號", "#獨老依靠"] }
         ];
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         
-        // --- [核心] 企業職人金句庫 ---
-        const publicQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。"];
+        // --- [優化] 企業職人金句庫 ---
         const corporateQuotes = {
-            'tech': ["你們修復人心，就像我們修復 Bug 一樣堅持。", "社工是社會的晶片，維持著系統運作，辛苦了！", "雖然頻率不同，但我們都在為更好的未來連線。"],
-            'finance': ["你們承擔風險守護弱勢，這次換我們守護你。", "這份愛的投資，我們保證長期持有。", "感謝你們為社會創造的無形資產。"],
-            'service': ["服務人的累我們都懂，今天換我們服務你。", "微笑背後的辛苦，我們感同身受。", "用一杯咖啡的時間，為你加油。"]
+            'tech': [
+                "你們修復人心，就像我們修復 Bug 一樣堅持。", 
+                "社工是社會的晶片，維持著系統運作，辛苦了！", 
+                "雖然頻率不同，但我們都在為更好的未來連線。"
+            ],
+            'finance': [
+                "你們承擔風險守護弱勢，這次換我們守護你。", 
+                "這份愛的投資，我們保證長期持有。", 
+                "感謝你們為社會創造的無形資產。"
+            ],
+            'service': [
+                "服務人的累我們都懂，今天換我們服務你。", 
+                "微笑背後的辛苦，我們感同身受。", 
+                "用一杯咖啡的時間，為你加油。"
+            ],
+            'general': [
+                "辛苦了，謝謝你們一直都在！", 
+                "謝謝你們接住了受傷的人。", 
+                "世界因為有你們而溫柔。"
+            ]
         };
 
         let currentUnit = null, selectedTag = null, selectedProp = null, userPhoto = null;
@@ -365,8 +415,7 @@
 
         // --- [核心] 企業模式與金句偵測 ---
         function checkEnterpriseMode() {
-            let activeQuotes = publicQuotes; // 預設一般民眾
-
+            // 預設不執行任何變更 (保持 HTML 預設)
             if(myTeamName) {
                 const name = decodeURIComponent(myTeamName);
                 
@@ -383,6 +432,7 @@
                 btn.classList.add('enterprise');
 
                 // 2. 金句偵測邏輯
+                let activeQuotes = corporateQuotes['general']; // fallback
                 if (name.includes('台積電') || name.includes('聯發科') || name.includes('華碩') || name.includes('Google')) {
                     activeQuotes = corporateQuotes['tech'];
                 } else if (name.includes('富邦') || name.includes('國泰') || name.includes('中信') || name.includes('玉山')) {
@@ -390,8 +440,10 @@
                 } else if (name.includes('麥當勞') || name.includes('星巴克') || name.includes('統一') || name.includes('王品')) {
                     activeQuotes = corporateQuotes['service'];
                 }
+                
+                // 3. 只有企業模式才去替換金句，一般民眾保持 HTML 預設
+                renderPresets(activeQuotes);
             }
-            renderPresets(activeQuotes);
         }
 
         // 動態渲染金句按鈕
@@ -443,14 +495,23 @@
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
                 document.getElementById('scanning-layer').style.display = 'flex';
+                
+                // Animation logic
                 let i = 0;
                 const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
-                const interval = setInterval(() => { if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++]; }, 600);
+                const interval = setInterval(() => {
+                    if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++];
+                }, 600);
                 setTimeout(() => { document.getElementById('scan-bar').style.width = "100%"; }, 100);
+
                 setTimeout(() => {
                     clearInterval(interval);
                     document.getElementById('scanning-layer').style.opacity = 0;
-                    setTimeout(() => { document.getElementById('scanning-layer').style.display = 'none'; document.getElementById('main-interface').style.opacity = 1; initGame(); }, 500);
+                    setTimeout(() => {
+                        document.getElementById('scanning-layer').style.display = 'none';
+                        document.getElementById('main-interface').style.opacity = 1;
+                        initGame();
+                    }, 500);
                 }, 2000);
             }, 500);
         }
@@ -460,12 +521,19 @@
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
+            
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
             if (currentUnit.tags) {
                 currentUnit.tags.forEach(tag => {
-                    const btn = document.createElement('div'); btn.className = 'tech-tag'; btn.innerText = tag;
-                    btn.onclick = (e) => { document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); selectedTag = tag; };
+                    const btn = document.createElement('div');
+                    btn.className = 'tech-tag';
+                    btn.innerText = tag;
+                    btn.onclick = (e) => {
+                        document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        selectedTag = tag;
+                    };
                     tagContainer.appendChild(btn);
                 });
             }
@@ -474,18 +542,29 @@
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            if(step === 3 && !selectedTag) { const tags = document.querySelectorAll('.tech-tag'); if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; } }
+            // Auto select first tag if none
+            if(step === 3 && !selectedTag) {
+                const tags = document.querySelectorAll('.tech-tag');
+                if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
+            }
             document.getElementById(`step-${step}`).style.display = 'flex';
         }
 
-        function selectProp(el, name) { document.querySelectorAll('.tech-card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); selectedProp = name; }
+        function selectProp(el, name) {
+            document.querySelectorAll('.tech-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedProp = name;
+        }
+
         function fillMsg(text) { document.getElementById('msg-input').value = text; }
         
         function openMsgModal() {
             const list = document.getElementById('msg-modal-list');
             list.innerHTML = "";
-            // 合併顯示通用金句 (這裡簡化為只顯示通用)
-            publicQuotes.forEach(q => { list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`; });
+            // 通用金句+其他
+            corporateQuotes['general'].concat(["願世界對你們溫柔", "請記得照顧好自己"]).forEach(q => {
+                list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
+            });
             document.getElementById('msg-modal').style.display = 'flex';
         }
         function selectMessage(text) { fillMsg(text); closeModal('msg-modal'); }
@@ -544,8 +623,8 @@
             checkGlobalTarget();
             document.getElementById('feedback-layer').style.display = 'flex';
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
-                const link = document.createElement('a'); link.download = `MISSION_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
-                setTimeout(() => { alert("任務回報完成！抽獎機會已累計。"); location.reload(); }, 2000);
+                const link = document.createElement('a'); link.download = `MISSION_REPORT_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
+                setTimeout(() => { alert("任務回報完成！"); location.reload(); }, 2000);
             });
         }
 
@@ -567,7 +646,6 @@
 
         function openSW(unitName) {
             document.getElementById('sw-target-name').innerText = unitName === 'demo' ? '親愛的' : unitName;
-            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了，謝謝你們一直都在！ <span>(3,240)</span></div><div class="ranking-item">2. 謝謝你們接住了受傷的人。 <span>(2,105)</span></div><div class="ranking-item">3. 希望世界對你，也能溫柔一點。 <span>(1,890)</span></div>`;
             document.getElementById('sw-modal').style.display = 'flex';
         }
         function openAdminLogin() {
@@ -581,7 +659,7 @@
         function downloadReport() { html2canvas(document.getElementById('hr-dashboard'), { backgroundColor: "#0a0a0a" }).then(canvas => { const link = document.createElement('a'); link.download = `ESG_REPORT.png`; link.href = canvas.toDataURL(); link.click(); }); }
         function openInventory() { 
             const list = document.getElementById('inventory-list'); list.innerHTML = "";
-            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>目前無參與紀錄</p>";
+            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>尚無紀錄</p>";
             else { for(let i=1; i<=totalParticipations; i++) list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`; if((4998+totalParticipations) >= 5000) list.innerHTML = `<h4 style="color:var(--neon-orange);margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML; }
             document.getElementById('inventory-modal').style.display = 'flex'; 
         }
