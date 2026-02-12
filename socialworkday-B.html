@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 - PROJECT NEON</title>
+    <title>2026 社工守護計畫 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -435,8 +435,10 @@
             const container = document.getElementById('dynamic-presets');
             container.innerHTML = '';
             
-            // [修正] 改用最穩定的 onclick 賦值方式，避免閉包或 EventListener 綁定問題
-            currentQuoteList.forEach(q => {
+            // [修正] 當前清單如果是空的，強制帶入預設值
+            const listToRender = (currentQuoteList && currentQuoteList.length > 0) ? currentQuoteList : quotesData.public;
+
+            listToRender.forEach(q => {
                 const chip = document.createElement('div');
                 chip.className = 'preset-chip';
                 chip.innerText = q;
@@ -463,11 +465,12 @@
         function openMsgModal() {
             const list = document.getElementById('msg-modal-list');
             list.innerHTML = "";
-            const fullList = (currentQuoteList !== quotesData.public) ? currentQuoteList.concat(quotesData.public) : quotesData.public;
+            const fullList = (currentQuoteList && currentQuoteList.length > 0) ? currentQuoteList.concat(quotesData.public) : quotesData.public;
             
-            const allQuotes = fullList.concat(["願世界對你們溫柔", "請記得照顧好自己", "你的付出，我們都看到了"]);
+            // 去重
+            const uniqueQuotes = [...new Set(fullList.concat(["願世界對你們溫柔", "請記得照顧好自己", "你的付出，我們都看到了"]))];
             
-            allQuotes.forEach(q => {
+            uniqueQuotes.forEach(q => {
                 const div = document.createElement('div');
                 div.className = 'msg-option';
                 div.innerText = q;
@@ -532,6 +535,11 @@
                 el.style.display = 'none';
             });
             document.getElementById(`step-${step}`).style.display = 'flex';
+            
+            // [關鍵修正] 進入 Step 3 時強制重新渲染按鈕，確保按鈕出現
+            if(step === 3) {
+                renderPresets();
+            }
         }
 
         function selectProp(el, name) {
