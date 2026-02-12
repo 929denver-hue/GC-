@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - 暖光行動</title>
+    <title>2026 社工守護計畫 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -27,7 +27,69 @@
             background-image: radial-gradient(circle at 50% 50%, #2a1a0a 0%, #000 100%);
         }
 
-        /* --- 背景動態網格 (保留科技感但變暖) --- */
+        /* --- 0. 前導層 (Mission Briefing) - 大幅優化 --- */
+        #intro-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; z-index: 999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px;
+            transition: opacity 0.8s ease-in-out;
+            background-image: linear-gradient(rgba(255, 179, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        .briefing-card {
+            max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
+            background: rgba(20, 20, 20, 0.9); padding: 30px 20px;
+            box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
+            position: relative; overflow: hidden;
+        }
+        /* 裝飾線條 */
+        .briefing-card::before { content: ''; position: absolute; top:0; left:0; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
+        .briefing-card::after { content: ''; position: absolute; bottom:0; right:0; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
+
+        .mission-header {
+            font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 2px;
+            margin-bottom: 20px; border-bottom: 1px dashed #333; padding-bottom: 10px;
+            display: flex; justify-content: space-between;
+        }
+        
+        .intro-title { 
+            font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; 
+            text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); 
+        }
+        
+        .intro-text { 
+            font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; 
+            font-family: 'Noto Serif TC'; text-align: justify;
+        }
+        .highlight { color: var(--neon-amber); font-weight: bold; border-bottom: 1px solid var(--neon-amber); }
+
+        /* 玩法圖示說明 */
+        .mission-steps { display: flex; justify-content: space-between; margin-bottom: 30px; text-align: center; }
+        .m-step { flex: 1; position: relative; }
+        .m-icon { font-size: 24px; margin-bottom: 5px; display: block; animation: float 3s infinite ease-in-out; }
+        .m-label { font-size: 10px; color: var(--neon-orange); font-family: 'Orbitron'; display: block; margin-bottom: 2px; }
+        .m-desc { font-size: 11px; color: #888; }
+        /* 箭頭 */
+        .m-step:not(:last-child)::after {
+            content: '>'; position: absolute; right: -5px; top: 10px; color: #333; font-family: 'Orbitron';
+        }
+
+        .btn-start-mission {
+            width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
+            padding: 15px; font-size: 14px; cursor: pointer;
+            font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
+            text-transform: uppercase; font-weight: bold;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        .btn-start-mission:hover {
+            background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber);
+        }
+
+        /* --- 1. 主介面 (Game Interface) --- */
+        #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; }
+
+        /* 背景動態網格 (保留科技感但變暖) */
         .warm-grid {
             position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
             background-image: linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px);
@@ -249,125 +311,161 @@
 </head>
 <body>
 
-    <div class="warm-grid"></div>
-
-    <div class="nav-hud">
-        <div>
-            <span class="hud-label">GLOBAL ENERGY</span>
-            <span class="hud-value">LV.78</span>
-        </div>
-        <div class="btn-inventory" onclick="openInventory()">🎒 PACK</div>
-    </div>
-
-    <div class="marquee-container">
-        <div class="marquee-text" id="marquee-content">
-            >> SYSTEM ONLINE ... User888 傳輸 [熱能補給] 給 華山基金會 ... 匿名勇者 傳輸 [防禦強化] ... 台積電戰隊 累積 5200 點能量 ...
-        </div>
-    </div>
-
-    <div class="console-wrapper">
-        <div class="screen-frame">
+    <div id="intro-layer">
+        <div class="briefing-card">
+            <div class="mission-header">
+                <span>MISSION: PROJECT NEON</span>
+                <span>STATUS: WAITING</span>
+            </div>
+            <div class="intro-title">啟動暖光行動</div>
+            <div class="intro-text">
+                在這座城市的光影背後，有一群人默默承接了所有的脆弱。他們是<span class="highlight">社工</span>，社會的安全網，卻往往耗盡了自己的能量。<br><br>
+                系統偵測到全台社工能量低落。<br>我們需要你——成為「像素守護者」。
+            </div>
             
-            <div id="step-0" class="state-idle">
-                <div class="core-circle" onclick="startMission()">
-                    <div class="core-icon">❤️</div>
-                    <div class="core-text">CONNECT</div>
+            <div class="mission-steps">
+                <div class="m-step">
+                    <span class="m-icon">📡</span>
+                    <span class="m-label">LINK</span>
+                    <span class="m-desc">隨機連結</span>
                 </div>
-                <div style="font-size:10px; color:#666;">DAILY LIMIT: <span id="daily-text">3</span>/3</div>
-            </div>
-
-            <div id="step-1" class="step-container">
-                <div class="story-img-box">
-                    <img id="story-img" class="story-img" src="">
-                    <div id="story-unit" class="unit-badge">單位名稱</div>
+                <div class="m-step">
+                    <span class="m-icon">📦</span>
+                    <span class="m-label">EQUIP</span>
+                    <span class="m-desc">選擇裝備</span>
                 </div>
-                <div class="story-content">
-                    <span id="story-desc"></span>
-                </div>
-                <div class="control-bar" style="padding:15px; background:#111;">
-                    <button class="btn-main" onclick="nextStep(2)">INITIALIZE SUPPORT >></button>
+                <div class="m-step">
+                    <span class="m-icon">⚡</span>
+                    <span class="m-label">SYNC</span>
+                    <span class="m-desc">傳輸能量</span>
                 </div>
             </div>
 
-            <div id="step-2" class="step-container">
-                <div class="panel-header">STEP 2/3 : CONFIGURE LOADOUT</div>
-                <div class="panel-body">
-                    
-                    <span class="section-label">1. SYNCHRONIZE (同步頻率)</span>
-                    <div class="tag-row" id="tag-container"></div>
-
-                    <span class="section-label">2. TACTICAL SUPPLY (戰術補給)</span>
-                    <div class="sponsor-list">
-                        <div class="tech-card" onclick="selectProp(this, '鼎王湯底')">
-                            <div class="tech-icon">🍲</div>
-                            <div class="tech-info">
-                                <span class="tech-reason">>> 偵測到寒冷與飢餓</span>
-                                <span class="tech-name">配置 [鼎王麻辣鍋]</span>
-                            </div>
-                            <div class="tech-check">✔</div>
-                        </div>
-                        <div class="tech-card" onclick="selectProp(this, '艾瑪絲洗髮')">
-                            <div class="tech-icon">🚿</div>
-                            <div class="tech-info">
-                                <span class="tech-reason">>> 偵測到身心疲勞</span>
-                                <span class="tech-name">配置 [艾瑪絲洗髮精]</span>
-                            </div>
-                            <div class="tech-check">✔</div>
-                        </div>
-                        <div class="tech-card" onclick="selectProp(this, '蓓朵娜防曬')">
-                            <div class="tech-icon">☀️</div>
-                            <div class="tech-info">
-                                <span class="tech-reason">>> 偵測到紫外線曝曬</span>
-                                <span class="tech-name">配置 [蓓朵娜防曬]</span>
-                            </div>
-                            <div class="tech-check">✔</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="control-bar" style="padding:15px; background:#111;">
-                    <button class="btn-back" onclick="nextStep(1)"><</button>
-                    <button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button>
-                </div>
-            </div>
-
-            <div id="step-3" class="step-container">
-                <div class="panel-header">STEP 3/3 : UPLOAD MESSAGE</div>
-                <div class="panel-body">
-                    
-                    <span class="section-label">MESSAGE (傳輸訊息)</span>
-                    <div class="input-wrapper">
-                        <span class="auto-fill-btn" onclick="autoFill()">[AUTO GENERATE]</span>
-                        <textarea id="msg-input" placeholder="寫下給社工的鼓勵..."></textarea>
-                    </div>
-
-                    <div class="photo-bar">
-                        <span class="photo-status" id="photo-status">IMAGE: DEFAULT</span>
-                        <label class="btn-upload-mini">
-                            UPLOAD <input type="file" id="upload-photo" style="display:none;" onchange="previewPhoto()">
-                        </label>
-                    </div>
-
-                    <span class="section-label">CODENAME (署名)</span>
-                    <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
-                    
-                    <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">
-                        🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span>
-                    </div>
-
-                </div>
-                <div class="control-bar" style="padding:15px; background:#111;">
-                    <button class="btn-back" onclick="nextStep(2)"><</button>
-                    <button class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button>
-                </div>
-            </div>
-
+            <button class="btn-start-mission" onclick="startMission()">INITIALIZE SYSTEM (啟動)</button>
         </div>
     </div>
 
-    <div class="footer-nav">
-        <span class="footer-link" onclick="alert('開啟搜尋')">SEARCH UNIT</span>
-        <span class="footer-link" onclick="openSW()">SOCIAL WORKER CHANNEL</span>
-        <div style="margin-top:5px;">&copy; 2026 PROJECT NEON</div>
+    <div id="main-interface">
+        <div class="warm-grid"></div>
+
+        <div class="nav-hud">
+            <div>
+                <span class="hud-label">GLOBAL ENERGY</span>
+                <span class="hud-value">LV.78</span>
+            </div>
+            <div class="btn-inventory" onclick="openInventory()">🎒 PACK</div>
+        </div>
+
+        <div class="marquee-container">
+            <div class="marquee-text" id="marquee-content">
+                >> SYSTEM ONLINE ... User888 傳輸 [熱能補給] 給 華山基金會 ... 匿名勇者 傳輸 [防禦強化] ... 台積電戰隊 累積 5200 點能量 ...
+            </div>
+        </div>
+
+        <div class="console-wrapper">
+            <div class="screen-frame">
+                
+                <div id="step-0" class="state-idle">
+                    <div class="core-circle" onclick="insertCoin()">
+                        <div class="core-icon">❤️</div>
+                        <div class="core-text">CONNECT</div>
+                    </div>
+                    <div style="font-size:10px; color:#666;">DAILY LIMIT: <span id="daily-text">3</span>/3</div>
+                </div>
+
+                <div id="step-1" class="step-container">
+                    <div class="story-img-box">
+                        <img id="story-img" class="story-img" src="">
+                        <div id="story-unit" class="unit-badge">單位名稱</div>
+                    </div>
+                    <div class="story-content">
+                        <span id="story-desc"></span>
+                    </div>
+                    <div class="control-bar" style="padding:15px; background:#111;">
+                        <button class="btn-main" onclick="nextStep(2)">INITIALIZE SUPPORT >></button>
+                    </div>
+                </div>
+
+                <div id="step-2" class="step-container">
+                    <div class="panel-header">STEP 2/3 : CONFIGURE LOADOUT</div>
+                    <div class="panel-body">
+                        
+                        <span class="section-label">1. SYNCHRONIZE (同步頻率)</span>
+                        <div class="tag-row" id="tag-container"></div>
+
+                        <span class="section-label">2. TACTICAL SUPPLY (戰術補給)</span>
+                        <div class="sponsor-list">
+                            <div class="tech-card" onclick="selectProp(this, '鼎王湯底')">
+                                <div class="tech-icon">🍲</div>
+                                <div class="tech-info">
+                                    <span class="tech-reason">>> 偵測到寒冷與飢餓</span>
+                                    <span class="tech-name">配置 [鼎王麻辣鍋]</span>
+                                </div>
+                                <div class="tech-check">✔</div>
+                            </div>
+                            <div class="tech-card" onclick="selectProp(this, '艾瑪絲洗髮')">
+                                <div class="tech-icon">🚿</div>
+                                <div class="tech-info">
+                                    <span class="tech-reason">>> 偵測到身心疲勞</span>
+                                    <span class="tech-name">配置 [艾瑪絲洗髮精]</span>
+                                </div>
+                                <div class="tech-check">✔</div>
+                            </div>
+                            <div class="tech-card" onclick="selectProp(this, '蓓朵娜防曬')">
+                                <div class="tech-icon">☀️</div>
+                                <div class="tech-info">
+                                    <span class="tech-reason">>> 偵測到紫外線曝曬</span>
+                                    <span class="tech-name">配置 [蓓朵娜防曬]</span>
+                                </div>
+                                <div class="tech-check">✔</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-bar" style="padding:15px; background:#111;">
+                        <button class="btn-back" onclick="nextStep(1)"><</button>
+                        <button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button>
+                    </div>
+                </div>
+
+                <div id="step-3" class="step-container">
+                    <div class="panel-header">STEP 3/3 : UPLOAD MESSAGE</div>
+                    <div class="panel-body">
+                        
+                        <span class="section-label">MESSAGE (傳輸訊息)</span>
+                        <div class="input-wrapper">
+                            <span class="auto-fill-btn" onclick="autoFill()">[AUTO GENERATE]</span>
+                            <textarea id="msg-input" placeholder="寫下給社工的鼓勵..."></textarea>
+                        </div>
+
+                        <div class="photo-bar">
+                            <span class="photo-status" id="photo-status">IMAGE: DEFAULT</span>
+                            <label class="btn-upload-mini">
+                                UPLOAD <input type="file" id="upload-photo" style="display:none;" onchange="previewPhoto()">
+                            </label>
+                        </div>
+
+                        <span class="section-label">CODENAME (署名)</span>
+                        <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
+                        
+                        <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">
+                            🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span>
+                        </div>
+
+                    </div>
+                    <div class="control-bar" style="padding:15px; background:#111;">
+                        <button class="btn-back" onclick="nextStep(2)"><</button>
+                        <button class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer-nav">
+            <span class="footer-link" onclick="alert('開啟搜尋')">SEARCH UNIT</span>
+            <span class="footer-link" onclick="openSW()">SOCIAL WORKER CHANNEL</span>
+            <div style="margin-top:5px;">&copy; 2026 PROJECT NEON</div>
+        </div>
     </div>
 
     <div id="preview-modal" class="modal-overlay">
@@ -459,6 +557,14 @@
 
         // Logic: Flow Control
         function startMission() {
+            document.getElementById('intro-layer').style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('intro-layer').style.display = 'none';
+                document.getElementById('main-interface').style.opacity = 1;
+            }, 800);
+        }
+
+        function insertCoin() {
             if(dailyCount >= 3) return alert("ENERGY DEPLETED. COME BACK TOMORROW.");
             
             // Random Unit
