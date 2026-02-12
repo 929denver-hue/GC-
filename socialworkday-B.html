@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON</title>
+    <title>2026 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -330,6 +330,7 @@
             <div class="hr-card"><span class="hr-metric-label">參與金句人數</span><span class="hr-metric" id="hr-p-count">1,248</span></div>
             <div class="hr-card"><span class="hr-metric-label">累積鼓勵則數</span><span class="hr-metric" id="hr-msg-count">3,560</span></div>
         </div>
+        <div id="hr-ranking-list"></div>
         <div style="margin-top:20px;"><button class="btn-download-report" onclick="downloadReport()">DOWNLOAD REPORT</button></div>
     </div>
 
@@ -366,21 +367,16 @@
         let myTeamName = new URLSearchParams(window.location.search).get('team');
         let currentQuoteList = quotesData.public; 
 
-        // [核心修正] 將 fillMsg 放在最外層，確保 HTML onclick 能呼叫到
         function fillMsg(txt) {
             const input = document.getElementById('msg-input');
             if(input) {
                 input.value = txt;
                 input.focus();
-                // 視覺反饋：稍微閃爍一下邊框
                 input.style.borderColor = 'var(--neon-amber)';
                 setTimeout(() => { input.style.borderColor = '#444'; }, 200);
-            } else {
-                console.error("找不到 msg-input 元素");
             }
         }
 
-        // [新增功能] 處理 Tag 點擊事件
         function toggleTag(el) {
             el.classList.toggle('active');
         }
@@ -397,9 +393,8 @@
 
         function checkDaily() { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
 
-        // --- [核心] 企業模式 ---
         function checkEnterpriseMode() {
-            currentQuoteList = quotesData.public;
+            currentQuoteList = quotesData.public; // 預設重置
             document.getElementById('ent-badge').style.display = 'none';
             document.getElementById('faction-display').style.display = 'none';
             document.getElementById('csr-hint').style.display = 'none';
@@ -420,6 +415,7 @@
                 btn.innerText = `ACTIVATE ${name} FUND ($10)`;
                 btn.classList.add('enterprise');
 
+                // [修正] 確保切換正確的金句庫
                 if (name.includes('台積電') || name.includes('聯發科') || name.includes('華碩') || name.includes('鴻海')) {
                     currentQuoteList = quotesData.tech;
                 } else if (name.includes('富邦') || name.includes('國泰') || name.includes('中信')) {
@@ -428,14 +424,13 @@
                     currentQuoteList = quotesData.service;
                 }
             }
-            renderPresets();
         }
 
         function renderPresets() {
             const container = document.getElementById('dynamic-presets');
             container.innerHTML = '';
             
-            // [修正] 當前清單如果是空的，強制帶入預設值
+            // [修正] 使用當前的 currentQuoteList (會隨 team 改變)
             const listToRender = (currentQuoteList && currentQuoteList.length > 0) ? currentQuoteList : quotesData.public;
 
             listToRender.forEach(q => {
@@ -457,9 +452,12 @@
             const newUrl = new URL(window.location.href);
             if(name) newUrl.searchParams.set('team', name); else newUrl.searchParams.delete('team');
             window.history.pushState({}, '', newUrl);
+            
+            // [修正] 立即更新全域變數並執行檢查
             myTeamName = name;
             checkEnterpriseMode();
-            alert(`已切換至：${name || '一般民眾模式'}`);
+            
+            alert(`已切換至：${name || '一般民眾模式'} (請至 Step 3 確認金句)`);
         }
 
         function openMsgModal() {
@@ -467,7 +465,6 @@
             list.innerHTML = "";
             const fullList = (currentQuoteList && currentQuoteList.length > 0) ? currentQuoteList.concat(quotesData.public) : quotesData.public;
             
-            // 去重
             const uniqueQuotes = [...new Set(fullList.concat(["願世界對你們溫柔", "請記得照顧好自己", "你的付出，我們都看到了"]))];
             
             uniqueQuotes.forEach(q => {
@@ -522,7 +519,6 @@
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
             
-            // [修正] 生成標籤時加入 onclick 事件
             currentUnit.tags.forEach(tag => {
                 tagContainer.innerHTML += `<div class="tech-tag" onclick="toggleTag(this)">${tag}</div>`;
             });
@@ -536,7 +532,7 @@
             });
             document.getElementById(`step-${step}`).style.display = 'flex';
             
-            // [關鍵修正] 進入 Step 3 時強制重新渲染按鈕，確保按鈕出現
+            // [關鍵] 切換到輸入頁時，重新渲染金句按鈕以符合當前產業模式
             if(step === 3) {
                 renderPresets();
             }
@@ -644,13 +640,38 @@
         function openSW() { document.getElementById('sw-modal').style.display = 'flex'; }
         
         function openAdminLogin() { 
-            // 模擬戰情室數據更新
             const baseP = 1200;
             const baseM = 3500;
             const added = parseInt(localStorage.getItem('gc_total') || 0);
             document.getElementById('hr-p-count').innerText = (baseP + added).toLocaleString();
             document.getElementById('hr-msg-count').innerText = (baseM + (added * 3)).toLocaleString();
             
+            // [新增] 產生熱門金句排行榜 (模擬資料)
+            const allQuotes = [
+                ...quotesData.public,
+                ...quotesData.tech,
+                ...quotesData.finance,
+                ...quotesData.service
+            ];
+            
+            // 隨機產生次數並排序
+            const ranking = allQuotes.map(q => ({
+                text: q,
+                count: Math.floor(Math.random() * 500) + 100
+            })).sort((a, b) => b.count - a.count).slice(0, 3);
+
+            let rankHTML = '<h4 style="color:var(--neon-amber); margin:15px 0 10px; font-size:14px; font-family:Orbitron;">🏆 TOP 3 MESSAGES (熱門金句)</h4>';
+            ranking.forEach((item, index) => {
+                rankHTML += `
+                    <div class="ranking-item">
+                        <span style="width:20px; color:var(--neon-orange); font-weight:bold;">${index + 1}.</span>
+                        <span style="flex:1; margin:0 10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#ccc;">${item.text}</span>
+                        <span style="color:var(--neon-blue); font-weight:bold;">${item.count}</span>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('hr-ranking-list').innerHTML = rankHTML;
             document.getElementById('hr-dashboard').style.display = 'block'; 
         }
         
