@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 給社工愛的鼓勵 - PROJECT NEON</title>
+    <title>2026 給社工愛的鼓勵 </title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -75,7 +75,6 @@
         .radar-ring:nth-child(1) { width: 80px; height: 80px; animation-duration: 1s; border-width: 1px; }
         .radar-ring:nth-child(2) { width: 140px; height: 140px; animation-duration: 2s; border-width: 2px; border-color: var(--neon-amber); }
         .radar-ring:nth-child(3) { width: 200px; height: 200px; animation-duration: 3s; border-width: 1px; }
-        
         .central-heart { font-size: 50px; animation: glitchHeart 1s infinite steps(2); z-index: 10; filter: drop-shadow(0 0 10px var(--neon-orange)); }
         
         @keyframes spinRipple { 0% { transform: rotate(0deg) scale(0.8); opacity: 0.2; } 50% { opacity: 1; } 100% { transform: rotate(360deg) scale(1.1); opacity: 0.2; } }
@@ -161,11 +160,22 @@
         .card-header { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); margin-bottom: 10px; }
         .card-photo-container { position: relative; width: 100%; height: 280px; margin-bottom: 15px; overflow: hidden; border: 1px solid #222; }
         .card-photo-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); }
-        .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); }
         
-        /* 修正：卡片上的單位名稱位置 */
-        .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 5; }
+        /* 浮水印：右下角代號 (z-index 修正) */
+        .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); z-index: 10; }
         
+        /* 左下角單位名稱 (z-index 修正) */
+        .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 10; }
+        
+        /* HUD 代號 - 右上角 (z-index 修正) */
+        .hud-code-name { position: absolute; top: 15px; right: 15px; text-align: right; z-index: 10; }
+        .code-main { font-family: 'Orbitron'; font-size: 14px; color: #fff; font-weight: bold; text-shadow: 0 0 10px var(--neon-amber); }
+        .code-sub { font-family: 'Orbitron'; font-size: 8px; color: var(--neon-orange); letter-spacing: 1px; }
+
+        /* HUD 裝備圖示 - 右下角 */
+        .hud-gear { position: absolute; bottom: 40px; right: 15px; text-align: right; z-index: 10; }
+        .gear-icon { font-size: 24px; filter: drop-shadow(0 0 5px var(--neon-amber)); }
+
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
@@ -206,7 +216,7 @@
             <div class="main-logo-text">2026 給社工愛的鼓勵</div>
             
             <div class="intro-text">
-                在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是<span class="highlight">社工</span>，社會的安全網，卻往往耗盡了自己的能量。<br><br>
+                在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是社工，也是社會的安全網。<br><br>
                 系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
             </div>
             
@@ -275,7 +285,7 @@
                         <textarea id="msg-input" placeholder="可選填上方金句，或自行輸入..."></textarea>
                         
                         <div class="photo-bar">
-                            <span style="font-size:11px;color:#888;">IMAGE: DEFAULT</span>
+                            <span style="font-size:11px;color:#888;" id="photo-status">IMAGE: DEFAULT</span>
                             <label class="btn-upload-mini">UPLOAD <input type="file" id="upload-photo" style="display:none;" onchange="previewPhoto()"></label>
                         </div>
                         <span class="section-label">CODENAME (署名)</span>
@@ -300,11 +310,20 @@
                 <div class="card-header"><span>PROJECT NEON</span><span>LOG #2026</span></div>
                 <div class="card-photo-container">
                     <img id="card-img" class="card-photo-img" src="">
-                    <div id="card-unit-name" class="card-unit-name"></div>
+                    
+                    <div class="hud-code-name">
+                        <div class="code-main" id="code-main">NEON-XXXX</div>
+                        <div class="code-sub" id="code-sub">GUARDIAN: UNKNOWN</div>
+                    </div>
+                    
+                    <div id="card-unit-name" class="card-unit-name">單位名稱</div>
                     <div id="card-sign" class="card-signature">USER</div>
+                    
+                    <div class="hud-gear"><div id="gear-icon" class="gear-icon">📦</div></div>
                 </div>
                 <div id="card-msg" class="card-text">...</div>
                 <div id="card-sponsor" class="card-sponsor"></div>
+                
                 <div id="feedback-layer"><div class="feedback-box"><div class="boost-text">SIGNAL BOOSTED +12%</div><div class="boost-sub">感謝您的支援，更多守護者將加入連線。</div></div></div>
             </div>
             <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
@@ -404,7 +423,7 @@
             } else { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
         }
 
-        // Logic 1: Intro -> Scanning -> Step 1 (Optimized)
+        // Logic 1: Intro -> Scanning -> Step 1
         function startScanning() {
             if(dailyCount >= 3) return alert("ENERGY DEPLETED. COME BACK TOMORROW.");
 
@@ -418,25 +437,24 @@
                 const scan = document.getElementById('scanning-layer');
                 scan.style.display = 'flex';
                 
-                // Dynamic Text Animation
-                const texts = ["ESTABLISHING SECURE CONNECTION...", "SCANNING SECTOR 7...", "ANALYZING SIGNAL...", "TARGET LOCKED"];
+                // Fun Logs
+                const logs = ["CONNECTING TO SERVER...", "BYPASSING FIREWALL...", "SEARCHING SECTOR 7...", "ANALYZING SIGNAL...", "TARGET LOCKED"];
                 let i = 0;
+                const logEl = document.getElementById('scan-log');
                 const statusEl = document.getElementById('scan-status');
                 const barEl = document.getElementById('scan-bar');
                 
-                // Speed up logic (Total ~2.2s)
                 const interval = setInterval(() => {
-                    if(i < texts.length) {
-                        statusEl.innerText = texts[i++];
+                    if(i < logs.length) {
+                        statusEl.innerText = logs[i];
+                        logEl.innerHTML += logs[i] + "<br>";
+                        i++;
                     }
-                }, 600);
-                
-                // Progress Bar Animation
-                setTimeout(() => { barEl.style.width = "40%"; }, 100);
-                setTimeout(() => { barEl.style.width = "80%"; }, 1200);
-                setTimeout(() => { barEl.style.width = "100%"; }, 2000);
+                }, 400); // Faster
 
-                // 3. Transition to Main Interface (Directly to Step 1)
+                setTimeout(() => { barEl.style.width = "60%"; }, 500);
+                setTimeout(() => { barEl.style.width = "100%"; }, 1500);
+
                 setTimeout(() => {
                     clearInterval(interval);
                     document.getElementById('scanning-layer').style.opacity = 0;
@@ -445,36 +463,40 @@
                         document.getElementById('main-interface').style.opacity = 1;
                         initGame();
                     }, 500);
-                }, 2200); // Shortened wait time
+                }, 2000); // 2 seconds total
             }, 500);
         }
 
         function initGame() {
-            currentUnit = units[Math.floor(Math.random() * units.length)];
+            // Safe fallback if units array is empty (unlikely but safe)
+            currentUnit = units.length > 0 ? units[Math.floor(Math.random() * units.length)] : { name: "未知單位", img: defaultImgs[0], desc: "DATA NOT FOUND" };
+            
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
             
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
-            currentUnit.tags.forEach(tag => {
-                const btn = document.createElement('div');
-                btn.className = 'tech-tag';
-                btn.innerText = tag;
-                btn.onclick = (e) => {
-                    document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    selectedTag = tag;
-                };
-                tagContainer.appendChild(btn);
-            });
+            if (currentUnit.tags) {
+                currentUnit.tags.forEach(tag => {
+                    const btn = document.createElement('div');
+                    btn.className = 'tech-tag';
+                    btn.innerText = tag;
+                    btn.onclick = (e) => {
+                        document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        selectedTag = tag;
+                    };
+                    tagContainer.appendChild(btn);
+                });
+            }
             nextStep(1);
         }
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
             if(step === 3 && !selectedTag) { 
-                // Auto-select first tag if none selected (Fix for stuck)
+                // Auto-select first tag if none selected
                 const tags = document.querySelectorAll('.tech-tag');
                 if(tags.length > 0) {
                     tags[0].classList.add('active');
@@ -490,7 +512,7 @@
             selectedProp = name;
         }
 
-        // Message Logic (Enhanced)
+        // Message Logic
         function fillMsg(text) { document.getElementById('msg-input').value = text; }
         
         function openMsgModal() {
@@ -519,9 +541,9 @@
             }
         }
 
-        // Logic 2: Generate Cool Card (Fixed)
+        // Logic 2: Generate Cool Card (Fix: Data Binding)
         function generatePreview() {
-            // 1. Auto-fill message if empty (Defensive UX)
+            // 1. Auto-fill message if empty
             const msgInput = document.getElementById('msg-input');
             if(!msgInput.value.trim()) {
                 msgInput.value = fullQuotes[Math.floor(Math.random() * fullQuotes.length)];
@@ -529,11 +551,10 @@
             const msg = msgInput.value;
             const sign = document.getElementById('sign-input').value || "UNKNOWN";
 
-            // 2. Generate Code Name
             const randomCode = Math.floor(1000 + Math.random() * 9000);
             const codeName = `NEON-${randomCode}`;
             
-            // 3. Robust Image Fallback
+            // 2. Robust Image Fallback
             let finalImg = userPhoto;
             if(!finalImg && currentUnit && currentUnit.img) finalImg = currentUnit.img;
             if(!finalImg) finalImg = defaultImgs[0]; // Absolute fallback
@@ -543,42 +564,49 @@
             document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
             document.getElementById('card-msg').innerText = msg;
             
-            // 4. Robust Unit Name
+            // 3. Robust Unit Name (Fix null check)
             const unitNameText = currentUnit ? currentUnit.name : "SEARCH TARGET";
             document.getElementById('card-unit-name').innerText = unitNameText;
             
-            // 5. Robust Sponsor
+            // 4. Watermark
+            document.getElementById('card-sign').innerText = sign.toUpperCase();
+
+            // 5. Sponsor & Gear Icon Fallback
             if(selectedProp) {
                 document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
+                document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : (selectedProp.includes('洗') ? '🚿' : '☀️');
             } else {
                 document.getElementById('card-sponsor').innerText = "SUPPLY: STANDARD"; 
+                document.getElementById('gear-icon').innerText = "🛡️"; // Default shield for search
             }
 
-            // 6. Show Preview
-            document.getElementById('btn-transmit').innerText = "TRANSMITTING...";
-            document.getElementById('btn-transmit').style.background = "#fff";
-            
-            setTimeout(() => {
-                document.getElementById('btn-transmit').innerText = "EXECUTE TRANSMISSION";
-                document.getElementById('btn-transmit').style.background = ""; // Reset
+            // 6. Visual Feedback
+            const btn = document.getElementById('btn-transmit');
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = "TRANSMITTING...";
+                btn.style.background = "#fff";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                    document.getElementById('preview-modal').style.display = 'flex';
+                }, 500);
+            } else {
                 document.getElementById('preview-modal').style.display = 'flex';
-            }, 500); // Visual feedback delay
+            }
         }
 
         // Logic 3: Share Benefit
         function finalSubmit() {
-            // Show Feedback Overlay inside the card preview
             const feedback = document.getElementById('feedback-layer');
             feedback.style.display = 'flex';
             
-            // Simulate Download/Share
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `MISSION_REPORT_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
                 
-                // Delay for effect, then reload
                 setTimeout(() => {
                     alert("任務回報完成！裝備已存入背包。");
                     location.reload();
@@ -586,22 +614,21 @@
             });
         }
 
-        // Search Logic: Auto Jump to Step 3
+        // Search Logic
         function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
         
         function executeSearch(keyword) {
             if(!keyword) return alert("請輸入關鍵字");
             closeModal('search-modal');
             
-            // 1. Simulate Scan
-            document.getElementById('main-interface').style.opacity = 0; // Hide Main momentarily
+            document.getElementById('main-interface').style.opacity = 0; 
             document.getElementById('scanning-layer').style.display = 'flex';
             
             setTimeout(() => {
                 document.getElementById('scanning-layer').style.display = 'none';
                 document.getElementById('main-interface').style.opacity = 1;
                 
-                // 2. Set Unit Data (Search Result) - Ensure structure matches units array
+                // Set Search Result Unit
                 currentUnit = { 
                     name: keyword, 
                     img: defaultImgs[0], 
@@ -609,22 +636,19 @@
                     tags: ["#搜索結果"] 
                 };
                 
-                // 3. Auto-Select Default Tag & Skip Step 2
                 selectedTag = "#搜索結果";
-                selectedProp = null; // No sponsor for search result (fast track)
+                selectedProp = null; 
                 
-                // 4. Force Jump to Step 3
+                // Jump to Step 3
                 document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
                 document.getElementById('step-3').style.display = 'flex';
                 
-            }, 1500); // Fast Scan
+            }, 1500); 
         }
 
         // SW Logic
         function openSW(unitName = '親愛的夥伴') {
             document.getElementById('sw-target-name').innerText = unitName;
-            
-            // Fake Ranking Generation
             const list = document.getElementById('sw-ranking');
             list.innerHTML = `
                 <h4 style="margin:0 0 15px 0; font-size:14px; color:var(--neon-orange);">🏆 民眾最想對你說的話：</h4>
@@ -635,7 +659,7 @@
             document.getElementById('sw-modal').style.display = 'flex';
         }
 
-        function openInventory() { /* ... */ document.getElementById('inventory-modal').style.display = 'flex'; }
+        function openInventory() { document.getElementById('inventory-modal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     </script>
