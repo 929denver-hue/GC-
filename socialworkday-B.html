@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON (Enterprise Demo)</title>
+    <title>2026 社工守護計畫 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -11,12 +11,15 @@
         :root {
             --neon-amber: #FFB300;
             --neon-orange: #FF5722;
-            --neon-blue: #00bcd4; /* 企業版強調色 */
+            --neon-blue: #00bcd4;
             --tech-bg: #121212;
+            --panel-bg: #1E1E1E;
             --text-main: #E0E0E0;
+            --glass-border: 1px solid rgba(255, 179, 0, 0.3);
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body { 
             margin: 0; font-family: 'Noto Sans TC', sans-serif; 
             background-color: var(--tech-bg); color: var(--text-main); 
@@ -24,88 +27,184 @@
             background-image: radial-gradient(circle at 50% 50%, #2a1a0a 0%, #000 100%);
         }
 
-        /* --- 通用動畫 --- */
-        @keyframes pulseCore { 0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.3); } }
+        /* --- 能量核心視覺 --- */
+        .energy-core-container {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 400px; height: 400px; z-index: -1; pointer-events: none; opacity: 0.5;
+        }
+        .energy-ball {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 150px; height: 150px; border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-amber) 0%, transparent 70%);
+            box-shadow: 0 0 60px var(--neon-orange);
+            animation: pulseCore 3s infinite ease-in-out;
+        }
+        .core-orbit {
+            position: absolute; top: 50%; left: 50%; width: 280px; height: 280px;
+            border: 1px dashed rgba(255, 179, 0, 0.2); border-radius: 50%;
+            transform: translate(-50%, -50%); animation: spin 20s linear infinite;
+        }
+        @keyframes pulseCore { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; } }
         @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- 1. 使用者介面 (USER UI) --- */
-        #user-interface { height: 100%; width: 100%; position: relative; display: flex; flex-direction: column; }
+        /* --- 0. 前導層 --- */
+        #intro-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; z-index: 999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px;
+            transition: opacity 0.8s ease-in-out;
+            background-image: linear-gradient(rgba(255, 179, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .briefing-card {
+            max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
+            background: rgba(20, 20, 20, 0.9); padding: 40px 20px;
+            box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
+            position: relative; overflow: hidden; text-align: center;
+        }
+        .briefing-card::before, .briefing-card::after { content: ''; position: absolute; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
+        .briefing-card::before { top:0; left:0; } .briefing-card::after { bottom:0; right:0; }
 
-        /* 能量核心 */
-        .energy-core-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; z-index: -1; pointer-events: none; opacity: 0.5; }
-        .energy-ball { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--neon-amber) 0%, transparent 70%); box-shadow: 0 0 60px var(--neon-orange); animation: pulseCore 4s infinite ease-in-out; }
-        .core-orbit { position: absolute; top: 50%; left: 50%; width: 280px; height: 280px; border: 1px dashed rgba(255, 179, 0, 0.2); border-radius: 50%; transform: translate(-50%, -50%); animation: spin 20s linear infinite; }
-
-        /* Intro Layer */
-        #intro-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; transition: opacity 0.8s; }
-        .briefing-card { max-width: 500px; width: 100%; border: 1px solid var(--neon-amber); background: rgba(20, 20, 20, 0.9); padding: 40px 20px; text-align: center; box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); }
-        .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); }
-        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; display: block; margin-bottom: 20px; }
+        .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
+        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
         .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px; }
-        .btn-start-mission { width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber); padding: 15px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 20px var(--neon-amber); }
+        .highlight { color: var(--neon-amber); font-weight: bold; border-bottom: 1px solid var(--neon-amber); }
 
-        /* Scanning */
-        #scanning-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 998; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .radar-box { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
-        .radar-ring { position: absolute; border: 1px solid var(--neon-orange); border-radius: 50%; animation: radarRipple 2s infinite linear; opacity: 0; }
-        .radar-ring:nth-child(1) { animation-delay: 0s; } .radar-ring:nth-child(2) { animation-delay: 0.6s; } .radar-ring:nth-child(3) { animation-delay: 1.2s; }
-        .central-heart { font-size: 50px; animation: heartBeat 1s infinite; z-index: 10; filter: drop-shadow(0 0 10px var(--neon-orange)); }
-        @keyframes radarRipple { 0% { transform: scale(0.5); opacity: 0; border-width: 4px; } 50% { opacity: 0.5; } 100% { transform: scale(1.5); opacity: 0; border-width: 0px; } }
-        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .scan-text { margin-top: 30px; font-family: 'Orbitron'; color: var(--neon-amber); letter-spacing: 2px; }
+        .btn-start-mission {
+            width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
+            padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
+            text-transform: uppercase; font-weight: bold; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            animation: pulseBtn 2s infinite;
+        }
+        .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber); }
+        @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
+
+        /* --- 0.5 過場層 (Scanning) --- */
+        #scanning-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 998; display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .cmd-log { position: absolute; top: 20px; left: 20px; font-family: 'Orbitron', monospace; font-size: 10px; color: rgba(0, 255, 0, 0.5); text-align: left; line-height: 1.5; opacity: 0.7; pointer-events: none; }
+        .radar-box { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; }
+        .radar-ring {
+            position: absolute; border: 2px solid var(--neon-orange); border-radius: 50%; opacity: 0;
+            border-left-color: transparent; border-right-color: transparent;
+            animation: spinRipple 1.5s infinite linear;
+        }
+        .radar-ring:nth-child(1) { width: 80px; height: 80px; animation-duration: 1s; border-width: 1px; }
+        .radar-ring:nth-child(2) { width: 140px; height: 140px; animation-duration: 2s; border-width: 2px; border-color: var(--neon-amber); }
+        .radar-ring:nth-child(3) { width: 200px; height: 200px; animation-duration: 3s; border-width: 1px; }
+        .central-heart { font-size: 50px; animation: glitchHeart 1s infinite steps(2); z-index: 10; filter: drop-shadow(0 0 10px var(--neon-orange)); }
+        @keyframes spinRipple { 0% { transform: rotate(0deg) scale(0.8); opacity: 0.2; } 50% { opacity: 1; } 100% { transform: rotate(360deg) scale(1.1); opacity: 0.2; } }
+        @keyframes glitchHeart { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
+        .scan-text { margin-top: 30px; font-family: 'Orbitron'; font-size: 16px; color: var(--neon-amber); letter-spacing: 2px; text-align: center; font-weight: bold; }
         .scan-progress-bar { width: 200px; height: 4px; background: #333; margin-top: 15px; border-radius: 2px; overflow: hidden; }
-        .scan-progress-fill { height: 100%; width: 0%; background: var(--neon-orange); transition: width 0.2s linear; }
+        .scan-progress-fill { height: 100%; width: 0%; background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); transition: width 0.2s linear; }
 
-        /* HUD & Interface */
-        .nav-hud { position: absolute; top: 0; left: 0; width: 100%; padding: 15px; z-index: 50; display: flex; justify-content: space-between; align-items: flex-end; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); border-bottom: 1px solid rgba(255, 179, 0, 0.1); }
+        /* --- 主介面 --- */
+        #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; }
+        .warm-grid { position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background-image: linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(500px) rotateX(60deg); z-index: -1; animation: gridMove 30s linear infinite; pointer-events: none; }
+        @keyframes gridMove { from { transform: perspective(500px) rotateX(60deg) translateY(0); } to { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
+
+        /* --- HUD --- */
+        .nav-hud { position: absolute; top: 0; left: 0; width: 100%; padding: 15px; z-index: 50; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(255, 179, 0, 0.1); background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
         .hud-label { font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); letter-spacing: 1px; }
-        .hud-value { font-size: 16px; font-weight: bold; color: #fff; }
-        .battery-container { display: flex; gap: 4px; margin-bottom: 2px; justify-content: flex-end; }
-        .battery-cell { width: 12px; height: 16px; border: 1px solid var(--neon-amber); background: rgba(255, 179, 0, 0.1); transform: skewX(-15deg); transition: 0.3s; }
-        .battery-cell.active { background: var(--neon-amber); box-shadow: 0 0 10px var(--neon-amber); }
-        .battery-cell.empty { border-color: #444; background: transparent; }
-        .btn-inventory { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Orbitron'; }
+        .hud-value { font-size: 16px; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--neon-amber); }
+        
+        .battery-container { display: flex; gap: 4px; margin-bottom: 5px; justify-content: flex-end; }
+        .battery-cell { width: 12px; height: 16px; border: 1px solid var(--neon-amber); background: rgba(255, 179, 0, 0.2); transition: 0.3s; transform: skewX(-15deg); }
+        .battery-cell.active { background: var(--neon-amber); box-shadow: 0 0 8px var(--neon-amber); }
+        .battery-cell.empty { border-color: #555; background: transparent; }
+
+        .btn-inventory { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Orbitron'; display: flex; align-items: center; gap: 5px; }
+
+        /* --- [修正] 跑馬燈 (解決亂版問題) --- */
+        .marquee-container {
+            position: absolute; top: 70px; width: 100%; 
+            background: rgba(255, 87, 34, 0.1); 
+            border-top: 1px solid rgba(255, 87, 34, 0.3); 
+            border-bottom: 1px solid rgba(255, 87, 34, 0.3); 
+            height: 28px; 
+            overflow: hidden; 
+            white-space: nowrap; /* 確保不換行 */
+            display: block; /* 避免 flex 擠壓 */
+        }
+        .marquee-text {
+            display: inline-block; /* 確保為行內區塊 */
+            font-size: 11px; 
+            color: var(--neon-orange); 
+            font-family: 'Orbitron'; 
+            padding-left: 100%;
+            animation: scrollText 20s linear infinite;
+            will-change: transform; /* 效能優化 */
+        }
+        @keyframes scrollText { 
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); } 
+        }
 
         .console-wrapper { position: absolute; top: 110px; bottom: 60px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; padding: 0 10px; display: flex; flex-direction: column; }
-        .screen-frame { flex: 1; background: rgba(0, 0, 0, 0.85); border: 2px solid #333; border-radius: 8px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 30px rgba(255, 179, 0, 0.1); }
+        .screen-frame { flex: 1; background: #000; border: 2px solid #333; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 179, 0, 0.1); display: flex; flex-direction: column; }
+        .screen-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; pointer-events: none; z-index: 99; }
+
+        /* Step Styles */
+        .step-container { display: none; height: 100%; flex-direction: column; opacity: 0; animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
         
-        .step-container { display: none; height: 100%; flex-direction: column; opacity: 0; animation: popIn 0.5s forwards; }
         .story-img-box { height: 40%; position: relative; overflow: hidden; border-bottom: 1px solid var(--neon-amber); }
-        .story-img { width: 100%; height: 100%; object-fit: cover; filter: sepia(30%); }
+        .story-img { width: 100%; height: 100%; object-fit: cover; filter: sepia(30%) contrast(1.1); }
         .unit-badge { position: absolute; bottom: 10px; left: 15px; background: rgba(0,0,0,0.8); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 4px 10px; font-size: 12px; font-weight: bold; }
-        .story-content { padding: 20px; color: #ccc; font-size: 15px; line-height: 1.8; flex: 1; overflow-y: auto; font-family: 'Noto Serif TC'; }
-        
-        .panel-header { padding: 15px; border-bottom: 1px solid #333; font-family: 'Orbitron'; color: var(--neon-amber); font-size: 12px; }
+        .story-content { padding: 25px; color: #ccc; font-size: 15px; line-height: 1.8; text-align: justify; flex: 1; overflow-y: auto; font-family: 'Noto Serif TC'; }
+        .story-quote { color: var(--neon-orange); font-weight: bold; margin-bottom: 15px; display: block; font-size: 16px; }
+
+        .panel-header { padding: 15px; border-bottom: 1px solid #333; font-family: 'Orbitron'; color: var(--neon-amber); font-size: 12px; letter-spacing: 1px; }
         .panel-body { flex: 1; padding: 20px; overflow-y: auto; }
         .section-label { font-size: 11px; color: #888; margin-bottom: 10px; display: block; font-weight: bold; }
+        
+        /* 標籤 */
         .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
-        .tech-tag { background: transparent; border: 1px solid #555; color: #aaa; padding: 8px 15px; font-size: 12px; cursor: pointer; border-radius: 2px; }
-        .tech-tag.active { border-color: var(--neon-amber); color: #000; background: var(--neon-amber); font-weight: bold; }
+        .tech-tag { background: transparent; border: 1px solid #555; color: #aaa; padding: 8px 15px; font-size: 12px; cursor: pointer; border-radius: 2px; transition: 0.2s; }
+        .tech-tag.active { border-color: var(--neon-amber); color: #000; background: var(--neon-amber); box-shadow: 0 0 10px rgba(255, 179, 0, 0.5); font-weight: bold; }
+
+        /* 贊助商 */
         .sponsor-list { display: flex; flex-direction: column; gap: 10px; }
         .tech-card { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #333; cursor: pointer; transition: 0.2s; }
-        .tech-card.selected { border-color: var(--neon-orange); background: rgba(255, 87, 34, 0.1); }
-        
+        .tech-card.selected { border-color: var(--neon-orange); background: rgba(255, 87, 34, 0.1); box-shadow: inset 0 0 10px rgba(255, 87, 34, 0.2); }
+        .tech-icon { font-size: 20px; }
+        .tech-info { flex: 1; }
+        .tech-reason { font-size: 10px; color: var(--neon-orange); display: block; margin-bottom: 2px; }
+        .tech-name { font-size: 13px; font-weight: bold; color: #fff; }
+        .tech-check { color: var(--neon-orange); font-size: 14px; opacity: 0; }
+        .tech-card.selected .tech-check { opacity: 1; }
+
+        /* 留言區 */
         .msg-presets { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-        .preset-chip { background: #222; border: 1px solid #444; color: #aaa; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; }
+        .preset-chip { background: #222; border: 1px solid #444; color: #aaa; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; transition: 0.2s; }
+        .preset-chip:hover { border-color: var(--neon-amber); color: var(--neon-amber); }
         .preset-more-btn { background: var(--neon-orange); color: #000; border: none; padding: 6px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; cursor: pointer; }
+
         textarea { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 15px; font-family: 'Noto Sans TC'; font-size: 14px; border-radius: 4px; outline: none; resize: none; min-height: 100px; }
-        .name-field { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 12px; text-align: center; margin-top: 10px; outline: none; }
-        
-        .control-bar { padding: 15px; display: flex; gap: 10px; background: #111; }
-        .btn-main { flex: 1; background: var(--neon-amber); color: #000; border: none; padding: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); text-align: center; }
+        textarea:focus { border-color: var(--neon-amber); }
+
+        .photo-bar { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px; margin: 15px 0; border-radius: 4px; }
+        .btn-upload-mini { border: 1px solid #555; background: transparent; color: #ccc; padding: 4px 10px; font-size: 10px; cursor: pointer; border-radius: 2px; }
+        .name-field { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 12px; text-align: center; margin-bottom: 10px; outline: none; }
+
+        .control-bar { padding-top: 15px; display: flex; gap: 10px; background: #111; padding: 15px; }
+        .btn-main { flex: 1; background: var(--neon-amber); color: #000; border: none; padding: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); transition: 0.2s; text-align: center; }
+        .btn-main:hover { box-shadow: 0 0 15px var(--neon-amber); background: #fff; }
         .btn-back { background: transparent; border: 1px solid #555; color: #888; padding: 0 15px; cursor: pointer; }
+
+        .footer-nav { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 10px; color: #666; z-index: 10; }
+        .footer-link { color: #888; text-decoration: none; border-bottom: 1px dashed #666; margin: 0 5px; cursor: pointer; }
 
         /* 企業 CSR 提示 */
         .csr-hint { font-size: 11px; color: var(--neon-orange); text-align: center; margin-bottom: 8px; font-family: 'Noto Sans TC'; border: 1px dashed var(--neon-orange); padding: 5px; border-radius: 4px; background: rgba(255,87,34,0.1); animation: blinkText 3s infinite; display: none; }
         @keyframes blinkText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-        /* Footer */
-        .footer-nav { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 10px; color: #666; z-index: 10; }
-        .footer-link { color: #888; text-decoration: none; border-bottom: 1px dashed #666; margin: 0 5px; cursor: pointer; }
-
-        /* --- 2. HR DASHBOARD UI (預設隱藏) --- */
+        /* --- HR DASHBOARD --- */
         #hr-dashboard { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; z-index: 2000; padding: 20px; overflow-y: auto; color: #fff; }
         .hr-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--neon-amber); padding-bottom: 15px; margin-bottom: 20px; }
         .hr-title { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--neon-amber); }
@@ -124,45 +223,57 @@
         /* --- Modals --- */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
         
-        /* 預覽卡片 */
         #capture-target { width: 320px; background: #000; border: 1px solid #333; padding: 15px; box-shadow: 0 0 40px rgba(255, 179, 0, 0.1); position: relative; }
         .card-header { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); margin-bottom: 10px; }
         .card-photo-container { position: relative; width: 100%; height: 280px; margin-bottom: 15px; overflow: hidden; border: 1px solid #222; }
         .card-photo-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); }
         .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); z-index: 10; }
         .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 10; }
+        .hud-code-name { position: absolute; top: 15px; right: 15px; text-align: right; z-index: 10; }
+        .code-main { font-family: 'Orbitron'; font-size: 14px; color: #fff; font-weight: bold; text-shadow: 0 0 10px var(--neon-amber); }
+        .code-sub { font-family: 'Orbitron'; font-size: 8px; color: var(--neon-orange); letter-spacing: 1px; }
         .hud-gear { position: absolute; bottom: 40px; right: 15px; text-align: right; z-index: 10; }
         .gear-icon { font-size: 24px; filter: drop-shadow(0 0 5px var(--neon-amber)); }
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
-        
+
         #feedback-layer { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; }
         .feedback-box { text-align: center; animation: popIn 0.5s; }
         .boost-text { font-family: 'Orbitron'; font-size: 24px; color: var(--neon-orange); font-weight: bold; margin-bottom: 10px; text-shadow: 0 0 20px var(--neon-orange); }
         .boost-sub { font-size: 12px; color: #fff; }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         /* Login Box */
         .login-box { width: 300px; background: #111; border: 1px solid var(--neon-orange); padding: 25px; text-align: center; box-shadow: 0 0 30px rgba(255, 87, 34, 0.3); }
-        .btn-auth { width: 100%; padding: 12px; background: var(--neon-amber); color: #000; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
+        .btn-auth { width: 100%; padding: 12px; background: var(--neon-amber); color: #000; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; font-family: 'Orbitron'; }
         .btn-guest { width: 100%; padding: 10px; background: transparent; color: #888; border: 1px solid #444; cursor: pointer; font-size: 12px; }
 
-        /* Common Modals */
         .common-box { background: #111; border: 1px solid var(--neon-amber); padding: 20px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; color: #fff; }
         .ranking-item { border-bottom: 1px solid #333; padding: 10px 0; font-size: 13px; display: flex; justify-content: space-between; }
-        .search-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .search-input { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 10px; font-family: 'Noto Sans TC'; }
         
-        .sw-box { background: #1a1a1a; width: 100%; max-width: 500px; padding: 25px; border: 1px solid var(--neon-amber); border-radius: 8px; color: #e0e0e0; }
+        /* SW Modal Styles */
+        .sw-box { background: #1a1a1a; width: 100%; max-width: 500px; padding: 25px; border: 1px solid var(--neon-amber); border-radius: 8px; color: #e0e0e0; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
         .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .sw-photo-frame { width: 100%; height: 180px; overflow: hidden; border-radius: 4px; margin-bottom: 20px; border: 1px solid #333; }
         .sw-photo { width: 100%; height: 100%; object-fit: cover; filter: sepia(30%); }
+        .sw-title { font-size: 1.4rem; font-weight: bold; color: var(--neon-amber); margin-bottom: 10px; font-family: 'Orbitron'; }
         .sw-intro { font-size: 1rem; line-height: 1.6; color: #ccc; text-align: justify; margin-bottom: 20px; font-family: 'Noto Serif TC'; }
+        .close-btn { cursor: pointer; color: #888; font-size: 20px; }
+
+        .search-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .search-input { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 10px; font-family: 'Noto Sans TC'; }
+        #msg-modal-list { max-height: 300px; overflow-y: auto; }
+        .msg-option { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; color: #ccc; font-size: 13px; }
+        .msg-option:hover { color: var(--neon-amber); background: rgba(255,255,255,0.05); }
 
     </style>
 </head>
 <body>
 
-    <div class="energy-core-container"><div class="core-orbit"></div><div class="energy-ball"></div></div>
+    <div class="energy-core-container">
+        <div class="core-orbit"></div>
+        <div class="energy-ball"></div>
+    </div>
 
     <div id="user-interface">
         
@@ -187,15 +298,21 @@
 
         <div id="main-interface">
             <div class="nav-hud">
-                <div><span class="hud-label">GLOBAL ENERGY</span><div class="hud-value" id="global-val">4998 / 5000</div></div>
-                <div style="text-align:right;">
-                    <span class="hud-label">DAILY CHARGE</span>
-                    <div class="battery-container"><div class="battery-cell active" id="batt-1"></div><div class="battery-cell active" id="batt-2"></div><div class="battery-cell active" id="batt-3"></div></div>
+                <div>
+                    <span class="hud-label">GLOBAL ENERGY</span>
+                    <div class="hud-value" id="global-energy-value" style="font-size:14px;">4998 / 5000</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                    <div class="battery-container">
+                        <div class="battery-cell active" id="batt-1"></div>
+                        <div class="battery-cell active" id="batt-2"></div>
+                        <div class="battery-cell active" id="batt-3"></div>
+                    </div>
                     <div class="btn-inventory" onclick="openInventory()">🎒 PACK (<span id="pack-count">0</span>)</div>
                 </div>
             </div>
             
-            <div class="marquee-container"><div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 匿名勇者 傳輸 [防禦強化] ...</div></div>
+            <div class="marquee-container"><div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 台積電戰隊 累積 5200 點能量 ...</div></div>
 
             <div class="console-wrapper">
                 <div class="screen-frame">
@@ -208,7 +325,8 @@
                     <div id="step-2" class="step-container">
                         <div class="panel-header">STEP 2/3 : CONFIGURE LOADOUT</div>
                         <div class="panel-body">
-                            <span class="section-label">1. SYNCHRONIZE (同步頻率)</span><div class="tag-row" id="tag-container"></div>
+                            <span class="section-label">1. SYNCHRONIZE (同步頻率)</span>
+                            <div class="tag-row" id="tag-container"></div>
                             <span class="section-label">2. TACTICAL SUPPLY (戰術補給)</span>
                             <div class="sponsor-list">
                                 <div class="tech-card" onclick="selectProp(this, '鼎王湯底')"><div class="tech-icon">🍲</div><div class="tech-info"><span class="tech-reason">>> 偵測到寒冷與飢餓</span><span class="tech-name">配置 [鼎王麻辣鍋]</span></div><div class="tech-check">✔</div></div>
@@ -304,11 +422,16 @@
                 </div>
                 <div id="card-msg" class="card-text">...</div>
                 <div id="card-sponsor" class="card-sponsor"></div>
-                <div id="feedback-layer"><div class="feedback-box"><div class="boost-text">TICKET UNLOCKED!<br>IMPACT +100</div><div class="boost-sub">已獲得本週抽獎資格</div></div></div>
+                <div id="feedback-layer">
+                    <div style="text-align: center; animation: popIn 0.5s;">
+                        <div style="font-family: 'Orbitron'; font-size: 24px; color: var(--neon-orange); font-weight: bold; margin-bottom: 10px; text-shadow: 0 0 20px var(--neon-orange);" id="feedback-title">TICKET GET!</div>
+                        <div style="font-size: 12px; color: #fff;" id="feedback-desc">獲得 1 次抽獎機會，已存入背包</div>
+                    </div>
+                </div>
             </div>
             <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
                 <button class="btn-main" onclick="closeModal('preview-modal')" style="background:transparent; border:1px solid #fff; color:#fff;">EDIT</button>
-                <button class="btn-main" onclick="finalSubmit()">REPORT STATUS</button>
+                <button class="btn-main" onclick="finalSubmit()">REPORT STATUS (SHARE)</button>
             </div>
         </div>
     </div>
@@ -316,17 +439,17 @@
     <div id="login-modal" class="modal-overlay">
         <div class="login-box">
             <div style="color:var(--neon-orange); font-size:1.2rem; font-weight:bold; margin-bottom:10px; font-family:'Orbitron';">身分驗證</div>
-            <div style="color:#ccc; font-size:0.9rem; margin-bottom:20px; line-height:1.5;">偵測到訪客連線。<br>登入後可累積抽獎次數並計入戰隊積分。</div>
+            <div style="color:#ccc; font-size:0.9rem; margin-bottom:20px; line-height:1.5;">偵測到訪客連線。<br>登入以記錄參與次數並獲取全服抽獎資格。</div>
             <button class="btn-auth" onclick="simulateAuth()">登入 / 註冊</button>
-            <button class="btn-guest" onclick="proceedAsGuest()">以訪客身分繼續</button>
+            <button class="btn-guest" onclick="proceedAsGuest()">以訪客身分繼續 (不計次數)</button>
         </div>
     </div>
 
     <div id="sw-modal" class="modal-overlay">
         <div class="sw-box">
             <div class="sw-header"><h3 class="sw-title">🔐 SOCIAL WORKER ACCESS</h3><span class="close-btn" onclick="closeModal('sw-modal')">×</span></div>
-            <div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" class="sw-photo"></div>
-            <div style="font-size:1.1rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div>
+            <div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" alt="Warm Hands" class="sw-photo"></div>
+            <div style="font-size:1.2rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div>
             <div class="sw-intro">
                 這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意。在繁忙的訪視與個案紀錄間，請別忘了，<span style="color:var(--neon-amber); font-weight:bold;">有人正默默停下來為你打氣</span>。你伸出的雙手接住了脆弱，而社會的善意正溫柔地支撐著你。感謝你的堅持，讓我們一起在這座城市，守護微小卻堅定的光芒。
             </div>
@@ -341,7 +464,8 @@
 
     <div id="search-modal" class="modal-overlay">
         <div class="common-box">
-            <h3 style="color:var(--neon-amber);">🔍 SEARCH UNIT</h3>
+            <div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('search-modal')">✕</div>
+            <h3 style="color:var(--neon-amber); margin-top:0;">🔍 SEARCH UNIT DATABASE</h3>
             <input type="text" id="search-input" class="search-input" placeholder="輸入單位名稱...">
             <div class="search-chips">
                 <div class="preset-chip" onclick="executeSearch('全體站內社工')">全體站內社工</div>
@@ -351,8 +475,17 @@
         </div>
     </div>
 
-    <div id="msg-modal" class="modal-overlay"><div class="common-box"><h3 style="color:var(--neon-amber);">SELECT MESSAGE</h3><div id="msg-modal-list"></div></div></div>
-    <div id="inventory-modal" class="modal-overlay"><div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT (背包)</h3><div id="inventory-list"></div></div></div>
+    <div id="msg-modal" class="modal-overlay">
+        <div class="common-box">
+            <div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('msg-modal')">✕</div>
+            <h3 style="color:var(--neon-amber); margin-top:0;">SELECT MESSAGE</h3>
+            <div id="msg-modal-list"></div>
+        </div>
+    </div>
+
+    <div id="inventory-modal" class="modal-overlay">
+        <div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT (背包)</h3><div id="inventory-list"></div></div>
+    </div>
 
     <script>
         const units = [
@@ -362,23 +495,24 @@
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         const fullQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。", "加油！你們的付出我們都看在眼裡。", "黑暗中總有光，而你們就是那道光。", "願世界對你們，也能溫柔以待。", "請記得照顧好自己。", "這是一份遠方的應援，挺你！", "讓這社會還有溫度。", "感謝你們的堅持。"];
 
-        let currentUnit = null, selectedTag = null, selectedProp = null, userPhoto = null;
-        let dailyCount = 0, totalParticipations = 0, isAuthenticated = false;
+        let currentUnit = null;
+        let selectedTag = null;
+        let selectedProp = null;
+        let userPhoto = null;
+        let dailyCount = 0;
+        let totalParticipations = 0; // [新增] 參與次數
+        let isAuthenticated = false; // [新增] 驗證狀態
         let myTeam = new URLSearchParams(window.location.search).get('team');
         let myTeamName = new URLSearchParams(window.location.search).get('name') || myTeam;
 
         window.onload = function() {
             localStorage.setItem('gc_daily', 0); // 測試用重置
             checkDaily();
+            
+            // [新增] 讀取背包紀錄
             totalParticipations = parseInt(localStorage.getItem('gc_total') || 0);
             document.getElementById('pack-count').innerText = totalParticipations;
-            updateBatteryVisual();
-            checkEnterpriseMode();
-        }
-
-        function checkDaily() { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
-
-        function checkEnterpriseMode() {
+            
             if(myTeamName) {
                 document.getElementById('faction-display').style.display = 'block';
                 document.getElementById('faction-name').innerText = decodeURIComponent(myTeamName);
@@ -386,13 +520,37 @@
                 document.getElementById('csr-hint').innerHTML = `✨ 本次傳輸將由 <strong>${decodeURIComponent(myTeamName)}</strong> 額外提撥愛心基金`;
                 document.querySelector('.hud-label').innerHTML = `GLOBAL ENERGY | <span style="color:var(--neon-blue)">${decodeURIComponent(myTeamName)} SQUAD</span>`;
             }
+            updateBatteryVisual();
+            checkGlobalTarget();
         }
 
+        function checkDaily() { 
+            dailyCount = parseInt(localStorage.getItem('gc_daily') || 0);
+        }
+
+        // [新增] 電池扣除邏輯
         function updateBatteryVisual() {
             for(let i=1; i<=3; i++) {
                 const cell = document.getElementById(`batt-${i}`);
-                if(i <= (3 - dailyCount)) { cell.classList.remove('empty'); cell.classList.add('active'); }
-                else { cell.classList.remove('active'); cell.classList.add('empty'); }
+                if(cell) {
+                    if(i <= (3 - dailyCount)) { cell.classList.remove('empty'); cell.classList.add('active'); }
+                    else { cell.classList.remove('active'); cell.classList.add('empty'); }
+                }
+            }
+        }
+
+        // [新增] 能量達標解鎖判斷
+        function checkGlobalTarget() {
+            let globalCount = 4998 + totalParticipations;
+            let target = 5000;
+            let hudVal = document.getElementById('global-energy-value');
+            if(hudVal) {
+                if (globalCount >= target) {
+                    hudVal.innerText = `${globalCount} / ${target} (解鎖!)`;
+                    hudVal.style.color = "var(--neon-orange)";
+                } else {
+                    hudVal.innerText = `${globalCount} / ${target}`;
+                }
             }
         }
 
@@ -402,14 +560,23 @@
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
                 document.getElementById('scanning-layer').style.display = 'flex';
+                
+                // Animation logic
                 let i = 0;
                 const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
-                const interval = setInterval(() => { if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++]; }, 600);
+                const interval = setInterval(() => {
+                    if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++];
+                }, 600);
                 setTimeout(() => { document.getElementById('scan-bar').style.width = "100%"; }, 100);
+
                 setTimeout(() => {
                     clearInterval(interval);
                     document.getElementById('scanning-layer').style.opacity = 0;
-                    setTimeout(() => { document.getElementById('scanning-layer').style.display = 'none'; document.getElementById('main-interface').style.opacity = 1; initGame(); }, 500);
+                    setTimeout(() => {
+                        document.getElementById('scanning-layer').style.display = 'none';
+                        document.getElementById('main-interface').style.opacity = 1;
+                        initGame();
+                    }, 500);
                 }, 2000);
             }, 500);
         }
@@ -419,30 +586,53 @@
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
+            
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
-            currentUnit.tags.forEach(tag => {
-                const btn = document.createElement('div'); btn.className = 'tech-tag'; btn.innerText = tag;
-                btn.onclick = (e) => { document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); selectedTag = tag; };
-                tagContainer.appendChild(btn);
-            });
+            if (currentUnit.tags) {
+                currentUnit.tags.forEach(tag => {
+                    const btn = document.createElement('div');
+                    btn.className = 'tech-tag';
+                    btn.innerText = tag;
+                    btn.onclick = (e) => {
+                        document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        selectedTag = tag;
+                    };
+                    tagContainer.appendChild(btn);
+                });
+            }
             nextStep(1);
         }
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            if(step === 3 && !selectedTag) { const tags = document.querySelectorAll('.tech-tag'); tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
+            // Auto select first tag if none
+            if(step === 3 && !selectedTag) {
+                const tags = document.querySelectorAll('.tech-tag');
+                if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
+            }
             document.getElementById(`step-${step}`).style.display = 'flex';
         }
 
-        function selectProp(el, name) { document.querySelectorAll('.tech-card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); selectedProp = name; }
+        function selectProp(el, name) {
+            document.querySelectorAll('.tech-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedProp = name;
+        }
+
         function fillMsg(text) { document.getElementById('msg-input').value = text; }
+        
         function openMsgModal() {
-            const list = document.getElementById('msg-modal-list'); list.innerHTML = "";
-            fullQuotes.forEach(q => { list.innerHTML += `<div class="msg-option" style="padding:10px; border-bottom:1px solid #333; cursor:pointer;" onclick="selectMessage('${q}')">${q}</div>`; });
+            const list = document.getElementById('msg-modal-list');
+            list.innerHTML = "";
+            fullQuotes.forEach(q => {
+                list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
+            });
             document.getElementById('msg-modal').style.display = 'flex';
         }
         function selectMessage(text) { fillMsg(text); closeModal('msg-modal'); }
+
         function previewPhoto() {
             const file = document.getElementById('upload-photo').files[0];
             if(file) {
@@ -452,23 +642,46 @@
             }
         }
 
-        function preSubmitCheck() { if(isAuthenticated) generatePreview(); else document.getElementById('login-modal').style.display = 'flex'; }
-        function simulateAuth() { isAuthenticated = true; closeModal('login-modal'); generatePreview(); }
-        function proceedAsGuest() { closeModal('login-modal'); generatePreview(); }
+        // --- [新增] 註冊攔截 ---
+        function preSubmitCheck() {
+            if (isAuthenticated) {
+                generatePreview();
+            } else {
+                document.getElementById('login-modal').style.display = 'flex';
+            }
+        }
+        function simulateAuth() {
+            isAuthenticated = true;
+            closeModal('login-modal');
+            generatePreview();
+        }
+        function proceedAsGuest() {
+            closeModal('login-modal');
+            generatePreview();
+        }
 
         function generatePreview() {
             const msgInput = document.getElementById('msg-input');
-            if(!msgInput.value.trim()) msgInput.value = fullQuotes[0];
-            const codeName = `NEON-${Math.floor(1000 + Math.random() * 9000)}`;
-            let finalImg = userPhoto || currentUnit.img || defaultImgs[0];
+            if(!msgInput.value.trim()) msgInput.value = fullQuotes[Math.floor(Math.random() * fullQuotes.length)];
+            const msg = msgInput.value;
+            const sign = document.getElementById('sign-input').value || "UNKNOWN";
 
+            const codeName = `NEON-${Math.floor(1000 + Math.random() * 9000)}`;
+            
+            // Image Fallback
+            let finalImg = userPhoto;
+            if(!finalImg && currentUnit && currentUnit.img) finalImg = currentUnit.img;
+            if(!finalImg) finalImg = defaultImgs[0];
+
+            // DOM Binding
             document.getElementById('card-img').src = finalImg;
             document.getElementById('code-main').innerText = codeName;
-            document.getElementById('code-sub').innerText = `GUARDIAN: ${document.getElementById('sign-input').value.toUpperCase() || "UNKNOWN"}`;
-            document.getElementById('card-msg').innerText = msgInput.value;
+            document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
+            document.getElementById('card-msg').innerText = msg;
             document.getElementById('card-unit-name').innerText = currentUnit ? currentUnit.name : "SEARCH TARGET";
-            document.getElementById('card-sign').innerText = document.getElementById('sign-input').value.toUpperCase() || "USER";
-            
+            document.getElementById('card-sign').innerText = sign.toUpperCase();
+
+            // Sponsor & Icon
             if(selectedProp) {
                 document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
                 document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : '☀️';
@@ -479,52 +692,68 @@
             
             // 企業聯名卡片處理
             if(myTeamName) {
-                const sign = document.getElementById('card-sign');
-                sign.innerText += ` | ${decodeURIComponent(myTeamName)}`;
-                sign.style.color = "var(--neon-blue)";
-                sign.style.borderColor = "var(--neon-blue)";
+                const signEl = document.getElementById('card-sign');
+                signEl.innerText += ` | ${decodeURIComponent(myTeamName)}`;
+                signEl.style.color = "var(--neon-blue)";
+                signEl.style.borderColor = "var(--neon-blue)";
             }
 
             document.getElementById('preview-modal').style.display = 'flex';
         }
 
         function finalSubmit() {
+            // [新增] 扣除次數、寫入背包
             dailyCount++;
             localStorage.setItem('gc_daily', dailyCount);
-            if(isAuthenticated) {
+            
+            if (isAuthenticated) {
                 totalParticipations++;
                 localStorage.setItem('gc_total', totalParticipations);
                 document.getElementById('pack-count').innerText = totalParticipations;
             }
+            
             updateBatteryVisual();
+            checkGlobalTarget();
+
             document.getElementById('feedback-layer').style.display = 'flex';
+            
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
-                const link = document.createElement('a'); link.download = `MISSION_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
-                setTimeout(() => { alert("任務回報完成！抽獎機會已累計。"); location.reload(); }, 2000);
+                const link = document.createElement('a');
+                link.download = `MISSION_REPORT_${Date.now()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                setTimeout(() => { alert("任務回報完成！已記錄您的參與與抽獎次數。"); location.reload(); }, 2000);
             });
         }
 
+        // Search Logic
+        function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
         function executeSearch(keyword) {
             if(!keyword) return alert("請輸入關鍵字");
             closeModal('search-modal');
-            document.getElementById('main-interface').style.opacity = 0;
+            document.getElementById('main-interface').style.opacity = 0; 
             document.getElementById('scanning-layer').style.display = 'flex';
+            
             setTimeout(() => {
                 document.getElementById('scanning-layer').style.display = 'none';
                 document.getElementById('main-interface').style.opacity = 1;
+                
+                // Set fallback data for search result
                 currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
                 selectedTag = "#搜索結果";
-                selectedProp = null;
+                selectedProp = null; 
+                
                 document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
                 document.getElementById('step-3').style.display = 'flex';
-            }, 1500);
+            }, 1500); 
         }
 
+        // SW & Utils
         function openSW(unitName) {
             document.getElementById('sw-target-name').innerText = unitName === 'demo' ? '親愛的' : unitName;
+            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了！ (3,240)</div>`; // Simplified demo
             document.getElementById('sw-modal').style.display = 'flex';
         }
-        function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
         
         function openAdminLogin() {
             const pwd = prompt("ENTER ADMIN CODE:");
@@ -541,16 +770,23 @@
             });
         }
 
+        // [新增] 背包內紀錄展開與達標提示
         function openInventory() { 
             const list = document.getElementById('inventory-list');
             list.innerHTML = "";
-            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>尚無紀錄</p>";
-            else {
-                for(let i=1; i<=totalParticipations; i++) list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`;
-                if((4998+totalParticipations) >= 5000) list.innerHTML = `<h4 style="color:var(--neon-orange);margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML;
+            if (totalParticipations === 0) {
+                list.innerHTML = "<p style='color:#888; font-size:12px;'>目前無參與紀錄</p>";
+            } else {
+                for(let i=1; i<=totalParticipations; i++) {
+                    list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`;
+                }
+                if ((4998 + totalParticipations) >= 5000) {
+                    list.innerHTML = `<h4 style="color:var(--neon-orange); margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML;
+                }
             }
             document.getElementById('inventory-modal').style.display = 'flex'; 
         }
+        
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     </script>
