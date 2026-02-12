@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 - PROJECT NEON</title>
+    <title>2026 社工守護計畫 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -46,7 +46,7 @@
         @keyframes pulseCore { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; } }
         @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        /* --- Intro & Home Gallery --- */
+        /* --- Intro Layout --- */
         #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #050505; z-index: 999; display: flex; flex-direction: column;
@@ -55,44 +55,52 @@
             background-image: linear-gradient(rgba(255, 179, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
         }
+        
+        /* 還原後的 Briefing Card (不包含 Gallery) */
         .briefing-card {
             max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
-            background: rgba(20, 20, 20, 0.95); padding: 25px 20px;
+            background: rgba(20, 20, 20, 0.95); padding: 40px 20px;
             box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
             position: relative; overflow: hidden; text-align: center;
-            display: flex; flex-direction: column; max-height: 85vh;
+            margin-bottom: 20px; /* 留空間給下方 Gallery */
         }
         .briefing-card::before, .briefing-card::after { content: ''; position: absolute; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
         .briefing-card::before { top:0; left:0; } .briefing-card::after { bottom:0; right:0; }
 
-        .main-logo-text { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
-        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 11px; letter-spacing: 3px; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
-        
-        /* [新增] 首頁即時留言牆樣式 */
-        .home-gallery-wrapper {
-            flex: 1; overflow-y: auto; margin-bottom: 15px; padding: 10px;
-            background: rgba(0,0,0,0.4); border: 1px solid #333; border-radius: 4px;
-            text-align: left;
-        }
-        .home-gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .hg-title { font-size: 10px; color: var(--neon-amber); font-family: 'Orbitron'; font-weight: bold; }
-        .hg-more { font-size: 10px; color: #666; cursor: pointer; text-decoration: underline; }
-        
-        .hg-item { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #222; padding: 8px 0; }
-        .hg-avatar { width: 30px; height: 30px; border-radius: 50%; background: #333; object-fit: cover; }
-        .hg-content { flex: 1; }
-        .hg-msg { font-size: 11px; color: #ddd; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-        .hg-info { font-size: 9px; color: #666; margin-top: 2px; }
-        .hg-like { font-size: 10px; color: #e91e63; }
+        .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px; }
+        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block; }
+        .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px; }
 
         .btn-start-mission {
             width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
-            padding: 12px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
+            padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
             text-transform: uppercase; font-weight: bold; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-            animation: pulseBtn 2s infinite; margin-top: auto;
+            animation: pulseBtn 2s infinite;
         }
         .btn-start-mission:hover { background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber); }
         @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
+
+        /* [新增] 位於首頁下方的即時牆 (Intro Footer Gallery) */
+        .intro-gallery-bar {
+            position: absolute; bottom: 20px; width: 90%; max-width: 500px;
+            background: rgba(0,0,0,0.8); border: 1px solid #333; border-radius: 8px;
+            padding: 10px 15px; backdrop-filter: blur(5px);
+            animation: slideUp 1s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .ig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .ig-title { font-size: 10px; color: var(--neon-amber); font-family: 'Orbitron'; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .ig-more { font-size: 10px; color: #888; cursor: pointer; font-family: 'Orbitron'; transition: 0.2s; }
+        .ig-more:hover { color: #fff; }
+
+        .ig-list { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .ig-list::-webkit-scrollbar { display: none; }
+        
+        .ig-item { min-width: 100px; cursor: pointer; transition: 0.2s; }
+        .ig-item:hover { transform: translateY(-2px); }
+        .ig-img { width: 100px; height: 60px; object-fit: cover; border-radius: 4px; filter: grayscale(30%); border: 1px solid #444; }
+        .ig-msg { font-size: 9px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 
         /* --- Scanning --- */
         #scanning-layer {
@@ -207,7 +215,7 @@
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
-        /* [新增] Success Actions */
+        /* Feedback Layer for Success Options */
         #feedback-layer { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; }
         .success-opts { display: flex; gap: 10px; margin-top: 20px; width: 100%; justify-content: center; }
         .btn-opt { padding: 10px 20px; font-family: 'Orbitron'; cursor: pointer; border: 1px solid #555; background: #222; color: #fff; border-radius: 4px; flex: 1; max-width: 140px; font-size: 12px; }
@@ -237,7 +245,7 @@
         .msg-option { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; color: #ccc; font-size: 13px; }
         .msg-option:hover { color: var(--neon-amber); background: rgba(255,255,255,0.05); }
 
-        /* --- Gallery & Social Features Styles --- */
+        /* --- Gallery Styles --- */
         .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding-bottom: 20px;
         }
@@ -275,20 +283,20 @@
         <div class="briefing-card">
             <span class="sub-logo-text">PROJECT NEON // 2026</span>
             <div class="main-logo-text">2026 給社工愛的鼓勵</div>
-            
-            <div class="home-gallery-wrapper">
-                <div class="home-gallery-header">
-                    <span class="hg-title">🔴 LIVE FEED (即時應援)</span>
-                    <span class="hg-more" onclick="openGallery()">VIEW ALL ></span>
-                </div>
-                <div id="home-gallery-list">
-                    </div>
-            </div>
-
-            <div class="intro-text" style="font-size: 0.9rem; margin-bottom: 10px;">
+            <div class="intro-text">
+                在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是社工，也是社會的安全網。<br><br>
                 系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
             </div>
             <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
+        </div>
+
+        <div class="intro-gallery-bar">
+            <div class="ig-header">
+                <span class="ig-title">🔴 LIVE FEED (即時應援)</span>
+                <span class="ig-more" onclick="openGallery()">VIEW ALL ▾</span>
+            </div>
+            <div class="ig-list" id="intro-gallery-list">
+                </div>
         </div>
     </div>
 
@@ -464,14 +472,12 @@
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         const fullQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。", "加油！你們的付出我們都看在眼裡。", "黑暗中總有光，而你們就是那道光。"];
 
-        // 模擬的公開留言牆資料
         let galleryData = [
             { id: 1, unit: '華山基金會', msg: '謝謝你們接住了受傷的人。', sign: 'UserA', likes: 120, img: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200' },
             { id: 2, unit: '屏東伯大尼之家', msg: '世界因為有你們而溫柔。', sign: 'UserB', likes: 85, img: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=200' },
             { id: 3, unit: '全體站內社工', msg: '加油！', sign: 'UserC', likes: 230, img: 'https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=200' },
         ];
 
-        // [新增] 背包預設資料
         const defaultInventory = [
             { id: 999, unit: '系統贈禮', msg: '歡迎加入 NEON 守護者行列！', sign: 'SYSTEM', likes: 0, img: defaultImgs[0], date: '2026/01/01' }
         ];
@@ -484,7 +490,7 @@
         let totalParticipations = 0;
         let isAuthenticated = false;
         let myTeam = new URLSearchParams(window.location.search).get('team');
-        let currentCanvas = null; // 暫存圖片
+        let currentCanvas = null;
 
         window.onload = function() {
             localStorage.setItem('gc_daily', 0); 
@@ -498,7 +504,7 @@
             }
             updateBatteryVisual();
             checkGlobalTarget();
-            renderHomeGallery(); // [新增]
+            renderIntroGallery();
         }
 
         function checkDaily() { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
@@ -527,19 +533,15 @@
             }
         }
 
-        // [新增] 渲染首頁即時牆
-        function renderHomeGallery() {
-            const container = document.getElementById('home-gallery-list');
+        // [優化] 渲染位於 Intro 底部的即時牆
+        function renderIntroGallery() {
+            const container = document.getElementById('intro-gallery-list');
             container.innerHTML = "";
-            galleryData.slice(0, 3).forEach(item => {
+            galleryData.slice(0, 5).forEach(item => {
                 container.innerHTML += `
-                    <div class="hg-item" onclick="openGallery()">
-                        <img src="${item.img}" class="hg-avatar">
-                        <div class="hg-content">
-                            <div class="hg-msg">${item.msg}</div>
-                            <div class="hg-info">${item.sign} • ${item.unit}</div>
-                        </div>
-                        <div class="hg-like">❤️ ${item.likes}</div>
+                    <div class="ig-item" onclick="openGallery()">
+                        <img src="${item.img}" class="ig-img">
+                        <div class="ig-msg">${item.msg}</div>
                     </div>
                 `;
             });
@@ -697,12 +699,12 @@
                 };
 
                 let myInventory = JSON.parse(localStorage.getItem('gc_inventory') || "[]");
-                if(myInventory.length === 0) myInventory = defaultInventory; // 合併預設
+                if(myInventory.length === 0) myInventory = defaultInventory;
                 myInventory.unshift(newPost);
                 localStorage.setItem('gc_inventory', JSON.stringify(myInventory));
 
                 galleryData.unshift(newPost);
-                renderHomeGallery(); // 更新首頁
+                renderIntroGallery(); // Update Intro
             }
             
             updateBatteryVisual();
@@ -711,12 +713,10 @@
             document.getElementById('feedback-layer').style.display = 'flex';
             
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
-                currentCanvas = canvas; // 暫存供下載用
-                // [修改] 不再自動下載與重整，顯示選項
+                currentCanvas = canvas;
             });
         }
 
-        // [新增] 下載邏輯
         function downloadCanvas() {
             if(currentCanvas) {
                 const link = document.createElement('a');
@@ -726,18 +726,15 @@
             }
         }
 
-        // [新增] 繼續留言邏輯 (跳過動畫)
         function continueMission() {
             document.getElementById('feedback-layer').style.display = 'none';
             document.getElementById('preview-modal').style.display = 'none';
-            // 清除狀態
             selectedTag = null;
             selectedProp = null;
             userPhoto = null;
             document.getElementById('msg-input').value = "";
             document.getElementById('photo-status').innerText = "IMAGE: DEFAULT";
-            // 直接進入新回合
-            initGame();
+            initGame(); // 跳過動畫直接開始
         }
 
         function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
@@ -786,7 +783,6 @@
             document.getElementById('gallery-modal').style.display = 'flex';
         }
 
-        // [修改] 按讚需登入
         function toggleLike(btn) {
             if(!isAuthenticated) {
                 alert("請先登入才能按讚！");
@@ -799,24 +795,20 @@
             countSpan.innerText = btn.classList.contains('liked') ? count + 1 : count - 1;
         }
 
-        // [修改] 轉發不用登入
         function sharePost() {
             alert("已複製連結，準備轉發！");
         }
 
-        // [修改] 背包預設與成就
         function openInventory() { 
             const list = document.getElementById('inventory-list');
             let myInventory = JSON.parse(localStorage.getItem('gc_inventory') || "[]");
             
-            // 預設資料
             if (myInventory.length === 0) {
                 myInventory = defaultInventory;
             }
 
             list.innerHTML = "";
             
-            // [新增] 能量滿載成就
             if ((4998 + totalParticipations) >= 5000) {
                 list.innerHTML += `
                     <div style="background:rgba(255,179,0,0.1); border:1px solid var(--neon-amber); padding:10px; margin-bottom:15px; border-radius:4px; text-align:center;">
