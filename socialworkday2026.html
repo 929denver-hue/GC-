@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 社工守護計畫 - PROJECT NEON</title>
+    <title>2026 給社工愛的鼓勵 - PROJECT NEON</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Orbitron:wght@500;700&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
     <style>
         :root {
-            /* 暖光科技風格 */
-            --neon-amber: #FFB300;
-            --neon-orange: #FF5722;
-            --tech-bg: #121212;
+            /* 暖光科技風格 (Warm Tech) */
+            --neon-amber: #FFB300;    /* 琥珀金 (主色) */
+            --neon-orange: #FF5722;   /* 暖橘紅 (強調) */
+            --tech-bg: #121212;       /* 深灰黑 */
+            --panel-bg: #1E1E1E;      /* 面板灰 */
             --text-main: #E0E0E0;
+            --glass-border: 1px solid rgba(255, 179, 0, 0.3);
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,89 +27,261 @@
             background-image: radial-gradient(circle at 50% 50%, #2a1a0a 0%, #000 100%);
         }
 
-        /* --- 0. 前導與過場 (保持不變) --- */
-        #intro-layer, #scanning-layer {
+        /* --- 0. 前導層 (Mission Briefing) --- */
+        #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #050505; z-index: 999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; padding: 20px; transition: opacity 0.5s;
+            align-items: center; justify-content: center; padding: 20px;
+            transition: opacity 0.8s ease-in-out;
+            background-image: linear-gradient(rgba(255, 179, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
-        .briefing-card { max-width: 500px; width: 100%; border: 1px solid var(--neon-amber); background: rgba(20, 20, 20, 0.9); padding: 40px 20px; text-align: center; position: relative; }
-        .main-logo-text { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); }
-        .sub-logo-text { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px; display: block; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; }
-        .intro-text { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; font-family: 'Noto Serif TC'; text-align: justify; }
-        .highlight { color: var(--neon-amber); font-weight: bold; }
-        .btn-start-mission { background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber); padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; width: 100%; }
         
-        .radar-box { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
-        .radar-ring { position: absolute; border: 1px solid var(--neon-orange); border-radius: 50%; opacity: 0; animation: radarRipple 2s infinite linear; }
-        .radar-ring:nth-child(2) { animation-delay: 0.5s; } .radar-ring:nth-child(3) { animation-delay: 1s; }
-        .central-heart { font-size: 40px; animation: heartBeat 1s infinite; }
-        @keyframes radarRipple { 0% { transform: scale(0.5); opacity: 0; border-width: 4px; } 100% { transform: scale(1.5); opacity: 0; border-width: 0px; } }
-        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .scan-text { margin-top: 30px; font-family: 'Orbitron'; font-size: 14px; color: var(--neon-amber); animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.3; } }
+        .briefing-card {
+            max-width: 500px; width: 100%; border: 1px solid var(--neon-amber);
+            background: rgba(20, 20, 20, 0.9); padding: 40px 20px;
+            box-shadow: 0 0 50px rgba(255, 179, 0, 0.1); border-radius: 4px;
+            position: relative; overflow: hidden; text-align: center;
+        }
+        .briefing-card::before { content: ''; position: absolute; top:0; left:0; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
+        .briefing-card::after { content: ''; position: absolute; bottom:0; right:0; width:100%; height:2px; background:var(--neon-amber); box-shadow:0 0 10px var(--neon-amber); }
 
-        /* --- 1. 主介面 (UI 結構保持不變) --- */
-        #main-interface { opacity: 0; transition: opacity 1s; height: 100%; display: flex; flex-direction: column; }
-        .warm-grid { position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background-image: linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(500px) rotateX(60deg); z-index: -1; animation: gridMove 30s linear infinite; pointer-events: none; }
+        .main-logo-text {
+            font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; color: #fff; 
+            text-shadow: 0 0 15px rgba(255, 179, 0, 0.5); letter-spacing: 1px;
+        }
+        .sub-logo-text {
+            font-family: 'Orbitron'; color: var(--neon-orange); font-size: 12px; letter-spacing: 3px;
+            margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: block;
+        }
+        
+        .intro-text { 
+            font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; 
+            font-family: 'Noto Serif TC'; text-align: justify; padding: 0 10px;
+        }
+        .highlight { color: var(--neon-amber); font-weight: bold; border-bottom: 1px solid var(--neon-amber); }
+
+        .btn-start-mission {
+            width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber);
+            padding: 15px; font-size: 14px; cursor: pointer;
+            font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s;
+            text-transform: uppercase; font-weight: bold;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            animation: pulseBtn 2s infinite;
+        }
+        .btn-start-mission:hover {
+            background: var(--neon-amber); color: #000; box-shadow: 0 0 30px var(--neon-amber);
+        }
+        @keyframes pulseBtn { 0% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} }
+
+        /* --- 0.5 過場層 (Scanning Layer) --- */
+        #scanning-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 998; display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .radar-box { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .radar-ring {
+            position: absolute; border: 1px solid var(--neon-orange); border-radius: 50%; opacity: 0;
+            animation: radarRipple 2s infinite linear;
+        }
+        .radar-ring:nth-child(1) { width: 50px; height: 50px; animation-delay: 0s; }
+        .radar-ring:nth-child(2) { width: 100px; height: 100px; animation-delay: 0.5s; }
+        .radar-ring:nth-child(3) { width: 150px; height: 150px; animation-delay: 1s; }
+        
+        .central-heart { font-size: 40px; animation: heartBeat 1s infinite; z-index: 10; }
+        @keyframes radarRipple { 0% { transform: scale(0.5); opacity: 0; border-width: 4px; } 50% { opacity: 0.5; } 100% { transform: scale(1.5); opacity: 0; border-width: 0px; } }
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+        .scan-text {
+            margin-top: 30px; font-family: 'Orbitron'; font-size: 14px; color: var(--neon-amber); letter-spacing: 2px;
+            animation: blinkText 1s infinite; text-align: center; line-height: 1.5;
+        }
+        @keyframes blinkText { 50% { opacity: 0.3; } }
+
+
+        /* --- 1. 主介面 (Main Interface) --- */
+        #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; }
+
+        /* 背景動態網格 */
+        .warm-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; transform: perspective(500px) rotateX(60deg);
+            z-index: -1; animation: gridMove 30s linear infinite; pointer-events: none;
+        }
         @keyframes gridMove { from { transform: perspective(500px) rotateX(60deg) translateY(0); } to { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
 
-        .nav-hud { padding: 15px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(255, 179, 0, 0.1); background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
-        .hud-label { font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); }
-        .hud-value { font-size: 16px; font-weight: bold; color: #fff; }
-        .btn-inventory { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 5px 12px; font-size: 11px; font-family: 'Orbitron'; cursor: pointer; }
+        /* --- 頂部 HUD --- */
+        .nav-hud {
+            position: absolute; top: 0; left: 0; width: 100%; padding: 15px; z-index: 50;
+            display: flex; justify-content: space-between; align-items: flex-end;
+            border-bottom: 1px solid rgba(255, 179, 0, 0.1);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+        .hud-label { font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); letter-spacing: 1px; display: block; }
+        .hud-value { font-size: 16px; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--neon-amber); }
+        
+        .btn-inventory {
+            background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber);
+            padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer;
+            font-family: 'Orbitron'; display: flex; align-items: center; gap: 5px;
+        }
 
-        .marquee-container { position: absolute; top: 70px; width: 100%; background: rgba(255, 87, 34, 0.1); border-top: 1px solid rgba(255, 87, 34, 0.3); border-bottom: 1px solid rgba(255, 87, 34, 0.3); height: 28px; display: flex; align-items: center; overflow: hidden; }
-        .marquee-text { white-space: nowrap; font-size: 11px; color: var(--neon-orange); font-family: 'Orbitron'; padding-left: 100%; animation: scrollText 20s linear infinite; }
+        /* --- 跑馬燈 --- */
+        .marquee-container {
+            position: absolute; top: 70px; width: 100%; background: rgba(255, 87, 34, 0.1);
+            border-top: 1px solid rgba(255, 87, 34, 0.3); border-bottom: 1px solid rgba(255, 87, 34, 0.3);
+            height: 28px; display: flex; align-items: center; overflow: hidden;
+        }
+        .marquee-text {
+            white-space: nowrap; font-size: 11px; color: var(--neon-orange); font-family: 'Orbitron';
+            animation: scrollText 20s linear infinite; padding-left: 100%;
+        }
         @keyframes scrollText { 100% { transform: translateX(-100%); } }
 
-        .console-wrapper { position: absolute; top: 110px; bottom: 60px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; padding: 0 10px; display: flex; flex-direction: column; }
-        .screen-frame { flex: 1; background: #000; border: 2px solid #333; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 179, 0, 0.1); display: flex; flex-direction: column; }
-        .screen-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; pointer-events: none; z-index: 99; }
+        /* --- 主機台容器 --- */
+        .console-wrapper {
+            position: absolute; top: 110px; bottom: 60px; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 420px; padding: 0 10px;
+            display: flex; flex-direction: column;
+        }
 
-        /* Step Styles */
-        .step-container { display: none; height: 100%; flex-direction: column; animation: fadeIn 0.5s forwards; }
+        .screen-frame {
+            flex: 1; background: #000; border: 2px solid #333; border-radius: 8px;
+            position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 179, 0, 0.1);
+            display: flex; flex-direction: column;
+        }
+        /* 螢幕掃描線特效 */
+        .screen-frame::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px; pointer-events: none; z-index: 99;
+        }
+
+        /* === 狀態 1-3: 步驟容器 (Steps) === */
+        /* 注意：State 0 (Idle) 已被移除，直接進入 Step 1 */
+        .step-container {
+            display: none; height: 100%; flex-direction: column; opacity: 0; animation: fadeIn 0.5s forwards;
+        }
         @keyframes fadeIn { to { opacity: 1; } }
-        
-        .story-img-box { height: 40%; position: relative; overflow: hidden; border-bottom: 1px solid var(--neon-amber); }
+
+        /* STEP 1: 故事 (Story) */
+        .story-img-box {
+            height: 40%; position: relative; width: 100%; overflow: hidden;
+            border-bottom: 1px solid var(--neon-amber);
+        }
         .story-img { width: 100%; height: 100%; object-fit: cover; filter: sepia(30%) contrast(1.1); }
-        .unit-badge { position: absolute; bottom: 10px; left: 15px; background: rgba(0,0,0,0.8); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 4px 10px; font-size: 12px; font-weight: bold; }
-        .story-content { padding: 25px; color: #ccc; font-size: 15px; line-height: 1.8; text-align: justify; flex: 1; overflow-y: auto; font-family: 'Noto Serif TC'; }
+        .unit-badge {
+            position: absolute; bottom: 10px; left: 15px; 
+            background: rgba(0,0,0,0.8); border: 1px solid var(--neon-amber);
+            color: var(--neon-amber); padding: 4px 10px; font-size: 12px; font-weight: bold;
+        }
+        
+        .story-content {
+            padding: 25px; color: #ccc; font-size: 15px; line-height: 1.8; text-align: justify;
+            font-family: 'Noto Serif TC', serif; flex: 1; overflow-y: auto;
+        }
         .story-quote { color: var(--neon-orange); font-weight: bold; margin-bottom: 15px; display: block; font-size: 16px; }
 
-        .panel-header { padding: 15px; border-bottom: 1px solid #333; font-family: 'Orbitron'; color: var(--neon-amber); font-size: 12px; letter-spacing: 1px; }
+        /* STEP 2: 裝備 (Equip) */
+        .panel-header {
+            padding: 15px; border-bottom: 1px solid #333; font-family: 'Orbitron'; 
+            color: var(--neon-amber); font-size: 12px; letter-spacing: 1px;
+        }
         .panel-body { flex: 1; padding: 20px; overflow-y: auto; }
+        
         .section-label { font-size: 11px; color: #888; margin-bottom: 10px; display: block; font-weight: bold; }
         
+        /* 標籤按鈕 */
         .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
-        .tech-tag { background: transparent; border: 1px solid #555; color: #aaa; padding: 8px 15px; font-size: 12px; cursor: pointer; }
-        .tech-tag.active { border-color: var(--neon-amber); color: #000; background: var(--neon-amber); font-weight: bold; }
+        .tech-tag {
+            background: transparent; border: 1px solid #555; color: #aaa;
+            padding: 8px 15px; font-size: 12px; cursor: pointer; border-radius: 2px;
+            transition: 0.2s;
+        }
+        .tech-tag.active { 
+            border-color: var(--neon-amber); color: #000; background: var(--neon-amber); 
+            box-shadow: 0 0 10px rgba(255, 179, 0, 0.5); font-weight: bold;
+        }
 
+        /* 贊助商卡片 */
         .sponsor-list { display: flex; flex-direction: column; gap: 10px; }
-        .tech-card { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #333; cursor: pointer; }
-        .tech-card.selected { border-color: var(--neon-orange); background: rgba(255, 87, 34, 0.1); }
+        .tech-card {
+            display: flex; align-items: center; gap: 15px; padding: 12px;
+            background: rgba(255,255,255,0.05); border: 1px solid #333;
+            cursor: pointer; transition: 0.2s; position: relative;
+        }
+        .tech-card.selected {
+            border-color: var(--neon-orange); background: rgba(255, 87, 34, 0.1);
+            box-shadow: inset 0 0 10px rgba(255, 87, 34, 0.2);
+        }
         .tech-icon { font-size: 20px; }
+        .tech-info { flex: 1; }
         .tech-reason { font-size: 10px; color: var(--neon-orange); display: block; margin-bottom: 2px; }
         .tech-name { font-size: 13px; font-weight: bold; color: #fff; }
-        .tech-check { color: var(--neon-orange); opacity: 0; }
+        .tech-check { color: var(--neon-orange); font-size: 14px; opacity: 0; }
         .tech-card.selected .tech-check { opacity: 1; }
 
-        textarea { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 15px; font-size: 14px; outline: none; border-radius: 4px; }
-        .auto-fill-btn { float: right; font-size: 10px; color: var(--neon-amber); cursor: pointer; text-decoration: underline; margin-bottom: 5px; }
-        .photo-bar { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px; margin: 15px 0; border-radius: 4px; }
-        .name-field { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 12px; text-align: center; margin-bottom: 10px; outline: none; }
+        /* STEP 3: 傳輸 (Transmit) */
+        .input-wrapper { margin-bottom: 20px; position: relative; }
+        textarea {
+            width: 100%; background: #080808; border: 1px solid #444; color: #fff;
+            padding: 15px; font-family: 'Noto Sans TC'; font-size: 14px; border-radius: 4px;
+            outline: none; resize: none; min-height: 100px;
+        }
+        textarea:focus { border-color: var(--neon-amber); }
+        .auto-fill-btn {
+            position: absolute; right: 10px; top: -25px; font-size: 10px;
+            color: var(--neon-amber); cursor: pointer; text-decoration: underline;
+        }
 
-        .control-bar { padding-top: 15px; display: flex; gap: 10px; background: #111; padding: 15px; }
-        .btn-main { flex: 1; background: var(--neon-amber); color: #000; border: none; padding: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
-        .btn-back { background: transparent; border: 1px solid #555; color: #888; padding: 0 15px; cursor: pointer; }
+        /* 照片上傳條 */
+        .photo-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #1a1a1a; padding: 10px; border-radius: 4px; margin-bottom: 20px;
+        }
+        .photo-status { font-size: 11px; color: #888; }
+        .btn-upload-mini {
+            border: 1px solid #555; background: transparent; color: #ccc;
+            padding: 4px 10px; font-size: 10px; cursor: pointer; border-radius: 2px;
+        }
+
+        .name-field {
+            width: 100%; background: #080808; border: 1px solid #444; color: #fff;
+            padding: 12px; text-align: center; margin-bottom: 10px; outline: none;
+        }
+
+        /* === 底部控制區 === */
+        .control-bar {
+            padding-top: 15px; display: flex; gap: 10px;
+        }
+        .btn-main {
+            flex: 1; background: var(--neon-amber); color: #000; border: none;
+            padding: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer;
+            font-size: 14px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: 0.2s; text-align: center;
+        }
+        .btn-main:hover { box-shadow: 0 0 15px var(--neon-amber); background: #fff; }
+        .btn-back {
+            background: transparent; border: 1px solid #555; color: #888; padding: 0 15px; cursor: pointer;
+        }
 
         /* --- Footer --- */
-        .footer-nav { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 10px; color: #666; z-index: 10; }
+        .footer-nav {
+            position: absolute; bottom: 10px; width: 100%; text-align: center;
+            font-size: 10px; color: #666; z-index: 10;
+        }
         .footer-link { color: #888; text-decoration: none; border-bottom: 1px dashed #666; margin: 0 5px; cursor: pointer; }
 
-        /* --- 2. 升級版卡片 (HUD Style) --- */
-        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
+        /* --- Modals --- */
+        .modal-overlay {
+            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center;
+        }
         
+        /* 預覽卡片 (壓字效果) */
         #capture-target {
             width: 320px; background: #000; border: 1px solid #333; padding: 0; position: relative;
             box-shadow: 0 0 50px rgba(255, 179, 0, 0.2); overflow: hidden;
@@ -118,34 +292,31 @@
         .card-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%) contrast(1.1); }
         .card-overlay-gradient { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, #000 10%, transparent 60%); }
         
-        /* 資訊層 (朋友看到的重點) */
+        /* 資訊層 (HUD) */
         .hud-top-left { position: absolute; top: 15px; left: 15px; font-family: 'Orbitron'; color: var(--neon-amber); font-size: 10px; font-weight: bold; letter-spacing: 1px; border: 1px solid var(--neon-amber); padding: 2px 6px; }
         
-        /* 核心進化：代號壓字 */
         .hud-code-name {
             position: absolute; top: 15px; right: 15px; text-align: right;
         }
         .code-main { font-family: 'Orbitron'; font-size: 14px; color: #fff; font-weight: bold; text-shadow: 0 0 10px var(--neon-amber); }
         .code-sub { font-family: 'Orbitron'; font-size: 8px; color: var(--neon-orange); letter-spacing: 1px; }
 
-        /* 左下角：任務說明 (朋友秒懂區) */
         .hud-mission-info {
             position: absolute; bottom: 20px; left: 20px; text-align: left;
         }
         .mission-title { font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px; }
         .mission-sub { font-size: 10px; color: #ccc; background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 2px; }
         
-        /* 右下角：裝備 */
         .hud-gear {
             position: absolute; bottom: 20px; right: 20px; text-align: right;
         }
         .gear-icon { font-size: 24px; filter: drop-shadow(0 0 5px var(--neon-amber)); }
         
-        /* 留言區 (位於照片下方) */
+        /* 留言區 */
         .card-footer-msg { padding: 15px; background: #080808; border-top: 1px solid #333; }
         .msg-text { color: #ddd; font-size: 13px; line-height: 1.5; font-style: italic; border-left: 2px solid var(--neon-amber); padding-left: 10px; }
 
-        /* --- 3. 轉發回饋 (Feedback Overlay) --- */
+        /* --- 轉發回饋 --- */
         #feedback-layer {
             position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9);
             display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20;
@@ -167,17 +338,21 @@
         <div class="briefing-card">
             <span class="sub-logo-text">PROJECT NEON // 2026</span>
             <div class="main-logo-text">2026 給社工愛的鼓勵</div>
+            
             <div class="intro-text">
                 在這座城市的光影背後，有一群人默默承接了所有的脆弱。他們是<span class="highlight">社工</span>，社會的安全網，卻往往耗盡了自己的能量。<br><br>
                 系統偵測到全台社工能量低落。<br>我們需要你——啟動連線，成為「像素守護者」。
             </div>
+            
             <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
         </div>
     </div>
 
     <div id="scanning-layer">
         <div class="radar-box">
-            <div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
             <div class="central-heart">❤️</div>
         </div>
         <div class="scan-text" id="scan-status">ESTABLISHING SECURE CONNECTION...</div>
@@ -185,58 +360,109 @@
 
     <div id="main-interface">
         <div class="warm-grid"></div>
+
         <div class="nav-hud">
-            <div><span class="hud-label">GLOBAL ENERGY</span><span class="hud-value">LV.78</span></div>
+            <div>
+                <span class="hud-label">GLOBAL ENERGY</span>
+                <span class="hud-value">LV.78</span>
+            </div>
             <div class="btn-inventory" onclick="openInventory()">🎒 PACK</div>
         </div>
+
         <div class="marquee-container">
-            <div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 台積電戰隊 累積 5200 點能量 ...</div>
+            <div class="marquee-text" id="marquee-content">
+                >> SYSTEM ONLINE ... User888 傳輸 [熱能補給] 給 華山基金會 ... 匿名勇者 傳輸 [防禦強化] ... 台積電戰隊 累積 5200 點能量 ...
+            </div>
         </div>
 
         <div class="console-wrapper">
             <div class="screen-frame">
+                
                 <div id="step-1" class="step-container">
                     <div class="story-img-box">
                         <img id="story-img" class="story-img" src="">
                         <div id="story-unit" class="unit-badge">單位名稱</div>
                     </div>
-                    <div class="story-content"><span id="story-desc"></span></div>
-                    <div class="control-bar"><button class="btn-main" onclick="nextStep(2)">INITIALIZE SUPPORT >></button></div>
+                    <div class="story-content">
+                        <span id="story-desc"></span>
+                    </div>
+                    <div class="control-bar" style="padding:15px; background:#111;">
+                        <button class="btn-main" onclick="nextStep(2)">INITIALIZE SUPPORT >></button>
+                    </div>
                 </div>
 
                 <div id="step-2" class="step-container">
                     <div class="panel-header">STEP 2/3 : CONFIGURE LOADOUT</div>
                     <div class="panel-body">
+                        
                         <span class="section-label">1. SYNCHRONIZE (同步頻率)</span>
                         <div class="tag-row" id="tag-container"></div>
+
                         <span class="section-label">2. TACTICAL SUPPLY (戰術補給)</span>
                         <div class="sponsor-list">
-                            <div class="tech-card" onclick="selectProp(this, '鼎王湯底')"><div class="tech-icon">🍲</div><div class="tech-info"><span class="tech-reason">>> 偵測到寒冷與飢餓</span><span class="tech-name">配置 [鼎王麻辣鍋]</span></div><div class="tech-check">✔</div></div>
-                            <div class="tech-card" onclick="selectProp(this, '艾瑪絲洗髮')"><div class="tech-icon">🚿</div><div class="tech-info"><span class="tech-reason">>> 偵測到身心疲勞</span><span class="tech-name">配置 [艾瑪絲洗髮精]</span></div><div class="tech-check">✔</div></div>
-                            <div class="tech-card" onclick="selectProp(this, '蓓朵娜防曬')"><div class="tech-icon">☀️</div><div class="tech-info"><span class="tech-reason">>> 偵測到紫外線曝曬</span><span class="tech-name">配置 [蓓朵娜防曬]</span></div><div class="tech-check">✔</div></div>
+                            <div class="tech-card" onclick="selectProp(this, '鼎王湯底')">
+                                <div class="tech-icon">🍲</div>
+                                <div class="tech-info">
+                                    <span class="tech-reason">>> 偵測到寒冷與飢餓</span>
+                                    <span class="tech-name">配置 [鼎王麻辣鍋]</span>
+                                </div>
+                                <div class="tech-check">✔</div>
+                            </div>
+                            <div class="tech-card" onclick="selectProp(this, '艾瑪絲洗髮')">
+                                <div class="tech-icon">🚿</div>
+                                <div class="tech-info">
+                                    <span class="tech-reason">>> 偵測到身心疲勞</span>
+                                    <span class="tech-name">配置 [艾瑪絲洗髮精]</span>
+                                </div>
+                                <div class="tech-check">✔</div>
+                            </div>
+                            <div class="tech-card" onclick="selectProp(this, '蓓朵娜防曬')">
+                                <div class="tech-icon">☀️</div>
+                                <div class="tech-info">
+                                    <span class="tech-reason">>> 偵測到紫外線曝曬</span>
+                                    <span class="tech-name">配置 [蓓朵娜防曬]</span>
+                                </div>
+                                <div class="tech-check">✔</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(1)"><</button><button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button></div>
+                    <div class="control-bar" style="padding:15px; background:#111;">
+                        <button class="btn-back" onclick="nextStep(1)"><</button>
+                        <button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button>
+                    </div>
                 </div>
 
                 <div id="step-3" class="step-container">
                     <div class="panel-header">STEP 3/3 : UPLOAD MESSAGE</div>
                     <div class="panel-body">
+                        
                         <span class="section-label">MESSAGE (傳輸訊息)</span>
                         <div class="input-wrapper">
                             <span class="auto-fill-btn" onclick="autoFill()">[AUTO GENERATE]</span>
                             <textarea id="msg-input" placeholder="寫下給社工的鼓勵..."></textarea>
                         </div>
+
                         <div class="photo-bar">
                             <span class="photo-status" id="photo-status">IMAGE: DEFAULT</span>
-                            <label class="btn-upload-mini">UPLOAD <input type="file" id="upload-photo" style="display:none;" onchange="previewPhoto()"></label>
+                            <label class="btn-upload-mini">
+                                UPLOAD <input type="file" id="upload-photo" style="display:none;" onchange="previewPhoto()">
+                            </label>
                         </div>
+
                         <span class="section-label">CODENAME (署名)</span>
                         <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
-                        <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span></div>
+                        
+                        <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">
+                            🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span>
+                        </div>
+
                     </div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)"><</button><button class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button></div>
+                    <div class="control-bar" style="padding:15px; background:#111;">
+                        <button class="btn-back" onclick="nextStep(2)"><</button>
+                        <button class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -327,7 +553,10 @@
 
         // Init
         window.onload = function() {
+            // FORCE RESET FOR TESTING
+            localStorage.setItem('gc_daily', 0); 
             checkDaily();
+            
             if(myTeam) {
                 document.getElementById('faction-display').style.display = 'block';
                 document.getElementById('faction-name').innerText = myTeam;
@@ -335,31 +564,46 @@
             }
         }
 
-        function checkDaily() { /* ...Same as before... */ }
+        function checkDaily() {
+            const today = new Date().toLocaleDateString();
+            if(localStorage.getItem('gc_last_date') !== today) {
+                localStorage.setItem('gc_last_date', today);
+                localStorage.setItem('gc_daily', 0);
+                dailyCount = 0;
+            } else { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
+        }
 
         // Logic 1: Intro -> Scanning -> Step 1
         function startScanning() {
+            if(dailyCount >= 3) return alert("ENERGY DEPLETED. COME BACK TOMORROW.");
+
+            // 1. Hide Intro
             document.getElementById('intro-layer').style.opacity = 0;
+            
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
-                document.getElementById('scanning-layer').style.display = 'flex';
                 
-                // Dynamic Text
-                const texts = ["ESTABLISHING CONNECTION...", "SCANNING GRID...", "SIGNAL FOUND"];
+                // 2. Show Scanning with Dynamic Text
+                const scan = document.getElementById('scanning-layer');
+                scan.style.display = 'flex';
+                
+                // Dynamic Text Animation
+                const texts = ["ESTABLISHING SECURE CONNECTION...", "SCANNING SECTOR 7...", "ANALYZING SIGNAL...", "TARGET LOCKED"];
                 let i = 0;
                 const interval = setInterval(() => {
                     if(i < texts.length) document.getElementById('scan-status').innerText = texts[i++];
                 }, 800);
 
+                // 3. Transition to Main Interface (Directly to Step 1)
                 setTimeout(() => {
                     clearInterval(interval);
-                    document.getElementById('scanning-layer').style.opacity = 0;
+                    scan.style.opacity = 0;
                     setTimeout(() => {
-                        document.getElementById('scanning-layer').style.display = 'none';
+                        scan.style.display = 'none';
                         document.getElementById('main-interface').style.opacity = 1;
                         initGame(); // Direct jump
                     }, 500);
-                }, 3000);
+                }, 3500); // Total scan time
             }, 800);
         }
 
