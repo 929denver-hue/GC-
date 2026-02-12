@@ -13,7 +13,6 @@
             --neon-orange: #FF5722;
             --neon-blue: #00bcd4;
             --tech-bg: #121212;
-            --panel-bg: #1E1E1E;
             --text-main: #E0E0E0;
         }
         
@@ -70,6 +69,7 @@
         .enterprise-badge { font-size: 10px; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 2px 6px; border-radius: 3px; background: rgba(0, 188, 212, 0.1); margin-left: 5px; font-family: 'Orbitron'; animation: blinkBlue 2s infinite; display: none; }
         @keyframes blinkBlue { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--neon-blue); } 50% { opacity: 0.5; box-shadow: none; } }
 
+        /* Marquee */
         .marquee-container { position: absolute; top: 70px; width: 100%; background: rgba(255, 87, 34, 0.1); border-top: 1px solid rgba(255, 87, 34, 0.3); border-bottom: 1px solid rgba(255, 87, 34, 0.3); height: 28px; overflow: hidden; white-space: nowrap; display: block; }
         .marquee-text { display: inline-block; font-size: 11px; color: var(--neon-orange); font-family: 'Orbitron'; padding-left: 100%; animation: scrollText 20s linear infinite; }
         @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
@@ -116,8 +116,8 @@
         /* Footer */
         .footer-nav { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 10px; color: #666; z-index: 10; }
         .footer-link { color: #888; text-decoration: none; border-bottom: 1px dashed #666; margin: 0 5px; cursor: pointer; }
-        .demo-bar { position: absolute; bottom: 40px; width: 100%; text-align: center; font-size: 10px; z-index: 100; opacity: 0.3; }
-        .demo-btn { background: #333; color: #fff; border: 1px solid #555; padding: 2px 5px; cursor: pointer; margin: 0 2px; }
+        .demo-bar { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 10px; z-index: 100; opacity: 0.6; }
+        .demo-btn { background: #333; color: #fff; border: 1px solid #555; padding: 2px 6px; cursor: pointer; margin: 0 2px; border-radius: 3px; }
 
         /* 企業 CSR 提示 */
         .csr-hint { font-size: 11px; color: var(--neon-blue); text-align: center; margin-bottom: 8px; font-family: 'Noto Sans TC'; border: 1px dashed var(--neon-blue); padding: 5px; border-radius: 4px; background: rgba(0, 188, 212, 0.1); animation: blinkText 3s infinite; display: none; }
@@ -134,13 +134,6 @@
         .hr-metric-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
         .close-dashboard { cursor: pointer; color: #fff; font-size: 24px; }
         .btn-download-report { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; }
-        .dna-bar-container { display: flex; height: 10px; width: 100%; background: #333; border-radius: 5px; overflow: hidden; margin-top: 5px; }
-        .dna-segment { height: 100%; }
-        .dna-legend { display: flex; gap: 10px; margin-top: 5px; font-size: 10px; color: #aaa; }
-        .dna-dot { width: 8px; height: 8px; display: inline-block; margin-right: 3px; border-radius: 50%; }
-        .sdg-box { display: flex; gap: 10px; }
-        .sdg-icon { width: 40px; height: 40px; background: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Orbitron'; color: #888; }
-        .sdg-icon.active { background: var(--neon-green); color: #000; box-shadow: 0 0 10px var(--neon-green); border: none; }
 
         /* Modals */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
@@ -261,12 +254,7 @@
                         <div class="panel-header">STEP 3/3 : UPLOAD MESSAGE</div>
                         <div class="panel-body">
                             <span class="section-label">MESSAGE (傳輸訊息)</span>
-                            <div class="msg-presets" id="dynamic-presets">
-                                <div class="preset-chip" onclick="fillMsg(this.innerText)">辛苦了，謝謝你們一直都在！</div>
-                                <div class="preset-chip" onclick="fillMsg(this.innerText)">謝謝你們接住了受傷的人。</div>
-                                <div class="preset-chip" onclick="fillMsg(this.innerText)">世界因為有你們而溫柔。</div>
-                                <button class="preset-more-btn" onclick="openMsgModal()">+ 更多 (10)</button>
-                            </div>
+                            <div class="msg-presets" id="dynamic-presets"></div>
                             
                             <textarea id="msg-input" placeholder="寫下對他們的鼓勵..."></textarea>
                             <span class="section-label" style="margin-top:15px;">CODENAME (署名)</span>
@@ -291,31 +279,6 @@
                     <button class="demo-btn" onclick="forceDemo('')">DEMO: RESET</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="hr-dashboard">
-        <div class="hr-header">
-            <div>
-                <div class="hr-title" id="hr-dash-title">NEON ALLIANCE DASHBOARD</div>
-                <div class="hr-subtitle">企業 ESG 戰情室 // 即時觀測中</div>
-            </div>
-            <div class="close-dashboard" onclick="closeDashboard()">✕</div>
-        </div>
-        <div class="hr-grid">
-            <div class="hr-card">
-                <span class="hr-metric-label">TOTAL PARTICIPATION</span>
-                <span class="hr-metric" style="color:var(--neon-amber);">1,248</span>
-                <span style="font-size:10px; color:#666;">員工參與人次</span>
-            </div>
-            <div class="hr-card">
-                <span class="hr-metric-label">MATCHING FUND</span>
-                <span class="hr-metric" style="color:var(--neon-blue);">$ 12,480</span>
-                <span style="font-size:10px; color:#666;">企業累積提撥金</span>
-            </div>
-        </div>
-        <div style="margin-top:20px;">
-            <button class="btn-download-report" onclick="downloadReport()">DOWNLOAD ESG REPORT (PNG)</button>
         </div>
     </div>
 
@@ -360,6 +323,12 @@
     <div id="msg-modal" class="modal-overlay"><div class="common-box"><h3 style="color:var(--neon-amber);">SELECT MESSAGE</h3><div id="msg-modal-list"></div></div></div>
     <div id="inventory-modal" class="modal-overlay"><div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT (背包)</h3><div id="inventory-list"></div></div></div>
 
+    <div id="hr-dashboard">
+        <div class="hr-header"><div><div class="hr-title" id="hr-dash-title">NEON DASHBOARD</div><div class="hr-subtitle">企業 ESG 戰情室</div></div><div class="close-dashboard" onclick="closeDashboard()">✕</div></div>
+        <div class="hr-grid"><div class="hr-card"><span class="hr-metric-label">TOTAL</span><span class="hr-metric">1,248</span></div><div class="hr-card"><span class="hr-metric-label">FUND</span><span class="hr-metric">$12,480</span></div></div>
+        <div style="margin-top:20px;"><button class="btn-download-report" onclick="downloadReport()">DOWNLOAD REPORT</button></div>
+    </div>
+
     <script>
         const units = [
             { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛...", tags: ["#堅韌防線", "#慢飛天使"] },
@@ -367,19 +336,23 @@
         ];
         const defaultImgs = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600"];
         
-        // --- [修正] 企業職人金句庫 (嚴格鎖定內容) ---
-        const publicQuotes = ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。"];
-        const corporateQuotes = {
-            'tech': [
+        // --- 職人金句庫 (Strict Data) ---
+        const quotesData = {
+            public: [
+                "辛苦了，謝謝你們一直都在！", 
+                "謝謝你們接住了受傷的人。", 
+                "世界因為有你們而溫柔。"
+            ],
+            tech: [
                 "你們修復人心，就像我們修復 Bug 一樣堅持。", 
                 "社工是社會的晶片，維持著系統運作，辛苦了！", 
                 "雖然頻率不同，但我們都在為更好的未來連線。"
             ],
-            'finance': [
+            finance: [
                 "你們承擔風險守護弱勢，這次換我們守護你。", 
                 "這份愛的投資，我們保證長期持有。"
             ],
-            'service': [
+            service: [
                 "服務人的累我們都懂，今天換我們服務你。", 
                 "微笑背後的辛苦，我們感同身受。"
             ]
@@ -387,9 +360,8 @@
 
         let currentUnit = null, selectedTag = null, selectedProp = null, userPhoto = null;
         let dailyCount = 0, totalParticipations = 0, isAuthenticated = false;
-        let myTeam = new URLSearchParams(window.location.search).get('team');
-        let myTeamName = new URLSearchParams(window.location.search).get('name') || myTeam;
-        let activeQuoteList = publicQuotes; // 當前使用的金句列表
+        let myTeamName = new URLSearchParams(window.location.search).get('team');
+        let currentQuoteList = quotesData.public; // 全域變數，儲存當前使用的金句列表
 
         window.onload = function() {
             localStorage.setItem('gc_daily', 0); 
@@ -397,14 +369,22 @@
             totalParticipations = parseInt(localStorage.getItem('gc_total') || 0);
             document.getElementById('pack-count').innerText = totalParticipations;
             updateBatteryVisual();
-            checkEnterpriseMode(); 
-            checkGlobalTarget();
+            checkEnterpriseMode(); // 啟動判斷
         }
 
         function checkDaily() { dailyCount = parseInt(localStorage.getItem('gc_daily') || 0); }
 
-        // --- [核心] 企業模式與金句偵測 ---
+        // --- [核心] 企業模式與金句渲染 ---
         function checkEnterpriseMode() {
+            // 重置為預設
+            currentQuoteList = quotesData.public;
+            document.getElementById('ent-badge').style.display = 'none';
+            document.getElementById('faction-display').style.display = 'none';
+            document.getElementById('csr-hint').style.display = 'none';
+            const btn = document.getElementById('btn-transmit');
+            btn.innerText = "EXECUTE TRANSMISSION";
+            btn.classList.remove('enterprise');
+
             if(myTeamName) {
                 const name = decodeURIComponent(myTeamName);
                 
@@ -414,45 +394,39 @@
                 document.getElementById('csr-hint').style.display = 'block';
                 document.getElementById('csr-hint').innerHTML = `✨ 本次傳輸將由 <strong>${name}</strong> 額外提撥愛心基金`;
                 document.querySelector('.hud-label').innerHTML = `GLOBAL ENERGY | <span style="color:var(--neon-blue)">${name} SQUAD</span>`;
-                
                 document.getElementById('ent-badge').style.display = 'inline-block';
-                const btn = document.getElementById('btn-transmit');
+                
                 btn.innerText = `ACTIVATE ${name} FUND ($10)`;
                 btn.classList.add('enterprise');
 
                 // 2. 金句偵測邏輯
-                let quotes = null;
                 if (name.includes('台積電') || name.includes('聯發科') || name.includes('華碩') || name.includes('宏碁') || name.includes('鴻海') || name.includes('廣達')) {
-                    quotes = corporateQuotes['tech'];
+                    currentQuoteList = quotesData.tech;
                 } else if (name.includes('富邦') || name.includes('國泰') || name.includes('中信') || name.includes('玉山') || name.includes('台新') || name.includes('元大')) {
-                    quotes = corporateQuotes['finance'];
+                    currentQuoteList = quotesData.finance;
                 } else if (name.includes('麥當勞') || name.includes('星巴克') || name.includes('統一') || name.includes('王品') || name.includes('全家')) {
-                    quotes = corporateQuotes['service'];
+                    currentQuoteList = quotesData.service;
                 }
-                
-                // 3. 只有偵測到特定產業才替換
-                if (quotes) {
-                    activeQuoteList = quotes; // 更新全域列表
-                    renderPresets(quotes);
-                }
-            } else {
-                activeQuoteList = publicQuotes; // Reset to public
-                renderPresets(publicQuotes); // Ensure render
             }
+            // 3. 強制刷新介面
+            renderPresets();
         }
 
-        // 動態渲染金句按鈕
-        function renderPresets(quotes) {
+        // --- 渲染金句按鈕 (統一入口) ---
+        function renderPresets() {
             const container = document.getElementById('dynamic-presets');
-            container.innerHTML = '';
-            quotes.forEach(q => {
+            container.innerHTML = ''; // 清空
+            
+            // 產生按鈕
+            currentQuoteList.forEach(q => {
                 const chip = document.createElement('div');
                 chip.className = 'preset-chip';
                 chip.innerText = q;
                 chip.onclick = () => fillMsg(q);
                 container.appendChild(chip);
             });
-            // 補上 More 按鈕
+
+            // 產生 More 按鈕
             const moreBtn = document.createElement('button');
             moreBtn.className = 'preset-more-btn';
             moreBtn.innerText = '+ 更多 (10)';
@@ -460,38 +434,31 @@
             container.appendChild(moreBtn);
         }
 
-        // 方便切換DEMO
+        // Demo 切換
         function forceDemo(name) {
             const newUrl = new URL(window.location.href);
-            if(name) newUrl.searchParams.set('team', name);
-            else newUrl.searchParams.delete('team');
+            if(name) newUrl.searchParams.set('team', name); else newUrl.searchParams.delete('team');
             window.history.pushState({}, '', newUrl);
             myTeamName = name;
-            checkEnterpriseMode(); // Rerun logic
+            checkEnterpriseMode();
             alert(`已切換至：${name || '一般民眾模式'}`);
+        }
+
+        function openMsgModal() {
+            const list = document.getElementById('msg-modal-list');
+            list.innerHTML = "";
+            // Modal 內優先顯示當前金句，再補上通用金句
+            const fullList = (currentQuoteList !== quotesData.public) ? currentQuoteList.concat(quotesData.public) : quotesData.public;
+            fullList.concat(["願世界對你們溫柔", "請記得照顧好自己"]).forEach(q => {
+                list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
+            });
+            document.getElementById('msg-modal').style.display = 'flex';
         }
 
         function updateBatteryVisual() {
             for(let i=1; i<=3; i++) {
                 const cell = document.getElementById(`batt-${i}`);
-                if(cell) {
-                    if(i <= (3 - dailyCount)) { cell.classList.remove('empty'); cell.classList.add('active'); }
-                    else { cell.classList.remove('active'); cell.classList.add('empty'); }
-                }
-            }
-        }
-
-        function checkGlobalTarget() {
-            let globalCount = 4998 + totalParticipations;
-            let target = 5000;
-            let hudVal = document.getElementById('global-energy-value');
-            if(hudVal) {
-                if (globalCount >= target) {
-                    hudVal.innerText = `${globalCount} / ${target} (解鎖!)`;
-                    hudVal.style.color = "var(--neon-orange)";
-                } else {
-                    hudVal.innerText = `${globalCount} / ${target}`;
-                }
+                if(cell) { if(i <= (3 - dailyCount)) { cell.classList.remove('empty'); cell.classList.add('active'); } else { cell.classList.remove('active'); cell.classList.add('empty'); } }
             }
         }
 
@@ -501,180 +468,7 @@
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
                 document.getElementById('scanning-layer').style.display = 'flex';
-                
-                // Animation logic
-                let i = 0;
-                const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
-                const interval = setInterval(() => {
-                    if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++];
-                }, 600);
+                let i = 0; const logs = ["CONNECTING...", "SCANNING...", "TARGET LOCKED"];
+                const interval = setInterval(() => { if(i < logs.length) document.getElementById('scan-status').innerText = logs[i++]; }, 600);
                 setTimeout(() => { document.getElementById('scan-bar').style.width = "100%"; }, 100);
-
-                setTimeout(() => {
-                    clearInterval(interval);
-                    document.getElementById('scanning-layer').style.opacity = 0;
-                    setTimeout(() => {
-                        document.getElementById('scanning-layer').style.display = 'none';
-                        document.getElementById('main-interface').style.opacity = 1;
-                        initGame();
-                    }, 500);
-                }, 2000);
-            }, 500);
-        }
-
-        function initGame() {
-            currentUnit = units[Math.floor(Math.random() * units.length)];
-            document.getElementById('story-img').src = currentUnit.img;
-            document.getElementById('story-unit').innerText = currentUnit.name;
-            document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
-            
-            const tagContainer = document.getElementById('tag-container');
-            tagContainer.innerHTML = '';
-            if (currentUnit.tags) {
-                currentUnit.tags.forEach(tag => {
-                    const btn = document.createElement('div');
-                    btn.className = 'tech-tag';
-                    btn.innerText = tag;
-                    btn.onclick = (e) => {
-                        document.querySelectorAll('.tech-tag').forEach(b => b.classList.remove('active'));
-                        e.target.classList.add('active');
-                        selectedTag = tag;
-                    };
-                    tagContainer.appendChild(btn);
-                });
-            }
-            nextStep(1);
-        }
-
-        function nextStep(step) {
-            document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            // Auto select first tag if none
-            if(step === 3 && !selectedTag) {
-                const tags = document.querySelectorAll('.tech-tag');
-                if(tags.length > 0) { tags[0].classList.add('active'); selectedTag = tags[0].innerText; }
-            }
-            document.getElementById(`step-${step}`).style.display = 'flex';
-        }
-
-        function selectProp(el, name) {
-            document.querySelectorAll('.tech-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            selectedProp = name;
-        }
-
-        function fillMsg(text) { document.getElementById('msg-input').value = text; }
-        
-        function openMsgModal() {
-            const list = document.getElementById('msg-modal-list');
-            list.innerHTML = "";
-            // [修正] 優先顯示當前企業金句，再顯示通用金句
-            const currentList = (activeQuoteList !== publicQuotes) ? activeQuoteList.concat(publicQuotes) : publicQuotes;
-            
-            currentList.forEach(q => {
-                list.innerHTML += `<div class="msg-option" onclick="selectMessage('${q}')">${q}</div>`;
-            });
-            document.getElementById('msg-modal').style.display = 'flex';
-        }
-        function selectMessage(text) { fillMsg(text); closeModal('msg-modal'); }
-
-        function previewPhoto() {
-            const file = document.getElementById('upload-photo').files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => { userPhoto = e.target.result; document.getElementById('photo-status').innerText = "IMAGE: READY"; };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function preSubmitCheck() { if(isAuthenticated) generatePreview(); else document.getElementById('login-modal').style.display = 'flex'; }
-        function simulateAuth() { isAuthenticated = true; closeModal('login-modal'); generatePreview(); }
-        function proceedAsGuest() { closeModal('login-modal'); generatePreview(); }
-
-        function generatePreview() {
-            const msgInput = document.getElementById('msg-input');
-            const msg = msgInput.value || "加油！";
-            const sign = document.getElementById('sign-input').value || "UNKNOWN";
-            const codeName = `NEON-${Math.floor(1000 + Math.random() * 9000)}`;
-            let finalImg = userPhoto || currentUnit.img || defaultImgs[0];
-
-            document.getElementById('card-img').src = finalImg;
-            document.getElementById('code-main').innerText = codeName;
-            document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
-            document.getElementById('card-msg').innerText = msg;
-            document.getElementById('card-unit-name').innerText = currentUnit ? currentUnit.name : "SEARCH TARGET";
-            document.getElementById('card-sign').innerText = sign.toUpperCase();
-
-            if(selectedProp) {
-                document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
-                document.getElementById('gear-icon').innerText = selectedProp.includes('湯') ? '🍲' : '☀️';
-            } else {
-                document.getElementById('card-sponsor').innerText = "SUPPLY: STANDARD"; 
-                document.getElementById('gear-icon').innerText = "🛡️";
-            }
-            
-            if(myTeamName) {
-                const signEl = document.getElementById('card-sign');
-                signEl.innerText += ` | ${decodeURIComponent(myTeamName)}`;
-                signEl.style.color = "var(--neon-blue)";
-                signEl.style.borderColor = "var(--neon-blue)";
-                document.getElementById('ent-receipt').style.display = 'block';
-            }
-
-            document.getElementById('preview-modal').style.display = 'flex';
-        }
-
-        function finalSubmit() {
-            dailyCount++;
-            localStorage.setItem('gc_daily', dailyCount);
-            if(isAuthenticated) { totalParticipations++; localStorage.setItem('gc_total', totalParticipations); document.getElementById('pack-count').innerText = totalParticipations; }
-            updateBatteryVisual();
-            checkGlobalTarget();
-            document.getElementById('feedback-layer').style.display = 'flex';
-            html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
-                const link = document.createElement('a'); link.download = `MISSION_REPORT_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
-                setTimeout(() => { alert("任務回報完成！"); location.reload(); }, 2000);
-            });
-        }
-
-        function executeSearch(keyword) {
-            if(!keyword) return alert("請輸入關鍵字");
-            closeModal('search-modal');
-            document.getElementById('main-interface').style.opacity = 0;
-            document.getElementById('scanning-layer').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('scanning-layer').style.display = 'none';
-                document.getElementById('main-interface').style.opacity = 1;
-                currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
-                selectedTag = "#搜索結果";
-                selectedProp = null; 
-                document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-                document.getElementById('step-3').style.display = 'flex';
-            }, 1500);
-        }
-
-        function openSW(unitName) {
-            document.getElementById('sw-target-name').innerText = unitName === 'demo' ? '親愛的' : unitName;
-            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了，謝謝你們一直都在！ <span>(3,240)</span></div><div class="ranking-item">2. 謝謝你們接住了受傷的人。 <span>(2,105)</span></div><div class="ranking-item">3. 希望世界對你，也能溫柔一點。 <span>(1,890)</span></div>`;
-            document.getElementById('sw-modal').style.display = 'flex';
-        }
-        function openAdminLogin() {
-            const pwd = prompt("ENTER ADMIN CODE:");
-            if(pwd === "2026") {
-                document.getElementById('hr-dashboard').style.display = 'block';
-                if(myTeamName) document.getElementById('hr-dash-title').innerText = `${decodeURIComponent(myTeamName)} DASHBOARD`;
-            }
-        }
-        function closeDashboard() { document.getElementById('hr-dashboard').style.display = 'none'; }
-        function downloadReport() { html2canvas(document.getElementById('hr-dashboard'), { backgroundColor: "#0a0a0a" }).then(canvas => { const link = document.createElement('a'); link.download = `ESG_REPORT.png`; link.href = canvas.toDataURL(); link.click(); }); }
-        function openInventory() { 
-            const list = document.getElementById('inventory-list'); list.innerHTML = "";
-            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>尚無紀錄</p>";
-            else { for(let i=1; i<=totalParticipations; i++) list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`; if((4998+totalParticipations) >= 5000) list.innerHTML = `<h4 style="color:var(--neon-orange);margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML; }
-            document.getElementById('inventory-modal').style.display = 'flex'; 
-        }
-        function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    </script>
-</body>
-</html>
+                setTimeout(() => { clearInterval(interval); document.getElementById('scanning-layer').style.opacity = 0; setTimeout(() => { document.getElementById('scanning-layer').style.display = 'none'; document.getElementById('main-interface').style.opacity = 1; initGame(); }, 500); }, 2
