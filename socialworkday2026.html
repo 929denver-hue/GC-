@@ -161,19 +161,8 @@
         .card-header { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); margin-bottom: 10px; }
         .card-photo-container { position: relative; width: 100%; height: 280px; margin-bottom: 15px; overflow: hidden; border: 1px solid #222; }
         .card-photo-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); }
-        
-        .card-signature { 
-            position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; 
-            font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); 
-            padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); 
-        }
-        
-        /* 增加 Unit Name 在卡片上的位置 */
-        .card-unit-name {
-            position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold;
-            font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000;
-        }
-
+        .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); }
+        .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 5; }
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
         .card-sponsor { font-size: 10px; color: var(--neon-orange); font-weight: bold; border-top: 1px solid #333; padding-top: 5px; }
 
@@ -290,7 +279,7 @@
                         <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
                         <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span></div>
                     </div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)"><</button><button class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button></div>
+                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)"><</button><button id="btn-transmit" class="btn-main" onclick="generatePreview()">EXECUTE TRANSMISSION</button></div>
                 </div>
             </div>
         </div>
@@ -447,25 +436,21 @@
                 // 3. Transition to Main Interface (Directly to Step 1)
                 setTimeout(() => {
                     clearInterval(interval);
-                    scan.style.opacity = 0;
+                    document.getElementById('scanning-layer').style.opacity = 0;
                     setTimeout(() => {
-                        scan.style.display = 'none';
+                        document.getElementById('scanning-layer').style.display = 'none';
                         document.getElementById('main-interface').style.opacity = 1;
-                        
-                        // **Critical: Automatically start the unit logic, skipping Idle**
-                        insertCoin(); 
+                        initGame();
                     }, 500);
                 }, 2200); // Shortened wait time
             }, 500);
         }
 
-        function insertCoin() {
-            // Populate Step 1 & Move
+        function initGame() {
             currentUnit = units[Math.floor(Math.random() * units.length)];
-            
             document.getElementById('story-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
-            document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`; 
+            document.getElementById('story-desc').innerHTML = `<span class="story-quote">" SYSTEM CONNECTED "</span>${currentUnit.desc}`;
             
             const tagContainer = document.getElementById('tag-container');
             tagContainer.innerHTML = '';
@@ -480,8 +465,6 @@
                 };
                 tagContainer.appendChild(btn);
             });
-
-            // Go directly to Step 1
             nextStep(1);
         }
 
@@ -535,14 +518,19 @@
 
         // Logic 2: Generate Cool Card (Fixed)
         function generatePreview() {
-            const msg = document.getElementById('msg-input').value;
+            // 1. Auto-fill message if empty (Defensive UX)
+            const msgInput = document.getElementById('msg-input');
+            if(!msgInput.value.trim()) {
+                msgInput.value = fullQuotes[Math.floor(Math.random() * fullQuotes.length)];
+            }
+            const msg = msgInput.value;
             const sign = document.getElementById('sign-input').value || "UNKNOWN";
-            if(!msg) return alert("請輸入傳輸訊息");
 
+            // 2. Generate Code Name
             const randomCode = Math.floor(1000 + Math.random() * 9000);
             const codeName = `NEON-${randomCode}`;
             
-            // Fix: Fallback Logic for Image
+            // 3. Robust Image Fallback
             let finalImg = userPhoto;
             if(!finalImg && currentUnit && currentUnit.img) finalImg = currentUnit.img;
             if(!finalImg) finalImg = defaultImgs[0]; // Absolute fallback
@@ -552,29 +540,42 @@
             document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
             document.getElementById('card-msg').innerText = msg;
             
-            // Fix: Show Unit Name
-            document.getElementById('card-unit-name').innerText = currentUnit ? currentUnit.name : "SEARCH TARGET";
+            // 4. Robust Unit Name
+            const unitNameText = currentUnit ? currentUnit.name : "SEARCH TARGET";
+            document.getElementById('card-unit-name').innerText = unitNameText;
             
+            // 5. Robust Sponsor
             if(selectedProp) {
                 document.getElementById('card-sponsor').innerText = `SUPPLY: ${selectedProp}`;
             } else {
                 document.getElementById('card-sponsor').innerText = "SUPPLY: STANDARD"; 
             }
 
-            document.getElementById('preview-modal').style.display = 'flex';
+            // 6. Show Preview
+            document.getElementById('btn-transmit').innerText = "TRANSMITTING...";
+            document.getElementById('btn-transmit').style.background = "#fff";
+            
+            setTimeout(() => {
+                document.getElementById('btn-transmit').innerText = "EXECUTE TRANSMISSION";
+                document.getElementById('btn-transmit').style.background = ""; // Reset
+                document.getElementById('preview-modal').style.display = 'flex';
+            }, 500); // Visual feedback delay
         }
 
         // Logic 3: Share Benefit
         function finalSubmit() {
+            // Show Feedback Overlay inside the card preview
             const feedback = document.getElementById('feedback-layer');
             feedback.style.display = 'flex';
             
+            // Simulate Download/Share
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `MISSION_REPORT_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
                 
+                // Delay for effect, then reload
                 setTimeout(() => {
                     alert("任務回報完成！裝備已存入背包。");
                     location.reload();
@@ -590,30 +591,37 @@
             closeModal('search-modal');
             
             // 1. Simulate Scan
-            document.getElementById('main-interface').style.opacity = 0; 
+            document.getElementById('main-interface').style.opacity = 0; // Hide Main momentarily
             document.getElementById('scanning-layer').style.display = 'flex';
             
             setTimeout(() => {
                 document.getElementById('scanning-layer').style.display = 'none';
                 document.getElementById('main-interface').style.opacity = 1;
                 
-                // 2. Set Unit Data (Search Result)
-                currentUnit = { name: keyword, img: defaultImgs[0], desc: "SEARCH RESULT", tags: ["#搜索結果"] };
+                // 2. Set Unit Data (Search Result) - Ensure structure matches units array
+                currentUnit = { 
+                    name: keyword, 
+                    img: defaultImgs[0], 
+                    desc: "SEARCH RESULT", 
+                    tags: ["#搜索結果"] 
+                };
                 
                 // 3. Auto-Select Default Tag & Skip Step 2
                 selectedTag = "#搜索結果";
-                selectedProp = null; 
+                selectedProp = null; // No sponsor for search result (fast track)
                 
                 // 4. Force Jump to Step 3
                 document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
                 document.getElementById('step-3').style.display = 'flex';
                 
-            }, 1500); 
+            }, 1500); // Fast Scan
         }
 
         // SW Logic
         function openSW(unitName = '親愛的夥伴') {
             document.getElementById('sw-target-name').innerText = unitName;
+            
+            // Fake Ranking Generation
             const list = document.getElementById('sw-ranking');
             list.innerHTML = `
                 <h4 style="margin:0 0 15px 0; font-size:14px; color:var(--neon-orange);">🏆 民眾最想對你說的話：</h4>
@@ -624,7 +632,7 @@
             document.getElementById('sw-modal').style.display = 'flex';
         }
 
-        function openInventory() { document.getElementById('inventory-modal').style.display = 'flex'; }
+        function openInventory() { /* ... */ document.getElementById('inventory-modal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     </script>
