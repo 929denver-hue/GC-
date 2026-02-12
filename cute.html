@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 給社工愛的鼓勵 - 像素守護者 (最終版)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Press+Start+2P&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --warm-orange: #E65100;
+            --hope-yellow: #FFD54F;
+            --soft-bg: #FFF8E1;
+            --text-dark: #2c2c2c;
+            --console-body: #F57F17;
+            --console-dark: #3E2723;
+        }
+        
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body { margin: 0; font-family: 'Noto Sans TC', sans-serif; color: var(--text-dark); background-color: var(--soft-bg); }
+
+        /* --- NAV: 背包按鈕 --- */
+        .nav-bar { position: absolute; top: 20px; right: 20px; z-index: 50; }
+        .btn-inventory {
+            background: #333; color: #fff; border: 2px solid #fff; padding: 8px 15px;
+            border-radius: 30px; cursor: pointer; font-family: 'Noto Sans TC'; font-size: 12px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .btn-inventory:hover { transform: scale(1.05); background: var(--warm-orange); }
+
+        /* --- 1. Hero Section --- */
+        #hero-section {
+            min-height: 95vh;
+            background: linear-gradient(rgba(60, 40, 30, 0.3), rgba(60, 40, 30, 0.7)), url('https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; color: #fff; padding: 40px 20px; position: relative;
+        }
+        .edition-tag { background: var(--hope-yellow); color: #333; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 20px; font-size: 0.9rem; }
+        .main-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .poetry-box { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); padding: 30px; border-left: 4px solid var(--hope-yellow); max-width: 600px; text-align: left; margin-bottom: 40px; line-height: 1.8; font-weight: 300; }
+        
+        .hp-bar-container { width: 100%; max-width: 600px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 2px solid #aaa; margin-bottom: 20px; }
+        .hp-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; color: var(--hope-yellow); font-family: 'Press Start 2P'; }
+        .hp-track { width: 100%; height: 20px; background: #222; border-radius: 10px; overflow: hidden; }
+        .hp-fill { height: 100%; width: 78%; background: linear-gradient(90deg, #FF9800, #FFD54F); box-shadow: 0 0 10px #FF9800; }
+        .scroll-down-btn { background: var(--warm-orange); color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 15px rgba(230, 81, 0, 0.4); }
+
+        /* --- 2. Game Section --- */
+        #game-section { padding: 50px 20px; background-color: var(--console-dark); background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); display: flex; flex-direction: column; align-items: center; font-family: 'Press Start 2P', cursive; color: #fff; }
+        
+        .daily-limit-badge {
+            background: #000; color: #00FF00; padding: 8px 15px; border-radius: 5px; 
+            margin-bottom: 20px; border: 2px solid #555; font-size: 10px; text-shadow: 0 0 5px #00FF00;
+        }
+
+        .arcade-marquee { width: 100%; max-width: 500px; background: #000; border: 4px solid #555; border-bottom: none; border-radius: 8px 8px 0 0; height: 36px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
+        .ticker-text { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; color: #00FF00; font-size: 10px; font-family: 'Press Start 2P'; text-shadow: 0 0 5px #00FF00; }
+        @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        .game-console { background-color: var(--console-body); padding: 20px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 500px; border-radius: 0 0 8px 8px; position: relative; }
+        .screen { background: #fff; border: 4px solid #222; min-height: 700px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; position: relative; }
+
+        .state-idle, .state-spinning { text-align: center; margin-top: 200px; }
+        .state-spinning { display: none; }
+        .state-quest { display: none; width: 100%; text-align: left; }
+        .real-photo-frame { width: 100%; height: 140px; background: #000; margin-bottom: 10px; border: 2px solid #333; overflow: hidden; }
+        .real-photo { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Interactions */
+        .interaction-area { font-family: 'Noto Sans TC'; margin-top: 10px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; font-weight: bold; }
+        .tag-row { display: flex; gap: 5px; flex-wrap: wrap; }
+        .tag-btn { font-size: 12px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; transition: 0.2s; }
+        .tag-btn.active { background: var(--warm-orange); color: #fff; border-color: var(--warm-orange); }
+
+        /* --- 贊助道具 (Grid) --- */
+        .supply-grid { display: flex; flex-direction: column; gap: 8px; }
+        .supply-item { 
+            border: 1px solid #ddd; border-radius: 8px; padding: 10px; 
+            cursor: pointer; transition: 0.2s; background: #fafafa;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .supply-item:hover { transform: translateX(3px); border-color: var(--warm-orange); }
+        .supply-item.selected { 
+            border-color: var(--warm-orange); background: #FFF3E0; 
+            box-shadow: 0 2px 5px rgba(230, 81, 0, 0.2);
+        }
+        .supply-icon { font-size: 24px; }
+        .supply-content { text-align: left; flex: 1; }
+        .supply-title { font-size: 13px; font-weight: bold; color: var(--warm-orange); margin-bottom: 2px; }
+        .supply-desc { font-size: 11px; color: #555; line-height: 1.3; }
+        .supply-brand { font-size: 10px; color: #999; margin-top: 2px; }
+
+        /* Upload & Input */
+        .upload-wrapper { position: relative; width: 100%; }
+        .btn-upload { border: 2px dashed #ccc; background: #fff; color: #888; padding: 8px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .btn-upload:hover { border-color: var(--warm-orange); color: var(--warm-orange); background: #FFF3E0; }
+        .upload-input { position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .file-status { font-size: 10px; color: #888; margin-top: 4px; text-align: center; }
+
+        .smart-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 5px; }
+        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 4px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; cursor: pointer; }
+        textarea, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; }
+
+        /* Coin */
+        .coin-area { display: flex; justify-content: flex-end; height: 60px; position: relative; margin-bottom: 10px; }
+        .coin-slot { width: 16px; height: 45px; background: #111; border: 2px solid #666; border-radius: 4px; position: relative; z-index: 1; top: 10px; box-shadow: inset 0 0 5px #000; }
+        .heart-token { font-size: 40px; color: #FF1744; position: absolute; right: 30px; top: 0; cursor: pointer; animation: float 2s infinite; z-index: 10; }
+        @keyframes insertCoin { 0% { top: 0; right: 30px; transform: scale(1); opacity: 1; } 50% { top: 15px; right: 0px; transform: scale(0.8); opacity: 1; } 100% { top: 35px; right: 0px; transform: scale(0.2); opacity: 0; } }
+        @keyframes float { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-8px);} }
+
+        .btn-main { background: #999; color: #ccc; border: 4px solid #555; padding: 15px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: not-allowed; pointer-events: none; }
+        .btn-unlocked { background: #FF1744; color: #fff; border-color: #880E4F; cursor: pointer; pointer-events: auto; box-shadow: 0 4px 0 #880E4F; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
+
+        /* 3. Search & Footer */
+        #search-section { padding: 60px 20px; background: #ECEFF1; text-align: center; border-top: 8px dashed #aaa; }
+        .db-console { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .search-bar { display: flex; gap: 10px; margin-top: 20px; }
+        .search-input { flex: 1; padding: 12px; border: 1px solid #aaa; border-radius: 5px; }
+        .search-btn { background: var(--console-dark); color: #fff; border: none; padding: 0 20px; border-radius: 5px; cursor: pointer; }
+        
+        #footer-section { padding: 40px 20px; background: #fff; text-align: center; font-size: 0.9rem; color: #666; }
+        .sponsor-list { display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
+        .sponsor-badge { border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; font-weight: bold; color: #888; font-size: 0.8rem; }
+        .sw-link { color: #ccc; font-size: 12px; text-decoration: none; margin-top: 20px; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; padding: 5px 10px; border: 1px dashed #ddd; border-radius: 4px; }
+        .sw-link:hover { color: var(--warm-orange); border-color: var(--warm-orange); }
+
+        /* --- Modals (Common) --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+        .close-btn { cursor: pointer; color: #fff; font-size: 20px; }
+
+        /* Preview Card */
+        #capture-target { background: #fff; width: 320px; padding: 25px; border-radius: 2px; margin: 0 auto; font-family: 'Noto Serif TC', serif; text-align: left; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card-header { display: flex; justify-content: space-between; font-size: 10px; color: #999; margin-bottom: 15px; letter-spacing: 1px; font-family: 'Noto Sans TC'; }
+        .card-img-box { width: 100%; height: 280px; overflow: hidden; margin-bottom: 20px; background: #eee; filter: grayscale(20%) contrast(105%); position: relative; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; }
+        .card-tag { background: #000; color: #fff; padding: 4px 8px; font-size: 10px; display: inline-block; margin-bottom: 15px; font-family: 'Noto Sans TC'; }
+        .card-msg { font-size: 1.2rem; font-weight: 600; line-height: 1.5; color: #222; margin-bottom: 25px; min-height: 60px; }
+        .card-footer { border-top: 1px solid #eee; padding-top: 15px; font-size: 0.8rem; color: #666; font-family: 'Noto Sans TC'; display: flex; justify-content: space-between; }
+        .prop-sticker { position: absolute; bottom: 10px; right: 10px; background: #fff; padding: 5px 10px; border-radius: 20px; font-size: 10px; font-family: 'Noto Sans TC'; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transform: rotate(-5deg); display: none; border: 1px solid #FFD54F; color: #E65100; font-weight: bold;}
+        .modal-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; width: 320px; }
+        .action-btn { padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; border: none; }
+        .btn-download { background: #E65100; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-back { background: transparent; color: #ccc; border: 1px solid #555; }
+
+        /* --- Inventory Modal (背包) --- */
+        .inventory-box { background: #fff; width: 100%; max-width: 400px; height: 75vh; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; font-family: 'Noto Sans TC'; position: relative; }
+        .inventory-header { background: var(--console-dark); color: #fff; padding: 15px; text-align: center; font-family: 'Press Start 2P'; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .inventory-list { padding: 15px; overflow-y: auto; flex: 1; background: #f5f5f5; }
+        .ticket-card { background: #fff; border: 1px solid #ddd; border-left: 5px solid var(--warm-orange); padding: 15px; margin-bottom: 10px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .ticket-id { font-size: 10px; color: #999; font-family: 'Press Start 2P'; margin-bottom: 5px; }
+        .ticket-target { font-weight: bold; color: #333; font-size: 14px; }
+        .ticket-msg-preview { font-size: 13px; color: #555; margin: 8px 0; font-style: italic; line-height: 1.4; }
+        .ticket-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px dashed #eee; padding-top: 8px; }
+        .ticket-prop { font-size: 11px; color: #E65100; background: #FFF3E0; padding: 2px 6px; border-radius: 4px; }
+        
+        /* 轉發分享按鈕 */
+        .btn-share-action { 
+            background: #E65100; color: #fff; border: none; padding: 5px 12px; border-radius: 20px; 
+            font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; 
+        }
+        .btn-share-action:hover { background: #FF6F00; }
+
+        .empty-state { text-align: center; color: #999; margin-top: 50px; font-size: 14px; }
+
+        /* --- Social Worker Modal (社工專屬層) --- */
+        .sw-box { background: #fff; width: 100%; max-width: 500px; padding: 30px; border-radius: 10px; text-align: center; font-family: 'Noto Serif TC', serif; }
+        .sw-title { font-size: 1.5rem; color: var(--console-dark); margin-bottom: 20px; font-weight: bold; }
+        .sw-intro { color: #555; line-height: 1.8; margin-bottom: 30px; font-size: 1.1rem; }
+        .sw-highlight { color: #E65100; font-weight: bold; background: #FFF3E0; padding: 0 5px; }
+        .ranking-list { text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+        .ranking-item { margin-bottom: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; font-family: 'Noto Sans TC'; color: #333; }
+        .ranking-badge { background: #333; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 8px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar">
+        <div class="btn-inventory" onclick="openInventory()">
+            <span>🎒</span> 我的背包
+        </div>
+    </div>
+
+    <section id="hero-section">
+        <div class="edition-tag">2026 第七屆</div>
+        <h1 class="main-title">給社工愛的鼓勵</h1>
+        <div class="poetry-box">
+            <p>有些人，長期站在最前線，卻很少被問一句：「你還好嗎？」</p>
+            <p>今年，GC 贈物網邀請你，<strong>不用捐錢，只留下一句真心的話。</strong></p>
+        </div>
+        <div class="hp-bar-container">
+            <div class="hp-info"><span>GLOBAL LOVE ENERGY</span><span>LV. 78</span></div>
+            <div class="hp-track"><div class="hp-fill"></div></div>
+            <div style="font-size:10px; color:#ccc; margin-top:5px; text-align:right;">全台累積 12,540 則祝福</div>
+        </div>
+        <a href="#game-section" class="scroll-down-btn">👇 進入任務 (開始留言)</a>
+    </section>
+
+    <section id="game-section">
+        <div class="daily-limit-badge">TODAY'S ENERGY: <span id="daily-count-display">3</span> / 3</div>
+        <div class="arcade-marquee">
+            <div class="ticker-text">User123 留言給 勵馨基金會：辛苦了！ ❤️ 王小明 給了 華山基金會 一個讚 ❤️ 匿名勇者 獲得 鼎王湯底...</div>
+        </div>
+
+        <div class="game-console">
+            <div class="screen">
+                <div id="state-idle" class="state-idle">
+                    <div style="font-size: 40px; margin-bottom: 20px;">🛡️</div>
+                    <div>PIXEL QUEST<br><span style="font-size:10px; color:#666;">投入愛心，遇見守護者</span></div>
+                </div>
+                <div id="state-spinning" class="state-spinning">
+                    <div>CONNECTING...</div>
+                    <div id="spin-icon" style="font-size: 40px; margin-top: 20px;">❤️</div>
+                </div>
+                <div id="state-quest" class="state-quest">
+                    <div class="real-photo-frame"><img id="quest-img" class="real-photo" src=""></div>
+                    <div style="font-size:14px; font-weight:bold; margin-bottom:10px;" id="quest-name">單位名稱</div>
+                    
+                    <div class="interaction-area">
+                        <div class="input-group">
+                            <label>1. 選擇標籤 (必選)：</label>
+                            <div class="tag-row" id="tag-container"></div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>2. 贈送補給品 (贊助夥伴)：</label>
+                            <div class="supply-grid">
+                                <div class="supply-item" onclick="selectProp(this, '鼎王湯底', '🍲')">
+                                    <div class="supply-icon">🍲</div>
+                                    <div class="supply-content">
+                                        <div class="supply-title">替你補一點熱</div>
+                                        <div class="supply-desc">下班後，也有人希望你被好好照顧</div>
+                                        <div class="supply-brand">（鼎王湯底）</div>
+                                    </div>
+                                </div>
+                                <div class="supply-item" onclick="selectProp(this, '艾瑪絲沐浴露', '🚿')">
+                                    <div class="supply-icon">🚿</div>
+                                    <div class="supply-content">
+                                        <div class="supply-title">洗掉整天疲憊</div>
+                                        <div class="supply-desc">那些撐住別人的時刻，也該被放下</div>
+                                        <div class="supply-brand">（艾瑪絲沐浴露）</div>
+                                    </div>
+                                </div>
+                                <div class="supply-item" onclick="selectProp(this, '蓓朵娜防曬', '☀️')">
+                                    <div class="supply-icon">☀️</div>
+                                    <div class="supply-content">
+                                        <div class="supply-title">擋掉外界消耗</div>
+                                        <div class="supply-desc">希望世界對你，也能溫柔一點</div>
+                                        <div class="supply-brand">（蓓朵娜防曬）</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>3. 寫下鼓勵：</label>
+                            <div class="smart-chips">
+                                <div class="smart-chip" onclick="fillInput('辛苦了，謝謝你們！')">辛苦了</div>
+                                <div class="smart-chip" onclick="fillInput('謝謝你們接住了受傷的人。')">接住受傷的人</div>
+                                <div class="smart-chip" onclick="fillInput('記得好好吃飯。')">記得吃飯</div>
+                            </div>
+                            <textarea id="msg-input" rows="2" placeholder="也可以自己寫喔..."></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label>4. 上傳照片 (可選)：</label>
+                            <div class="upload-wrapper">
+                                <button class="btn-upload">📷 上傳照片</button>
+                                <input type="file" id="user-photo-upload" class="upload-input" accept="image/*" onchange="previewUserPhoto()">
+                            </div>
+                            <div id="file-status" class="file-status"></div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>5. 署名：</label>
+                            <input type="text" id="sign-input" placeholder="例如：王小明">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="coin-area">
+                <div style="margin-right: 15px; margin-top: 15px; font-size: 10px; color: #fff;">點擊愛心 ▶</div>
+                <div id="heart-token" class="heart-token">❤️</div>
+                <div class="coin-slot"></div>
+            </div>
+            <button id="btn-action" class="btn-main">請先投幣 (INSERT LOVE)</button>
+        </div>
+        <div style="font-size: 10px; margin-top: 10px; color: #ccc;">今日剩餘愛心：3 / 3</div>
+    </section>
+
+    <section id="search-section">
+        <div class="db-console">
+            <h3 style="color:#5D4037; margin:0 0 10px 0;">🔍 尋找更多光芒</h3>
+            <p style="color:#666; font-size: 0.9rem;">GC 站內 <strong>640 間</strong> 公益單位，輸入名稱或 ID 都能傳達心意。</p>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="例如：勵馨、芒草心...">
+                <button class="search-btn" onclick="alert('搜尋功能示意：將開啟同樣的留言流程。')">搜尋</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="footer-section">
+        <div style="font-size: 0.8rem; letter-spacing: 2px; color: #999;">特別感謝榮譽夥伴</div>
+        <div class="sponsor-list">
+            <span class="sponsor-badge">蓓朵娜</span>
+            <span class="sponsor-badge">艾瑪絲</span>
+            <span class="sponsor-badge">鼎王</span>
+        </div>
+        <div style="margin-top:20px;">&copy; 2026 GC 贈物網 | 讓愛循環</div>
+        <div onclick="openSWLayer()" class="sw-link">🔒 社工夥伴專屬通道</div>
+    </section>
+
+    <div id="preview-modal" class="modal-overlay">
+        <div>
+            <div id="capture-target">
+                <div class="card-header"><span>GC GIVE CIRCLE</span><span>2026</span></div>
+                <div class="card-img-box">
+                    <img id="card-img" class="card-img" src="">
+                    <div id="prop-sticker" class="prop-sticker"><span id="prop-icon"></span> <span id="prop-text"></span></div>
+                </div>
+                <div id="card-tag" class="card-tag">#TAG</div>
+                <div id="card-msg" class="card-msg">留言...</div>
+                <div class="card-footer"><div>To: <strong id="card-to">單位</strong></div><div>From: <span id="card-from">我</span></div></div>
+            </div>
+            <div class="modal-actions">
+                <button id="btn-confirm" class="action-btn btn-download">✅ 確認送出 (獲得抽獎機會)</button>
+                <button onclick="closeModal('preview-modal')" class="action-btn btn-back">返回修改</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="inventory-modal" class="modal-overlay">
+        <div class="inventory-box">
+            <div class="inventory-header"><span>🎒 勇者背包</span><span class="close-btn" onclick="closeModal('inventory-modal')">×</span></div>
+            <div class="inventory-list" id="inventory-list"></div>
+        </div>
+    </div>
+
+    <div id="sw-modal" class="modal-overlay">
+        <div class="sw-box">
+            <div style="text-align:right; margin-bottom:10px;"><span class="close-btn" style="color:#999;" onclick="closeModal('sw-modal')">×</span></div>
+            <div class="sw-title">致 親愛的夥伴</div>
+            <div class="sw-intro">
+                這些祝福來自真實民眾，<br>
+                每一枚愛心幣，都代表<br><span class="sw-highlight">有人停下來想到你</span>。<br>
+                請收下這些溫暖，繼續照亮社會角落。
+            </div>
+            <div class="ranking-list">
+                <h4 style="margin:0 0 15px 0; font-size:14px;">🏆 民眾票選・最想對你說的話：</h4>
+                <div class="ranking-item"><span class="ranking-badge">1</span> 辛苦了，謝謝你們一直都在！ (3,240次)</div>
+                <div class="ranking-item"><span class="ranking-badge">2</span> 謝謝你們接住了受傷的人。 (2,105次)</div>
+                <div class="ranking-item"><span class="ranking-badge">3</span> 希望世界對你，也能溫柔一點。 (1,890次)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const units = [
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600", tags: ["#深夜燈塔", "#憨兒依靠"] },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?w=600", tags: ["#便當快遞", "#聽故事的人"] }
+        ];
+        const defaultImages = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600", "https://images.unsplash.com/photo-1499209974431-2761388a123d?w=600"];
+
+        let isCoinInserted = false;
+        let currentUnit = null;
+        let selectedTag = "";
+        let selectedProp = null; 
+        let userImgData = null;
+        let dailyCount = 0;
+        const todayStr = new Date().toLocaleDateString();
+
+        const heartToken = document.getElementById('heart-token');
+        const btnAction = document.getElementById('btn-action');
+        const stateIdle = document.getElementById('state-idle');
+        const stateQuest = document.getElementById('state-quest');
+        const tagContainer = document.getElementById('tag-container');
+        const previewModal = document.getElementById('preview-modal');
+        const inventoryModal = document.getElementById('inventory-modal');
+        const swModal = document.getElementById('sw-modal');
+
+        // Init
+        window.onload = function() { checkDailyLimit(); }
+
+        function checkDailyLimit() {
+            const savedDate = localStorage.getItem('gc_last_date');
+            if (savedDate !== todayStr) {
+                localStorage.setItem('gc_last_date', todayStr);
+                localStorage.setItem('gc_daily_count', 0);
+                dailyCount = 0;
+            } else { dailyCount = parseInt(localStorage.getItem('gc_daily_count') || 0); }
+            updateDailyDisplay();
+        }
+
+        function updateDailyDisplay() {
+            document.getElementById('daily-count-display').innerText = Math.max(0, 3 - dailyCount);
+            if (dailyCount >= 3) {
+                btnAction.innerText = "今日次數已達上限 (TOMORROW)";
+                btnAction.classList.add('btn-main'); btnAction.classList.remove('btn-unlocked');
+                heartToken.style.display = 'none';
+            }
+        }
+
+        // Actions
+        heartToken.addEventListener('click', () => {
+            if (dailyCount >= 3) return alert("勇者休息一下，明天再來吧！");
+            if (isCoinInserted) return;
+            heartToken.style.animation = "insertCoin 0.8s forwards ease-in";
+            setTimeout(() => {
+                isCoinInserted = true;
+                btnAction.innerText = "轉動緣分 (START)";
+                btnAction.classList.remove('btn-main'); btnAction.classList.add('btn-main', 'btn-unlocked');
+                stateIdle.innerHTML = '<div style="font-size:20px; margin-bottom:10px;">READY!</div>';
+            }, 800);
+        });
+
+        btnAction.addEventListener('click', () => {
+            if (dailyCount >= 3) return;
+            if (!isCoinInserted) return;
+            if (stateQuest.style.display !== 'block') { stateIdle.style.display = 'none'; showQuest(); } else { generatePreview(); }
+        });
+
+        function showQuest() {
+            currentUnit = units[Math.floor(Math.random() * units.length)];
+            document.getElementById('quest-img').src = currentUnit.img;
+            document.getElementById('quest-name').innerText = currentUnit.name;
+            tagContainer.innerHTML = '';
+            currentUnit.tags.forEach(tag => {
+                const btn = document.createElement('div'); btn.className = 'tag-btn'; btn.innerText = tag;
+                btn.onclick = () => { document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); selectedTag = tag; };
+                tagContainer.appendChild(btn);
+            });
+            stateQuest.style.display = 'block'; btnAction.innerText = "預覽祝福 (NEXT)";
+        }
+
+        function selectProp(el, name, icon) {
+            document.querySelectorAll('.supply-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected'); selectedProp = { name, icon };
+        }
+
+        function fillInput(text) { document.getElementById('msg-input').value = text; }
+
+        function previewUserPhoto() {
+            const file = document.getElementById('user-photo-upload').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { userImgData = e.target.result; document.getElementById('file-status').innerText = "✅ 已選擇：" + file.name; }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function generatePreview() {
+            const msg = document.getElementById('msg-input').value;
+            const sign = document.getElementById('sign-input').value;
+            if(!selectedTag || !msg || !sign) return alert("請完整填寫喔！");
+
+            const finalImg = userImgData ? userImgData : defaultImages[Math.floor(Math.random() * defaultImages.length)];
+            document.getElementById('card-img').src = finalImg;
+            document.getElementById('card-tag').innerText = selectedTag;
+            document.getElementById('card-msg').innerText = msg;
+            document.getElementById('card-to').innerText = currentUnit.name;
+            document.getElementById('card-from').innerText = sign;
+
+            const sticker = document.getElementById('prop-sticker');
+            if(selectedProp) {
+                sticker.style.display = 'flex';
+                document.getElementById('prop-icon').innerText = selectedProp.icon;
+                document.getElementById('prop-text').innerText = "贈送 " + selectedProp.name;
+            } else { sticker.style.display = 'none'; }
+            previewModal.style.display = 'flex';
+        }
+
+        document.getElementById('btn-confirm').addEventListener('click', () => {
+            const btn = document.getElementById('btn-confirm');
+            btn.innerHTML = "生成中...";
+            html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a'); link.download = `GC_LoveCard_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
+                dailyCount++; localStorage.setItem('gc_daily_count', dailyCount); saveRecord();
+                btn.innerHTML = "✅ 完成！"; setTimeout(() => { alert("感謝您的愛心！抽獎券已存入背包！"); location.reload(); }, 1500);
+            });
+        });
+
+        function saveRecord() {
+            const records = JSON.parse(localStorage.getItem('gc_records') || "[]");
+            const newRecord = {
+                id: `GC-${Date.now().toString().slice(-6)}`, date: new Date().toLocaleString(),
+                unit: currentUnit.name, prop: selectedProp ? selectedProp.name : "無", msg: document.getElementById('msg-input').value
+            };
+            records.unshift(newRecord); localStorage.setItem('gc_records', JSON.stringify(records));
+        }
+
+        function openInventory() {
+            const records = JSON.parse(localStorage.getItem('gc_records') || "[]");
+            const list = document.getElementById('inventory-list'); list.innerHTML = "";
+            if (records.length === 0) { list.innerHTML = '<div class="empty-state">目前還沒有冒險紀錄...</div>'; } 
+            else {
+                records.forEach(r => {
+                    const div = document.createElement('div'); div.className = 'ticket-card';
+                    div.innerHTML = `
+                        <div class="ticket-id">🎫 TICKET: ${r.id}</div>
+                        <div class="ticket-target">To: ${r.unit}</div>
+                        <div class="ticket-msg-preview">"${r.msg}"</div>
+                        <div class="ticket-footer">
+                            ${r.prop !== "無" ? `<div class="ticket-prop">🎁 贈送: ${r.prop}</div>` : '<div></div>'}
+                            <button class="btn-share-action" onclick='shareRecord(${JSON.stringify(r)})'>
+                                📤 轉發分享
+                            </button>
+                        </div>`;
+                    list.appendChild(div);
+                });
+            }
+            inventoryModal.style.display = 'flex';
+        }
+
+        function shareRecord(record) {
+            // 使用 Web Share API 喚起原生分享
+            if (navigator.share) {
+                navigator.share({
+                    title: '給社工愛的鼓勵',
+                    text: `我在【${record.unit}】留下了這句話：「${record.msg}」。邀請你也來為社工補血！ #像素守護者`,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // 電腦版或不支援時的備案
+                alert("請截圖此畫面分享，或是複製網址邀請朋友！");
+            }
+        }
+
+        function openSWLayer() { swModal.style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    </script>
+</body>
+</html>
