@@ -457,7 +457,14 @@
 
         function nextStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
-            if(step === 3 && !selectedTag) { alert("請選擇同步頻率"); nextStep(2); return; }
+            if(step === 3 && !selectedTag) { 
+                // Auto-select first tag if none selected (Fix for stuck)
+                const tags = document.querySelectorAll('.tech-tag');
+                if(tags.length > 0) {
+                    tags[0].classList.add('active');
+                    selectedTag = tags[0].innerText;
+                }
+            }
             document.getElementById(`step-${step}`).style.display = 'flex';
         }
 
@@ -506,7 +513,11 @@
             const codeName = `NEON-${randomCode}`;
             
             // Render Card
-            document.getElementById('card-img').src = userPhoto || (currentUnit.img || defaultImgs[0]);
+            let finalImg = userPhoto;
+            if(!finalImg && currentUnit && currentUnit.img) finalImg = currentUnit.img;
+            if(!finalImg) finalImg = defaultImgs[Math.floor(Math.random() * defaultImgs.length)];
+
+            document.getElementById('card-img').src = finalImg;
             document.getElementById('code-main').innerText = codeName;
             document.getElementById('code-sub').innerText = `GUARDIAN: ${sign.toUpperCase()}`;
             document.getElementById('card-msg').innerText = msg;
@@ -541,7 +552,7 @@
             });
         }
 
-        // Search & SW Logic
+        // Search Logic: Auto Jump to Step 3
         function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
         
         function executeSearch(keyword) {
@@ -570,6 +581,7 @@
             }, 1500); // Fast Scan
         }
 
+        // SW Logic
         function openSW(unitName = '親愛的夥伴') {
             document.getElementById('sw-target-name').innerText = unitName;
             
