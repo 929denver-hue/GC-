@@ -25,9 +25,9 @@
             background-image: radial-gradient(circle at 50% 50%, #2a1a0a 0%, #000 100%);
         }
 
-        /* 能量核心視覺 */
+        /* 能量核心背景 */
         .energy-core-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; z-index: -1; pointer-events: none; opacity: 0.5; }
-        .energy-ball { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--neon-amber) 0%, transparent 70%); box-shadow: 0 0 60px var(--neon-orange); animation: pulseCore 3s infinite ease-in-out; }
+        .energy-ball { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--neon-amber) 0%, transparent 70%); box-shadow: 0 0 60px var(--neon-orange); animation: pulseCore 4s infinite ease-in-out; }
         .core-orbit { position: absolute; top: 50%; left: 50%; width: 280px; height: 280px; border: 1px dashed rgba(255, 179, 0, 0.2); border-radius: 50%; transform: translate(-50%, -50%); animation: spin 20s linear infinite; }
         @keyframes pulseCore { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; } }
         @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -41,7 +41,7 @@
         .btn-start-mission { width: 100%; background: transparent; color: var(--neon-amber); border: 1px solid var(--neon-amber); padding: 15px; font-size: 14px; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); animation: pulseBtn 2s infinite; }
         @keyframes pulseBtn { 0%, 100% {box-shadow: 0 0 10px rgba(255, 179, 0, 0.2);} 50% {box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);} }
 
-        /* Scanning */
+        /* Scanning (Classic Radar) */
         #scanning-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 998; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .radar-box { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; }
         .radar-ring { position: absolute; border: 1px solid var(--neon-orange); border-radius: 50%; opacity: 0; animation: radarRipple 2s infinite linear; }
@@ -59,64 +59,48 @@
         #main-interface { opacity: 0; transition: opacity 1s ease-in; height: 100%; display: flex; flex-direction: column; }
         .nav-hud { position: absolute; top: 0; left: 0; width: 100%; padding: 15px; z-index: 50; display: flex; justify-content: space-between; align-items: flex-end; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); border-bottom: 1px solid rgba(255, 179, 0, 0.1); }
         .hud-label { font-family: 'Orbitron'; font-size: 10px; color: var(--neon-amber); letter-spacing: 1px; }
-        .hud-value { font-size: 16px; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--neon-amber); }
-        .battery-container { display: flex; gap: 4px; margin-bottom: 5px; justify-content: flex-end; }
-        .battery-cell { width: 12px; height: 16px; border: 1px solid var(--neon-amber); background: rgba(255, 179, 0, 0.2); transition: 0.3s; transform: skewX(-15deg); }
-        .battery-cell.active { background: var(--neon-amber); box-shadow: 0 0 8px var(--neon-amber); }
-        .battery-cell.empty { border-color: #555; background: transparent; }
-        .btn-inventory { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Orbitron'; display: flex; align-items: center; gap: 5px; }
+        .hud-value { font-size: 16px; font-weight: bold; color: #fff; }
+        .battery-container { display: flex; gap: 4px; margin-bottom: 2px; justify-content: flex-end; }
+        .battery-cell { width: 12px; height: 16px; border: 1px solid var(--neon-amber); background: rgba(255, 179, 0, 0.1); transition: 0.5s; transform: skewX(-15deg); }
+        .battery-cell.active { background: var(--neon-amber); box-shadow: 0 0 10px var(--neon-amber); }
+        .battery-cell.empty { border-color: #444; background: transparent; }
+        .btn-inventory { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Orbitron'; }
 
-        /* 企業模式標籤 */
-        .enterprise-badge {
-            font-size: 10px; color: var(--neon-green); border: 1px solid var(--neon-green); 
-            padding: 2px 6px; border-radius: 3px; background: rgba(0, 255, 157, 0.1);
-            margin-left: 5px; font-family: 'Orbitron'; animation: blinkGreen 2s infinite;
-            display: none;
-        }
-        @keyframes blinkGreen { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--neon-green); } 50% { opacity: 0.5; box-shadow: none; } }
+        /* 企業模式標籤 (權力感) */
+        .enterprise-badge { font-size: 10px; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 2px 6px; border-radius: 3px; background: rgba(0, 188, 212, 0.1); margin-left: 5px; font-family: 'Orbitron'; animation: blinkBlue 2s infinite; display: none; }
+        @keyframes blinkBlue { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--neon-blue); } 50% { opacity: 0.5; box-shadow: none; } }
 
         .marquee-container { position: absolute; top: 70px; width: 100%; background: rgba(255, 87, 34, 0.1); border-top: 1px solid rgba(255, 87, 34, 0.3); border-bottom: 1px solid rgba(255, 87, 34, 0.3); height: 28px; overflow: hidden; white-space: nowrap; display: block; }
         .marquee-text { display: inline-block; font-size: 11px; color: var(--neon-orange); font-family: 'Orbitron'; padding-left: 100%; animation: scrollText 20s linear infinite; }
         @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .console-wrapper { position: absolute; top: 110px; bottom: 60px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 420px; padding: 0 10px; display: flex; flex-direction: column; }
-        .screen-frame { flex: 1; background: #000; border: 2px solid #333; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 179, 0, 0.1); display: flex; flex-direction: column; }
-        .screen-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; pointer-events: none; z-index: 99; }
-
+        .screen-frame { flex: 1; background: rgba(0, 0, 0, 0.85); border: 2px solid #333; border-radius: 8px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
         .step-container { display: none; height: 100%; flex-direction: column; opacity: 0; animation: fadeIn 0.5s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
 
         .story-img-box { height: 40%; position: relative; overflow: hidden; border-bottom: 1px solid var(--neon-amber); }
         .story-img { width: 100%; height: 100%; object-fit: cover; filter: sepia(30%); }
         .unit-badge { position: absolute; bottom: 10px; left: 15px; background: rgba(0,0,0,0.8); border: 1px solid var(--neon-amber); color: var(--neon-amber); padding: 4px 10px; font-size: 12px; font-weight: bold; }
-        .story-content { padding: 25px; color: #ccc; font-size: 15px; line-height: 1.8; text-align: justify; flex: 1; overflow-y: auto; font-family: 'Noto Serif TC'; }
-        .story-quote { color: var(--neon-orange); font-weight: bold; margin-bottom: 15px; display: block; font-size: 16px; }
-
-        .panel-header { padding: 15px; border-bottom: 1px solid #333; font-family: 'Orbitron'; color: var(--neon-amber); font-size: 12px; letter-spacing: 1px; }
+        .story-content { padding: 25px; color: #ccc; font-size: 15px; line-height: 1.8; flex: 1; overflow-y: auto; font-family: 'Noto Serif TC'; }
+        
+        .panel-header { padding: 15px; border-bottom: 1px solid #333; font-family: 'Orbitron'; color: var(--neon-amber); font-size: 12px; }
         .panel-body { flex: 1; padding: 20px; overflow-y: auto; }
         .section-label { font-size: 11px; color: #888; margin-bottom: 10px; display: block; font-weight: bold; }
-        
         .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
         .tech-tag { background: transparent; border: 1px solid #555; color: #aaa; padding: 8px 15px; font-size: 12px; cursor: pointer; border-radius: 2px; transition: 0.2s; }
-        .tech-tag.active { border-color: var(--neon-amber); color: #000; background: var(--neon-amber); box-shadow: 0 0 10px rgba(255, 179, 0, 0.5); font-weight: bold; }
+        .tech-tag.active { border-color: var(--neon-amber); color: #000; background: var(--neon-amber); font-weight: bold; }
         
         .sponsor-list { display: flex; flex-direction: column; gap: 10px; }
         .tech-card { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #333; cursor: pointer; transition: 0.2s; }
         .tech-card.selected { border-color: var(--neon-orange); background: rgba(255, 87, 34, 0.1); box-shadow: inset 0 0 10px rgba(255, 87, 34, 0.2); }
-        .tech-icon { font-size: 20px; }
-        .tech-info { flex: 1; }
-        .tech-reason { font-size: 10px; color: var(--neon-orange); display: block; margin-bottom: 2px; }
-        .tech-name { font-size: 13px; font-weight: bold; color: #fff; }
-        .tech-check { color: var(--neon-orange); font-size: 14px; opacity: 0; }
-        .tech-card.selected .tech-check { opacity: 1; }
+        .tech-icon { font-size: 20px; } .tech-info { flex: 1; } .tech-reason { font-size: 10px; color: var(--neon-orange); display: block; margin-bottom: 2px; } .tech-name { font-size: 13px; font-weight: bold; color: #fff; } .tech-check { color: var(--neon-orange); opacity: 0; } .tech-card.selected .tech-check { opacity: 1; }
 
         .msg-presets { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
         .preset-chip { background: #222; border: 1px solid #444; color: #aaa; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; transition: 0.2s; }
         .preset-chip:hover { border-color: var(--neon-amber); color: var(--neon-amber); }
         .preset-more-btn { background: var(--neon-orange); color: #000; border: none; padding: 6px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; cursor: pointer; }
-
         textarea { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 15px; font-family: 'Noto Sans TC'; font-size: 14px; border-radius: 4px; outline: none; resize: none; min-height: 100px; }
-        textarea:focus { border-color: var(--neon-amber); }
         .photo-bar { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px; margin: 15px 0; border-radius: 4px; }
         .btn-upload-mini { border: 1px solid #555; background: transparent; color: #ccc; padding: 4px 10px; font-size: 10px; cursor: pointer; border-radius: 2px; }
         .name-field { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 12px; text-align: center; margin-bottom: 10px; outline: none; }
@@ -124,15 +108,17 @@
         .control-bar { padding-top: 15px; display: flex; gap: 10px; background: #111; padding: 15px; }
         .btn-main { flex: 1; background: var(--neon-amber); color: #000; border: none; padding: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); transition: 0.2s; text-align: center; }
         .btn-main:hover { box-shadow: 0 0 15px var(--neon-amber); background: #fff; }
-        /* 企業版按鈕 */
+        /* 企業版按鈕樣式 */
         .btn-main.enterprise { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); animation: pulseBlue 2s infinite; }
         @keyframes pulseBlue { 0% { box-shadow: 0 0 5px var(--neon-blue); } 50% { box-shadow: 0 0 20px var(--neon-blue); } 100% { box-shadow: 0 0 5px var(--neon-blue); } }
         .btn-back { background: transparent; border: 1px solid #555; color: #888; padding: 0 15px; cursor: pointer; }
 
+        /* Footer */
         .footer-nav { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 10px; color: #666; z-index: 10; }
         .footer-link { color: #888; text-decoration: none; border-bottom: 1px dashed #666; margin: 0 5px; cursor: pointer; }
 
-        .csr-hint { font-size: 11px; color: var(--neon-orange); text-align: center; margin-bottom: 8px; font-family: 'Noto Sans TC'; border: 1px dashed var(--neon-orange); padding: 5px; border-radius: 4px; background: rgba(255,87,34,0.1); animation: blinkText 3s infinite; display: none; }
+        /* 企業 CSR 提示 */
+        .csr-hint { font-size: 11px; color: var(--neon-blue); text-align: center; margin-bottom: 8px; font-family: 'Noto Sans TC'; border: 1px dashed var(--neon-blue); padding: 5px; border-radius: 4px; background: rgba(0, 188, 212, 0.1); animation: blinkText 3s infinite; display: none; }
         @keyframes blinkText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
         /* HR DASHBOARD */
@@ -144,20 +130,8 @@
         .hr-card { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 4px; }
         .hr-metric { font-family: 'Orbitron'; font-size: 2rem; color: #fff; display: block; margin-bottom: 5px; }
         .hr-metric-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
-        .hr-chart-box { background: #111; border: 1px solid #333; height: 200px; padding: 15px; margin-bottom: 20px; position: relative; display: flex; align-items: center; justify-content: center; }
-        .fake-chart { width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: space-around; }
-        .chart-bar { width: 15%; background: var(--neon-amber); opacity: 0.7; transition: height 1s; position: relative; }
-        .chart-bar::after { content: attr(data-val); position: absolute; top: -20px; left: 0; width: 100%; text-align: center; font-size: 10px; color: #fff; }
         .close-dashboard { cursor: pointer; color: #fff; font-size: 24px; }
         .btn-download-report { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; }
-        
-        .dna-bar-container { display: flex; height: 10px; width: 100%; background: #333; border-radius: 5px; overflow: hidden; margin-top: 5px; }
-        .dna-segment { height: 100%; }
-        .dna-legend { display: flex; gap: 10px; margin-top: 5px; font-size: 10px; color: #aaa; }
-        .dna-dot { width: 8px; height: 8px; display: inline-block; margin-right: 3px; border-radius: 50%; }
-        .sdg-box { display: flex; gap: 10px; }
-        .sdg-icon { width: 40px; height: 40px; background: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Orbitron'; color: #888; }
-        .sdg-icon.active { background: var(--neon-green); color: #000; box-shadow: 0 0 10px var(--neon-green); border: none; }
 
         /* Modals */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
@@ -167,9 +141,6 @@
         .card-photo-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); }
         .card-signature { position: absolute; bottom: 10px; right: 10px; font-family: 'Orbitron'; font-weight: bold; font-size: 16px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); text-shadow: 0 0 5px var(--neon-amber); z-index: 10; }
         .card-unit-name { position: absolute; bottom: 10px; left: 10px; font-family: 'Noto Sans TC'; font-weight: bold; font-size: 14px; color: #fff; text-shadow: 0 2px 5px #000; z-index: 10; }
-        .hud-code-name { position: absolute; top: 15px; right: 15px; text-align: right; z-index: 10; }
-        .code-main { font-family: 'Orbitron'; font-size: 14px; color: #fff; font-weight: bold; text-shadow: 0 0 10px var(--neon-amber); }
-        .code-sub { font-family: 'Orbitron'; font-size: 8px; color: var(--neon-orange); letter-spacing: 1px; }
         .hud-gear { position: absolute; bottom: 40px; right: 15px; text-align: right; z-index: 10; }
         .gear-icon { font-size: 24px; filter: drop-shadow(0 0 5px var(--neon-amber)); }
         .card-text { font-size: 14px; color: #ddd; line-height: 1.5; margin-bottom: 10px; min-height: 40px; }
@@ -206,93 +177,91 @@
 
     <div class="energy-core-container"><div class="core-orbit"></div><div class="energy-ball"></div></div>
 
-    <div id="intro-layer">
-        <div class="briefing-card">
-            <span class="sub-logo-text">PROJECT NEON // 2026</span>
-            <div class="main-logo-text">2026 給社工愛的鼓勵</div>
-            <div class="intro-text">
-                在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是社工，也是社會的安全網。<br><br>
-                系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
-            </div>
-            <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
-        </div>
-    </div>
-
-    <div id="scanning-layer">
-        <div class="cmd-log" id="scan-log">SYSTEM BOOT...<br>LOADING MODULES...</div>
-        <div class="radar-box"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div><div class="central-heart">❤️</div></div>
-        <div class="scan-text" id="scan-status">INITIATING SCAN...</div>
-        <div class="scan-progress-bar"><div class="scan-progress-fill" id="scan-bar"></div></div>
-    </div>
-
-    <div id="main-interface">
-        <div class="nav-hud">
-            <div>
-                <span class="hud-label">GLOBAL ENERGY <span id="ent-badge" class="enterprise-badge">CSR MATCHING: ACTIVE</span></span>
-                <div class="hud-value" id="global-energy-value" style="font-size:14px;">4998 / 5000</div>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:flex-end;">
-                <div class="battery-container">
-                    <div class="battery-cell active" id="batt-1"></div>
-                    <div class="battery-cell active" id="batt-2"></div>
-                    <div class="battery-cell active" id="batt-3"></div>
-                </div>
-                <div class="btn-inventory" onclick="openInventory()">🎒 PACK (<span id="pack-count">0</span>)</div>
-            </div>
-        </div>
+    <div id="user-interface">
         
-        <div class="marquee-container"><div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 台積電戰隊 累積 5200 點能量 ...</div></div>
-
-        <div class="console-wrapper">
-            <div class="screen-frame">
-                <div id="step-1" class="step-container">
-                    <div class="story-img-box"><img id="story-img" class="story-img" src=""><div id="story-unit" class="unit-badge">單位名稱</div></div>
-                    <div class="story-content"><span id="story-desc"></span></div>
-                    <div class="control-bar"><button class="btn-main" onclick="nextStep(2)">INITIALIZE SUPPORT >></button></div>
+        <div id="intro-layer">
+            <div class="briefing-card">
+                <span class="sub-logo-text">PROJECT NEON // 2026</span>
+                <div class="main-logo-text">2026 給社工愛的鼓勵</div>
+                <div class="intro-text">
+                    在城市光影的背後，有一群人長期承接著最脆弱的瞬間。他們是社工，也是社會的安全網。<br><br>
+                    系統偵測到全台社工能量低於安全值。<br>請啟動連線，成為「守護者」。
                 </div>
-
-                <div id="step-2" class="step-container">
-                    <div class="panel-header">STEP 2/3 : CONFIGURE LOADOUT</div>
-                    <div class="panel-body">
-                        <span class="section-label">1. SYNCHRONIZE (同步頻率)</span>
-                        <div class="tag-row" id="tag-container"></div>
-                        <span class="section-label">2. TACTICAL SUPPLY (戰術補給)</span>
-                        <div class="sponsor-list">
-                            <div class="tech-card" onclick="selectProp(this, '鼎王湯底')"><div class="tech-icon">🍲</div><div class="tech-info"><span class="tech-reason">>> 偵測到寒冷與飢餓</span><span class="tech-name">配置 [鼎王麻辣鍋]</span></div><div class="tech-check">✔</div></div>
-                            <div class="tech-card" onclick="selectProp(this, '艾瑪絲洗髮')"><div class="tech-icon">🚿</div><div class="tech-info"><span class="tech-reason">>> 偵測到身心疲勞</span><span class="tech-name">配置 [艾瑪絲洗髮精]</span></div><div class="tech-check">✔</div></div>
-                            <div class="tech-card" onclick="selectProp(this, '蓓朵娜防曬')"><div class="tech-icon">☀️</div><div class="tech-info"><span class="tech-reason">>> 偵測到紫外線曝曬</span><span class="tech-name">配置 [蓓朵娜防曬]</span></div><div class="tech-check">✔</div></div>
-                        </div>
-                    </div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(1)">&lt;</button><button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button></div>
-                </div>
-
-                <div id="step-3" class="step-container">
-                    <div class="panel-header">STEP 3/3 : UPLOAD MESSAGE</div>
-                    <div class="panel-body">
-                        <span class="section-label">MESSAGE (傳輸訊息)</span>
-                        <div class="msg-presets" id="dynamic-presets"></div>
-                        
-                        <textarea id="msg-input" placeholder="寫下對他們的鼓勵..."></textarea>
-                        
-                        <div class="photo-bar">
-                            <span style="font-size:11px;color:#888;" id="photo-status">IMAGE: DEFAULT</span>
-                            <label class="btn-upload-mini">UPLOAD <input type="file" id="upload-photo" style="display:none;" onchange="previewPhoto()"></label>
-                        </div>
-                        <span class="section-label">CODENAME (署名)</span>
-                        <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
-                        <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-amber)"></span></div>
-                    </div>
-                    <div id="csr-hint" class="csr-hint"></div>
-                    <div class="control-bar"><button class="btn-back" onclick="nextStep(2)">&lt;</button><button id="btn-transmit" class="btn-main" onclick="preSubmitCheck()">EXECUTE TRANSMISSION</button></div>
-                </div>
+                <button class="btn-start-mission" onclick="startScanning()">啟動連線 (INITIALIZE LINK)</button>
             </div>
         </div>
 
-        <div class="footer-nav">
-            <span class="footer-link" onclick="openSearch()">SEARCH UNIT</span>
-            <span class="footer-link" onclick="openSW('demo')">SOCIAL WORKER CHANNEL</span>
-            <span class="footer-link" onclick="openAdminLogin()">ADMIN ACCESS</span>
-            <div style="margin-top:5px;">&copy; 2026 PROJECT NEON</div>
+        <div id="scanning-layer">
+            <div class="cmd-log" id="scan-log">SYSTEM BOOT...<br>LOADING MODULES...</div>
+            <div class="radar-box"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div><div class="central-heart">❤️</div></div>
+            <div class="scan-text" id="scan-status">INITIATING SCAN...</div>
+            <div class="scan-progress-bar"><div class="scan-progress-fill" id="scan-bar"></div></div>
+        </div>
+
+        <div id="main-interface">
+            <div class="nav-hud">
+                <div>
+                    <span class="hud-label">GLOBAL ENERGY <span id="ent-badge" class="enterprise-badge">CSR MATCHING</span></span>
+                    <div class="hud-value" id="global-energy-value" style="font-size:14px;">4998 / 5000</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                    <div class="battery-container">
+                        <div class="battery-cell active" id="batt-1"></div>
+                        <div class="battery-cell active" id="batt-2"></div>
+                        <div class="battery-cell active" id="batt-3"></div>
+                    </div>
+                    <div class="btn-inventory" onclick="openInventory()">🎒 PACK (<span id="pack-count">0</span>)</div>
+                </div>
+            </div>
+            
+            <div class="marquee-container"><div class="marquee-text" id="marquee-content">>> SYSTEM ONLINE ... User888 傳輸 [熱能補給] ... 台積電戰隊 累積 5200 點能量 ...</div></div>
+
+            <div class="console-wrapper">
+                <div class="screen-frame">
+                    <div id="step-1" class="step-container">
+                        <div class="story-img-box"><img id="story-img" class="story-img" src=""><div id="story-unit" class="unit-badge">單位名稱</div></div>
+                        <div class="story-content"><span id="story-desc"></span></div>
+                        <div class="control-bar"><button class="btn-main" onclick="nextStep(2)">INITIALIZE SUPPORT >></button></div>
+                    </div>
+
+                    <div id="step-2" class="step-container">
+                        <div class="panel-header">STEP 2/3 : CONFIGURE LOADOUT</div>
+                        <div class="panel-body">
+                            <span class="section-label">1. SYNCHRONIZE (同步頻率)</span>
+                            <div class="tag-row" id="tag-container"></div>
+                            <span class="section-label">2. TACTICAL SUPPLY (戰術補給)</span>
+                            <div class="sponsor-list">
+                                <div class="tech-card" onclick="selectProp(this, '鼎王湯底')"><div class="tech-icon">🍲</div><div class="tech-info"><span class="tech-reason">>> 偵測到寒冷與飢餓</span><span class="tech-name">配置 [鼎王麻辣鍋]</span></div><div class="tech-check">✔</div></div>
+                                <div class="tech-card" onclick="selectProp(this, '艾瑪絲洗髮')"><div class="tech-icon">🚿</div><div class="tech-info"><span class="tech-reason">>> 偵測到身心疲勞</span><span class="tech-name">配置 [艾瑪絲洗髮精]</span></div><div class="tech-check">✔</div></div>
+                                <div class="tech-card" onclick="selectProp(this, '蓓朵娜防曬')"><div class="tech-icon">☀️</div><div class="tech-info"><span class="tech-reason">>> 偵測到紫外線曝曬</span><span class="tech-name">配置 [蓓朵娜防曬]</span></div><div class="tech-check">✔</div></div>
+                            </div>
+                        </div>
+                        <div class="control-bar"><button class="btn-back" onclick="nextStep(1)">&lt;</button><button class="btn-main" onclick="nextStep(3)">CONFIRM LOADOUT >></button></div>
+                    </div>
+
+                    <div id="step-3" class="step-container">
+                        <div class="panel-header">STEP 3/3 : UPLOAD MESSAGE</div>
+                        <div class="panel-body">
+                            <span class="section-label">MESSAGE (傳輸訊息)</span>
+                            <div class="msg-presets" id="dynamic-presets"></div>
+                            
+                            <textarea id="msg-input" placeholder="寫下對他們的鼓勵..."></textarea>
+                            <span class="section-label" style="margin-top:15px;">CODENAME (署名)</span>
+                            <input type="text" id="sign-input" class="name-field" placeholder="輸入您的代號" maxlength="10">
+                            <div id="faction-display" style="text-align:center; font-size:10px; color:#666; margin-top:5px; display:none;">🛡️ Linked to Squad: <span id="faction-name" style="color:var(--neon-blue)"></span></div>
+                        </div>
+                        <div id="csr-hint" class="csr-hint"></div>
+                        <div class="control-bar"><button class="btn-back" onclick="nextStep(2)">&lt;</button><button id="btn-transmit" class="btn-main" onclick="preSubmitCheck()">EXECUTE TRANSMISSION</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-nav">
+                <span class="footer-link" onclick="openSearch()">SEARCH UNIT</span>
+                <span class="footer-link" onclick="openSW('demo')">SOCIAL WORKER CHANNEL</span>
+                <span class="footer-link" onclick="openAdminLogin()">ADMIN ACCESS</span>
+                <div style="margin-top:5px;">&copy; 2026 PROJECT NEON</div>
+            </div>
         </div>
     </div>
 
@@ -314,36 +283,6 @@
                 <span class="hr-metric-label">MATCHING FUND</span>
                 <span class="hr-metric" style="color:var(--neon-blue);">$ 12,480</span>
                 <span style="font-size:10px; color:#666;">企業累積提撥金</span>
-            </div>
-        </div>
-        <div class="hr-card">
-            <span class="hr-metric-label">IMPACT RADAR (守護領域分佈)</span>
-            <div class="hr-chart-box">
-                <div class="fake-chart">
-                    <div class="chart-bar" style="height:40%;" data-val="獨老"></div>
-                    <div class="chart-bar" style="height:80%;" data-val="偏鄉"></div>
-                    <div class="chart-bar" style="height:60%;" data-val="身障"></div>
-                    <div class="chart-bar" style="height:30%;" data-val="婦幼"></div>
-                </div>
-            </div>
-        </div>
-        <div class="hr-card">
-            <span class="hr-metric-label">CORPORATE EMPATHY DNA (員工價值觀分佈)</span>
-            <div class="dna-bar-container">
-                <div class="dna-segment" style="width:40%; background:#FF5722;" title="Survival"></div>
-                <div class="dna-segment" style="width:35%; background:#FFB300;" title="Morale"></div>
-                <div class="dna-segment" style="width:25%; background:#00bcd4;" title="Intel"></div>
-            </div>
-            <div class="dna-legend">
-                <span><span class="dna-dot" style="background:#FF5722;"></span>生命維持</span>
-                <span><span class="dna-dot" style="background:#FFB300;"></span>心靈護盾</span>
-                <span><span class="dna-dot" style="background:#00bcd4;"></span>智識升級</span>
-            </div>
-        </div>
-        <div class="hr-card" style="margin-top:15px;">
-            <span class="hr-metric-label">SDG CONTRIBUTION</span>
-            <div class="sdg-box">
-                <div class="sdg-icon active">01</div><div class="sdg-icon active">02</div><div class="sdg-icon">04</div><div class="sdg-icon active">12</div>
             </div>
         </div>
         <div style="margin-top:20px;">
@@ -387,13 +326,12 @@
         </div>
     </div>
 
-    <div id="sw-modal" class="modal-overlay"><div class="sw-box"><div class="sw-header"><h3 class="sw-title">🔐 SOCIAL WORKER ACCESS</h3><span class="close-btn" onclick="closeModal('sw-modal')">×</span></div><div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" class="sw-photo"></div><div style="font-size:1.1rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div><div class="sw-intro">這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意...</div><div class="ranking-list" id="sw-ranking"></div></div></div>
+    <div id="sw-modal" class="modal-overlay"><div class="sw-box"><div class="sw-header"><h3 class="sw-title">🔐 SOCIAL WORKER ACCESS</h3><span class="close-btn" onclick="closeModal('sw-modal')">×</span></div><div class="sw-photo-frame"><img src="https://images.unsplash.com/photo-1516733968668-dbdce39c46ef?auto=format&fit=crop&w=800&q=80" class="sw-photo"></div><div style="font-size:1.2rem; font-weight:bold; color:#fff; margin-bottom:10px;">致 <span id="sw-target-name" style="color:var(--neon-amber)">夥伴</span>：</div><div class="sw-intro">這份祝福來自全台角落，每一枚投下的愛心幣，都承載著民眾對你的深切謝意。在繁忙的訪視與個案紀錄間，請別忘了，<span style="color:var(--neon-amber); font-weight:bold;">有人正默默停下來為你打氣</span>。你伸出的雙手接住了脆弱，而社會的善意正溫柔地支撐著你。感謝你的堅持，讓我們一起在這座城市，守護微小卻堅定的光芒。</div><div class="ranking-list" id="sw-ranking"><h4 style="margin:0 0 10px 0; color:var(--neon-orange); font-size:13px;">🏆 民眾最想對你說的話：</h4><div class="ranking-item">1. 辛苦了，謝謝你們一直都在！ <span>(3,240)</span></div><div class="ranking-item">2. 謝謝你們接住了受傷的人。 <span>(2,105)</span></div><div class="ranking-item">3. 希望世界對你，也能溫柔一點。 <span>(1,890)</span></div></div></div></div>
     <div id="search-modal" class="modal-overlay"><div class="common-box"><h3 style="color:var(--neon-amber);">🔍 SEARCH UNIT DATABASE</h3><input type="text" id="search-input" class="search-input" placeholder="輸入單位名稱..."><div class="search-chips"><div class="preset-chip" onclick="executeSearch('全體站內社工')">全體站內社工</div><div class="preset-chip" onclick="executeSearch('華山基金會')">華山基金會</div></div><button class="btn-main" onclick="executeSearch(document.getElementById('search-input').value)" style="margin-top:15px;">INITIATE SEARCH</button></div></div>
     <div id="msg-modal" class="modal-overlay"><div class="common-box"><h3 style="color:var(--neon-amber);">SELECT MESSAGE</h3><div id="msg-modal-list"></div></div></div>
     <div id="inventory-modal" class="modal-overlay"><div class="common-box"><div style="text-align:right; margin-bottom:10px; cursor:pointer;" onclick="closeModal('inventory-modal')">✕</div><h3 style="color:var(--neon-amber); margin-top:0;">EQUIPMENT (背包)</h3><div id="inventory-list"></div></div></div>
 
     <script>
-        // Data Configuration
         const units = [
             { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600", desc: "【憨兒守護者】<br>在國境之南，我們陪伴140多位憨兒慢飛...", tags: ["#堅韌防線", "#慢飛天使"] },
             { name: "華山基金會", img: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=600", desc: "【獨老依靠】<br>穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望...", tags: ["#溫柔信號", "#獨老依靠"] }
@@ -606,8 +544,8 @@
             checkGlobalTarget();
             document.getElementById('feedback-layer').style.display = 'flex';
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true, backgroundColor: "#000" }).then(canvas => {
-                const link = document.createElement('a'); link.download = `MISSION_REPORT_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
-                setTimeout(() => { alert("任務回報完成！"); location.reload(); }, 2000);
+                const link = document.createElement('a'); link.download = `MISSION_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
+                setTimeout(() => { alert("任務回報完成！抽獎機會已累計。"); location.reload(); }, 2000);
             });
         }
 
@@ -629,7 +567,7 @@
 
         function openSW(unitName) {
             document.getElementById('sw-target-name').innerText = unitName === 'demo' ? '親愛的' : unitName;
-            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了！ (3,240)</div>`;
+            document.getElementById('sw-ranking').innerHTML = `<div class="ranking-item">1. 辛苦了，謝謝你們一直都在！ <span>(3,240)</span></div><div class="ranking-item">2. 謝謝你們接住了受傷的人。 <span>(2,105)</span></div><div class="ranking-item">3. 希望世界對你，也能溫柔一點。 <span>(1,890)</span></div>`;
             document.getElementById('sw-modal').style.display = 'flex';
         }
         function openAdminLogin() {
@@ -643,7 +581,7 @@
         function downloadReport() { html2canvas(document.getElementById('hr-dashboard'), { backgroundColor: "#0a0a0a" }).then(canvas => { const link = document.createElement('a'); link.download = `ESG_REPORT.png`; link.href = canvas.toDataURL(); link.click(); }); }
         function openInventory() { 
             const list = document.getElementById('inventory-list'); list.innerHTML = "";
-            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>尚無紀錄</p>";
+            if(totalParticipations === 0) list.innerHTML = "<p style='color:#888; font-size:12px;'>目前無參與紀錄</p>";
             else { for(let i=1; i<=totalParticipations; i++) list.innerHTML += `<div class="ranking-item">任務紀錄 #${i} <span>獲得 1 張抽獎券</span></div>`; if((4998+totalParticipations) >= 5000) list.innerHTML = `<h4 style="color:var(--neon-orange);margin-top:0;">✨ 全服電力達標，已解鎖獎池！</h4>` + list.innerHTML; }
             document.getElementById('inventory-modal').style.display = 'flex'; 
         }
