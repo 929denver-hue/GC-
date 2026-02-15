@@ -1,403 +1,875 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>馬年好運啟動台｜終極旗艦版</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- 視覺與色票設定 --- */
-        :root {
-            --bg-gradient: linear-gradient(135deg, #7A1614 0%, #3B0A09 100%);
-            --primary-red: #B22222; 
-            --accent-gold: #D4AF37; 
-            --text-light: #FDFBF7; 
-            --bg-dark-panel: rgba(0, 0, 0, 0.5);
-            --font-serif: 'Noto Serif TC', serif;
-            --font-sans: 'Noto Sans TC', sans-serif;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>馬年 · 好運啟動台（簡約中式 Demo）</title>
 
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background: var(--bg-gradient); color: var(--text-light);
-            font-family: var(--font-sans);
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; position: relative;
-        }
+  <!-- Optional fonts (online). Offline will fallback gracefully. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
 
-        /* --- UI/UX 升級：書法吉祥話浮水印底圖 --- */
-        .bg-watermark {
-            position: absolute; width: 100%; height: 100%;
-            top: 0; left: 0; z-index: 0; pointer-events: none; overflow: hidden;
-        }
-        .bg-watermark .char {
-            position: absolute; font-family: var(--font-serif); font-weight: 900;
-            color: var(--accent-gold); opacity: 0.06; user-select: none;
-        }
-        /* 藝術化排版 */
-        .char1 { top: -5%; left: -5%; font-size: 35vh; transform: rotate(-15deg); }
-        .char2 { bottom: -5%; right: -5%; font-size: 40vh; transform: rotate(10deg); }
-        .char3 { top: 35%; right: 10%; font-size: 25vh; transform: rotate(-20deg); opacity: 0.04; }
-        .char4 { bottom: 25%; left: 5%; font-size: 30vh; transform: rotate(15deg); opacity: 0.05; }
-        .char5 { top: 10%; left: 40%; font-size: 20vh; transform: rotate(5deg); opacity: 0.03; }
+  <style>
+    :root{
+      /* Minimal Chinese New Year palette (matte) */
+      --bg:#121212;
+      --bg2:#1A1A1A;
+      --red:#8C1D18;      /* 胭脂紅（霧面） */
+      --red2:#6E1B17;     /* 棗紅（偏暗） */
+      --gold:#C9A24D;     /* 霧金 */
+      --ivory:#F5EFE6;    /* 米白 */
+      --muted:rgba(245,239,230,.75);
+      --line:rgba(245,239,230,.18);
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --radius:18px;
+    }
 
-        /* 主視窗，加上毛玻璃特效浮在底圖上 */
-        .container {
-            width: 95%; max-width: 600px; height: 95vh;
-            padding: 40px 20px; box-sizing: border-box;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            text-align: center; position: relative; z-index: 1;
-            background: rgba(122, 22, 20, 0.1);
-            backdrop-filter: blur(3px); /* 毛玻璃特效 */
-            -webkit-backdrop-filter: blur(3px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-        }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      /* Red “responds” but never becomes full-red: just soft halos */
+      background:
+        radial-gradient(900px 520px at 50% 0%, rgba(140,29,24,.22), transparent 62%),
+        radial-gradient(800px 520px at 50% 100%, rgba(201,162,77,.10), transparent 60%),
+        radial-gradient(1200px 800px at 20% 55%, rgba(140,29,24,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--ivory);
+      font-family:"Noto Sans TC", system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
 
-        /* --- 視覺化的後台觸發印章 --- */
-        .secret-seal {
-            position: absolute; top: 15px; right: 15px;
-            width: 36px; height: 36px;
-            border: 1.5px solid var(--accent-gold); color: var(--accent-gold);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-family: var(--font-serif); font-size: 1.1rem;
-            opacity: 0.3; cursor: pointer; z-index: 999; transition: 0.3s;
-        }
-        .secret-seal:active { opacity: 1; transform: scale(0.9); }
+    .frame{
+      width:min(430px, 100%);
+      background:rgba(18,18,18,.72);
+      border:1px solid rgba(245,239,230,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
 
-        /* --- 畫面切換邏輯 --- */
-        .screen { display: none; width: 100%; animation: fadeIn 0.8s ease; }
-        .screen.active { display: flex; flex-direction: column; align-items: center; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* subtle “paper grain” */
+    .frame::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E");
+      opacity:.26;
+      pointer-events:none;
+      mix-blend-mode:overlay;
+    }
 
-        /* --- 字體與排版 --- */
-        h1, h2, .serif-text { font-family: var(--font-serif); font-weight: 600; letter-spacing: 2px; margin: 0; }
-        .title { font-size: 2.8rem; color: var(--accent-gold); margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .subtitle { font-size: 1.1rem; color: var(--text-light); opacity: 0.9; margin-bottom: 50px; font-weight: 400; }
-        .divider { width: 50px; height: 2px; background-color: var(--accent-gold); margin: 30px auto; opacity: 0.5; }
+    .header{
+      padding:18px 18px 10px;
+      position:relative;
+      z-index:1;
+    }
+    .kicker{
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(201,162,77,.85);
+      font-size:12px;
+      margin-bottom:6px;
+    }
+    .title{
+      font-family:"Noto Serif TC", "Noto Sans TC", serif;
+      font-weight:700;
+      font-size:26px;
+      line-height:1.2;
+      margin:0 0 6px;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
 
-        /* --- 輸入區設計 --- */
-        .name-input {
-            width: 80%; background: var(--bg-dark-panel); 
-            border: 1px solid var(--accent-gold); border-radius: 8px;
-            color: var(--text-light); font-size: 1.5rem; font-family: var(--font-serif);
-            text-align: center; padding: 15px; box-sizing: border-box; outline: none; margin-bottom: 30px;
-        }
-        .name-input:focus { background: rgba(0,0,0,0.6); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
-        .name-input::placeholder { color: rgba(253, 251, 247, 0.4); font-family: var(--font-sans); font-size: 1rem; }
+    .divider{
+      height:1px;
+      background:linear-gradient(90deg, transparent, var(--line), transparent);
+      margin:14px 0 0;
+    }
 
-        .btn-primary {
-            background-color: transparent; color: var(--accent-gold);
-            border: 2px solid var(--accent-gold); border-radius: 30px;
-            padding: 15px 50px; font-size: 1.2rem;
-            font-family: var(--font-serif); letter-spacing: 2px; cursor: pointer;
-            transition: all 0.3s; background: rgba(212, 175, 55, 0.1);
-        }
-        .btn-primary:hover { background-color: var(--accent-gold); color: #3B0A09; font-weight: bold; }
+    .content{
+      padding:16px 18px 18px;
+      position:relative;
+      z-index:1;
+    }
 
-        /* --- 萬馬奔騰圖片動畫區 --- */
-        .spin-circle {
-            width: 240px; height: 240px; border: 3px dashed var(--accent-gold);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            margin: 40px auto; background: rgba(0,0,0,0.2); position: relative;
-        }
-        
-        /* 引入真實奔騰馬剪影，並透過濾鏡鍍成金色 */
-        .horse-pic {
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Horse_silhouette.svg');
-            background-size: contain; background-repeat: no-repeat; background-position: center;
-            /* 魔法濾鏡：把黑色轉為我們設定的 --accent-gold 金色 */
-            filter: invert(72%) sepia(45%) saturate(545%) hue-rotate(352deg) brightness(96%) contrast(92%);
-        }
-        
-        .main-horse { width: 110px; height: 110px; z-index: 10; opacity: 0.9; }
-        
-        .galloping-horses { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: none; }
-        .galloping-horses div {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0;
-        }
+    .panel{
+      position:relative; /* for mute button */
+      border:1px solid rgba(245,239,230,.12);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(26,26,26,.55);
+    }
 
-        .spinning .main-horse { animation: spinAnim 5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
-        .spinning .spin-circle { border-style: solid; box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); transition: 0.5s; }
-        .spinning .galloping-horses { display: block; }
+    label{
+      display:block;
+      font-size:12px;
+      color:rgba(245,239,230,.70);
+      margin:2px 0 8px;
+      letter-spacing:.06em;
+    }
+    .input{
+      width:100%;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(245,239,230,.06);
+      color:var(--ivory);
+      padding:12px 12px;
+      border-radius:14px;
+      outline:none;
+      font-size:16px;
+    }
+    .input:focus{
+      border-color:rgba(201,162,77,.55);
+      box-shadow:0 0 0 4px rgba(201,162,77,.10);
+    }
+    .row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:12px;
+    }
 
-        /* 大小不一、錯落有致的馬群動畫 */
-        .spinning .galloping-horses div:nth-child(1) { animation: stampede 1.3s linear infinite 0.1s; width: 60px; height: 60px; }
-        .spinning .galloping-horses div:nth-child(2) { animation: stampede 1.6s linear infinite 0.4s; width: 90px; height: 90px; }
-        .spinning .galloping-horses div:nth-child(3) { animation: stampede 1.2s linear infinite 0.7s; width: 120px; height: 120px; filter: brightness(150%); }
-        .spinning .galloping-horses div:nth-child(4) { animation: stampede 1.5s linear infinite 1.0s; width: 70px; height: 70px; }
-        .spinning .galloping-horses div:nth-child(5) { animation: stampede 1.4s linear infinite 1.3s; width: 100px; height: 100px; filter: brightness(80%); }
+    .stepper{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(245,239,230,.06);
+      border-radius:14px;
+      width:100%;
+      justify-content:space-between;
+    }
+    .stepper .btn{
+      width:40px;height:40px;
+      border-radius:12px;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(18,18,18,.35);
+      color:var(--ivory);
+      font-size:18px;
+      cursor:pointer;
+    }
+    .stepper .btn:active{ transform:translateY(1px); }
+    .stepper .value{
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.08em;
+      color:rgba(245,239,230,.92);
+    }
 
-        @keyframes spinAnim { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(720deg) scale(1.1); } 100% { transform: rotate(1440deg) scale(1); } }
-        
-        /* 奔騰效果：旋轉放大、淡出 */
-        @keyframes stampede {
-            0% { transform: translate(-50%, -50%) scale(0.1) rotate(0deg); opacity: 0; }
-            30% { opacity: 0.7; }
-            100% { transform: translate(-50%, -50%) scale(4) rotate(180deg); opacity: 0; }
-        }
+    .cta{
+      margin-top:14px;
+      width:100%;
+      height:52px;
+      border:none;
+      border-radius:16px;
+      color:var(--ivory);
+      cursor:pointer;
+      font-size:16px;
+      letter-spacing:.08em;
+      background:
+        linear-gradient(180deg, rgba(201,162,77,.18), rgba(201,162,77,.04)),
+        linear-gradient(180deg, var(--red), var(--red2));
+      box-shadow:0 10px 28px rgba(140,29,24,.30);
+      position:relative;
+      overflow:hidden;
+    }
+    .cta::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at 30% 30%, rgba(245,239,230,.18), transparent 55%);
+      transform:translateX(-18%);
+      transition:transform .6s ease;
+    }
+    .cta:hover::after{ transform:translateX(6%); }
+    .cta:disabled{
+      cursor:not-allowed;
+      opacity:.55;
+      box-shadow:none;
+    }
 
-        .spin-text { font-size: 1.2rem; letter-spacing: 2px; color: var(--accent-gold); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+    .hint{
+      margin-top:10px;
+      font-size:12px;
+      color:rgba(245,239,230,.58);
+      text-align:center;
+    }
 
-        /* --- 結果畫面 --- */
-        .result-name { font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 10px; }
-        .reward-box { background: var(--bg-dark-panel); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 30px; width: 85%; margin: 20px 0; }
-        .reward-title { font-size: 1rem; color: var(--text-light); opacity: 0.8; margin-bottom: 10px; }
-        .reward-content { font-size: 1.8rem; color: var(--accent-gold); font-weight: bold; }
-        .quote-text { font-size: 1.2rem; line-height: 1.8; padding: 0 20px; margin: 30px 0; opacity: 0.9; }
+    /* Screens */
+    .screen{ display:none; }
+    .screen.active{ display:block; }
 
-        /* --- 後台管理介面 (包含金句對應紀錄) --- */
-        .admin-panel { text-align: left; width: 90%; max-width: 500px; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; margin-bottom: 20px; }
-        .admin-stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .admin-stat { background: var(--bg-dark-panel); padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px; text-align: center;}
-        .admin-stat span { font-size: 1.5rem; color: var(--accent-gold); font-weight: bold; display: block; margin-top: 5px;}
-        .setting-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.2); }
-        
-        /* 歷史紀錄區塊優化，容納更多字數 */
-        .history-list { max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.6); padding: 15px; font-size: 0.9rem; margin-top: 20px; border-radius: 5px; }
-        .history-item { border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; }
-        .history-main { font-weight: bold; color: var(--text-light); font-size: 1rem; }
-        .history-main span { color: var(--accent-gold); }
-        .history-quote { color: var(--accent-gold); opacity: 0.85; font-size: 0.85rem; line-height: 1.4; }
-        
-        .btn-danger { background-color: var(--primary-red); border: none; color: white; padding: 12px; margin-top: 15px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; letter-spacing: 1px; }
-        .btn-close { background: transparent; color: var(--text-light); border: 1px solid var(--text-light); padding: 5px 15px; cursor: pointer; border-radius: 4px; }
-    </style>
+    /* ===== Spin screen ===== */
+    .spinWrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      padding:12px 8px 10px;
+    }
+
+    .scanLine{
+      width:100%;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(201,162,77,.55), transparent);
+      opacity:.65;
+      position:relative;
+      overflow:hidden;
+      border-radius:999px;
+      margin-top:2px;
+    }
+    .scanLine::after{
+      content:"";
+      position:absolute;
+      top:-1px; left:-30%;
+      width:30%; height:3px;
+      background:linear-gradient(90deg, transparent, rgba(245,239,230,.35), transparent);
+      animation:scan 1.4s ease-in-out infinite;
+      opacity:.9;
+    }
+    .spinTitle{
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      font-size:18px;
+      margin:6px 0 0;
+    }
+    .spinText{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+      text-align:center;
+      max-width:32ch;
+    }
+
+    /* ===== Envelope (Red Packet) Visual ===== */
+    .envelopeStage{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 0 2px;
+      position:relative;
+    }
+
+    .envelope{
+      width:170px;
+      height:200px;
+      position:relative;
+      border-radius:18px;
+      background:
+        radial-gradient(120px 120px at 35% 30%, rgba(245,239,230,.10), transparent 60%),
+        linear-gradient(180deg, rgba(201,162,77,.10), rgba(201,162,77,.02)),
+        linear-gradient(180deg, var(--red), var(--red2));
+      border:1px solid rgba(201,162,77,.35);
+      box-shadow:0 18px 55px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+
+    .env-body{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg, rgba(245,239,230,.06), transparent 35%, rgba(245,239,230,.04)),
+        radial-gradient(220px 120px at 50% 20%, rgba(201,162,77,.10), transparent 60%);
+      opacity:.9;
+    }
+
+    .env-flap{
+      position:absolute;
+      left:0; right:0;
+      top:0;
+      height:62%;
+      background:
+        linear-gradient(180deg, rgba(245,239,230,.08), rgba(245,239,230,0)),
+        linear-gradient(180deg, rgba(201,162,77,.14), rgba(201,162,77,.03));
+      clip-path:polygon(0 0, 100% 0, 50% 72%);
+      opacity:.9;
+    }
+
+    .env-seal{
+      position:absolute;
+      left:50%;
+      top:56%;
+      transform:translate(-50%,-50%);
+      width:56px;height:56px;
+      border-radius:16px;
+      border:1px solid rgba(201,162,77,.55);
+      background:
+        radial-gradient(circle at 50% 35%, rgba(245,239,230,.16), transparent 60%),
+        linear-gradient(180deg, rgba(201,162,77,.20), rgba(201,162,77,.06));
+      display:grid;
+      place-items:center;
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      letter-spacing:.2em;
+      padding-left:.2em;
+      color:rgba(245,239,230,.92);
+      box-shadow:0 10px 28px rgba(0,0,0,.35);
+      opacity:.95;
+    }
+
+    .env-card{
+      position:absolute;
+      left:12%;
+      width:76%;
+      height:62%;
+      bottom:-36%;
+      border-radius:14px;
+      background:
+        linear-gradient(180deg, rgba(245,239,230,.92), rgba(245,239,230,.82));
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow:0 16px 40px rgba(0,0,0,.35);
+      animation:cardFloat 2.8s ease-in-out infinite;
+    }
+    .env-card-line{
+      height:10px;
+      margin:16px 16px 0;
+      border-radius:999px;
+      background:rgba(18,18,18,.10);
+    }
+    .env-card-line.short{ width:62%; }
+
+    .env-spark{
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:999px;
+      background:radial-gradient(circle, rgba(201,162,77,.18), transparent 62%);
+      filter:blur(0.2px);
+      opacity:.7;
+      animation:sparkPulse 2.6s ease-in-out infinite;
+    }
+
+    /* ===== Quote ticker ===== */
+    .quoteTicker{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(201,162,77,.25);
+      background:rgba(18,18,18,.22);
+      color:rgba(245,239,230,.88);
+      font-size:13px;
+      line-height:1.7;
+      max-width:34ch;
+      text-align:center;
+    }
+    .quoteTicker .qMark{
+      color:rgba(201,162,77,.9);
+      font-weight:600;
+    }
+
+    /* ===== Stamp row (封紅包感) ===== */
+    .stampRow{
+      margin-top:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      color:rgba(245,239,230,.70);
+      font-size:12px;
+      letter-spacing:.18em;
+    }
+    .stampDot{
+      color:rgba(201,162,77,.85);
+      transform:translateY(-1px);
+    }
+    .stampText{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(201,162,77,.28);
+      background:rgba(18,18,18,.18);
+      position:relative;
+    }
+    .stampText::after{
+      content:"封";
+      position:absolute;
+      right:-10px;
+      top:-12px;
+      width:28px;height:28px;
+      border-radius:10px;
+      border:1px solid rgba(201,162,77,.45);
+      background:
+        radial-gradient(circle at 50% 35%, rgba(245,239,230,.14), transparent 60%),
+        linear-gradient(180deg, rgba(201,162,77,.20), rgba(201,162,77,.06));
+      display:grid;
+      place-items:center;
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      color:rgba(245,239,230,.92);
+      box-shadow:0 10px 26px rgba(0,0,0,.35);
+      opacity:.95;
+      transform:rotate(-8deg) scale(.96);
+      animation:stampTap 2.2s ease-in-out infinite;
+    }
+
+    /* Mute button */
+    .muteBtn{
+      position:absolute;
+      right:16px;
+      top:14px;
+      height:34px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(18,18,18,.25);
+      color:rgba(245,239,230,.78);
+      font-size:12px;
+      letter-spacing:.08em;
+      cursor:pointer;
+    }
+    .muteBtn:active{ transform:translateY(1px); }
+
+    /* ===== Result screen ===== */
+    .resultCard{
+      border:1px solid rgba(245,239,230,.12);
+      border-radius:18px;
+      background:
+        radial-gradient(900px 450px at 50% 0%, rgba(140,29,24,.16), transparent 62%),
+        rgba(26,26,26,.55);
+      padding:16px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(201,162,77,.35);
+      color:rgba(201,162,77,.95);
+      font-size:12px;
+      letter-spacing:.08em;
+    }
+    .bigName{
+      margin:12px 0 6px;
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      font-size:26px;
+      letter-spacing:.04em;
+      line-height:1.25;
+    }
+    .gift{
+      margin:10px 0 0;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(245,239,230,.12);
+      background:rgba(245,239,230,.04);
+    }
+    .gift .label{
+      font-size:12px;
+      color:rgba(245,239,230,.70);
+      letter-spacing:.08em;
+      margin-bottom:6px;
+    }
+    .gift .value{
+      font-size:16px;
+      font-weight:600;
+      color:rgba(245,239,230,.92);
+      line-height:1.4;
+    }
+    .quote{
+      margin-top:12px;
+      padding:12px 12px;
+      border-left:3px solid rgba(201,162,77,.55);
+      background:rgba(18,18,18,.22);
+      border-radius:14px;
+      color:rgba(245,239,230,.85);
+      line-height:1.8;
+      font-size:14px;
+    }
+    .quote small{
+      display:block;
+      margin-top:6px;
+      color:rgba(245,239,230,.55);
+      font-size:12px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+    }
+    .ghost{
+      flex:1;
+      height:46px;
+      border-radius:16px;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(245,239,230,.04);
+      color:rgba(245,239,230,.86);
+      cursor:pointer;
+      letter-spacing:.08em;
+    }
+    .primarySmall{
+      flex:1;
+      height:46px;
+      border-radius:16px;
+      border:none;
+      cursor:pointer;
+      color:var(--ivory);
+      background:linear-gradient(180deg, var(--red), var(--red2));
+      box-shadow:0 10px 24px rgba(140,29,24,.28);
+      letter-spacing:.08em;
+    }
+
+    .footerNote{
+      margin-top:10px;
+      text-align:center;
+      font-size:12px;
+      color:rgba(245,239,230,.55);
+      line-height:1.6;
+    }
+
+    @keyframes scan{
+      0%{ left:-30%; }
+      50%{ left:50%; }
+      100%{ left:110%; }
+    }
+    @keyframes cardFloat{
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-10px); }
+    }
+    @keyframes sparkPulse{
+      0%,100%{ transform:scale(1); opacity:.65; }
+      50%{ transform:scale(1.05); opacity:.9; }
+    }
+    @keyframes stampTap{
+      0%,70%,100%{ transform:rotate(-8deg) scale(.96) translateY(0); opacity:.95; }
+      80%{ transform:rotate(-8deg) scale(.98) translateY(1px); opacity:1; }
+      90%{ transform:rotate(-8deg) scale(.96) translateY(0); opacity:.95; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .scanLine::after{ animation:none; }
+      .env-card{ animation:none; }
+      .env-spark{ animation:none; }
+      .stampText::after{ animation:none; }
+      .cta::after{ transition:none; }
+    }
+  </style>
 </head>
+
 <body>
+  <main class="frame" role="main">
+    <header class="header">
+      <div class="kicker">新年 · 祝福生成</div>
+      <h1 class="title">丙午年 · 好運啟動台</h1>
+      <p class="subtitle">請留下名字，讓新年的祝福找到你。</p>
+      <div class="divider"></div>
+    </header>
 
-<div class="bg-watermark">
-    <div class="char char1">福</div>
-    <div class="char char2">春</div>
-    <div class="char char3">吉</div>
-    <div class="char char4">財</div>
-    <div class="char char5">滿</div>
-</div>
+    <section class="content">
+      <!-- Screen 1: Input -->
+      <div id="screenInput" class="screen active">
+        <div class="panel">
+          <label for="nameInput">你的名字（像題字一樣）</label>
+          <input id="nameInput" class="input" inputmode="text" maxlength="12"
+                 placeholder="例如：小安 / 家豪 / 阿嬤" />
 
-<div class="container">
-    <div class="secret-seal" onclick="triggerAdmin()">福</div>
-
-    <div id="screen-input" class="screen active">
-        <h1 class="title">馬年好運啟動台</h1>
-        <div class="subtitle">轉動的不是運氣，是迎接好運的心意</div>
-        <div class="divider"></div>
-        <input type="text" id="userName" class="name-input" placeholder="請寫下您的名字" maxlength="8" autocomplete="off">
-        <div class="divider"></div>
-        <button class="btn-primary" onclick="startSpin()">啟動好運</button>
-    </div>
-
-    <div id="screen-spin" class="screen">
-        <div class="spin-circle" id="spinner">
-            <div class="main-horse horse-pic"></div>
-            <div class="galloping-horses">
-                <div class="horse-pic"></div>
-                <div class="horse-pic"></div>
-                <div class="horse-pic"></div>
-                <div class="horse-pic"></div>
-                <div class="horse-pic"></div>
+          <div class="row" style="margin-top:14px;">
+            <div style="width:100%;">
+              <label>好運份量（今年想接住的希望）</label>
+              <div class="stepper" aria-label="好運份量">
+                <button id="minusBtn" class="btn" type="button" aria-label="減少">−</button>
+                <div id="amountValue" class="value" aria-live="polite">1</div>
+                <button id="plusBtn" class="btn" type="button" aria-label="增加">＋</button>
+              </div>
             </div>
-        </div>
-        <div class="serif-text spin-text">萬馬奔騰，好運凝聚中...</div>
-    </div>
+          </div>
 
-    <div id="screen-result" class="screen">
-        <div class="subtitle" style="margin-bottom: 10px;">祝福已生成</div>
-        <h2 id="resultName" class="result-name serif-text"></h2>
-        
-        <div id="rewardContainer" class="reward-box">
-            <div class="reward-title">🎁 好運入手</div>
-            <div id="resultReward" class="reward-content serif-text"></div>
+          <button id="startBtn" class="cta" type="button">啟動好運</button>
+          <div class="hint">無需捐款｜約 10 秒完成</div>
         </div>
+      </div>
 
-        <div id="resultQuote" class="quote-text serif-text"></div>
-        <div class="divider"></div>
-        <button class="btn-primary" onclick="resetToHome()" style="font-size: 1rem; padding: 10px 30px;">下一位接好運</button>
-    </div>
+      <!-- Screen 2: Spin -->
+      <div id="screenSpin" class="screen" aria-live="polite">
+        <div class="panel spinWrap">
+          <button class="muteBtn" id="muteBtn" type="button" aria-label="切換音效">音效：開</button>
 
-    <div id="screen-admin" class="screen admin-panel">
-        <div class="admin-header">
-            <h2 class="serif-text" style="color:var(--accent-gold);">機台控制中心</h2>
-            <button class="btn-close" onclick="resetToHome()">返回首頁</button>
-        </div>
-        
-        <div style="font-size: 0.9rem; margin-bottom: 5px; opacity: 0.8;">目前剩餘庫存：</div>
-        <div class="admin-stat-row">
-            <div class="admin-stat">500元刮刮樂<span id="stock500">0</span></div>
-            <div class="admin-stat">200元刮刮樂<span id="stock200">0</span></div>
-        </div>
-
-        <div class="history-list" id="historyList">
+          <div class="envelopeStage" aria-hidden="true">
+            <div class="envelope">
+              <div class="env-body"></div>
+              <div class="env-flap"></div>
+              <div class="env-seal">福</div>
+              <div class="env-card">
+                <div class="env-card-line"></div>
+                <div class="env-card-line short"></div>
+              </div>
             </div>
+            <div class="env-spark"></div>
+          </div>
 
-        <div class="setting-box" style="margin-top: 15px;">
-            <div class="admin-stat-row" style="margin-bottom: 0;">
-                <label style="color: var(--text-light); font-size: 0.9rem;">重設 500元數量： <input type="number" id="setQty500" value="3" min="0" style="width: 40px; background: transparent; border: 1px solid var(--accent-gold); color: white;"></label>
-                <label style="color: var(--text-light); font-size: 0.9rem;">重設 200元數量： <input type="number" id="setQty200" value="3" min="0" style="width: 40px; background: transparent; border: 1px solid var(--accent-gold); color: white;"></label>
-            </div>
-            <button class="btn-danger" onclick="applyNewSettings()">載入新數量並清空紀錄</button>
+          <div class="scanLine" aria-hidden="true"></div>
+
+          <h2 class="spinTitle">祝福生成中</h2>
+          <p class="spinText" id="spinText">馬蹄聲起，願你步步向前。</p>
+
+          <div class="quoteTicker" id="quoteTicker" role="status" aria-live="polite">
+            <span class="qMark">「</span><span id="tickerText">把希望留在心裡，好運自然會來。</span><span class="qMark">」</span>
+          </div>
+
+          <div class="stampRow" aria-hidden="true">
+            <span class="stampText" id="stampText">封存祝福中</span>
+            <span class="stampDot">•</span>
+            <span class="stampText2" id="stampText2">請稍候</span>
+          </div>
         </div>
-    </div>
-</div>
 
-<script>
-    // --- 安全設定 ---
-    const ADMIN_PIN = "8888"; 
+        <div class="footerNote">請稍候，正在封好你的新年紅包祝福。</div>
+      </div>
 
-    // --- 20 句過年勵志開運金句 ---
-    const quotes = [
-        "迎向新局，每一小步都是萬馬奔騰的序曲。",
-        "心若篤定，路便寬廣；新年新願，好運自來。",
-        "願你新的一年，有奔赴山海的勇氣，也有靜待花開的從容。",
-        "不疾不徐，步步生蓮；你的堅持，終將迎來美好。",
-        "把期待化為具體的行動，好運便會與你不期而遇。",
-        "新年不僅是時間的更迭，更是心靈與目標的重啟。",
-        "願你如駿馬般昂首闊步，踏破一切難關，迎向豐盛。",
-        "時間會看見每一份努力，新的一年，請大膽前行。",
-        "把希望裝進行囊，讓善意成為你最強大的運氣。",
-        "相信自己，就是新年最豐盛、最靈驗的開運配方。",
-        "迎著光走，即使步伐緩慢，前方也必定是一片燦爛。",
-        "願新年的每一天，都如春日般充滿生機、破土而出。",
-        "不要害怕緩慢，只要方向正確，好運早就等在路上。",
-        "所有的沉澱與積累，都是為了來日的萬馬奔騰。",
-        "新的一年，願你褪去包袱，活成自己最喜歡的模樣。",
-        "行動是最好的破局之法，願你新年充滿執行的力量。",
-        "運氣從來都是努力的附屬品，越努力，越幸運。",
-        "以歡喜心過生活，以平常心看勝敗，好運自然會敲門。",
-        "願你的每一分付出，都在新的一年綻放最耀眼的光芒。",
-        "帶著初心出發，新的一年，前程必定繁花似錦。"
+      <!-- Screen 3: Result -->
+      <div id="screenResult" class="screen">
+        <div class="resultCard">
+          <div class="badge">祝福已生成</div>
+          <div id="nameLine" class="bigName">—</div>
+
+          <div class="gift">
+            <div class="label">🎁 好運入手</div>
+            <div id="giftLine" class="value">—</div>
+          </div>
+
+          <div class="quote" id="quoteBox">
+            「—」
+            <small id="quoteAuthor">—</small>
+          </div>
+
+          <div class="actions">
+            <button id="copyBtn" class="ghost" type="button">複製結果文字</button>
+            <button id="resetBtn" class="primarySmall" type="button">下一位啟動</button>
+          </div>
+
+          <div class="footerNote">祝福已完成生成，請領取你的紅包祝福。</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ===== Config =====
+    const REWARDS = [
+      { amount: 500, label: "500 元「希望無窮」刮刮樂" },
+      { amount: 200, label: "200 元「希望無窮」刮刮樂" }
     ];
 
-    // 更新儲存金鑰為 V4，確保新版資料格式不衝突
-    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V4'));
-    
-    if (!appData) {
-        appData = { inventory: ["500", "500", "500", "200", "200", "200"], history: [] };
-        saveData();
+    // NOTE:
+    // If you want "real celebrities + correct source", prepare a verified list.
+    // This demo uses safe, non-controversial “新年箴言” to avoid misattribution.
+    const QUOTES = [
+      { text: "一步一步走，好運就在路上。", author: "新年箴言" },
+      { text: "心定了，路就亮了。", author: "新年箴言" },
+      { text: "新的一年，願努力都有回應。", author: "新年箴言" },
+      { text: "行動，就是最好的祝福。", author: "新年箴言" },
+      { text: "慢慢來，也是一種前進。", author: "新年箴言" },
+      { text: "願你所走的每一步，都靠近心之所向。", author: "新年箴言" },
+      { text: "把希望留在心裡，好運自然會來。", author: "新年箴言" },
+      { text: "新年不是重來，而是更靠近。", author: "新年箴言" },
+      { text: "願善意成為你最長久的運氣。", author: "新年箴言" },
+      { text: "願今天的期待，成為明天的收穫。", author: "新年箴言" }
+    ];
+
+    // ===== State =====
+    let amount = 1;
+    let currentName = "";
+    let currentReward = null;
+    let currentQuote = null;
+
+    let tickerTimer = null;
+    let isMuted = false;
+
+    // ===== DOM =====
+    const screenInput  = document.getElementById("screenInput");
+    const screenSpin   = document.getElementById("screenSpin");
+    const screenResult = document.getElementById("screenResult");
+
+    const nameInput = document.getElementById("nameInput");
+    const amountValue = document.getElementById("amountValue");
+    const minusBtn = document.getElementById("minusBtn");
+    const plusBtn = document.getElementById("plusBtn");
+    const startBtn = document.getElementById("startBtn");
+
+    const nameLine = document.getElementById("nameLine");
+    const giftLine = document.getElementById("giftLine");
+    const quoteBox = document.getElementById("quoteBox");
+    const quoteAuthor = document.getElementById("quoteAuthor");
+
+    const resetBtn = document.getElementById("resetBtn");
+    const copyBtn = document.getElementById("copyBtn");
+
+    const spinText = document.getElementById("spinText");
+    const tickerText = document.getElementById("tickerText");
+    const muteBtn = document.getElementById("muteBtn");
+
+    // ===== Helpers =====
+    function show(screen){
+      [screenInput, screenSpin, screenResult].forEach(s => s.classList.remove("active"));
+      screen.classList.add("active");
     }
 
-    function saveData() { localStorage.setItem('luckyDrawDataCNY_V4', JSON.stringify(appData)); }
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-    function switchScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
+    function pick(arr){
+      return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    function startSpin() {
-        const nameInput = document.getElementById('userName').value.trim();
-        if (!nameInput) {
-            alert("請留下您的名字，讓好運找到您！");
-            return;
-        }
-
-        switchScreen('screen-spin');
-        
-        const spinner = document.getElementById('spinner');
-        spinner.classList.remove('spinning');
-        void spinner.offsetWidth; 
-        spinner.classList.add('spinning');
-
-        setTimeout(() => { showResult(nameInput); }, 5500); 
+    function normalizeName(raw){
+      const n = (raw || "").trim();
+      return n.replace(/\s+/g, " ");
     }
 
-    function showResult(name) {
-        const finalQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        let finalReward = null;
-        let rewardText = "純祝福";
-
-        document.getElementById('resultName').innerText = `${name} 的新年好運`;
-
-        if (appData.inventory.length > 0) {
-            const randomIndex = Math.floor(Math.random() * appData.inventory.length);
-            finalReward = appData.inventory.splice(randomIndex, 1)[0];
-            rewardText = `${finalReward}元`;
-
-            document.getElementById('rewardContainer').style.display = 'block';
-            document.getElementById('resultReward').innerText = `${finalReward} 元 希望無窮 刮刮樂`;
-        } else {
-            document.getElementById('rewardContainer').style.display = 'none';
-        }
-
-        // 紀錄全面升級：存入物件包含時間、姓名、金額與專屬金句
-        const timeString = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
-        appData.history.unshift({
-            time: timeString,
-            name: name,
-            reward: rewardText,
-            quote: finalQuote
-        });
-        saveData();
-
-        document.getElementById('resultQuote').innerText = `「${finalQuote}」`;
-        switchScreen('screen-result');
+    function setAmount(next){
+      amount = clamp(next, 1, 9);
+      amountValue.textContent = String(amount);
     }
 
-    function resetToHome() {
-        document.getElementById('userName').value = '';
-        document.getElementById('spinner').classList.remove('spinning');
-        switchScreen('screen-input');
+    function validate(){
+      const n = normalizeName(nameInput.value);
+      startBtn.disabled = n.length === 0;
     }
 
-    // --- 後台邏輯 ---
-    let secretClicks = 0;
-    let clickTimer;
+    function renderResult(){
+      const displayName = currentName.length ? currentName : "你";
+      nameLine.textContent = `${displayName} 的新年好運`;
+      giftLine.textContent = `好運入手：${currentReward.label}`;
 
-    function triggerAdmin() {
-        secretClicks++;
-        clearTimeout(clickTimer);
-        
-        if (secretClicks >= 5) {
-            secretClicks = 0;
-            const pwd = prompt("請輸入機台控制中心密碼：");
-            if (pwd === ADMIN_PIN) {
-                renderAdmin();
-                switchScreen('screen-admin');
-            } else if (pwd !== null) {
-                alert("密碼錯誤");
-            }
-        }
-        clickTimer = setTimeout(() => { secretClicks = 0; }, 2000); 
+      // Update quote
+      quoteBox.firstChild && (quoteBox.firstChild.textContent = `「${currentQuote.text}」`);
+      quoteAuthor.textContent = `— ${currentQuote.author}`;
     }
 
-    function renderAdmin() {
-        const count500 = appData.inventory.filter(x => x === "500").length;
-        const count200 = appData.inventory.filter(x => x === "200").length;
-        
-        document.getElementById('stock500').innerText = count500;
-        document.getElementById('stock200').innerText = count200;
-
-        // 渲染完整版歷史紀錄 (包含金額與對應金句)
-        const historyHtml = appData.history.length === 0 
-            ? "<div style='opacity:0.5; text-align:center;'>尚無發放紀錄</div>" 
-            : appData.history.map(item => `
-                <div class="history-item">
-                    <div class="history-main">${item.time} - <span>${item.name}</span> 獲得 ${item.reward}</div>
-                    <div class="history-quote">「${item.quote}」</div>
-                </div>
-            `).join('');
-        
-        document.getElementById('historyList').innerHTML = historyHtml;
+    function buildShareText(){
+      const displayName = currentName.length ? currentName : "我";
+      return [
+        "【馬年 · 好運啟動台】",
+        `${displayName} 的新年好運已生成`,
+        `🎁 ${currentReward.label}`,
+        `「${currentQuote.text}」— ${currentQuote.author}`
+      ].join("\n");
     }
 
-    function applyNewSettings() {
-        const qty500 = parseInt(document.getElementById('setQty500').value) || 0;
-        const qty200 = parseInt(document.getElementById('setQty200').value) || 0;
-
-        if(confirm(`確定要重新開始活動嗎？\n這將清空所有發放紀錄，並設定為：\n500元: ${qty500} 張\n200元: ${qty200} 張`)) {
-            let newInventory = [];
-            for(let i=0; i < qty500; i++) newInventory.push("500");
-            for(let i=0; i < qty200; i++) newInventory.push("200");
-
-            appData = { inventory: newInventory, history: [] };
-            saveData();
-            renderAdmin();
-            alert("✅ 數量設定完畢，機台已重置！");
-        }
+    function startTicker(){
+      stopTicker();
+      if (!tickerText) return;
+      tickerTimer = window.setInterval(() => {
+        const q = pick(QUOTES);
+        tickerText.textContent = q.text;
+      }, 1800);
     }
-</script>
 
+    function stopTicker(){
+      if (tickerTimer){
+        window.clearInterval(tickerTimer);
+        tickerTimer = null;
+      }
+    }
+
+    function playDing(){
+      if (isMuted) return;
+      try{
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+
+        o.type = "sine";
+        o.frequency.setValueAtTime(880, ctx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.08);
+
+        g.gain.setValueAtTime(0.0001, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
+
+        o.connect(g);
+        g.connect(ctx.destination);
+
+        o.start();
+        o.stop(ctx.currentTime + 0.2);
+        o.onended = () => ctx.close();
+      }catch(e){
+        // ignore (autoplay policies / unavailable)
+      }
+    }
+
+    // ===== Events =====
+    minusBtn.addEventListener("click", () => setAmount(amount - 1));
+    plusBtn.addEventListener("click", () => setAmount(amount + 1));
+
+    nameInput.addEventListener("input", validate);
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !startBtn.disabled) startBtn.click();
+    });
+
+    if (muteBtn){
+      muteBtn.addEventListener("click", () => {
+        isMuted = !isMuted;
+        muteBtn.textContent = isMuted ? "音效：關" : "音效：開";
+      });
+    }
+
+    startBtn.addEventListener("click", () => {
+      currentName = normalizeName(nameInput.value);
+      if (!currentName) return;
+
+      currentReward = pick(REWARDS);
+      currentQuote = pick(QUOTES);
+
+      spinText.textContent = `${currentName}，馬蹄聲起，願你步步向前。`;
+
+      show(screenSpin);
+      startTicker();
+
+      // Simulate 9–11 seconds “生成”
+      const ms = 9000 + Math.floor(Math.random() * 2000);
+
+      window.setTimeout(() => {
+        stopTicker();
+        playDing();
+        renderResult();
+        show(screenResult);
+      }, ms);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      stopTicker();
+      currentName = "";
+      currentReward = null;
+      currentQuote = null;
+      nameInput.value = "";
+      setAmount(1);
+      validate();
+      show(screenInput);
+      nameInput.focus();
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      const text = buildShareText();
+      try{
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "已複製 ✔";
+        window.setTimeout(() => (copyBtn.textContent = "複製結果文字"), 1200);
+      }catch(err){
+        window.prompt("複製以下文字：", text);
+      }
+    });
+
+    // Init
+    setAmount(1);
+    validate();
+    nameInput.focus();
+  </script>
 </body>
 </html>
