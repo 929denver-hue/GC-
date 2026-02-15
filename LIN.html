@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>馬年好運啟動台｜萬馬奔騰版</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+    <title>馬年好運啟動台｜終極旗艦版</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 視覺與色票設定 (極簡過年風) --- */
+        /* --- 視覺與色票設定 --- */
         :root {
             --bg-gradient: linear-gradient(135deg, #7A1614 0%, #3B0A09 100%);
             --primary-red: #B22222; 
             --accent-gold: #D4AF37; 
             --text-light: #FDFBF7; 
-            --bg-dark-panel: rgba(0, 0, 0, 0.4);
+            --bg-dark-panel: rgba(0, 0, 0, 0.5);
             --font-serif: 'Noto Serif TC', serif;
             --font-sans: 'Noto Sans TC', sans-serif;
         }
@@ -23,18 +23,37 @@
             background: var(--bg-gradient); color: var(--text-light);
             font-family: var(--font-sans);
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+            overflow: hidden; position: relative;
         }
 
+        /* --- UI/UX 升級：書法吉祥話浮水印底圖 --- */
+        .bg-watermark {
+            position: absolute; width: 100%; height: 100%;
+            top: 0; left: 0; z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .bg-watermark .char {
+            position: absolute; font-family: var(--font-serif); font-weight: 900;
+            color: var(--accent-gold); opacity: 0.06; user-select: none;
+        }
+        /* 藝術化排版 */
+        .char1 { top: -5%; left: -5%; font-size: 35vh; transform: rotate(-15deg); }
+        .char2 { bottom: -5%; right: -5%; font-size: 40vh; transform: rotate(10deg); }
+        .char3 { top: 35%; right: 10%; font-size: 25vh; transform: rotate(-20deg); opacity: 0.04; }
+        .char4 { bottom: 25%; left: 5%; font-size: 30vh; transform: rotate(15deg); opacity: 0.05; }
+        .char5 { top: 10%; left: 40%; font-size: 20vh; transform: rotate(5deg); opacity: 0.03; }
+
+        /* 主視窗，加上毛玻璃特效浮在底圖上 */
         .container {
             width: 95%; max-width: 600px; height: 95vh;
             padding: 40px 20px; box-sizing: border-box;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            text-align: center; position: relative;
+            text-align: center; position: relative; z-index: 1;
+            background: rgba(122, 22, 20, 0.1);
+            backdrop-filter: blur(3px); /* 毛玻璃特效 */
+            -webkit-backdrop-filter: blur(3px);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
 
         /* --- 視覺化的後台觸發印章 --- */
@@ -78,42 +97,46 @@
         }
         .btn-primary:hover { background-color: var(--accent-gold); color: #3B0A09; font-weight: bold; }
 
-        /* --- 萬馬奔騰動畫區 --- */
+        /* --- 萬馬奔騰圖片動畫區 --- */
         .spin-circle {
-            width: 220px; height: 220px; border: 3px dashed var(--accent-gold);
+            width: 240px; height: 240px; border: 3px dashed var(--accent-gold);
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
             margin: 40px auto; background: rgba(0,0,0,0.2); position: relative;
         }
         
-        .main-horse { font-size: 5rem; color: var(--accent-gold); font-family: var(--font-serif); text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); z-index: 10; }
+        /* 引入真實奔騰馬剪影，並透過濾鏡鍍成金色 */
+        .horse-pic {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Horse_silhouette.svg');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            /* 魔法濾鏡：把黑色轉為我們設定的 --accent-gold 金色 */
+            filter: invert(72%) sepia(45%) saturate(545%) hue-rotate(352deg) brightness(96%) contrast(92%);
+        }
         
-        /* 隱藏的奔騰馬群 (僅在啟動時顯示) */
+        .main-horse { width: 110px; height: 110px; z-index: 10; opacity: 0.9; }
+        
         .galloping-horses { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: none; }
-        .galloping-horses span {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-family: var(--font-serif); color: var(--accent-gold); opacity: 0;
+        .galloping-horses div {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0;
         }
 
-        /* 旋轉與奔騰觸發 */
         .spinning .main-horse { animation: spinAnim 5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
-        .spinning .spin-circle { border-style: solid; box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); transition: 0.5s; }
+        .spinning .spin-circle { border-style: solid; box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); transition: 0.5s; }
         .spinning .galloping-horses { display: block; }
 
-        /* 每匹馬不同的出發點與奔騰動畫 */
-        .spinning .galloping-horses span:nth-child(1) { animation: stampede 1.2s linear infinite 0.1s; font-size: 2rem; }
-        .spinning .galloping-horses span:nth-child(2) { animation: stampede 1.5s linear infinite 0.4s; font-size: 3rem; color: #E8C373; }
-        .spinning .galloping-horses span:nth-child(3) { animation: stampede 1.1s linear infinite 0.7s; font-size: 4rem; color: rgba(255,255,255,0.8); }
-        .spinning .galloping-horses span:nth-child(4) { animation: stampede 1.4s linear infinite 1.0s; font-size: 2.5rem; }
-        .spinning .galloping-horses span:nth-child(5) { animation: stampede 1.3s linear infinite 1.3s; font-size: 3.5rem; color: #E8C373; }
-        .spinning .galloping-horses span:nth-child(6) { animation: stampede 1.6s linear infinite 1.6s; font-size: 1.5rem; color: rgba(255,255,255,0.6); }
+        /* 大小不一、錯落有致的馬群動畫 */
+        .spinning .galloping-horses div:nth-child(1) { animation: stampede 1.3s linear infinite 0.1s; width: 60px; height: 60px; }
+        .spinning .galloping-horses div:nth-child(2) { animation: stampede 1.6s linear infinite 0.4s; width: 90px; height: 90px; }
+        .spinning .galloping-horses div:nth-child(3) { animation: stampede 1.2s linear infinite 0.7s; width: 120px; height: 120px; filter: brightness(150%); }
+        .spinning .galloping-horses div:nth-child(4) { animation: stampede 1.5s linear infinite 1.0s; width: 70px; height: 70px; }
+        .spinning .galloping-horses div:nth-child(5) { animation: stampede 1.4s linear infinite 1.3s; width: 100px; height: 100px; filter: brightness(80%); }
 
-        @keyframes spinAnim { 0% { transform: rotate(0deg); } 100% { transform: rotate(1440deg); } }
+        @keyframes spinAnim { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(720deg) scale(1.1); } 100% { transform: rotate(1440deg) scale(1); } }
         
-        /* 奔騰核心：從中心旋轉並放大衝出，最後淡出 */
+        /* 奔騰效果：旋轉放大、淡出 */
         @keyframes stampede {
             0% { transform: translate(-50%, -50%) scale(0.1) rotate(0deg); opacity: 0; }
-            30% { opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(5) rotate(180deg); opacity: 0; }
+            30% { opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(4) rotate(180deg); opacity: 0; }
         }
 
         .spin-text { font-size: 1.2rem; letter-spacing: 2px; color: var(--accent-gold); animation: pulse 2s infinite; }
@@ -126,22 +149,34 @@
         .reward-content { font-size: 1.8rem; color: var(--accent-gold); font-weight: bold; }
         .quote-text { font-size: 1.2rem; line-height: 1.8; padding: 0 20px; margin: 30px 0; opacity: 0.9; }
 
-        /* --- 後台管理介面 --- */
+        /* --- 後台管理介面 (包含金句對應紀錄) --- */
         .admin-panel { text-align: left; width: 90%; max-width: 500px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; margin-bottom: 20px; }
         .admin-stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .admin-stat { background: var(--bg-dark-panel); padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px; text-align: center;}
         .admin-stat span { font-size: 1.5rem; color: var(--accent-gold); font-weight: bold; display: block; margin-top: 5px;}
         .setting-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.2); }
-        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; }
-        .qty-input { width: 60px; padding: 5px; text-align: center; background: transparent; border: 1px solid var(--accent-gold); color: white; border-radius: 4px; }
-        .history-list { max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.6); padding: 10px; font-size: 0.9rem; margin-top: 20px; border-radius: 5px; }
-        .history-item { border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 8px 0; }
+        
+        /* 歷史紀錄區塊優化，容納更多字數 */
+        .history-list { max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.6); padding: 15px; font-size: 0.9rem; margin-top: 20px; border-radius: 5px; }
+        .history-item { border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; }
+        .history-main { font-weight: bold; color: var(--text-light); font-size: 1rem; }
+        .history-main span { color: var(--accent-gold); }
+        .history-quote { color: var(--accent-gold); opacity: 0.85; font-size: 0.85rem; line-height: 1.4; }
+        
         .btn-danger { background-color: var(--primary-red); border: none; color: white; padding: 12px; margin-top: 15px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; letter-spacing: 1px; }
         .btn-close { background: transparent; color: var(--text-light); border: 1px solid var(--text-light); padding: 5px 15px; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
+
+<div class="bg-watermark">
+    <div class="char char1">福</div>
+    <div class="char char2">春</div>
+    <div class="char char3">吉</div>
+    <div class="char char4">財</div>
+    <div class="char char5">滿</div>
+</div>
 
 <div class="container">
     <div class="secret-seal" onclick="triggerAdmin()">福</div>
@@ -157,10 +192,13 @@
 
     <div id="screen-spin" class="screen">
         <div class="spin-circle" id="spinner">
-            <div class="main-horse">馬</div>
+            <div class="main-horse horse-pic"></div>
             <div class="galloping-horses">
-                <span>馬</span><span>馬</span><span>馬</span>
-                <span>馬</span><span>馬</span><span>馬</span>
+                <div class="horse-pic"></div>
+                <div class="horse-pic"></div>
+                <div class="horse-pic"></div>
+                <div class="horse-pic"></div>
+                <div class="horse-pic"></div>
             </div>
         </div>
         <div class="serif-text spin-text">萬馬奔騰，好運凝聚中...</div>
@@ -192,26 +230,22 @@
             <div class="admin-stat">200元刮刮樂<span id="stock200">0</span></div>
         </div>
 
-        <div class="setting-box">
-            <div style="color: var(--accent-gold); margin-bottom: 10px; font-weight: bold;">⚙️ 重新設定活動數量</div>
-            <div class="setting-row">
-                <label>500元 刮刮樂 (張)：</label>
-                <input type="number" id="setQty500" class="qty-input" value="3" min="0">
+        <div class="history-list" id="historyList">
             </div>
-            <div class="setting-row">
-                <label>200元 刮刮樂 (張)：</label>
-                <input type="number" id="setQty200" class="qty-input" value="3" min="0">
+
+        <div class="setting-box" style="margin-top: 15px;">
+            <div class="admin-stat-row" style="margin-bottom: 0;">
+                <label style="color: var(--text-light); font-size: 0.9rem;">重設 500元數量： <input type="number" id="setQty500" value="3" min="0" style="width: 40px; background: transparent; border: 1px solid var(--accent-gold); color: white;"></label>
+                <label style="color: var(--text-light); font-size: 0.9rem;">重設 200元數量： <input type="number" id="setQty200" value="3" min="0" style="width: 40px; background: transparent; border: 1px solid var(--accent-gold); color: white;"></label>
             </div>
             <button class="btn-danger" onclick="applyNewSettings()">載入新數量並清空紀錄</button>
         </div>
-
-        <div class="history-list" id="historyList"></div>
     </div>
 </div>
 
 <script>
     // --- 安全設定 ---
-    const ADMIN_PIN = "8888"; // 後台密碼在此設定，不顯示於前端提示中
+    const ADMIN_PIN = "8888"; 
 
     // --- 20 句過年勵志開運金句 ---
     const quotes = [
@@ -237,14 +271,15 @@
         "帶著初心出發，新的一年，前程必定繁花似錦。"
     ];
 
-    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V3'));
+    // 更新儲存金鑰為 V4，確保新版資料格式不衝突
+    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V4'));
     
     if (!appData) {
         appData = { inventory: ["500", "500", "500", "200", "200", "200"], history: [] };
         saveData();
     }
 
-    function saveData() { localStorage.setItem('luckyDrawDataCNY_V3', JSON.stringify(appData)); }
+    function saveData() { localStorage.setItem('luckyDrawDataCNY_V4', JSON.stringify(appData)); }
 
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -265,31 +300,36 @@
         void spinner.offsetWidth; 
         spinner.classList.add('spinning');
 
-        // 轉動 5.5 秒後揭曉，讓參與者充分感受奔騰特效
         setTimeout(() => { showResult(nameInput); }, 5500); 
     }
 
     function showResult(name) {
         const finalQuote = quotes[Math.floor(Math.random() * quotes.length)];
         let finalReward = null;
+        let rewardText = "純祝福";
 
         document.getElementById('resultName').innerText = `${name} 的新年好運`;
 
         if (appData.inventory.length > 0) {
             const randomIndex = Math.floor(Math.random() * appData.inventory.length);
             finalReward = appData.inventory.splice(randomIndex, 1)[0];
-            
-            const timeString = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
-            appData.history.unshift(`${timeString} - ${name} 獲得 ${finalReward}元`);
-            saveData();
+            rewardText = `${finalReward}元`;
 
             document.getElementById('rewardContainer').style.display = 'block';
             document.getElementById('resultReward').innerText = `${finalReward} 元 希望無窮 刮刮樂`;
         } else {
             document.getElementById('rewardContainer').style.display = 'none';
-            appData.history.unshift(`${new Date().toLocaleTimeString('zh-TW')} - ${name} (純祝福)`);
-            saveData();
         }
+
+        // 紀錄全面升級：存入物件包含時間、姓名、金額與專屬金句
+        const timeString = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+        appData.history.unshift({
+            time: timeString,
+            name: name,
+            reward: rewardText,
+            quote: finalQuote
+        });
+        saveData();
 
         document.getElementById('resultQuote').innerText = `「${finalQuote}」`;
         switchScreen('screen-result');
@@ -311,7 +351,6 @@
         
         if (secretClicks >= 5) {
             secretClicks = 0;
-            // 提示框已移除「預設 8888」字眼
             const pwd = prompt("請輸入機台控制中心密碼：");
             if (pwd === ADMIN_PIN) {
                 renderAdmin();
@@ -330,9 +369,15 @@
         document.getElementById('stock500').innerText = count500;
         document.getElementById('stock200').innerText = count200;
 
+        // 渲染完整版歷史紀錄 (包含金額與對應金句)
         const historyHtml = appData.history.length === 0 
             ? "<div style='opacity:0.5; text-align:center;'>尚無發放紀錄</div>" 
-            : appData.history.map(item => `<div class="history-item">${item}</div>`).join('');
+            : appData.history.map(item => `
+                <div class="history-item">
+                    <div class="history-main">${item.time} - <span>${item.name}</span> 獲得 ${item.reward}</div>
+                    <div class="history-quote">「${item.quote}」</div>
+                </div>
+            `).join('');
         
         document.getElementById('historyList').innerHTML = historyHtml;
     }
