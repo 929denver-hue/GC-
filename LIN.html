@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>馬年好運啟動台｜終極特效版</title>
+    <title>馬年好運啟動台｜百元加碼版</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -14,7 +14,6 @@
             --accent-gold: #D4AF37; 
             --text-light: #FDFBF7; 
             --bg-dark-panel: rgba(0, 0, 0, 0.55);
-            /* 加入標楷體等傳統書法字體作為備援，確保書法感一定出得來 */
             --font-serif: 'Noto Serif TC', 'BiauKai', 'KaiTi', serif;
             --font-sans: 'Noto Sans TC', sans-serif;
         }
@@ -27,17 +26,14 @@
             overflow: hidden; position: relative;
         }
 
-        /* --- UI/UX 升級：書法吉祥話浮水印底圖 (強制顯色版) --- */
+        /* --- UI/UX 書法吉祥話浮水印底圖 --- */
         .bg-watermark {
             position: absolute; width: 100%; height: 100%;
             top: 0; left: 0; z-index: 0; pointer-events: none; overflow: hidden;
         }
         .bg-watermark .char {
             position: absolute; font-family: var(--font-serif); font-weight: 900;
-            color: var(--accent-gold); 
-            opacity: 0.15; /* 大幅提高透明度，保證看得見 */
-            text-shadow: 2px 4px 15px rgba(0,0,0,0.8); /* 加入陰影增加立體感 */
-            user-select: none;
+            color: var(--accent-gold); opacity: 0.15; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); user-select: none;
         }
         .char1 { top: -2%; left: -2%; font-size: 35vh; transform: rotate(-15deg); }
         .char2 { bottom: -2%; right: -2%; font-size: 40vh; transform: rotate(10deg); }
@@ -45,7 +41,6 @@
         .char4 { bottom: 25%; left: 5%; font-size: 30vh; transform: rotate(15deg); opacity: 0.12; }
         .char5 { top: 10%; left: 40%; font-size: 20vh; transform: rotate(5deg); opacity: 0.08; }
 
-        /* 主視窗 */
         .container {
             width: 95%; max-width: 600px; height: 95vh;
             padding: 40px 20px; box-sizing: border-box;
@@ -58,7 +53,6 @@
             border-radius: 12px; box-shadow: 0 15px 50px rgba(0,0,0,0.6);
         }
 
-        /* --- 視覺化的後台觸發印章 --- */
         .secret-seal {
             position: absolute; top: 15px; right: 15px;
             width: 36px; height: 36px;
@@ -96,29 +90,23 @@
         }
         .btn-primary:hover { background-color: var(--accent-gold); color: #3B0A09; font-weight: bold; }
 
-        /* --- 萬馬奔騰圖片動畫區 (改用實體圖片保證顯示) --- */
+        /* --- 萬馬奔騰圖片動畫區 --- */
         .spin-circle {
             width: 240px; height: 240px; border: 3px dashed var(--accent-gold);
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
             margin: 40px auto; background: rgba(0,0,0,0.3); position: relative;
         }
         
-        /* 中心的主馬 */
         .main-horse { width: 120px; height: 120px; z-index: 10; object-fit: contain; }
-        
-        /* 奔騰的馬群容器 */
         .galloping-horses { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
         .galloping-horses img {
             position: absolute; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) scale(0); /* 初始隱藏 */
-            opacity: 0; object-fit: contain;
+            transform: translate(-50%, -50%) scale(0); opacity: 0; object-fit: contain;
         }
 
-        /* 旋轉與奔騰觸發 */
         .spinning .main-horse { animation: spinAnim 5.5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
         .spinning .spin-circle { border-style: solid; box-shadow: 0 0 50px rgba(212, 175, 55, 0.6); transition: 0.5s; }
         
-        /* 分別設定每匹馬衝出來的速度與大小 */
         .spinning .galloping-horses img:nth-child(1) { animation: stampede 1.4s ease-out infinite 0.1s; width: 80px; }
         .spinning .galloping-horses img:nth-child(2) { animation: stampede 1.7s ease-out infinite 0.4s; width: 130px; }
         .spinning .galloping-horses img:nth-child(3) { animation: stampede 1.2s ease-out infinite 0.8s; width: 160px; filter: brightness(1.2); }
@@ -126,8 +114,6 @@
         .spinning .galloping-horses img:nth-child(5) { animation: stampede 1.3s ease-out infinite 1.4s; width: 140px; }
 
         @keyframes spinAnim { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(720deg) scale(1.2); } 100% { transform: rotate(1440deg) scale(1); } }
-        
-        /* 奔騰效果：旋轉放大、向上衝刺、淡出 */
         @keyframes stampede {
             0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
             20% { opacity: 0.8; }
@@ -145,20 +131,25 @@
         .quote-text { font-size: 1.2rem; line-height: 1.8; padding: 0 20px; margin: 30px 0; opacity: 0.9; }
 
         /* --- 後台管理介面 --- */
-        .admin-panel { text-align: left; width: 90%; max-width: 500px; }
+        .admin-panel { text-align: left; width: 95%; max-width: 500px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; margin-bottom: 20px; }
-        .admin-stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .admin-stat { background: var(--bg-dark-panel); padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px; text-align: center;}
-        .admin-stat span { font-size: 1.5rem; color: var(--accent-gold); font-weight: bold; display: block; margin-top: 5px;}
-        .setting-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.2); }
         
-        .history-list { max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.6); padding: 15px; font-size: 0.9rem; margin-top: 20px; border-radius: 5px; }
+        .admin-stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
+        .admin-stat { background: var(--bg-dark-panel); padding: 12px 5px; border-radius: 5px; flex: 1; text-align: center; font-size: 0.9rem;}
+        .admin-stat span { font-size: 1.4rem; color: var(--accent-gold); font-weight: bold; display: block; margin-top: 5px;}
+        
+        .setting-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.2); }
+        .setting-inputs { display: flex; justify-content: space-around; flex-wrap: wrap; margin-bottom: 10px; }
+        .setting-inputs label { color: var(--text-light); font-size: 0.85rem; margin: 5px 0; display: flex; align-items: center; gap: 5px;}
+        .setting-inputs input { width: 45px; padding: 3px; background: transparent; border: 1px solid var(--accent-gold); color: white; text-align: center; border-radius: 3px;}
+        
+        .history-list { max-height: 220px; overflow-y: auto; background: rgba(0,0,0,0.6); padding: 15px; font-size: 0.9rem; margin-top: 20px; border-radius: 5px; }
         .history-item { border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; }
         .history-main { font-weight: bold; color: var(--text-light); font-size: 1rem; }
         .history-main span { color: var(--accent-gold); }
         .history-quote { color: var(--accent-gold); opacity: 0.85; font-size: 0.85rem; line-height: 1.4; }
         
-        .btn-danger { background-color: var(--primary-red); border: none; color: white; padding: 12px; margin-top: 15px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; letter-spacing: 1px; }
+        .btn-danger { background-color: var(--primary-red); border: none; color: white; padding: 12px; margin-top: 5px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; letter-spacing: 1px; }
         .btn-close { background: transparent; color: var(--text-light); border: 1px solid var(--text-light); padding: 5px 15px; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
@@ -220,17 +211,18 @@
         
         <div style="font-size: 0.9rem; margin-bottom: 5px; opacity: 0.8;">目前剩餘庫存：</div>
         <div class="admin-stat-row">
-            <div class="admin-stat">500元刮刮樂<span id="stock500">0</span></div>
-            <div class="admin-stat">200元刮刮樂<span id="stock200">0</span></div>
+            <div class="admin-stat">500元<span id="stock500">0</span></div>
+            <div class="admin-stat">200元<span id="stock200">0</span></div>
+            <div class="admin-stat">100元<span id="stock100">0</span></div>
         </div>
 
-        <div class="history-list" id="historyList">
-            </div>
+        <div class="history-list" id="historyList"></div>
 
-        <div class="setting-box" style="margin-top: 15px;">
-            <div class="admin-stat-row" style="margin-bottom: 0;">
-                <label style="color: var(--text-light); font-size: 0.9rem;">重設 500元： <input type="number" id="setQty500" value="3" min="0" style="width: 40px; background: transparent; border: 1px solid var(--accent-gold); color: white;"></label>
-                <label style="color: var(--text-light); font-size: 0.9rem;">重設 200元： <input type="number" id="setQty200" value="3" min="0" style="width: 40px; background: transparent; border: 1px solid var(--accent-gold); color: white;"></label>
+        <div class="setting-box">
+            <div class="setting-inputs">
+                <label>500元： <input type="number" id="setQty500" value="3" min="0"></label>
+                <label>200元： <input type="number" id="setQty200" value="3" min="0"></label>
+                <label>100元： <input type="number" id="setQty100" value="3" min="0"></label>
             </div>
             <button class="btn-danger" onclick="applyNewSettings()">載入新數量並清空紀錄</button>
         </div>
@@ -263,14 +255,19 @@
         "帶著初心出發，新的一年，前程必定繁花似錦。"
     ];
 
-    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V5'));
+    // 更新資料庫版本至 V6，避免舊資料干擾
+    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V6'));
     
+    // 初始化時自動帶入三種面額
     if (!appData) {
-        appData = { inventory: ["500", "500", "500", "200", "200", "200"], history: [] };
+        appData = { 
+            inventory: ["500", "500", "500", "200", "200", "200", "100", "100", "100"], 
+            history: [] 
+        };
         saveData();
     }
 
-    function saveData() { localStorage.setItem('luckyDrawDataCNY_V5', JSON.stringify(appData)); }
+    function saveData() { localStorage.setItem('luckyDrawDataCNY_V6', JSON.stringify(appData)); }
 
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -352,11 +349,14 @@
     }
 
     function renderAdmin() {
+        // 分別計算三種庫存
         const count500 = appData.inventory.filter(x => x === "500").length;
         const count200 = appData.inventory.filter(x => x === "200").length;
+        const count100 = appData.inventory.filter(x => x === "100").length;
         
         document.getElementById('stock500').innerText = count500;
         document.getElementById('stock200').innerText = count200;
+        document.getElementById('stock100').innerText = count100;
 
         const historyHtml = appData.history.length === 0 
             ? "<div style='opacity:0.5; text-align:center;'>尚無發放紀錄</div>" 
@@ -373,11 +373,13 @@
     function applyNewSettings() {
         const qty500 = parseInt(document.getElementById('setQty500').value) || 0;
         const qty200 = parseInt(document.getElementById('setQty200').value) || 0;
+        const qty100 = parseInt(document.getElementById('setQty100').value) || 0;
 
-        if(confirm(`確定要重新開始活動嗎？\n這將清空所有發放紀錄，並設定為：\n500元: ${qty500} 張\n200元: ${qty200} 張`)) {
+        if(confirm(`確定要重新開始活動嗎？\n這將清空所有紀錄，並設定為：\n500元: ${qty500}張\n200元: ${qty200}張\n100元: ${qty100}張`)) {
             let newInventory = [];
             for(let i=0; i < qty500; i++) newInventory.push("500");
             for(let i=0; i < qty200; i++) newInventory.push("200");
+            for(let i=0; i < qty100; i++) newInventory.push("100");
 
             appData = { inventory: newInventory, history: [] };
             saveData();
