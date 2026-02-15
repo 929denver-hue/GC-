@@ -3,44 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>馬年好運啟動台｜專業管控版</title>
+    <title>馬年好運啟動台｜過年喜氣升級版</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 視覺與色票設定 (極簡中式) --- */
+        /* --- 視覺與色票設定 (極簡過年風) --- */
         :root {
-            --bg-color: #121212; 
-            --bg-light: #1A1A1A; 
-            --primary-red: #8C1D18; 
-            --dark-red: #6E1B17; 
-            --accent-gold: #C9A24D; 
-            --text-light: #F5EFE6; 
+            /* 背景改為溫暖高貴的絳紅漸層 */
+            --bg-gradient: linear-gradient(135deg, #7A1614 0%, #3B0A09 100%);
+            --primary-red: #B22222; 
+            --accent-gold: #D4AF37; /* 更有光澤的古典金 */
+            --text-light: #FDFBF7; /* 暖白 */
+            --bg-dark-panel: rgba(0, 0, 0, 0.4);
+            
             --font-serif: 'Noto Serif TC', serif;
             --font-sans: 'Noto Sans TC', sans-serif;
         }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: var(--bg-color); color: var(--text-light);
+            background: var(--bg-gradient); color: var(--text-light);
             font-family: var(--font-sans);
             display: flex; justify-content: center; align-items: center;
             overflow: hidden;
         }
 
+        /* 外框增加微金邊，像精緻的春聯紙 */
         .container {
-            width: 100%; max-width: 600px; height: 100vh;
+            width: 95%; max-width: 600px; height: 95vh;
             padding: 40px 20px; box-sizing: border-box;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             text-align: center; position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* --- 隱藏式後台觸發區 --- */
-        #secret-trigger {
-            position: absolute; top: 0; left: 0;
-            width: 80px; height: 80px;
-            background: transparent; z-index: 999;
+        /* --- 視覺化的後台觸發印章 --- */
+        .secret-seal {
+            position: absolute; top: 15px; right: 15px;
+            width: 36px; height: 36px;
+            border: 1.5px solid var(--accent-gold);
+            color: var(--accent-gold);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-family: var(--font-serif); font-size: 1.1rem;
+            opacity: 0.4; cursor: pointer; z-index: 999;
+            transition: opacity 0.3s;
         }
+        .secret-seal:active { opacity: 1; transform: scale(0.9); }
 
         /* --- 畫面切換邏輯 --- */
         .screen { display: none; width: 100%; animation: fadeIn 0.8s ease; }
@@ -49,71 +61,82 @@
 
         /* --- 字體與排版 --- */
         h1, h2, .serif-text { font-family: var(--font-serif); font-weight: 600; letter-spacing: 2px; margin: 0; }
-        .title { font-size: 2.5rem; color: var(--accent-gold); margin-bottom: 10px; }
-        .subtitle { font-size: 1.1rem; color: var(--text-light); opacity: 0.8; margin-bottom: 50px; font-weight: 400; }
-        .divider { width: 40px; height: 1px; background-color: var(--primary-red); margin: 30px auto; }
+        .title { font-size: 2.8rem; color: var(--accent-gold); margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .subtitle { font-size: 1.1rem; color: var(--text-light); opacity: 0.9; margin-bottom: 50px; font-weight: 400; }
+        .divider { width: 50px; height: 2px; background-color: var(--accent-gold); margin: 30px auto; opacity: 0.5; }
 
         /* --- 輸入區設計 --- */
         .name-input {
-            width: 80%; background: transparent; border: 1px solid var(--text-light);
+            width: 80%; background: var(--bg-dark-panel); 
+            border: 1px solid var(--accent-gold); border-radius: 8px;
             color: var(--text-light); font-size: 1.5rem; font-family: var(--font-serif);
             text-align: center; padding: 15px; box-sizing: border-box; outline: none; margin-bottom: 30px;
         }
-        .name-input:focus { border-color: var(--accent-gold); background: rgba(255,255,255,0.05); }
-        .name-input::placeholder { color: rgba(245, 239, 230, 0.3); font-family: var(--font-sans); font-size: 1rem; }
+        .name-input:focus { background: rgba(0,0,0,0.6); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+        .name-input::placeholder { color: rgba(253, 251, 247, 0.4); font-family: var(--font-sans); font-size: 1rem; }
 
         /* --- 按鈕設計 --- */
         .btn-primary {
-            background-color: var(--primary-red); color: var(--text-light);
-            border: none; padding: 15px 40px; font-size: 1.2rem;
+            background-color: transparent; color: var(--accent-gold);
+            border: 2px solid var(--accent-gold); border-radius: 30px;
+            padding: 15px 50px; font-size: 1.2rem;
             font-family: var(--font-serif); letter-spacing: 2px; cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s; background: rgba(212, 175, 55, 0.1);
         }
-        .btn-primary:hover { background-color: var(--dark-red); }
+        .btn-primary:hover { background-color: var(--accent-gold); color: #3B0A09; font-weight: bold; }
 
         /* --- 轉動畫面 --- */
         .spin-circle {
-            width: 200px; height: 200px; border: 2px solid var(--accent-gold);
+            width: 220px; height: 220px; border: 3px dashed var(--accent-gold);
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            margin: 40px auto;
+            margin: 40px auto; background: rgba(0,0,0,0.2);
         }
-        .horse-icon { font-size: 4rem; color: var(--primary-red); font-family: var(--font-serif); }
+        .horse-icon { font-size: 5rem; color: var(--accent-gold); font-family: var(--font-serif); text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
         .spinning { animation: spinAnim 5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
         @keyframes spinAnim { 0% { transform: rotate(0deg); } 100% { transform: rotate(1440deg); } }
-        .spin-text { font-size: 1.2rem; letter-spacing: 2px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .spin-text { font-size: 1.2rem; letter-spacing: 2px; color: var(--accent-gold); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
 
         /* --- 結果畫面 --- */
-        .result-name { font-size: 2rem; color: var(--accent-gold); margin-bottom: 10px; }
+        .result-name { font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 10px; }
         .reward-box {
-            background: var(--bg-light); border: 1px solid var(--primary-red);
-            padding: 30px; width: 80%; margin: 20px 0; position: relative;
+            background: var(--bg-dark-panel); border: 1px solid var(--accent-gold);
+            border-radius: 8px; padding: 30px; width: 85%; margin: 20px 0; position: relative;
         }
         .reward-title { font-size: 1rem; color: var(--text-light); opacity: 0.8; margin-bottom: 10px; }
-        .reward-content { font-size: 1.8rem; color: var(--accent-gold); }
+        .reward-content { font-size: 1.8rem; color: var(--accent-gold); font-weight: bold; }
         .quote-text { font-size: 1.2rem; line-height: 1.8; padding: 0 20px; margin: 30px 0; opacity: 0.9; }
 
         /* --- 後台管理介面 --- */
         .admin-panel { text-align: left; width: 90%; max-width: 500px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; margin-bottom: 20px; }
-        .admin-stat { background: var(--bg-light); padding: 15px; margin-bottom: 10px; border-radius: 5px; }
-        .admin-stat span { font-size: 1.5rem; color: var(--accent-gold); font-weight: bold; }
-        .history-list { max-height: 250px; overflow-y: auto; background: #000; padding: 10px; font-size: 0.9rem; }
-        .history-item { border-bottom: 1px dashed #333; padding: 8px 0; }
-        .btn-danger { background-color: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 10px; margin-top: 20px; cursor: pointer; width: 100%; }
-        .btn-close { background: transparent; color: var(--text-light); border: 1px solid var(--text-light); padding: 5px 15px; cursor: pointer; }
+        
+        .admin-stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .admin-stat { background: var(--bg-dark-panel); padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px; text-align: center;}
+        .admin-stat span { font-size: 1.5rem; color: var(--accent-gold); font-weight: bold; display: block; margin-top: 5px;}
+        
+        /* 新增數量設定區 */
+        .setting-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; }
+        .qty-input { width: 60px; padding: 5px; text-align: center; background: transparent; border: 1px solid var(--accent-gold); color: white; border-radius: 4px; }
+        
+        .history-list { max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.6); padding: 10px; font-size: 0.9rem; margin-top: 20px; border-radius: 5px; }
+        .history-item { border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 8px 0; }
+        
+        .btn-danger { background-color: var(--primary-red); border: none; color: white; padding: 12px; margin-top: 15px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; letter-spacing: 1px; }
+        .btn-close { background: transparent; color: var(--text-light); border: 1px solid var(--text-light); padding: 5px 15px; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="secret-trigger" onclick="triggerAdmin()"></div>
+    <div class="secret-seal" onclick="triggerAdmin()">福</div>
 
     <div id="screen-input" class="screen active">
-        <h1 class="title">馬年 · 好運啟動台</h1>
+        <h1 class="title">馬年好運啟動台</h1>
         <div class="subtitle">轉動的不是運氣，是迎接好運的心意</div>
         <div class="divider"></div>
-        <input type="text" id="userName" class="name-input" placeholder="請留下名字" maxlength="8" autocomplete="off">
+        <input type="text" id="userName" class="name-input" placeholder="請寫下您的名字" maxlength="8" autocomplete="off">
         <div class="divider"></div>
         <button class="btn-primary" onclick="startSpin()">啟動好運</button>
     </div>
@@ -122,7 +145,7 @@
         <div class="spin-circle" id="spinner">
             <div class="horse-icon">馬</div>
         </div>
-        <div class="serif-text spin-text">讓新年的祝福，找到你...</div>
+        <div class="serif-text spin-text">正在為您凝聚新年祝福...</div>
     </div>
 
     <div id="screen-result" class="screen">
@@ -141,46 +164,52 @@
 
     <div id="screen-admin" class="screen admin-panel">
         <div class="admin-header">
-            <h2 class="serif-text" style="color:var(--accent-gold);">系統後台</h2>
-            <button class="btn-close" onclick="resetToHome()">關閉</button>
+            <h2 class="serif-text" style="color:var(--accent-gold);">機台控制中心</h2>
+            <button class="btn-close" onclick="resetToHome()">返回首頁</button>
         </div>
         
-        <div class="admin-stat">
-            500元 刮刮樂剩餘：<span id="stock500">3</span> 張
-        </div>
-        <div class="admin-stat">
-            200元 刮刮樂剩餘：<span id="stock200">3</span> 張
+        <div style="font-size: 0.9rem; margin-bottom: 5px; opacity: 0.8;">目前剩餘庫存：</div>
+        <div class="admin-stat-row">
+            <div class="admin-stat">500元刮刮樂<span id="stock500">0</span></div>
+            <div class="admin-stat">200元刮刮樂<span id="stock200">0</span></div>
         </div>
 
-        <h3 style="margin-top: 20px; font-size: 1rem;">發放紀錄</h3>
-        <div id="historyList" class="history-list">
+        <div class="setting-box">
+            <div style="color: var(--accent-gold); margin-bottom: 10px; font-weight: bold;">⚙️ 重新設定活動數量</div>
+            <div class="setting-row">
+                <label>500元 刮刮樂 (張)：</label>
+                <input type="number" id="setQty500" class="qty-input" value="3" min="0">
             </div>
+            <div class="setting-row">
+                <label>200元 刮刮樂 (張)：</label>
+                <input type="number" id="setQty200" class="qty-input" value="3" min="0">
+            </div>
+            <button class="btn-danger" onclick="applyNewSettings()">載入新數量並清空紀錄</button>
+        </div>
 
-        <button class="btn-danger" onclick="hardReset()">⚠ 一鍵重置所有庫存與紀錄</button>
+        <div class="history-list" id="historyList">
+            </div>
     </div>
 </div>
 
 <script>
-    // --- 1. 系統預設與庫存邏輯 (Local Storage) ---
+    // --- 1. 系統預設與庫存邏輯 ---
     const quotes = [
         "一步一步走，好運就在路上。", "心定了，路就亮了。", "新的一年，願努力都有回應。",
         "行動，就是最好的祝福。", "願今天的期待，成為明天的收穫。", "慢慢來，也是一種前進。",
         "願你所走的每一步，都靠近心之所向。", "把希望留在心裡，好運自然會來。"
     ];
 
-    let appData = JSON.parse(localStorage.getItem('luckyDrawData'));
+    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY'));
     
-    // 初始化庫存 (如果沒有紀錄，就給 3張500、3張200)
+    // 初始化 (預設 3張500、3張200)
     if (!appData) {
-        appData = {
-            inventory: ["500", "500", "500", "200", "200", "200"],
-            history: []
-        };
+        appData = { inventory: ["500", "500", "500", "200", "200", "200"], history: [] };
         saveData();
     }
 
     function saveData() {
-        localStorage.setItem('luckyDrawData', JSON.stringify(appData));
+        localStorage.setItem('luckyDrawDataCNY', JSON.stringify(appData));
     }
 
     // --- 2. 前台互動邏輯 ---
@@ -192,7 +221,7 @@
     function startSpin() {
         const nameInput = document.getElementById('userName').value.trim();
         if (!nameInput) {
-            alert("請以寫春聯的心情，留下您的名字喔！");
+            alert("請留下您的名字，讓好運找到您！");
             return;
         }
 
@@ -203,7 +232,6 @@
         void spinner.offsetWidth; 
         spinner.classList.add('spinning');
 
-        // 轉動 5 秒後揭曉
         setTimeout(() => { showResult(nameInput); }, 5000); 
     }
 
@@ -211,25 +239,22 @@
         const finalQuote = quotes[Math.floor(Math.random() * quotes.length)];
         let finalReward = null;
 
-        document.getElementById('resultName').innerText = `${name} 的新年祝福`;
+        document.getElementById('resultName').innerText = `${name} 的新年好運`;
 
-        // 判斷庫存
         if (appData.inventory.length > 0) {
             // 隨機抽出一張並從庫存移除
             const randomIndex = Math.floor(Math.random() * appData.inventory.length);
             finalReward = appData.inventory.splice(randomIndex, 1)[0];
             
-            // 紀錄到歷史
             const timeString = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
-            appData.history.push(`${timeString} - ${name} 獲得 ${finalReward}元`);
+            appData.history.unshift(`${timeString} - ${name} 獲得 ${finalReward}元`); // unshift 讓最新紀錄在最上面
             saveData();
 
             document.getElementById('rewardContainer').style.display = 'block';
             document.getElementById('resultReward').innerText = `${finalReward} 元 希望無窮 刮刮樂`;
         } else {
-            // 已經發完的狀態
-            document.getElementById('rewardContainer').style.display = 'none'; // 隱藏獎品區塊
-            appData.history.push(`${new Date().toLocaleTimeString('zh-TW')} - ${name} (純祝福，已無庫存)`);
+            document.getElementById('rewardContainer').style.display = 'none';
+            appData.history.unshift(`${new Date().toLocaleTimeString('zh-TW')} - ${name} (純祝福)`);
             saveData();
         }
 
@@ -251,9 +276,10 @@
         secretClicks++;
         clearTimeout(clickTimer);
         
+        // 連點 5 下觸發
         if (secretClicks >= 5) {
             secretClicks = 0;
-            const pwd = prompt("請輸入系統管理員密碼：");
+            const pwd = prompt("請輸入控制中心密碼：(預設 8888)");
             if (pwd === "8888") {
                 renderAdmin();
                 switchScreen('screen-admin');
@@ -262,7 +288,7 @@
             }
         }
         
-        clickTimer = setTimeout(() => { secretClicks = 0; }, 2000); // 2秒內沒點完5下就重置
+        clickTimer = setTimeout(() => { secretClicks = 0; }, 2000); 
     }
 
     function renderAdmin() {
@@ -273,21 +299,31 @@
         document.getElementById('stock200').innerText = count200;
 
         const historyHtml = appData.history.length === 0 
-            ? "<div style='opacity:0.5;'>尚無發放紀錄</div>" 
+            ? "<div style='opacity:0.5; text-align:center;'>尚無發放紀錄</div>" 
             : appData.history.map(item => `<div class="history-item">${item}</div>`).join('');
         
         document.getElementById('historyList').innerHTML = historyHtml;
     }
 
-    function hardReset() {
-        if(confirm("警告：這將會清空所有歷史紀錄，並將刮刮樂數量恢復為各 3 張。確定執行嗎？")) {
+    // --- 4. 自訂數量邏輯 ---
+    function applyNewSettings() {
+        const qty500 = parseInt(document.getElementById('setQty500').value) || 0;
+        const qty200 = parseInt(document.getElementById('setQty200').value) || 0;
+
+        if(confirm(`確定要重新開始活動嗎？\n這將清空所有發放紀錄，並設定為：\n500元: ${qty500} 張\n200元: ${qty200} 張`)) {
+            
+            let newInventory = [];
+            for(let i=0; i < qty500; i++) newInventory.push("500");
+            for(let i=0; i < qty200; i++) newInventory.push("200");
+
             appData = {
-                inventory: ["500", "500", "500", "200", "200", "200"],
+                inventory: newInventory,
                 history: []
             };
+            
             saveData();
             renderAdmin();
-            alert("系統已重置完成！");
+            alert("✅ 數量設定完畢，機台已重置！");
         }
     }
 </script>
