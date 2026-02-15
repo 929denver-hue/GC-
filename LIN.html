@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>馬年好運啟動台｜百元加碼版</title>
+    <title>馬年好運啟動台｜家族專屬彩蛋版</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -128,7 +128,17 @@
         .reward-box { background: var(--bg-dark-panel); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 30px; width: 85%; margin: 20px 0; }
         .reward-title { font-size: 1rem; color: var(--text-light); opacity: 0.8; margin-bottom: 10px; }
         .reward-content { font-size: 1.8rem; color: var(--accent-gold); font-weight: bold; }
-        .quote-text { font-size: 1.2rem; line-height: 1.8; padding: 0 20px; margin: 30px 0; opacity: 0.9; }
+        .quote-text { font-size: 1.1rem; line-height: 1.6; padding: 0 20px; margin: 30px 0; opacity: 0.9; }
+        
+        /* 專屬彩蛋祝福的特效樣式 (強化視覺) */
+        .special-quote { 
+            display: block; margin-top: 15px; font-size: 1.25rem; 
+            color: #FFD700; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+            animation: fadeInSparkle 1.5s ease-in-out;
+            border-top: 1px dashed rgba(255, 215, 0, 0.3);
+            padding-top: 15px;
+        }
+        @keyframes fadeInSparkle { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
 
         /* --- 後台管理介面 --- */
         .admin-panel { text-align: left; width: 95%; max-width: 500px; }
@@ -232,6 +242,25 @@
 <script>
     const ADMIN_PIN = "8888"; 
 
+    // 🌟 家族專屬 VIP 祝福彩蛋名單 (共15位) 🌟
+    const specialGuests = {
+        "華哥": "✨ 越來越帥還瘦身成功，根本逆齡示範組。財庫補好、氣色發光，丙午年旺到像開外掛，連莊又自摸只是日常，全家最穩靠山。",
+        "惠美": "✨ 氣質好到自帶柔焦濾鏡，神似林志玲的優雅與從容。國標100分、回頭率200%，親戚都在問：這位女神還收不收粉絲？走到哪都是焦點，難怪人人搶著欣賞與靠近。",
+        "許月": "✨ 可愛又慈善，笑容一出就讓人安心。家中真正的扛把子，溫暖又有智慧，說話就是成交，根本天生的銷售高手。",
+        "洵": "✨ 籃球、羽球、網球樣樣來，運動靠熱情不靠天分。嘴上不說，行動最誠實；家人是最愛。",
+        "永國": "✨ 小酒窩一笑大家先投降，水電維修直接全包。早餐好吃到像開早市，技術與胃口雙滿足，手藝好、心也暖，是生活系男神。",
+        "鼎來": "✨ 帥氣就是你的超能力，不用多說已經全場焦點。大家不搶演唱會門票，只想看你本人出現，存在感直接拉滿。",
+        "權陞": "✨ 溫柔又有愛心、眼神溫暖。連小貓咪都知道誰最值得依靠，自然黏上你，好人品一眼就看得出來。",
+        "勝宏": "✨ 運動高手，什麼都會一點還都很強。樣樣精通毫不張揚。帥氣外表下是自律與自信，站在那裡就讓人忍不住欣賞。",
+        "奕廷": "✨ 笑容乾淨又可愛，像陽光一樣讓人心情變好。不費力就迷倒眾生，是天生自帶好感度的小太陽，是未來紅包最多的潛力股。",
+        "妙娟": "✨ 細心溫柔到自帶安撫功能，聲音一出全場降噪。孫女自動黏緊緊，耐心與愛藏在細節裡，難怪成為孫女心中最安心的存在。",
+        "郁雯": "✨ 漂亮又有愛的護理師，自帶安心感光環。東西整理得乾乾淨淨，連空氣都很有秩序，是人美心細的最佳代表。",
+        "真妮": "✨ 警界校花本人無誤，顏值在線、氣質溫柔。站在那裡就很正義，讓人懷疑是不是制服本身都在加分。",
+        "彬": "✨ 帥氣穩重，羽球場上的實力派。事業與球技同步成長，是讓人放心又值得恭喜的存在。",
+        "蕎蕎": "✨ 兩歲就可愛到犯規，愛運動、活力滿滿。一雙迷人眼睛笑起來，全場自動融化，完全是家族開心果。",
+        "毓秀": "✨ 聲音溫柔讓人一聽就安心，廚藝好到大家自動加飯。歌聲悅耳、又熱愛爬山，是能把生活過得又暖又健康的代表。"
+    };
+
     const quotes = [
         "迎向新局，每一小步都是萬馬奔騰的序曲。",
         "心若篤定，路便寬廣；新年新願，好運自來。",
@@ -255,10 +284,8 @@
         "帶著初心出發，新的一年，前程必定繁花似錦。"
     ];
 
-    // 更新資料庫版本至 V6，避免舊資料干擾
-    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V6'));
+    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V8'));
     
-    // 初始化時自動帶入三種面額
     if (!appData) {
         appData = { 
             inventory: ["500", "500", "500", "200", "200", "200", "100", "100", "100"], 
@@ -267,7 +294,7 @@
         saveData();
     }
 
-    function saveData() { localStorage.setItem('luckyDrawDataCNY_V6', JSON.stringify(appData)); }
+    function saveData() { localStorage.setItem('luckyDrawDataCNY_V8', JSON.stringify(appData)); }
 
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -292,7 +319,7 @@
     }
 
     function showResult(name) {
-        const finalQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        let finalQuote = quotes[Math.floor(Math.random() * quotes.length)];
         let finalReward = null;
         let rewardText = "純祝福";
 
@@ -318,7 +345,13 @@
         });
         saveData();
 
-        document.getElementById('resultQuote').innerText = `「${finalQuote}」`;
+        // 🌟 組合金句顯示內容 (判斷是否有觸發專屬彩蛋)
+        let quoteHtml = `「${finalQuote}」`;
+        if (specialGuests[name]) {
+            quoteHtml += `<span class="special-quote">${specialGuests[name]}</span>`;
+        }
+        
+        document.getElementById('resultQuote').innerHTML = quoteHtml;
         switchScreen('screen-result');
     }
 
@@ -349,7 +382,6 @@
     }
 
     function renderAdmin() {
-        // 分別計算三種庫存
         const count500 = appData.inventory.filter(x => x === "500").length;
         const count200 = appData.inventory.filter(x => x === "200").length;
         const count100 = appData.inventory.filter(x => x === "100").length;
