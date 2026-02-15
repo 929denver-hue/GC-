@@ -1,554 +1,624 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>林家專屬・頂級新春拉霸</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>馬年 · 好運啟動台（Demo）</title>
 
-        :root {
-            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            --gold-text: linear-gradient(to bottom, #cfc09f 22%, #634f2c 24%, #cfc09f 26%, #cfc09f 27%, #ffecb3 40%, #3a2c0f 78%);
-            --deep-red-bg: radial-gradient(circle at center, #7f1d1d 0%, #450a0a 100%);
-        }
+  <!-- Optional: nicer fonts (works when online). If offline, it will fall back gracefully. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
 
-        body {
-            font-family: 'Noto Serif TC', serif;
-            background: var(--deep-red-bg);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fbbf24' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
+  <style>
+    :root{
+      /* Minimal Chinese New Year palette */
+      --bg:#121212;
+      --bg2:#1A1A1A;
+      --red:#8C1D18;      /* 胭脂紅（霧面） */
+      --red2:#6E1B17;     /* 棗紅（偏暗） */
+      --gold:#C9A24D;     /* 霧金 */
+      --ivory:#F5EFE6;    /* 米白 */
+      --muted:rgba(245,239,230,.75);
+      --line:rgba(245,239,230,.18);
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --radius:18px;
+    }
 
-        /* 華麗流光標題 */
-        .shimmer-text {
-            background: linear-gradient(45deg, #FFD700, #FFF, #FFD700);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s linear infinite;
-        }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 700px at 50% 12%, rgba(140,29,24,.18), transparent 55%),
+        radial-gradient(900px 600px at 50% 88%, rgba(201,162,77,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--ivory);
+      font-family:"Noto Sans TC", system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
 
-        @keyframes shimmer {
-            to { background-position: 200% center; }
-        }
+    .frame{
+      width:min(430px, 100%);
+      background:rgba(18,18,18,.75);
+      border:1px solid rgba(245,239,230,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
 
-        .gold-text {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
-        }
+    /* subtle “paper grain” */
+    .frame::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E");
+      opacity:.28;
+      pointer-events:none;
+      mix-blend-mode:overlay;
+    }
 
-        .slot-machine-casing {
-            background: linear-gradient(to bottom, #2a0a0a, #1a0505);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 
-                0 20px 50px rgba(0,0,0,0.9),
-                0 0 0 8px #594319,
-                0 0 0 12px #bf953f,
-                0 0 40px rgba(255, 215, 0, 0.2);
-            position: relative;
-        }
+    .header{
+      padding:18px 18px 10px;
+      position:relative;
+      z-index:1;
+    }
+    .kicker{
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(201,162,77,.85);
+      font-size:12px;
+      margin-bottom:6px;
+    }
+    .title{
+      font-family:"Noto Serif TC", "Noto Sans TC", serif;
+      font-weight:700;
+      font-size:26px;
+      line-height:1.2;
+      margin:0 0 6px;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
 
-        .reel-window {
-            background: #000;
-            border: 4px solid #855e14;
-            border-radius: 10px;
-            box-shadow: inset 0 0 30px rgba(0,0,0,1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .reel-window::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 40%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
-            pointer-events: none;
-            z-index: 10;
-        }
+    .divider{
+      height:1px;
+      background:linear-gradient(90deg, transparent, var(--line), transparent);
+      margin:14px 0 0;
+    }
 
-        .reel {
-            font-size: 4.5rem;
-            height: 130px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(to bottom, #fff8e1 0%, #d4b08c 100%);
-            color: #333;
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
-            border-right: 2px solid #594319;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-        }
-        .reel:last-child { border-right: none; }
+    .content{
+      padding:16px 18px 18px;
+      position:relative;
+      z-index:1;
+    }
 
-        .reel.blur {
-            filter: blur(8px) motion-blur(vertical);
-            color: transparent;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-        }
+    .panel{
+      border:1px solid rgba(245,239,230,.12);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(26,26,26,.55);
+    }
 
-        .spin-btn {
-            background: radial-gradient(circle at 30% 30%, #ff0000, #8b0000);
-            border: 4px solid #fcd34d;
-            box-shadow: 
-                0 10px 0 #5b0000, 
-                0 15px 20px rgba(0,0,0,0.6),
-                inset 0 2px 5px rgba(255,255,255,0.4);
-            transition: all 0.1s;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            position: relative;
-            overflow: hidden;
-        }
+    label{
+      display:block;
+      font-size:12px;
+      color:rgba(245,239,230,.70);
+      margin:2px 0 8px;
+      letter-spacing:.06em;
+    }
+    .input{
+      width:100%;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(245,239,230,.06);
+      color:var(--ivory);
+      padding:12px 12px;
+      border-radius:14px;
+      outline:none;
+      font-size:16px;
+    }
+    .input:focus{
+      border-color:rgba(201,162,77,.55);
+      box-shadow:0 0 0 4px rgba(201,162,77,.10);
+    }
+    .row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:12px;
+    }
 
-        .spin-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
+    .stepper{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(245,239,230,.06);
+      border-radius:14px;
+      width:100%;
+      justify-content:space-between;
+    }
+    .stepper .btn{
+      width:40px;height:40px;
+      border-radius:12px;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(18,18,18,.35);
+      color:var(--ivory);
+      font-size:18px;
+      cursor:pointer;
+    }
+    .stepper .btn:active{ transform:translateY(1px); }
+    .stepper .value{
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.08em;
+      color:rgba(245,239,230,.92);
+    }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
+    .cta{
+      margin-top:14px;
+      width:100%;
+      height:52px;
+      border:none;
+      border-radius:16px;
+      color:var(--ivory);
+      cursor:pointer;
+      font-size:16px;
+      letter-spacing:.08em;
+      background:
+        linear-gradient(180deg, rgba(201,162,77,.18), rgba(201,162,77,.04)),
+        linear-gradient(180deg, var(--red), var(--red2));
+      box-shadow:0 10px 28px rgba(140,29,24,.35);
+      position:relative;
+      overflow:hidden;
+    }
+    .cta::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at 30% 30%, rgba(245,239,230,.18), transparent 55%);
+      transform:translateX(-18%);
+      transition:transform .6s ease;
+    }
+    .cta:hover::after{ transform:translateX(6%); }
+    .cta:disabled{
+      cursor:not-allowed;
+      opacity:.55;
+      box-shadow:none;
+    }
 
-        .spin-btn:active {
-            transform: translateY(8px);
-            box-shadow: 
-                0 2px 0 #5b0000, 
-                inset 0 5px 10px rgba(0,0,0,0.4);
-        }
+    .hint{
+      margin-top:10px;
+      font-size:12px;
+      color:rgba(245,239,230,.58);
+      text-align:center;
+    }
 
-        .spin-btn:disabled {
-            filter: grayscale(100%);
-            cursor: not-allowed;
-            transform: translateY(8px);
-            box-shadow: none;
-            animation: none;
-        }
+    /* Screens */
+    .screen{ display:none; }
+    .screen.active{ display:block; }
 
-        .prize-display {
-            background: rgba(40, 0, 0, 0.95);
-            border: 2px solid #bf953f;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
-            backdrop-filter: blur(10px);
-        }
+    /* Spin screen */
+    .spinWrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      padding:18px 8px;
+    }
+    .seal{
+      width:86px;height:86px;
+      border-radius:22px;
+      border:1px solid rgba(201,162,77,.55);
+      background:
+        radial-gradient(circle at 50% 40%, rgba(201,162,77,.28), transparent 60%),
+        linear-gradient(180deg, rgba(140,29,24,.55), rgba(110,27,23,.55));
+      box-shadow:0 14px 40px rgba(0,0,0,.5);
+      position:relative;
+      display:grid;
+      place-items:center;
+      transform-origin:50% 50%;
+      animation:spin 1.2s linear infinite;
+    }
+    .seal::before{
+      content:"馬";
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      font-size:34px;
+      color:rgba(245,239,230,.92);
+      letter-spacing:.06em;
+    }
+    .scanLine{
+      width:100%;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(201,162,77,.55), transparent);
+      opacity:.65;
+      position:relative;
+      overflow:hidden;
+      border-radius:999px;
+      margin-top:2px;
+    }
+    .scanLine::after{
+      content:"";
+      position:absolute;
+      top:-1px; left:-30%;
+      width:30%; height:3px;
+      background:linear-gradient(90deg, transparent, rgba(245,239,230,.35), transparent);
+      animation:scan 1.4s ease-in-out infinite;
+      opacity:.9;
+    }
+    .spinTitle{
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      font-size:18px;
+      margin:0;
+    }
+    .spinText{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+      text-align:center;
+      max-width:30ch;
+    }
 
-        /* 財神動畫：縮放與出場 */
-        @keyframes cai-shen-pop {
-            0% { transform: scale(0) translateY(100px); opacity: 0; }
-            60% { transform: scale(1.1) translateY(0); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes ray-rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+    /* Result screen */
+    .resultCard{
+      border:1px solid rgba(245,239,230,.12);
+      border-radius:18px;
+      background:
+        radial-gradient(900px 450px at 50% 0%, rgba(140,29,24,.18), transparent 60%),
+        rgba(26,26,26,.55);
+      padding:16px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(201,162,77,.35);
+      color:rgba(201,162,77,.95);
+      font-size:12px;
+      letter-spacing:.08em;
+    }
+    .bigName{
+      margin:12px 0 6px;
+      font-family:"Noto Serif TC", serif;
+      font-weight:700;
+      font-size:26px;
+      letter-spacing:.04em;
+      line-height:1.25;
+    }
+    .gift{
+      margin:10px 0 0;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(245,239,230,.12);
+      background:rgba(245,239,230,.04);
+    }
+    .gift .label{
+      font-size:12px;
+      color:rgba(245,239,230,.70);
+      letter-spacing:.08em;
+      margin-bottom:6px;
+    }
+    .gift .value{
+      font-size:16px;
+      font-weight:600;
+      color:rgba(245,239,230,.92);
+      line-height:1.4;
+    }
+    .quote{
+      margin-top:12px;
+      padding:12px 12px;
+      border-left:3px solid rgba(201,162,77,.55);
+      background:rgba(18,18,18,.22);
+      border-radius:14px;
+      color:rgba(245,239,230,.85);
+      line-height:1.8;
+      font-size:14px;
+    }
+    .quote small{
+      display:block;
+      margin-top:6px;
+      color:rgba(245,239,230,.55);
+      font-size:12px;
+    }
 
-        .cai-shen-active {
-            animation: cai-shen-pop 1.0s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        
-        /* 萬丈光芒背景 */
-        .holy-light {
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            background: repeating-conic-gradient(
-                from 0deg,
-                rgba(255, 215, 0, 0.3) 0deg 20deg,
-                transparent 20deg 40deg
-            );
-            animation: ray-rotate 10s linear infinite;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+    }
+    .ghost{
+      flex:1;
+      height:46px;
+      border-radius:16px;
+      border:1px solid rgba(245,239,230,.16);
+      background:rgba(245,239,230,.04);
+      color:rgba(245,239,230,.86);
+      cursor:pointer;
+      letter-spacing:.08em;
+    }
+    .primarySmall{
+      flex:1;
+      height:46px;
+      border-radius:16px;
+      border:none;
+      cursor:pointer;
+      color:var(--ivory);
+      background:linear-gradient(180deg, var(--red), var(--red2));
+      box-shadow:0 10px 24px rgba(140,29,24,.30);
+      letter-spacing:.08em;
+    }
 
-        #confetti {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 100;
-        }
-    </style>
+    .footerNote{
+      margin-top:10px;
+      text-align:center;
+      font-size:12px;
+      color:rgba(245,239,230,.55);
+      line-height:1.6;
+    }
+
+    @keyframes spin{
+      from{ transform:rotate(0deg); }
+      to{ transform:rotate(360deg); }
+    }
+    @keyframes scan{
+      0%{ left:-30%; }
+      50%{ left:50%; }
+      100%{ left:110%; }
+    }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .seal{ animation:none; }
+      .scanLine::after{ animation:none; }
+      .cta::after{ transition:none; }
+    }
+  </style>
 </head>
+
 <body>
+  <main class="frame" role="main">
+    <header class="header">
+      <div class="kicker">新年 · 祝福生成</div>
+      <h1 class="title">馬年 · 好運啟動台</h1>
+      <p class="subtitle">請留下名字，讓新年的祝福找到你。</p>
+      <div class="divider"></div>
+    </header>
 
-    <div class="container max-w-lg mx-auto p-4 w-full relative z-10">
-        
-        <div class="text-center mb-8">
-            <div class="inline-block border-b-2 border-yellow-500/50 pb-2 mb-4">
-                <span class="text-yellow-400 tracking-[0.5em] text-xs font-bold uppercase">Ultimate Edition</span>
+    <section class="content">
+      <!-- Screen 1: Input -->
+      <div id="screenInput" class="screen active">
+        <div class="panel">
+          <label for="nameInput">你的名字（像題字一樣）</label>
+          <input id="nameInput" class="input" inputmode="text" maxlength="12" placeholder="例如：小安 / 家豪 / 阿嬤" />
+
+          <div class="row" style="margin-top:14px;">
+            <div style="width:100%;">
+              <label>好運份量（今年想接住的希望）</label>
+              <div class="stepper" aria-label="好運份量">
+                <button id="minusBtn" class="btn" type="button" aria-label="減少">−</button>
+                <div id="amountValue" class="value" aria-live="polite">1</div>
+                <button id="plusBtn" class="btn" type="button" aria-label="增加">＋</button>
+              </div>
             </div>
-            <h1 class="text-6xl font-black mb-2 shimmer-text drop-shadow-xl tracking-wide">
-                林家御用
-            </h1>
-            <p class="text-2xl text-yellow-200 font-bold tracking-[0.8em] mt-2 gold-text">
-                新春發財金
-            </p>
+          </div>
+
+          <button id="startBtn" class="cta" type="button">啟動好運</button>
+          <div class="hint">無需捐款｜約 10 秒完成</div>
         </div>
+      </div>
 
-        <div class="slot-machine-casing mb-8">
-            <div class="absolute top-3 left-1/2 transform -translate-x-1/2 w-full flex justify-between px-8">
-                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_15px_#ef4444]"></div>
-                <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse delay-75 shadow-[0_0_15px_#facc15]"></div>
-                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse delay-150 shadow-[0_0_15px_#ef4444]"></div>
-                <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse delay-75 shadow-[0_0_15px_#facc15]"></div>
-                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_15px_#ef4444]"></div>
-            </div>
-
-            <div class="reel-window grid grid-cols-3 gap-1 p-1 bg-black mb-8 mt-4">
-                <div id="reel1" class="reel rounded-l-md">💎</div>
-                <div id="reel2" class="reel">👲</div>
-                <div id="reel3" class="reel rounded-r-md">💰</div>
-            </div>
-
-            <div class="text-center px-2 pb-2">
-                <button id="spinBtn" onclick="spin()" class="spin-btn w-full py-6 rounded-2xl text-4xl font-black text-white text-shadow-md">
-                    啟 動 好 運
-                </button>
-            </div>
+      <!-- Screen 2: Spin -->
+      <div id="screenSpin" class="screen" aria-live="polite">
+        <div class="panel spinWrap">
+          <div class="seal" aria-hidden="true"></div>
+          <div class="scanLine" aria-hidden="true"></div>
+          <h2 class="spinTitle">祝福生成中</h2>
+          <p class="spinText" id="spinText">馬蹄聲起，願你步步向前。</p>
         </div>
+        <div class="footerNote">請稍候，祝福正在匯聚。</div>
+      </div>
 
-        <div id="resultOverlay" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-md transition-all duration-500 overflow-hidden">
-            
-            <div id="caishenContainer" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden z-60">
-                <div id="caishenLight" class="holy-light"></div>
-                
-                <div class="text-center relative flex flex-col items-center">
-                    <div id="caishenImage" class="w-64 h-64 mb-6 opacity-0 transform translate-y-20 transition-all duration-700">
-                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-[0_0_30px_rgba(255,215,0,0.6)]">
-                            <circle cx="100" cy="100" r="90" fill="#fcd34d" opacity="0.3" />
-                            <circle cx="100" cy="100" r="80" fill="#fbbf24" opacity="0.5" />
-                            <path d="M60 60 Q100 30 140 60 L150 50 L160 65 L145 75 L155 85 L130 90 L70 90 L45 85 L55 75 L40 65 L50 50 Z" fill="#000" />
-                            <rect x="70" y="50" width="60" height="40" rx="5" fill="#111" />
-                            <circle cx="100" cy="65" r="8" fill="#ef4444" stroke="#fbbf24" stroke-width="2" />
-                            <circle cx="100" cy="100" r="45" fill="#fde68a" />
-                            <path d="M75 120 Q100 160 125 120" fill="none" stroke="#111" stroke-width="3" />
-                            <path d="M100 125 L90 150 L100 160 L110 150 Z" fill="#111" />
-                            <path d="M80 95 Q85 90 90 95" fill="none" stroke="#000" stroke-width="2" />
-                            <path d="M110 95 Q115 90 120 95" fill="none" stroke="#000" stroke-width="2" />
-                            <path d="M90 115 Q100 125 110 115" fill="none" stroke="#b91c1c" stroke-width="2" />
-                            <path d="M50 140 Q100 130 150 140 L160 200 L40 200 Z" fill="#dc2626" />
-                            <path d="M80 160 Q100 180 120 160 L130 150 Q100 140 70 150 Z" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
-                        </svg>
-                    </div>
-                    
-                    <div id="caishenText" class="opacity-0 transition-opacity duration-1000 delay-500 mt-4 transform scale-150">
-                        <div class="text-6xl font-black text-yellow-400 stroke-red-800 text-stroke drop-shadow-xl bg-red-900/90 px-8 py-3 rounded-full border-4 border-yellow-500 inline-block">
-                            財神爺到！
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Screen 3: Result -->
+      <div id="screenResult" class="screen">
+        <div class="resultCard">
+          <div class="badge">祝福已生成</div>
+          <div id="nameLine" class="bigName">—</div>
 
-            <div id="resultCard" class="prize-display w-[90%] max-w-md rounded-3xl p-8 text-center relative overflow-hidden transform scale-0 transition-transform duration-500 delay-1000 z-70">
-                <div class="absolute inset-0 bg-[radial-gradient(circle,rgba(255,215,0,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
-                
-                <h2 class="text-2xl font-bold text-yellow-200 mb-4 tracking-widest">恭喜獲得</h2>
-                
-                <div class="my-6 relative">
-                    <div class="absolute inset-0 bg-yellow-500/20 blur-xl rounded-full"></div>
-                    <span id="prizeAmount" class="relative text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-100 to-yellow-500 drop-shadow-sm">
-                        $500
-                    </span>
-                </div>
-                
-                <p id="prizeMsg" class="text-xl text-white font-medium leading-relaxed mb-8 border-t border-b border-yellow-500/30 py-4">
-                    </p>
-                
-                <button onclick="resetGameUI()" class="w-full py-4 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold rounded-xl shadow-lg border border-yellow-500/50 text-xl transition transform hover:scale-105">
-                    🧧 歡喜收下 🧧
-                </button>
-            </div>
+          <div class="gift">
+            <div class="label">🎁 好運入手</div>
+            <div id="giftLine" class="value">—</div>
+          </div>
+
+          <div class="quote" id="quoteBox">
+            「—」
+            <small id="quoteAuthor">—</small>
+          </div>
+
+          <div class="actions">
+            <button id="copyBtn" class="ghost" type="button">複製結果文字</button>
+            <button id="resetBtn" class="primarySmall" type="button">下一位啟動</button>
+          </div>
+
+          <div class="footerNote">祝福已完成生成，請領取你的紅包祝福。</div>
         </div>
-        
-        <div id="gameOverArea" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90">
-            <div class="text-center p-8 border-2 border-yellow-600 rounded-2xl bg-red-950/50 backdrop-blur">
-                <div class="text-6xl mb-4">🏮</div>
-                <h3 class="text-3xl text-yellow-400 font-bold mb-4">紅包圓滿發送完畢</h3>
-                <p class="text-white/80 text-lg mb-6">祝林家 2026 年<br>蛇年行大運，富貴萬萬年！</p>
-                <button onclick="location.reload()" class="text-sm text-yellow-600 underline hover:text-yellow-400">
-                    重新載入獎池
-                </button>
-            </div>
-        </div>
+      </div>
+    </section>
+  </main>
 
-        <div class="text-center mt-12 text-yellow-500/30 text-xs font-serif tracking-[0.3em]">
-             LIN FAMILY EXCLUSIVE © 2026
-        </div>
-    </div>
+  <script>
+    // ===== Config =====
+    const REWARDS = [
+      { amount: 500, label: "500 元「希望無窮」刮刮樂" },
+      { amount: 200, label: "200 元「希望無窮」刮刮樂" }
+    ];
 
-    <canvas id="confetti"></canvas>
+    // Use short, warm, non-controversial lines (no political/religious content).
+    // If you want “名人” attribution, replace author with a real verified name you prefer.
+    // Here we keep it safe and generic: “新年箴言”.
+    const QUOTES = [
+      { text: "一步一步走，好運就在路上。", author: "新年箴言" },
+      { text: "心定了，路就亮了。", author: "新年箴言" },
+      { text: "新的一年，願努力都有回應。", author: "新年箴言" },
+      { text: "行動，就是最好的祝福。", author: "新年箴言" },
+      { text: "慢慢來，也是一種前進。", author: "新年箴言" },
+      { text: "願你所走的每一步，都靠近心之所向。", author: "新年箴言" },
+      { text: "把希望留在心裡，好運自然會來。", author: "新年箴言" },
+      { text: "新年不是重來，而是更靠近。", author: "新年箴言" },
+      { text: "願善意成為你最長久的運氣。", author: "新年箴言" },
+      { text: "願今天的期待，成為明天的收穫。", author: "新年箴言" }
+    ];
 
-    <script>
-        // --- 獎項與符號設定 ---
-        // 符號：金塊(🪙), 金元寶(💰), 紅包袋(🧧), 鑽石(💎), 財神爺(👲)
-        
-        const initialPrizePool = [
-            // $500 組 (5個) - 財神爺 (👲)
-            { amount: 500, symbol: '👲', msg: "五福臨門！2026 氣勢如虹，事業學業都頂尖！" },
-            { amount: 500, symbol: '👲', msg: "財源滾滾！堅持到底，成功就在不遠處！" },
-            { amount: 500, symbol: '👲', msg: "鴻運當頭！你的潛力無限，今年大放異彩！" },
-            { amount: 500, symbol: '👲', msg: "大吉大利！保持熱情，世界會為你讓路！" },
-            { amount: 500, symbol: '👲', msg: "心想事成！勇敢追夢，你就是自己的光！" },
+    // ===== State =====
+    let amount = 1;
+    let currentName = "";
+    let currentReward = null;
+    let currentQuote = null;
 
-            // $200 組 (5個) - 鑽石 (💎)
-            { amount: 200, symbol: '💎', msg: "好事成雙！每天進步一點點，一年後將大不同！" },
-            { amount: 200, symbol: '💎', msg: "龍馬精神！挑戰是成長的養分，擁抱它！" },
-            { amount: 200, symbol: '💎', msg: "步步高升！心寬路就寬，樂觀迎接每一天！" },
-            { amount: 200, symbol: '💎', msg: "花開富貴！相信美好的事情即將發生！" },
-            { amount: 200, symbol: '💎', msg: "迎春納福！做自己的太陽，無需憑藉誰的光！" },
+    // ===== DOM =====
+    const screenInput  = document.getElementById("screenInput");
+    const screenSpin   = document.getElementById("screenSpin");
+    const screenResult = document.getElementById("screenResult");
 
-            // $100 組 (5個) - 紅包袋 (🧧)
-            { amount: 100, symbol: '🧧', msg: "一元復始！吃得好睡得好，健康沒煩惱！" },
-            { amount: 100, symbol: '🧧', msg: "歲歲平安！失敗是成功的墊腳石，別怕跌倒！" },
-            { amount: 100, symbol: '🧧', msg: "萬象更新！今天的努力，是為了未來的驚喜！" },
-            { amount: 100, symbol: '🧧', msg: "笑口常開！愛笑的人運氣不會太差！" },
-            { amount: 100, symbol: '🧧', msg: "吉祥如意！懂得感恩，幸福就會不期而遇！" }
-        ];
+    const nameInput = document.getElementById("nameInput");
+    const amountValue = document.getElementById("amountValue");
+    const minusBtn = document.getElementById("minusBtn");
+    const plusBtn = document.getElementById("plusBtn");
+    const startBtn = document.getElementById("startBtn");
 
-        // 轉盤混淆用的符號池
-        const fillerSymbols = ['🪙', '💰', '🧧', '💎', '👲', '🪙', '💰']; 
-        
-        let prizePool = [...initialPrizePool]; 
-        let isSpinning = false;
-        
-        // DOM Elements
-        const reel1 = document.getElementById('reel1');
-        const reel2 = document.getElementById('reel2');
-        const reel3 = document.getElementById('reel3');
-        const spinBtn = document.getElementById('spinBtn');
-        const resultOverlay = document.getElementById('resultOverlay');
-        const resultCard = document.getElementById('resultCard');
-        const caishenContainer = document.getElementById('caishenContainer');
-        const caishenImage = document.getElementById('caishenImage');
-        const caishenLight = document.getElementById('caishenLight');
-        const caishenText = document.getElementById('caishenText');
-        const gameOverArea = document.getElementById('gameOverArea');
+    const nameLine = document.getElementById("nameLine");
+    const giftLine = document.getElementById("giftLine");
+    const quoteBox = document.getElementById("quoteBox");
+    const quoteAuthor = document.getElementById("quoteAuthor");
 
-        function spin() {
-            if (isSpinning) return;
-            if (prizePool.length === 0) {
-                gameOverArea.classList.remove('hidden');
-                return;
-            }
+    const resetBtn = document.getElementById("resetBtn");
+    const copyBtn = document.getElementById("copyBtn");
 
-            isSpinning = true;
-            spinBtn.disabled = true;
-            
-            // 決定獎項
-            const randomIndex = Math.floor(Math.random() * prizePool.length);
-            const winningPrize = prizePool[randomIndex];
-            prizePool.splice(randomIndex, 1); 
+    const spinText = document.getElementById("spinText");
 
-            // 視覺特效：開始轉動
-            reel1.classList.add('blur');
-            reel2.classList.add('blur');
-            reel3.classList.add('blur');
-            spinBtn.innerText = "好 運 運 轉 中 ...";
+    // ===== Helpers =====
+    function show(screen){
+      [screenInput, screenSpin, screenResult].forEach(s => s.classList.remove("active"));
+      screen.classList.add("active");
+    }
 
-            let loopCount = 0;
-            const spinInterval = setInterval(() => {
-                reel1.innerText = getRandomFiller();
-                reel2.innerText = getRandomFiller();
-                reel3.innerText = getRandomFiller();
-                loopCount++;
-            }, 80);
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-            // 停止轉動邏輯
-            setTimeout(() => {
-                reel1.classList.remove('blur');
-                reel1.innerText = winningPrize.symbol;
-                playThudEffect(reel1);
-            }, 1500);
+    function pick(arr){
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
 
-            setTimeout(() => {
-                reel2.classList.remove('blur');
-                reel2.innerText = winningPrize.symbol;
-                playThudEffect(reel2);
-            }, 2200);
+    function normalizeName(raw){
+      const n = (raw || "").trim();
+      // Keep it friendly; allow Chinese/letters/numbers/spaces
+      return n.replace(/\s+/g, " ");
+    }
 
-            setTimeout(() => {
-                clearInterval(spinInterval);
-                reel3.classList.remove('blur');
-                reel3.innerText = winningPrize.symbol;
-                playThudEffect(reel3);
-                
-                // 延遲顯示結果
-                setTimeout(() => showResult(winningPrize), 800);
-            }, 3000);
-        }
+    function setAmount(next){
+      amount = clamp(next, 1, 9);
+      amountValue.textContent = String(amount);
+    }
 
-        function getRandomFiller() {
-            return fillerSymbols[Math.floor(Math.random() * fillerSymbols.length)];
-        }
+    function validate(){
+      const n = normalizeName(nameInput.value);
+      startBtn.disabled = n.length === 0;
+    }
 
-        function playThudEffect(el) {
-            el.style.transform = "scale(1.3)";
-            el.style.color = "#fff"; 
-            setTimeout(() => {
-                el.style.transform = "scale(1)";
-                el.style.color = "#333";
-            }, 150);
-        }
+    function renderResult(){
+      const displayName = currentName.length ? currentName : "你";
+      nameLine.textContent = `${displayName} 的新年好運`;
 
-        function showResult(prize) {
-            // 1. 顯示全螢幕遮罩
-            resultOverlay.classList.remove('hidden');
-            
-            // 2. 財神出場
-            caishenContainer.classList.remove('hidden');
-            
-            // 重置動畫 Class
-            caishenImage.classList.remove('caishen-active');
-            caishenImage.style.opacity = '0';
-            caishenImage.style.transform = 'translateY(50px) scale(0.5)';
-            
-            void caishenImage.offsetWidth; // trigger reflow
-            
-            // 播放財神動畫
-            caishenImage.classList.add('caishen-active');
-            
-            // 顯示光芒與文字
-            setTimeout(() => { caishenLight.style.opacity = '1'; }, 200);
-            setTimeout(() => { caishenText.classList.remove('opacity-0'); }, 800);
+      giftLine.textContent = `好運入手：${currentReward.label}`;
 
-            // 3. 啟動鞭炮雨特效
-            fireFirecrackerRain();
+      // Quote box with Chinese-style quotes
+      quoteBox.firstChild && (quoteBox.firstChild.textContent = `「${currentQuote.text}」`);
+      quoteAuthor.textContent = `— ${currentQuote.author}`;
+    }
 
-            // 4. 顯示卡片 (延遲一點讓財神先出來秀一下)
-            setTimeout(() => {
-                document.getElementById('prizeAmount').innerText = `$${prize.amount}`;
-                document.getElementById('prizeMsg').innerText = prize.msg;
-                
-                // 隱藏財神，切換到結果卡片
-                caishenContainer.classList.add('hidden');
-                // 關閉光芒
-                caishenLight.style.opacity = '0';
-                caishenText.classList.add('opacity-0');
-                
-                resultCard.classList.remove('scale-0');
-                resultCard.classList.add('scale-100');
-            }, 3000); // 讓財神秀久一點 (3秒)
+    function buildShareText(){
+      const displayName = currentName.length ? currentName : "我";
+      return [
+        "【馬年 · 好運啟動台】",
+        `${displayName} 的新年好運已生成`,
+        `🎁 ${currentReward.label}`,
+        `「${currentQuote.text}」— ${currentQuote.author}`
+      ].join("\n");
+    }
 
-            isSpinning = false;
-        }
+    // ===== Events =====
+    minusBtn.addEventListener("click", () => setAmount(amount - 1));
+    plusBtn.addEventListener("click", () => setAmount(amount + 1));
 
-        function resetGameUI() {
-            // 關閉視窗與特效
-            resultOverlay.classList.add('hidden');
-            resultCard.classList.remove('scale-100');
-            resultCard.classList.add('scale-0');
-            
-            // 重置財神狀態
-            caishenImage.classList.remove('caishen-active');
-            caishenLight.style.opacity = '0';
-            caishenText.classList.add('opacity-0');
+    nameInput.addEventListener("input", validate);
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !startBtn.disabled) startBtn.click();
+    });
 
-            if (prizePool.length === 0) {
-                spinBtn.innerText = "獎 項 已 空";
-                spinBtn.disabled = true;
-                setTimeout(() => {
-                    gameOverArea.classList.remove('hidden');
-                }, 1000);
-            } else {
-                spinBtn.disabled = false;
-                spinBtn.innerText = "下 一 位 接 財 神";
-            }
-        }
+    startBtn.addEventListener("click", () => {
+      currentName = normalizeName(nameInput.value);
+      if (!currentName) return;
 
-        // --- Canvas Effects (Confetti + Firecrackers) ---
-        function fireFirecrackerRain() {
-            const canvas = document.getElementById('confetti');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+      // pick reward + quote
+      currentReward = pick(REWARDS);
+      currentQuote = pick(QUOTES);
 
-            const particles = [];
-            
-            // 混合：金塊, 金元寶, 紅包, 財神等
-            const items = ['💰', '🪙', '🧧', '💎', '✨']; 
-            const colors = ['#ffd700', '#ff0000', '#ffffff', '#eab308'];
+      // Optional: small personalized spin line
+      spinText.textContent = `${currentName}，馬蹄聲起，願你步步向前。`;
 
-            // 產生大量粒子
-            for (let i = 0; i < 250; i++) {
-                const isText = Math.random() > 0.4; // 60% 機率是圖案
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height - 200,
-                    vx: Math.random() * 4 - 2,
-                    vy: Math.random() * 8 + 5,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    text: items[Math.floor(Math.random() * items.length)],
-                    size: Math.random() * 30 + 20,
-                    rotation: Math.random() * 360,
-                    rotationSpeed: Math.random() * 10 - 5,
-                    isText: isText
-                });
-            }
+      // Go spin
+      show(screenSpin);
 
-            let animationId;
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                let activeParticles = false;
+      // Simulate 9–11s “生成”
+      const ms = 9000 + Math.floor(Math.random() * 2000);
 
-                particles.forEach(p => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.rotation += p.rotationSpeed;
-                    p.vy += 0.05; 
-                    
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.rotation * Math.PI / 180);
-                    
-                    if (p.isText) {
-                        ctx.font = `${p.size}px serif`;
-                        ctx.textAlign = "center";
-                        ctx.textBaseline = "middle";
-                        ctx.fillText(p.text, 0, 0);
-                    } else {
-                        // 彩帶
-                        ctx.fillStyle = p.color;
-                        ctx.fillRect(-p.size/4, -p.size/4, p.size/2, p.size/2);
-                    }
-                    
-                    ctx.restore();
+      window.setTimeout(() => {
+        renderResult();
+        show(screenResult);
+      }, ms);
+    });
 
-                    if (p.y < canvas.height + 100) activeParticles = true;
-                });
+    resetBtn.addEventListener("click", () => {
+      // reset
+      currentName = "";
+      currentReward = null;
+      currentQuote = null;
+      nameInput.value = "";
+      setAmount(1);
+      validate();
+      show(screenInput);
+      nameInput.focus();
+    });
 
-                if (activeParticles) {
-                    animationId = requestAnimationFrame(animate);
-                }
-            }
-            animate();
-        }
-        
-        window.addEventListener('resize', () => {
-            const c = document.getElementById('confetti');
-            if(c) {
-                c.width = window.innerWidth;
-                c.height = window.innerHeight;
-            }
-        });
-    </script>
+    copyBtn.addEventListener("click", async () => {
+      const text = buildShareText();
+      try{
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "已複製 ✔";
+        window.setTimeout(() => (copyBtn.textContent = "複製結果文字"), 1200);
+      }catch(err){
+        // Fallback: prompt
+        window.prompt("複製以下文字：", text);
+      }
+    });
+
+    // Init
+    setAmount(1);
+    validate();
+    nameInput.focus();
+  </script>
 </body>
 </html>
