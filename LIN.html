@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>馬年好運啟動台｜語音朗讀版</title>
+    <title>馬年好運啟動台｜點擊播放語音版</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -89,6 +89,24 @@
         }
         .btn-primary:hover { background-color: var(--accent-gold); color: #3B0A09; font-weight: bold; }
 
+        /* --- 播放語音按鈕 (隱藏/顯示控制) --- */
+        .btn-play-audio {
+            display: none; /* 預設隱藏 */
+            background-color: rgba(212, 175, 55, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 10px 25px;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            animation: pulsePlay 2s infinite;
+        }
+        .btn-play-audio:hover { background-color: var(--accent-gold); color: #3B0A09; }
+        @keyframes pulsePlay { 0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); } 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } }
+
         /* --- 萬馬奔騰圖片動畫區 --- */
         .spin-circle {
             width: 240px; height: 240px; border: 3px dashed var(--accent-gold);
@@ -127,7 +145,7 @@
         .reward-box { background: var(--bg-dark-panel); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 30px; width: 85%; margin: 20px 0; }
         .reward-title { font-size: 1rem; color: var(--text-light); opacity: 0.8; margin-bottom: 10px; }
         .reward-content { font-size: 1.8rem; color: var(--accent-gold); font-weight: bold; }
-        .quote-text { font-size: 1.1rem; line-height: 1.6; padding: 0 20px; margin: 30px 0; opacity: 0.9; }
+        .quote-text { font-size: 1.1rem; line-height: 1.6; padding: 0 20px; margin: 30px 0 10px 0; opacity: 0.9; }
         
         .special-quote { 
             display: block; margin-top: 15px; font-size: 1.25rem; 
@@ -175,7 +193,7 @@
     <div class="secret-seal" onclick="triggerAdmin()">福</div>
 
     <div id="screen-input" class="screen active">
-        <h1 class="title">2026馬年<br>好運啟動台</h1>
+        <h1 class="title">馬年好運啟動台</h1>
         <div class="subtitle">轉動的不是運氣，是迎接好運的心意</div>
         <div class="divider"></div>
         <input type="text" id="userName" class="name-input" placeholder="請寫下您的名字" maxlength="8" autocomplete="off">
@@ -207,6 +225,9 @@
         </div>
 
         <div id="resultQuote" class="quote-text serif-text"></div>
+        
+        <button id="btnPlayAudio" class="btn-play-audio" onclick="playSecretAudio()">🔊 聆聽專屬祝福</button>
+
         <div class="divider"></div>
         <button class="btn-primary" onclick="resetToHome()" style="font-size: 1rem; padding: 10px 30px;">下一位接好運</button>
     </div>
@@ -239,24 +260,26 @@
 
 <script>
     const ADMIN_PIN = "8888"; 
+    
+    let currentAudio = null; // 存放當前的音樂物件
 
     // 🌟 家族專屬 VIP 祝福彩蛋名單 🌟
     const specialGuests = {
-        "華哥": "越來越帥還瘦身成功，根本逆齡示範組。財庫補好、氣色發光，丙午年旺到像開外掛，連莊又自摸只是日常，全家最穩靠山。",
-        "惠美": "氣質好到自帶柔焦濾鏡，神似林志玲的優雅與從容。國標100分、回頭率200%，親戚都在問：這位女神還收不收粉絲？走到哪都是焦點，難怪人人搶著欣賞與靠近。",
-        "許月": "可愛又慈善，笑容一出就讓人安心。家中真正的扛把子，溫暖又有智慧，說話就是成交，根本天生的銷售高手。",
-        "洵": "籃球、羽球、網球樣樣來，運動靠熱情不靠天分。嘴上不說，行動最誠實；家人是最愛。",
-        "永國": "小酒窩一笑大家先投降，水電維修直接全包。早餐好吃到像開早市，技術與胃口雙滿足，手藝好、心也暖，是生活系男神。",
-        "鼎來": "帥氣就是你的超能力，不用多說已經全場焦點。大家不搶演唱會門票，只想看你本人出現，存在感直接拉滿。",
-        "權陞": "溫柔又有愛心、眼神溫暖。連小貓咪都知道誰最值得依靠，自然黏上你，好人品一眼就看得出來。",
-        "勝宏": "運動高手，什麼都會一點還都很強。樣樣精通毫不張揚。帥氣外表下是自律與自信，站在那裡就讓人忍不住欣賞。",
-        "奕廷": "笑容乾淨又可愛，像陽光一樣讓人心情變好。不費力就迷倒眾生，是天生自帶好感度的小太陽，是未來紅包最多的潛力股。",
-        "妙娟": "細心溫柔到自帶安撫功能，聲音一出全場降噪。孫女自動黏緊緊，耐心與愛藏在細節裡，難怪成為孫女心中最安心的存在。",
-        "郁雯": "漂亮又有愛的護理師，自帶安心感光環。東西整理得乾乾淨淨，連空氣都很有秩序，是人美心細的最佳代表。",
-        "真妮": "警界校花本人無誤，顏值在線、氣質溫柔。站在那裡就很正義，讓人懷疑是不是制服本身都在加分。",
-        "彬": "帥氣穩重，羽球場上的實力派。事業與球技同步成長，是讓人放心又值得恭喜的存在。",
-        "蕎蕎": "兩歲就可愛到犯規，愛運動、活力滿滿。一雙迷人眼睛笑起來，全場自動融化，完全是家族開心果。",
-        "毓秀": "聲音溫柔讓人一聽就安心，廚藝好到大家自動加飯。歌聲悅耳、又熱愛爬山，是能把生活過得又暖又健康的代表。"
+        "華哥": "✨ 越來越帥還瘦身成功，根本逆齡示範組。財庫補好、氣色發光，丙午年旺到像開外掛，連莊又自摸只是日常，全家最穩靠山。",
+        "惠美": "✨ 氣質好到自帶柔焦濾鏡，神似林志玲的優雅與從容。國標100分、回頭率200%，親戚都在問：這位女神還收不收粉絲？走到哪都是焦點，難怪人人搶著欣賞與靠近。",
+        "許月": "✨ 可愛又慈善，笑容一出就讓人安心。家中真正的扛把子，溫暖又有智慧，說話就是成交，根本天生的銷售高手。",
+        "洵": "✨ 籃球、羽球、網球樣樣來，運動靠熱情不靠天分。嘴上不說，行動最誠實；家人是最愛。",
+        "永國": "✨ 小酒窩一笑大家先投降，水電維修直接全包。早餐好吃到像開早市，技術與胃口雙滿足，手藝好、心也暖，是生活系男神。",
+        "鼎來": "✨ 帥氣就是你的超能力，不用多說已經全場焦點。大家不搶演唱會門票，只想看你本人出現，存在感直接拉滿。",
+        "權陞": "✨ 溫柔又有愛心、眼神溫暖。連小貓咪都知道誰最值得依靠，自然黏上你，好人品一眼就看得出來。",
+        "勝宏": "✨ 運動高手，什麼都會一點還都很強。樣樣精通毫不張揚。帥氣外表下是自律與自信，站在那裡就讓人忍不住欣賞。",
+        "奕廷": "✨ 笑容乾淨又可愛，像陽光一樣讓人心情變好。不費力就迷倒眾生，是天生自帶好感度的小太陽，是未來紅包最多的潛力股。",
+        "妙娟": "✨ 細心溫柔到自帶安撫功能，聲音一出全場降噪。孫女自動黏緊緊，耐心與愛藏在細節裡，難怪成為孫女心中最安心的存在。",
+        "郁雯": "✨ 漂亮又有愛的護理師，自帶安心感光環。東西整理得乾乾淨淨，連空氣都很有秩序，是人美心細的最佳代表。",
+        "真妮": "✨ 警界校花本人無誤，顏值在線、氣質溫柔。站在那裡就很正義，讓人懷疑是不是制服本身都在加分。",
+        "彬": "✨ 帥氣穩重，羽球場上的實力派。事業與球技同步成長，是讓人放心又值得恭喜的存在。",
+        "蕎蕎": "✨ 兩歲就可愛到犯規，愛運動、活力滿滿。一雙迷人眼睛笑起來，全場自動融化，完全是家族開心果。",
+        "毓秀": "✨ 聲音溫柔讓人一聽就安心，廚藝好到大家自動加飯。歌聲悅耳、又熱愛爬山，是能把生活過得又暖又健康的代表。"
     };
 
     const quotes = [
@@ -282,7 +305,7 @@
         "帶著初心出發，新的一年，前程必定繁花似錦。"
     ];
 
-    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V9'));
+    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V11'));
     
     if (!appData) {
         appData = { 
@@ -292,28 +315,11 @@
         saveData();
     }
 
-    function saveData() { localStorage.setItem('luckyDrawDataCNY_V9', JSON.stringify(appData)); }
+    function saveData() { localStorage.setItem('luckyDrawDataCNY_V11', JSON.stringify(appData)); }
 
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
-    }
-
-    // 🌟 語音朗讀功能 🌟
-    function speakText(text) {
-        if ('speechSynthesis' in window) {
-            // 每次唸之前先打斷之前的，避免重疊
-            window.speechSynthesis.cancel();
-            
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'zh-TW'; // 設定為台灣中文發音
-            utterance.rate = 0.95;    // 語速稍微放慢，比較有感情與穩重感
-            utterance.pitch = 1;      // 正常音調
-            
-            window.speechSynthesis.speak(utterance);
-        } else {
-            console.log("此設備瀏覽器不支援語音功能");
-        }
     }
 
     function startSpin() {
@@ -321,12 +327,6 @@
         if (!nameInput) {
             alert("請留下您的名字，讓好運找到您！");
             return;
-        }
-        
-        // 為了觸發蘋果 iOS 設備的語音權限，在點擊按鈕時先給一個空白靜音喚醒
-        if ('speechSynthesis' in window) {
-            let silentUtterance = new SpeechSynthesisUtterance('');
-            window.speechSynthesis.speak(silentUtterance);
         }
 
         switchScreen('screen-spin');
@@ -343,6 +343,10 @@
         let finalQuote = quotes[Math.floor(Math.random() * quotes.length)];
         let finalReward = null;
         let rewardText = "純祝福";
+        
+        // 每次顯示新結果前，先隱藏播放按鈕
+        const btnPlayAudio = document.getElementById('btnPlayAudio');
+        btnPlayAudio.style.display = 'none';
 
         document.getElementById('resultName').innerText = `${name} 的新年好運`;
 
@@ -359,34 +363,47 @@
 
         const timeString = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
         appData.history.unshift({
-            time: timeString,
-            name: name,
-            reward: rewardText,
-            quote: finalQuote
+            time: timeString, name: name, reward: rewardText, quote: finalQuote
         });
         saveData();
 
-        // 🌟 組合金句顯示內容與要「唸出來的台詞」
+        // 🌟 組合金句顯示內容 🌟
         let quoteHtml = `「${finalQuote}」`;
-        let textToRead = finalQuote; // 系統預備要唸的字
-
         if (specialGuests[name]) {
-            quoteHtml += `<span class="special-quote">✨ ${specialGuests[name]}</span>`;
-            // 如果有專屬彩蛋，就把彩蛋內容加進去一起唸！
-            textToRead += " 特別祝福您，" + specialGuests[name]; 
+            quoteHtml += `<span class="special-quote">${specialGuests[name]}</span>`;
+            
+            // 系統在背景偷偷準備好音檔，但不自動播放
+            try {
+                let audioFileName = name + ".mp3"; 
+                currentAudio = new Audio(audioFileName);
+                // 顯示播放按鈕，讓家人自己決定何時點擊
+                btnPlayAudio.style.display = 'inline-block';
+            } catch (error) {
+                console.log("音效準備失敗");
+            }
         }
         
         document.getElementById('resultQuote').innerHTML = quoteHtml;
         switchScreen('screen-result');
+    }
 
-        // 觸發朗讀！
-        speakText(textToRead);
+    // 🌟 點擊按鈕後執行播放 🌟
+    function playSecretAudio() {
+        if (currentAudio) {
+            // 如果音樂正在播，就重頭播
+            currentAudio.currentTime = 0;
+            currentAudio.play().catch(e => {
+                alert("播放失敗，請確認手機/平板是否開啟靜音，或音檔是否已上傳。");
+            });
+        }
     }
 
     function resetToHome() {
-        // 如果還沒唸完，點擊下一位時自動閉嘴
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
+        // 點擊下一位時，關閉聲音
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio = null;
         }
 
         document.getElementById('userName').value = '';
@@ -394,6 +411,7 @@
         switchScreen('screen-input');
     }
 
+    // --- 後台管理區 ---
     let secretClicks = 0;
     let clickTimer;
 
