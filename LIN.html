@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>馬年好運啟動台｜點擊播放語音</title>
+    <title>2026 馬年好運啟動台｜最終完美版</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -87,11 +87,12 @@
             font-family: var(--font-serif); letter-spacing: 2px; cursor: pointer;
             transition: all 0.3s; background: rgba(212, 175, 55, 0.1);
         }
-        .btn-primary:hover { background-color: var(--accent-gold); color: #3B0A09; font-weight: bold; }
+        .btn-primary:hover:not(:disabled) { background-color: var(--accent-gold); color: #3B0A09; font-weight: bold; }
+        .btn-primary:disabled { cursor: not-allowed; }
 
         /* --- 播放語音按鈕 (隱藏/顯示控制) --- */
         .btn-play-audio {
-            display: none; /* 預設隱藏 */
+            display: none; 
             background-color: rgba(212, 175, 55, 0.15);
             color: var(--accent-gold);
             border: 1px solid var(--accent-gold);
@@ -145,7 +146,12 @@
         .reward-box { background: var(--bg-dark-panel); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 30px; width: 85%; margin: 20px 0; }
         .reward-title { font-size: 1rem; color: var(--text-light); opacity: 0.8; margin-bottom: 10px; }
         .reward-content { font-size: 1.8rem; color: var(--accent-gold); font-weight: bold; }
-        .quote-text { font-size: 1.1rem; line-height: 1.6; padding: 0 20px; margin: 30px 0 10px 0; opacity: 0.9; }
+        
+        /* 修改：穩定版面高度，防止字數少時跳動 */
+        .quote-text { 
+            font-size: 1.1rem; line-height: 1.6; padding: 0 20px; margin: 30px 0 10px 0; opacity: 0.9; 
+            min-height: 80px; display: flex; flex-direction: column; justify-content: center;
+        }
         
         .special-quote { 
             display: block; margin-top: 15px; font-size: 1.25rem; 
@@ -198,7 +204,7 @@
         <div class="divider"></div>
         <input type="text" id="userName" class="name-input" placeholder="請寫下您的名字" maxlength="8" autocomplete="off">
         <div class="divider"></div>
-        <button class="btn-primary" onclick="startSpin()">啟動好運</button>
+        <button id="btnStartSpin" class="btn-primary" onclick="startSpin()">啟動好運</button>
     </div>
 
     <div id="screen-spin" class="screen">
@@ -261,9 +267,8 @@
 <script>
     const ADMIN_PIN = "8888"; 
     
-    let currentAudio = null; // 存放當前的音樂物件
+    let currentAudio = null; 
 
-    // 🌟 家族專屬 VIP 祝福彩蛋名單 🌟
     const specialGuests = {
         "華哥": "✨ 越來越帥還瘦身成功，根本逆齡示範組。財庫補好、氣色發光，丙午年旺到像開外掛，連莊又自摸只是日常，全家最穩靠山。",
         "惠美": "✨ 氣質好到自帶柔焦濾鏡，神似林志玲的優雅與從容。國標100分、回頭率200%，親戚都在問：這位女神還收不收粉絲？走到哪都是焦點，難怪人人搶著欣賞與靠近。",
@@ -281,7 +286,7 @@
         "蕎蕎": "✨ 兩歲就可愛到犯規，愛運動、活力滿滿。一雙迷人眼睛笑起來，全場自動融化，完全是家族開心果。",
         "愛美": "✨ 可愛又動人，學習力強到讓人佩服，易經研究得頭頭是道。當班長根本眾望所歸，走到哪都自帶聚光燈，是家族最亮的一顆星。",
         "彥綸": "✨ 越來越年輕，黑頭髮悄悄回歸，連黑斑都懂得自動淡出。靠的不是保養品，是多年堅持與毅力，新的一年繼續帥得很有底氣。",
-        "美怡": "✨ 美麗有氣質，自帶女神光環，幼稚園小朋友搶著抱。籃球場上的擦板女王，家中小甜心兼軍師，新的一年繼續用魅力與智慧收服全場。。"
+        "美怡": "✨ 美麗有氣質，自帶女神光環，幼稚園小朋友搶著抱。籃球場上的擦板女王，家中小甜心兼軍師，新的一年繼續用魅力與智慧收服全場。",
         "毓秀": "✨ 聲音溫柔讓人一聽就安心，廚藝好到大家自動加飯。歌聲悅耳、又熱愛爬山，是能把生活過得又暖又健康的代表。"
     };
 
@@ -308,7 +313,8 @@
         "帶著初心出發，新的一年，前程必定繁花似錦。"
     ];
 
-    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V11'));
+    // 更新至 V12 確保舊有庫存與設定不衝突
+    let appData = JSON.parse(localStorage.getItem('luckyDrawDataCNY_V12'));
     
     if (!appData) {
         appData = { 
@@ -318,7 +324,7 @@
         saveData();
     }
 
-    function saveData() { localStorage.setItem('luckyDrawDataCNY_V11', JSON.stringify(appData)); }
+    function saveData() { localStorage.setItem('luckyDrawDataCNY_V12', JSON.stringify(appData)); }
 
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -331,6 +337,15 @@
             alert("請留下您的名字，讓好運找到您！");
             return;
         }
+
+        // 🌟 新增防手抖連點機制
+        const btnStart = document.getElementById('btnStartSpin');
+        btnStart.disabled = true;
+        btnStart.style.opacity = '0.5';
+
+        // 靜音喚醒 Audio，確保後續能正常發聲
+        let unlockAudio = new Audio('');
+        unlockAudio.play().catch(e => {}); 
 
         switchScreen('screen-spin');
         
@@ -347,7 +362,6 @@
         let finalReward = null;
         let rewardText = "純祝福";
         
-        // 每次顯示新結果前，先隱藏播放按鈕
         const btnPlayAudio = document.getElementById('btnPlayAudio');
         btnPlayAudio.style.display = 'none';
 
@@ -370,17 +384,22 @@
         });
         saveData();
 
-        // 🌟 組合金句顯示內容 🌟
         let quoteHtml = `「${finalQuote}」`;
         if (specialGuests[name]) {
             quoteHtml += `<span class="special-quote">${specialGuests[name]}</span>`;
             
-            // 系統在背景偷偷準備好音檔，但不自動播放
+            // 🌟 強化音檔載入防呆與編碼機制
             try {
-                let audioFileName = name + ".mp3"; 
+                let audioFileName = encodeURIComponent(name) + ".mp3"; 
                 currentAudio = new Audio(audioFileName);
-                // 顯示播放按鈕，讓家人自己決定何時點擊
+                
+                // 先顯示按鈕，若真的載入失敗再隱藏
                 btnPlayAudio.style.display = 'inline-block';
+                
+                currentAudio.onerror = function() {
+                    console.log("未找到音檔或無法讀取：" + name + ".mp3");
+                    btnPlayAudio.style.display = 'none'; // 找不到音檔就自動隱藏播放鈕
+                };
             } catch (error) {
                 console.log("音效準備失敗");
             }
@@ -390,19 +409,16 @@
         switchScreen('screen-result');
     }
 
-    // 🌟 點擊按鈕後執行播放 🌟
     function playSecretAudio() {
         if (currentAudio) {
-            // 如果音樂正在播，就重頭播
             currentAudio.currentTime = 0;
             currentAudio.play().catch(e => {
-                alert("播放失敗，請確認手機/平板是否開啟靜音，或音檔是否已上傳。");
+                alert("播放失敗，請確認手機/平板是否開啟靜音，或網頁權限是否阻擋聲音。");
             });
         }
     }
 
     function resetToHome() {
-        // 點擊下一位時，關閉聲音
         if (currentAudio) {
             currentAudio.pause();
             currentAudio.currentTime = 0;
@@ -410,11 +426,16 @@
         }
 
         document.getElementById('userName').value = '';
+        
+        // 🌟 恢復首頁啟動按鈕的點擊狀態
+        const btnStart = document.getElementById('btnStartSpin');
+        btnStart.disabled = false;
+        btnStart.style.opacity = '1';
+        
         document.getElementById('spinner').classList.remove('spinning');
         switchScreen('screen-input');
     }
 
-    // --- 後台管理區 ---
     let secretClicks = 0;
     let clickTimer;
 
@@ -461,7 +482,15 @@
         const qty200 = parseInt(document.getElementById('setQty200').value) || 0;
         const qty100 = parseInt(document.getElementById('setQty100').value) || 0;
 
+        // 🌟 雙重確認機制：防止活動中誤觸清空
         if(confirm(`確定要重新開始活動嗎？\n這將清空所有紀錄，並設定為：\n500元: ${qty500}張\n200元: ${qty200}張\n100元: ${qty100}張`)) {
+            
+            const check = prompt("防呆確認：請輸入『確認清空』四個字以執行重置");
+            if(check !== "確認清空") {
+                alert("輸入錯誤，已為您取消重置操作。");
+                return;
+            }
+
             let newInventory = [];
             for(let i=0; i < qty500; i++) newInventory.push("500");
             for(let i=0; i < qty200; i++) newInventory.push("200");
