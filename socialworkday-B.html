@@ -9,183 +9,248 @@
     
     <style>
         :root {
-            --warm-orange: #E65100; --hope-yellow: #FFD54F; --soft-bg: #FFF8E1;
-            --text-dark: #2c2c2c; --console-body: #F57F17; --console-dark: #3E2723;
-            --ent-blue: #0277BD; 
+            --warm-orange: #E65100; --hope-yellow: #FFD54F; --soft-bg: #FFF9F2;
+            --text-dark: #4E342E; --console-body: #F57F17; --console-dark: #3E2723;
+            --ent-blue: #0277BD; --heart-red: #E53935;
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* --- App 佈局設定 (解決一頁式過長問題) --- */
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; color: var(--text-dark); background-color: var(--soft-bg); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        .view-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 70px; /* 留給底部導覽列的空間 */ }
-        .view { display: none; width: 100%; min-height: 100%; flex-direction: column; align-items: center; padding: 20px; animation: fadeIn 0.3s ease-out; }
+        
+        .view-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 70px; padding-top: 30px; scroll-behavior: smooth; }
+        .view { display: none; width: 100%; min-height: 100%; flex-direction: column; align-items: center; padding: 20px; animation: fadeIn 0.4s ease-out; }
         .view.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 底部導覽列 (Bottom Tab Bar) --- */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; background: #222; border-top: 3px solid var(--warm-orange); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
-        .tab-item { color: #888; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: bold; cursor: pointer; flex: 1; transition: 0.2s; }
-        .tab-item.active { color: var(--hope-yellow); }
+        /* --- Demo Bar (測試切換用，固定於最上方) --- */
+        .demo-bar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; padding: 5px; z-index: 3000; }
+        .demo-btn { background: #444; color: #fff; border: 1px solid #666; padding: 4px 10px; font-size: 10px; border-radius: 4px; cursor: pointer; margin: 0 4px; }
+        .demo-btn:hover { background: var(--warm-orange); }
+
+        /* --- 底部導覽列 --- */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; background: #fff; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); }
+        .tab-item { color: #bbb; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: bold; cursor: pointer; flex: 1; transition: 0.2s; }
+        .tab-item.active { color: var(--warm-orange); }
         .tab-icon { font-size: 22px; margin-bottom: 4px; transition: transform 0.2s; }
-        .tab-item.active .tab-icon { transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 0 5px var(--hope-yellow)); }
+        .tab-item.active .tab-icon { transform: translateY(-3px) scale(1.1); }
 
-        /* --- 視圖 1: 首頁 (Hero) --- */
-        #view-home { background: linear-gradient(rgba(60,40,30,0.4), rgba(60,40,30,0.8)), url('https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; color: #fff; justify-content: center; text-align: center; }
-        .edition-tag { background: var(--hope-yellow); color: #333; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
-        .main-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 15px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .poetry-box { background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); padding: 20px; border-left: 4px solid var(--hope-yellow); margin-bottom: 30px; font-size: 1rem; line-height: 1.6; text-align: left; }
-        .hp-bar-container { width: 100%; max-width: 400px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 1px solid #aaa; }
-        .hp-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; color: var(--hope-yellow); font-family: 'Press Start 2P'; }
-        .hp-track { width: 100%; height: 20px; background: #222; border-radius: 10px; overflow: hidden; }
-        .hp-fill { height: 100%; width: 78%; background: linear-gradient(90deg, #FF9800, #FFD54F); }
-        .btn-go-game { background: var(--warm-orange); color: #fff; border: none; padding: 15px 40px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; margin-top: 30px; box-shadow: 0 4px 15px rgba(230,81,0,0.5); cursor: pointer; }
+        /* --- 視圖 1: 首頁 --- */
+        #view-home { 
+            background-color: var(--soft-bg);
+            background-image: radial-gradient(circle at 15% 10%, rgba(255, 204, 128, 0.4) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 171, 145, 0.3) 0%, transparent 50%);
+            justify-content: flex-start; padding-top: 30px; 
+        }
+        .edition-tag { background: #FFE0B2; color: #E65100; padding: 6px 16px; border-radius: 20px; font-weight: bold; margin-bottom: 15px; font-size: 0.8rem; letter-spacing: 1px; }
+        .main-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 20px; color: #4E342E; letter-spacing: 1px; text-align: center;}
+        .poetry-box { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.8; color: #6D4C41; box-shadow: 0 8px 25px rgba(0,0,0,0.03); width: 100%; max-width: 400px; text-align: left; }
+        .hp-bar-container { width: 100%; max-width: 400px; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 30px; border: 1px solid #f9f9f9; }
+        .hp-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; color: #E65100; font-family: 'Press Start 2P'; }
+        .hp-track { width: 100%; height: 12px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .hp-fill { height: 100%; width: 78%; background: linear-gradient(90deg, #FFB74D, #FF9800); border-radius: 10px;}
+        .btn-go-game { background: #E65100; color: #fff; border: none; padding: 16px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(230,81,0,0.3); cursor: pointer; width: 100%; max-width: 400px; transition: 0.2s; }
+        .btn-go-game:active { transform: scale(0.98); }
 
-        /* --- 視圖 2: 遊戲機 (Game) --- */
+        /* 企業 CSR 提示 */
+        .csr-hint { font-size: 12px; color: var(--ent-blue); text-align: center; margin-bottom: 10px; font-family: 'Noto Sans TC'; border: 1px dashed var(--ent-blue); padding: 8px; border-radius: 4px; background: rgba(2, 119, 189, 0.1); display: none; font-weight:bold; }
+
+        /* --- 視圖 2: 遊戲機 --- */
         #view-game { background-color: var(--console-dark); background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); justify-content: center; }
         .daily-limit-badge { background: #000; color: #00FF00; padding: 8px 15px; border-radius: 5px; margin-bottom: 15px; border: 2px solid #555; font-size: 10px; font-family: 'Press Start 2P'; text-shadow: 0 0 5px #00FF00; }
-        .arcade-marquee { width: 100%; max-width: 400px; background: #000; border: 4px solid #555; border-bottom: none; border-radius: 8px 8px 0 0; height: 36px; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
-        .ticker-text { display: inline-block; padding-left: 100%; animation: ticker 20s linear infinite; color: #00FF00; font-size: 10px; font-family: 'Press Start 2P'; text-shadow: 0 0 5px #00FF00; }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-        
-        .game-console { background-color: var(--console-body); padding: 15px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 400px; border-radius: 0 0 8px 8px; }
-        .screen { background: #fff; border: 4px solid #222; height: 480px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; overflow-y: auto; overflow-x: hidden; }
+        .game-console { background-color: var(--console-body); padding: 15px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 400px; border-radius: 8px; }
+        .screen { background: #fff; border: 4px solid #222; height: 520px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; overflow-y: auto; overflow-x: hidden; position: relative;}
 
-        /* 遊戲狀態 */
-        .state-idle, .state-spinning { text-align: center; margin-top: 130px; font-family: 'Press Start 2P'; }
-        .state-spinning { display: none; }
+        .state-idle, .state-spinning, .state-steps { text-align: center; margin-top: 100px; font-family: 'Press Start 2P'; width: 100%; }
+        .state-spinning, .state-steps { display: none; margin-top: 150px; }
+        .radar-spinner { width: 60px; height: 60px; border: 4px solid #eee; border-top: 4px solid var(--warm-orange); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .quest-progress { display: none; justify-content: space-between; width: 100%; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee; position: sticky; top: 0; background: #fff; z-index: 10; }
+        .q-step { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #ccc; flex: 1; transition: 0.3s; font-weight: bold;}
+        .q-icon { font-size: 18px; margin-bottom: 5px; background: #f5f5f5; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: 0.3s; border: 2px solid transparent;}
+        .q-step.active { color: var(--warm-orange); }
+        .q-step.active .q-icon { background: #FFE0B2; border-color: var(--warm-orange); transform: scale(1.15); box-shadow: 0 0 10px rgba(230,81,0,0.2); }
+        .q-step.completed { color: #888; }
+        .q-step.completed .q-icon { background: #e0e0e0; border-color: #aaa; }
+
         .state-quest { display: none; width: 100%; flex-direction: column; }
         .step-container { display: none; flex-direction: column; width: 100%; animation: fadeIn 0.5s; }
         
-        .real-photo-frame { width: 100%; height: 160px; background: #000; margin-bottom: 10px; border: 2px solid #333; border-radius: 4px; overflow: hidden; }
+        .real-photo-frame { width: 100%; height: 160px; background: #000; margin-bottom: 10px; border: 2px solid #333; border-radius: 4px; overflow: hidden; position: relative;}
         .real-photo { width: 100%; height: 100%; object-fit: cover; }
+        .unit-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--hope-yellow); padding: 4px 10px; font-size: 14px; font-weight: bold; border: 1px solid var(--hope-yellow); }
         
-        /* 表單元件 */
         .input-group { margin-bottom: 15px; }
-        .input-group label { font-size: 12px; color: #555; display: block; margin-bottom: 8px; font-weight: bold; }
-        .tag-row { display: flex; gap: 5px; flex-wrap: wrap; }
-        .tag-btn { font-size: 12px; padding: 6px 12px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; background: #fafafa; }
+        .input-group label { font-size: 13px; color: #333; display: block; margin-bottom: 10px; font-weight: bold; }
+        .tag-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag-btn { font-size: 13px; padding: 8px 15px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; background: #fafafa; transition: 0.2s;}
         .tag-btn.active { background: var(--warm-orange); color: #fff; border-color: var(--warm-orange); }
 
         .supply-grid { display: flex; flex-direction: column; gap: 8px; }
-        .supply-item { border: 1px solid #ddd; border-radius: 8px; padding: 10px; cursor: pointer; background: #fafafa; display: flex; align-items: center; gap: 10px; }
-        .supply-item.selected { border-color: var(--warm-orange); background: #FFF3E0; box-shadow: 0 2px 5px rgba(230,81,0,0.2); }
-        .supply-icon { font-size: 24px; }
-        .supply-content { text-align: left; flex: 1; line-height: 1.3;}
-        .supply-title { font-size: 13px; font-weight: bold; color: var(--warm-orange); }
-        .supply-desc { font-size: 10px; color: #666; }
+        .supply-item { border: 1px solid #ddd; border-radius: 8px; padding: 12px; cursor: pointer; background: #fafafa; display: flex; align-items: center; gap: 10px; transition: 0.2s;}
+        .supply-item.selected { border-color: var(--warm-orange); background: #FFF3E0; box-shadow: 0 2px 5px rgba(230,81,0,0.2); transform: translateX(3px); }
+        .supply-icon { font-size: 26px; }
+        .supply-content { text-align: left; flex: 1; line-height: 1.4;}
+        .supply-title { font-size: 14px; font-weight: bold; color: var(--warm-orange); }
+        .supply-desc { font-size: 11px; color: #666; }
 
-        .smart-chips { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 5px; }
-        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 4px 10px; border-radius: 12px; font-size: 11px; white-space: nowrap; cursor: pointer; }
+        .smart-chips { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 8px; }
+        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 5px 12px; border-radius: 15px; font-size: 12px; white-space: nowrap; cursor: pointer; }
         textarea, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; font-size: 14px; outline: none;}
         textarea:focus, input[type="text"]:focus { border-color: var(--warm-orange); }
         
+        .upload-wrapper { position: relative; width: 100%; }
+        .btn-upload { border: 2px dashed #ccc; background: #fff; color: #888; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; font-weight:bold; }
+        .btn-upload:hover { border-color: var(--warm-orange); color: var(--warm-orange); background: #FFF3E0; }
+        .upload-input { position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
         .step-controls { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-step { flex: 1; background: #333; color: #fff; border: none; padding: 12px; font-family: 'Noto Sans TC'; font-weight:bold; font-size: 12px; cursor: pointer; border-radius: 4px; }
+        .btn-step { flex: 1; background: #333; color: #fff; border: none; padding: 12px; font-family: 'Noto Sans TC'; font-weight:bold; font-size: 13px; cursor: pointer; border-radius: 4px; }
         .btn-step.primary { background: var(--warm-orange); }
 
-        /* --- 投幣區動畫優化 (解決掉入問題) --- */
+        /* 投幣區 */
         .coin-area { display: flex; justify-content: flex-end; align-items: flex-end; height: 60px; padding-right: 10px; position: relative; margin-bottom: 15px; }
-        .insert-hint { position: absolute; right: 60px; top: 10px; font-size: 10px; color: #fff; font-family: 'Noto Sans TC'; animation: pulse 1.5s infinite; }
-        
-        /* 投幣孔與愛心的相對位置容器 */
+        .insert-hint { position: absolute; right: 60px; top: 10px; font-size: 10px; color: #fff; font-family: 'Noto Sans TC'; animation: pulseHint 1.5s infinite; }
         .slot-wrapper { position: relative; width: 40px; height: 60px; display: flex; justify-content: center; align-items: flex-end; }
         .coin-slot { width: 18px; height: 45px; background: #000; border: 2px solid #555; border-radius: 4px; box-shadow: inset 0 0 10px #000; z-index: 2; }
-        
-        /* 愛心預設在投幣孔上方漂浮，Z-index 較小，所以掉落時會被黑色孔蓋住 */
         .heart-token { font-size: 35px; position: absolute; top: -10px; z-index: 1; cursor: pointer; animation: float 2s infinite; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5)); }
         
         @keyframes float { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-8px);} }
-        
-        /* 物理掉落動畫：上拉蓄力 -> 直接掉入洞內縮小 */
-        @keyframes dropIn { 
-            0% { transform: translateY(0) scale(1); opacity: 1; } 
-            30% { transform: translateY(-15px) scale(1.1); opacity: 1; } 
-            100% { transform: translateY(45px) scale(0.1); opacity: 0; } 
-        }
+        @keyframes dropIn { 0% { transform: translateY(0) scale(1); opacity: 1; } 30% { transform: translateY(-15px) scale(1.1); opacity: 1; } 100% { transform: translateY(45px) scale(0.1); opacity: 0; } }
+        @keyframes pulseHint { 0%, 100% {opacity: 0.5;} 50% {opacity: 1;} }
 
         .btn-main-start { background: #999; color: #fff; border: 4px solid #555; padding: 15px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: pointer; border-radius: 4px; transition: 0.3s; }
         .btn-main-start.unlocked { background: #FF1744; border-color: #880E4F; animation: pulse 2s infinite; box-shadow: 0 4px 0 #880E4F; }
-        .btn-main-start.unlocked:active { transform: translateY(4px); box-shadow: none; }
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
-
-        /* --- 視圖 3: 搜尋與致敬 (Search) --- */
-        #view-search { background: #ECEFF1; justify-content: center; }
-        .db-console { max-width: 400px; width: 100%; background: #fff; padding: 30px 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
-        .search-input { width: 100%; padding: 12px; border: 1px solid #aaa; border-radius: 5px; margin: 15px 0; font-size: 14px; }
-        .search-btn { background: var(--console-dark); color: #fff; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
         
-        /* 贊助商區塊 */
-        .sponsor-list { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
+        /* --- 視圖 3: 搜尋與致敬 (含隱藏入口) --- */
+        #view-search { background: #ECEFF1; justify-content: flex-start; padding-top: 40px; }
+        .db-console { max-width: 400px; width: 100%; background: #fff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+        .search-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin: 15px 0; font-size: 14px; background: #fafafa;}
+        .search-btn { background: #4E342E; color: #fff; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        .sponsor-list { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
         .sponsor-badge { border: 1px solid #ddd; padding: 8px 15px; border-radius: 30px; font-weight: bold; color: #888; font-size: 0.8rem; background: #fafafa;}
+        
+        /* 隱藏入口連結 */
+        .secret-links { margin-top: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;}
+        .secret-btn { background: transparent; border: 1px dashed #bbb; color: #888; padding: 6px 12px; font-size: 11px; border-radius: 4px; cursor: pointer; text-decoration: none; }
+        .secret-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
 
-        /* --- Modals (預覽卡片與背包) --- */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .close-btn { cursor: pointer; color: #fff; font-size: 20px; font-weight: bold; }
+        /* --- 視圖 4: 祝福瀑布牆 --- */
+        #view-waterfall { background: #f5f5f5; justify-content: flex-start; padding: 20px 10px; }
+        .waterfall-header { width: 100%; max-width: 500px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 10px;}
+        .waterfall-title { font-size: 1.5rem; font-weight: bold; color: #4E342E; margin: 0; }
+        .waterfall-grid { width: 100%; max-width: 500px; column-count: 2; column-gap: 15px; }
+        .waterfall-card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); break-inside: avoid; border-top: 4px solid #FFB74D; }
+        .wf-head { font-size: 11px; color: #999; margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 5px;}
+        .wf-head strong { color: #E65100; font-size: 12px; display: block; margin-bottom: 2px;}
+        .wf-msg { font-size: 14px; color: #333; line-height: 1.5; margin-bottom: 12px; }
+        .wf-prop { font-size: 10px; color: #fff; background: #ccc; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+        .wf-actions { display: flex; justify-content: space-between; border-top: 1px solid #f5f5f5; padding-top: 10px; }
+        .action-btn-sm { background: transparent; border: none; font-size: 12px; color: #888; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;}
+        .action-btn-sm.liked { color: var(--heart-red); }
+        .wf-comments { margin-top: 10px; background: #fafafa; border-radius: 6px; padding: 8px; font-size: 11px; color: #555; }
+        .wf-comment-item { border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 4px; }
+        .wf-comment-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
-        #capture-target { background: #fff; width: 100%; max-width: 320px; padding: 25px; border-radius: 4px; margin: 0 auto; font-family: 'Noto Serif TC', serif; text-align: left; position: relative; }
+        /* --- Modals (共用與專屬) --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px);}
+        .close-btn { cursor: pointer; color: #fff; font-size: 24px; font-weight: bold; }
+
+        /* 預覽卡片與企業收據 */
+        #capture-target { background: #fff; width: 100%; max-width: 320px; padding: 25px; border-radius: 8px; margin: 0 auto; font-family: 'Noto Serif TC', serif; text-align: left; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .card-header { display: flex; justify-content: space-between; font-size: 10px; color: #999; margin-bottom: 15px; font-family: 'Noto Sans TC'; }
-        .card-img-box { width: 100%; height: 200px; overflow: hidden; margin-bottom: 15px; background: #eee; position: relative; }
+        .card-img-box { width: 100%; height: 200px; overflow: hidden; margin-bottom: 15px; background: #eee; position: relative; border-radius:4px;}
         .card-img { width: 100%; height: 100%; object-fit: cover; }
         .prop-sticker { position: absolute; bottom: 10px; right: 10px; background: #fff; padding: 5px 10px; border-radius: 20px; font-size: 10px; font-family: 'Noto Sans TC'; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transform: rotate(-5deg); display: none; border: 1px solid #FFD54F; color: #E65100; font-weight: bold;}
-        .card-tag { background: #000; color: #fff; padding: 4px 8px; font-size: 10px; display: inline-block; margin-bottom: 10px; font-family: 'Noto Sans TC'; }
-        .card-msg { font-size: 1.1rem; font-weight: 600; line-height: 1.5; color: #222; margin-bottom: 20px; min-height: 50px; }
+        .card-tag { background: #000; color: #fff; padding: 4px 8px; font-size: 10px; display: inline-block; margin-bottom: 10px; font-family: 'Noto Sans TC'; border-radius:3px;}
+        .card-msg { font-size: 1.1rem; font-weight: 600; line-height: 1.6; color: #333; margin-bottom: 20px; min-height: 50px; }
         .card-footer { border-top: 1px solid #eee; padding-top: 15px; font-size: 0.8rem; color: #666; font-family: 'Noto Sans TC'; display: flex; justify-content: space-between; align-items: flex-end; }
         
+        .receipt-box { background: rgba(2, 119, 189, 0.05); border: 1px dashed var(--ent-blue); padding: 10px; margin-top: 15px; border-radius: 4px; font-family: 'Noto Sans TC'; font-size: 10px; color: #555; display: none; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .receipt-total { border-top: 1px solid #ccc; padding-top: 5px; margin-top: 5px; color: var(--ent-blue); font-weight: bold; font-size: 11px; }
+
         .modal-actions { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; margin-left: auto; margin-right: auto;}
         .action-btn { padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; border: none; font-family: 'Noto Sans TC'; font-size: 14px; }
         .btn-download { background: var(--warm-orange); color: #fff; }
-        .btn-back { background: transparent; color: #ccc; border: 1px solid #555; }
+        .btn-back { background: transparent; color: #fff; border: 1px solid #fff; }
 
-        /* Inventory (背包) */
-        .inventory-box { background: #fff; width: 100%; max-width: 400px; height: 75vh; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-        .inventory-header { background: var(--console-dark); color: #fff; padding: 15px; text-align: center; font-family: 'Press Start 2P'; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
-        .inventory-list { padding: 15px; overflow-y: auto; flex: 1; background: #f5f5f5; }
-        .ticket-card { background: #fff; border: 1px solid #ddd; border-left: 5px solid var(--warm-orange); padding: 15px; margin-bottom: 10px; border-radius: 4px; }
-        
+        /* HR Dashboard & Social Worker Modal */
+        .hr-dashboard-box { background: #FAFAFA; width: 100%; max-width: 500px; height: 85vh; border-radius: 8px; display: flex; flex-direction: column; font-family: 'Noto Sans TC'; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .hr-header { background: #5D4037; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .hr-body { padding: 20px; overflow-y: auto; flex: 1; }
+        .hr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .hr-card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .hr-metric { font-size: 1.8rem; font-weight: bold; color: var(--warm-orange); display: block; margin-top: 5px; font-family: 'Press Start 2P'; }
+        .ranking-list { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 15px; }
+        .ranking-item { display: flex; padding: 10px 0; border-bottom: 1px dashed #eee; font-size: 13px; color: #444; align-items: center;}
+        .ranking-badge { background: var(--console-dark); color: #fff; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; font-size: 10px; margin-right: 10px; font-weight: bold; }
+
+        .sw-box { background: #fff; width: 100%; max-width: 400px; padding: 30px; border-radius: 10px; text-align: center; font-family: 'Noto Serif TC', serif; }
+        .sw-title { font-size: 1.5rem; color: var(--console-dark); margin-bottom: 20px; font-weight: bold; font-family: 'Noto Sans TC'; }
+        .sw-intro { color: #555; line-height: 1.8; margin-bottom: 30px; font-size: 1.1rem; text-align: left;}
+        .sw-highlight { color: #E65100; font-weight: bold; background: #FFF3E0; padding: 0 5px; }
+
+        /* Inventory */
+        .inventory-box { background: #fafafa; width: 100%; max-width: 400px; height: 75vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+        .inventory-header { background: #4E342E; color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight:bold; }
+        .inventory-list { padding: 15px; overflow-y: auto; flex: 1; }
+        .ticket-card { background: #fff; border: 1px solid #eee; border-left: 4px solid var(--warm-orange); padding: 15px; margin-bottom: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+
     </style>
 </head>
 <body>
+
+    <div class="demo-bar">
+        <button class="demo-btn" onclick="forceDemo('台積電')">科技業</button>
+        <button class="demo-btn" onclick="forceDemo('富邦金控')">金融業</button>
+        <button class="demo-btn" onclick="forceDemo('')">一般民眾</button>
+    </div>
 
     <nav class="bottom-nav">
         <div class="tab-item active" onclick="switchView('view-home', this)">
             <span class="tab-icon">🏠</span><span>首頁</span>
         </div>
-        <div class="tab-item" onclick="switchView('view-game', this)">
-            <span class="tab-icon">🕹️</span><span>任務</span>
-        </div>
         <div class="tab-item" onclick="switchView('view-search', this)">
-            <span class="tab-icon">🔍</span><span>致敬</span>
+            <span class="tab-icon">🔍</span><span>搜尋</span>
+        </div>
+        <div class="tab-item" onclick="switchView('view-waterfall', this)">
+            <span class="tab-icon">💬</span><span>祝福牆</span>
         </div>
         <div class="tab-item" onclick="openInventory()">
             <span class="tab-icon">🎒</span><span>背包</span>
         </div>
     </nav>
 
-    <div class="view-container">
+    <div class="view-container" id="main-scroll-container">
         
         <main id="view-home" class="view active">
             <div class="edition-tag">2026 第七屆</div>
             <h1 class="main-title">給社工愛的鼓勵</h1>
             <div class="poetry-box">
-                <p>有些人，長期站在最前線，卻很少被問一句：「你還好嗎？」</p>
-                <p>今年，GC 贈物網邀請你，<strong>不用捐錢，只留下一句真心的話。</strong></p>
+                有些人，長期站在最前線<br>接住別人最難的時候<br>卻很少被問一句：「你還好嗎？」<br><br>
+                <strong>今年，不需物資、不用捐錢。<br>只邀請你，留下一句真心的話。</strong>
             </div>
+            
+            <div id="csr-hint" class="csr-hint"></div>
+
             <div class="hp-bar-container">
-                <div class="hp-info"><span>GLOBAL ENERGY</span><span>LV. 78</span></div>
+                <div class="hp-info">
+                    <span>GLOBAL ENERGY <span id="ent-badge-hero" style="color:var(--ent-blue); display:none;">| CSR MATCH</span></span>
+                    <span>LV. 78</span>
+                </div>
                 <div class="hp-track"><div class="hp-fill"></div></div>
-                <div style="font-size:10px; color:#ccc; margin-top:5px; text-align:right;">全台累積 <span id="global-count-display">12,540</span> 則祝福</div>
+                <div style="font-size:10px; color:#999; margin-top:5px; text-align:right;">全台累積 <span id="global-count-display">12,540</span> 則祝福</div>
             </div>
-            <button class="btn-go-game" onclick="document.querySelectorAll('.tab-item')[1].click()">開始任務 (START) ▶</button>
+            <div class="home-btn-group">
+                <button class="btn-go-game" onclick="switchView('view-game', null)">開始任務 (START) ▶</button>
+            </div>
         </main>
 
         <main id="view-game" class="view">
             <div class="daily-limit-badge">TODAY'S ENERGY: <span id="daily-count-display">3</span> / 3</div>
             
-            <div class="arcade-marquee">
-                <div class="ticker-text" id="marquee-content">王小明 給了 華山基金會 一個讚 ❤️ 匿名勇者 獲得 鼎王湯底... ❤️ 李小姐 上傳了照片...</div>
-            </div>
-
             <div class="game-console">
                 <div class="screen">
                     <div id="state-idle" class="state-idle">
@@ -194,164 +259,193 @@
                     </div>
 
                     <div id="state-spinning" class="state-spinning">
-                        <div>SEARCHING...</div>
-                        <div id="spin-icon" style="font-size: 40px; margin-top: 20px;">❤️</div>
+                        <div style="font-size: 12px; color: #E65100; margin-bottom: 15px; font-family:'Press Start 2P';">MATCHING...</div>
+                        <div class="radar-spinner"></div>
+                        <div id="shuffle-unit-name" style="margin-top: 30px; font-size: 16px; font-weight: bold; color: #333; background: #f0f0f0; padding: 10px 20px; border-radius: 30px; border: 2px dashed #ccc; font-family:'Noto Sans TC';">
+                            正在尋找連線單位...
+                        </div>
+                    </div>
+
+                    <div class="quest-progress" id="quest-progress">
+                        <div class="q-step" id="q-step-1"><div class="q-icon">🏷️</div><span>1. 標籤</span></div>
+                        <div class="q-step" id="q-step-2"><div class="q-icon">🎁</div><span>2. 補給</span></div>
+                        <div class="q-step" id="q-step-3"><div class="q-icon">💌</div><span>3. 祝福</span></div>
                     </div>
 
                     <div id="state-quest" class="state-quest">
-                        
                         <div id="step-1" class="step-container">
                             <div class="real-photo-frame">
                                 <img id="quest-img" class="real-photo" src="">
                                 <div id="story-unit" class="unit-badge">單位名稱</div>
                             </div>
-                            <div style="font-size:13px; color:#666; margin-bottom:15px;" id="story-desc">故事內容...</div>
-                            
+                            <div style="font-size:13px; color:#666; margin-bottom:15px; line-height:1.6;" id="story-desc">故事內容...</div>
                             <div class="input-group">
                                 <label>📝 選擇最符合的標籤 (必選)：</label>
                                 <div class="tag-row" id="tag-container"></div>
                             </div>
-                            
-                            <div class="step-controls">
-                                <button class="btn-step primary" onclick="goToStep2()">確認支援 (NEXT) &gt;</button>
-                            </div>
+                            <div class="step-controls"><button class="btn-step primary" onclick="goToStep(2)">下一步：挑選補給 &gt;</button></div>
                         </div>
 
                         <div id="step-2" class="step-container">
                             <div class="input-group">
-                                <label>🎁 贈送補給品 (贊助夥伴)：</label>
+                                <label>🎁 挑選補給用品 (贊助夥伴)：</label>
                                 <div class="supply-grid">
-                                    <div class="supply-item" onclick="selectProp(this, '鼎王湯底', '🍲')">
-                                        <div class="supply-icon">🍲</div>
-                                        <div class="supply-content"><div class="supply-title">暖心體力湯</div><div class="supply-desc">鼎王麻辣鍋</div></div>
-                                    </div>
-                                    <div class="supply-item" onclick="selectProp(this, '艾瑪絲洗髮', '🚿')">
-                                        <div class="supply-icon">🚿</div>
-                                        <div class="supply-content"><div class="supply-title">淨化防禦水</div><div class="supply-desc">艾瑪絲</div></div>
-                                    </div>
-                                    <div class="supply-item" onclick="selectProp(this, '蓓朵娜防曬', '☀️')">
-                                        <div class="supply-icon">☀️</div>
-                                        <div class="supply-content"><div class="supply-title">顏值守護霜</div><div class="supply-desc">蓓朵娜</div></div>
-                                    </div>
+                                    <div class="supply-item" onclick="selectProp(this, '鼎王湯底', '🍲')"><div class="supply-icon">🍲</div><div class="supply-content"><div class="supply-title">暖心體力湯</div><div class="supply-desc">下班後被好好照顧 (鼎王)</div></div></div>
+                                    <div class="supply-item" onclick="selectProp(this, '艾瑪絲洗髮', '🚿')"><div class="supply-icon">🚿</div><div class="supply-content"><div class="supply-title">淨化防禦水</div><div class="supply-desc">洗掉一整天疲憊 (艾瑪絲)</div></div></div>
+                                    <div class="supply-item" onclick="selectProp(this, '蓓朵娜防曬', '☀️')"><div class="supply-icon">☀️</div><div class="supply-content"><div class="supply-title">顏值守護霜</div><div class="supply-desc">擋掉外界的消耗 (蓓朵娜)</div></div></div>
                                 </div>
                             </div>
-
-                            <div class="input-group">
-                                <label>💬 寫下鼓勵 (點擊金句自動填入)：</label>
-                                <div class="smart-chips">
-                                    <div class="smart-chip" onclick="fillInput('辛苦了，謝謝你們！')">辛苦了</div>
-                                    <div class="smart-chip" onclick="fillInput('謝謝你們接住了受傷的人。')">接住受傷的人</div>
-                                    <div class="smart-chip" onclick="fillInput('記得好好吃飯。')">記得吃飯</div>
-                                </div>
-                                <textarea id="msg-input" rows="2" placeholder="也可以自己寫喔..."></textarea>
-                            </div>
-
-                            <div class="input-group">
-                                <label>✍️ 署名：</label>
-                                <input type="text" id="sign-input" placeholder="例如：王小明">
-                            </div>
-
-                            <div class="step-controls">
-                                <button class="btn-step" onclick="backToStep1()">&lt; 返回</button>
-                                <button class="btn-step primary" onclick="generatePreview()">預覽卡片 (PREVIEW)</button>
-                            </div>
+                            <div class="step-controls"><button class="btn-step" onclick="goToStep(1)">&lt; 返回</button><button class="btn-step primary" onclick="goToStep(3)">下一步：給予祝福 &gt;</button></div>
                         </div>
 
+                        <div id="step-3" class="step-container">
+                            <div class="input-group">
+                                <label>💬 寫下鼓勵 (點擊自動填入)：</label>
+                                <div class="smart-chips" id="dynamic-presets"></div>
+                                <textarea id="msg-input" rows="2" placeholder="也可以自己寫喔..."></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>📷 上傳照片 (可選，沒傳會用預設暖圖)：</label>
+                                <div class="upload-wrapper"><button class="btn-upload">上傳一張照片</button><input type="file" id="user-photo-upload" class="upload-input" accept="image/*" onchange="previewUserPhoto()"></div>
+                            </div>
+                            <div class="input-group">
+                                <label>✍️ 您的署名：</label>
+                                <input type="text" id="sign-input" placeholder="如：王小明 / 匿名勇者">
+                            </div>
+                            <div class="step-controls"><button class="btn-step" onclick="goToStep(2)">&lt; 返回</button><button class="btn-step primary" id="btn-preview-trigger" onclick="generatePreview()">預覽成果 (PREVIEW)</button></div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="coin-area">
                     <div id="insert-hint" class="insert-hint">點擊愛心 或 按鈕 ▶</div>
-                    <div class="slot-wrapper">
-                        <div id="heart-token" class="heart-token" onclick="handleCoinInsert()">❤️</div>
-                        <div class="coin-slot"></div>
-                    </div>
+                    <div class="slot-wrapper"><div id="heart-token" class="heart-token" onclick="handleCoinInsert()">❤️</div><div class="coin-slot"></div></div>
                 </div>
-                
                 <button id="btn-start-game" class="btn-main-start" onclick="handleMainButtonClick()">請先投幣 (INSERT LOVE)</button>
             </div>
         </main>
 
         <main id="view-search" class="view">
             <div class="db-console">
-                <h3 style="color:#5D4037; margin:0 0 10px 0;">🔍 尋找更多光芒</h3>
-                <p style="color:#666; font-size: 0.9rem; line-height: 1.5;">
-                    想鼓勵的單位不在遊戲機裡？<br>
-                    GC 站內 <strong>640 間</strong> 公益單位，輸入名稱或 ID 都能傳達心意。
-                </p>
+                <h3 style="color:#4E342E; margin:0 0 10px 0;">🔍 尋找更多光芒</h3>
+                <p style="color:#666; font-size: 0.9rem; line-height: 1.5;">想鼓勵的單位不在遊戲機裡？<br>GC 站內 <strong>640 間</strong> 公益單位，輸入名稱或 ID 都能傳達心意。</p>
                 <input type="text" class="search-input" placeholder="例如：勵馨、芒草心...">
-                <button class="search-btn" onclick="alert('搜尋功能展示：將載入該單位並開啟留言流程。')">開始搜尋 (SEARCH)</button>
+                <button class="search-btn" onclick="alert('展示功能：將載入該單位。')">開始搜尋 (SEARCH)</button>
                 
-                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
-                
+                <hr style="border: 0; border-top: 1px dashed #eee; margin: 30px 0;">
                 <div style="font-size: 0.8rem; letter-spacing: 2px; color: #999; margin-bottom:15px;">特別感謝榮譽夥伴</div>
-                <div class="sponsor-list">
-                    <span class="sponsor-badge">蓓朵娜</span>
-                    <span class="sponsor-badge">艾瑪絲</span>
-                    <span class="sponsor-badge">鼎王</span>
+                <div class="sponsor-list"><span class="sponsor-badge">蓓朵娜</span><span class="sponsor-badge">艾瑪絲</span><span class="sponsor-badge">鼎王</span></div>
+            </div>
+            
+            <div class="secret-links">
+                <div onclick="openSWLayer()" class="secret-btn">🔒 社工專屬通道</div>
+                <div onclick="openHRDashboard()" class="secret-btn">📊 企業戰情室</div>
+            </div>
+        </main>
+
+        <main id="view-waterfall" class="view">
+            <div class="waterfall-header">
+                <h2 class="waterfall-title">💬 祝福瀑布牆</h2>
+                <span style="font-size:12px; color:#888;">全站即時動態</span>
+            </div>
+            <div class="waterfall-grid" id="waterfall-grid">
+                <div class="waterfall-card">
+                    <div class="wf-head"><strong>王小明</strong>To 華山基金會</div>
+                    <div class="wf-msg">天氣變冷了，各位社工訪視時也要注意保暖喔！</div>
+                    <div class="wf-prop">🍲 贈送 暖心體力湯</div>
+                    <div class="wf-actions"><button class="action-btn-sm" onclick="toggleLike(this)"><span class="icon">🤍</span> <span class="count">24</span></button><button class="action-btn-sm" onclick="openCommentModal(this)">💬 <span class="count">2</span></button></div>
+                    <div class="wf-comments" style="display:block;"><div class="wf-comment-item"><strong style="color:#0277BD;">社工小編:</strong> 收到滿滿溫暖，謝謝你！</div><div class="wf-comment-item"><strong style="color:#0277BD;">路人A:</strong> 真的辛苦了！</div></div>
+                </div>
+                <div class="waterfall-card">
+                    <div class="wf-head"><strong>Sarah</strong>To 伯大尼之家</div>
+                    <div class="wf-msg">照顧憨兒是一件不容易的事，這點小小心意希望能給你們一點力量。</div>
+                    <div class="wf-prop">☀️ 贈送 顏值守護霜</div>
+                    <div class="wf-actions"><button class="action-btn-sm" onclick="toggleLike(this)"><span class="icon">🤍</span> <span class="count">18</span></button><button class="action-btn-sm" onclick="openCommentModal(this)">💬 <span class="count">0</span></button></div>
                 </div>
             </div>
         </main>
 
-    </div> <div id="preview-modal" class="modal-overlay">
+    </div>
+
+    <div id="preview-modal" class="modal-overlay">
         <div>
             <div id="capture-target">
                 <div class="card-header"><span>GC GIVE CIRCLE</span><span>2026</span></div>
-                <div class="card-img-box">
-                    <img id="card-img" class="card-img" src="">
-                    <div id="prop-sticker" class="prop-sticker"><span id="prop-icon"></span> <span id="prop-text"></span></div>
-                </div>
+                <div class="card-img-box"><img id="card-img" class="card-img" src=""><div id="prop-sticker" class="prop-sticker"><span id="prop-icon"></span> <span id="prop-text"></span></div></div>
                 <div id="card-tag" class="card-tag">#TAG</div>
                 <div id="card-msg" class="card-msg">留言...</div>
-                <div class="card-footer">
-                    <div>To: <strong id="card-to">單位</strong></div>
-                    <div>From: <span id="card-from">我</span></div>
+                
+                <div id="ent-receipt" class="receipt-box">
+                    <div class="receipt-row"><span>個人傳送心意</span><span>COMPLETE</span></div>
+                    <div class="receipt-row"><span>企業相對提撥</span><span style="color:var(--ent-blue);">$ 10.00</span></div>
+                    <div class="receipt-total" id="receipt-sponsor-name">總社會效益倍率：1000%</div>
                 </div>
+
+                <div class="card-footer"><div>To: <strong id="card-to">單位</strong></div><div>From: <span id="card-from">我</span></div></div>
             </div>
-            <div class="modal-actions">
-                <button id="btn-confirm" class="action-btn btn-download">✅ 確認送出 (獲得抽獎機會)</button>
-                <button onclick="closeModal('preview-modal')" class="action-btn btn-back">修改內容</button>
-            </div>
+            <div class="modal-actions"><button id="btn-confirm" class="action-btn btn-download">✅ 確認送出 (發布至瀑布牆)</button><button onclick="closeModal('preview-modal')" class="action-btn btn-back">修改內容</button></div>
         </div>
     </div>
 
-    <div id="inventory-modal" class="modal-overlay">
-        <div class="inventory-box">
-            <div class="inventory-header"><span>🎒 勇者背包</span><span class="close-btn" onclick="closeModal('inventory-modal')">×</span></div>
-            <div class="inventory-list" id="inventory-list"></div>
-        </div>
-    </div>
+    <div id="inventory-modal" class="modal-overlay"><div class="inventory-box"><div class="inventory-header"><span>🎒 勇者背包</span><span class="close-btn" onclick="closeModal('inventory-modal')">×</span></div><div class="inventory-list" id="inventory-list"></div></div></div>
+    
+    <div id="comment-modal" class="modal-overlay"><div style="background:#fff; width:90%; max-width:320px; padding:25px; border-radius:12px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);"><h3 style="color:#4E342E; margin-top:0; margin-bottom:5px;">回覆這則祝福</h3><input type="text" id="comment-input" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:6px; margin:15px 0; outline:none;" placeholder="說點什麼吧..."><div style="display:flex; gap:10px;"><button class="action-btn btn-back" style="color:#555; border-color:#ccc; padding:10px;" onclick="closeModal('comment-modal')">取消</button><button class="action-btn btn-download" style="padding:10px;" onclick="submitComment()">發佈</button></div></div></div>
+
+    <div id="hr-dashboard" class="modal-overlay"><div class="hr-dashboard-box"><div class="hr-header"><div><div style="font-size:1.2rem; font-weight:bold; font-family:'Orbitron';">NEON DASHBOARD</div><div style="font-size:0.8rem; opacity:0.8;">企業 ESG 戰情室</div></div><span class="close-btn" onclick="closeModal('hr-dashboard')">✕</span></div><div class="hr-body"><div class="hr-grid"><div class="hr-card"><span class="hr-label">參與同仁人數</span><span class="hr-metric" id="hr-p-count">1,248</span></div><div class="hr-card"><span class="hr-label">累積公益積分</span><span class="hr-metric" id="hr-msg-count">3,560</span></div></div><div class="ranking-list"><h4 style="margin:0 0 15px 0; color:#5D4037; font-size:14px;">🏆 企業內部最熱門金句</h4><div id="hr-ranking-content"></div></div><button style="margin-top:20px; padding:15px; background:var(--ent-blue); color:#fff; border:none; width:100%; border-radius:6px; font-weight:bold;" onclick="alert('報表下載中...')">下載 ESG 結案報告 (PDF)</button></div></div></div>
+
+    <div id="sw-modal" class="modal-overlay"><div class="sw-box"><div style="text-align:right; margin-bottom:10px;"><span class="close-btn" style="color:#999;" onclick="closeModal('sw-modal')">×</span></div><div class="sw-title">致 親愛的夥伴</div><div class="sw-intro">這些祝福來自真實民眾，每一枚投下的愛心幣，都代表<span class="sw-highlight">有人停下來想到你</span>。<br>請收下這些溫暖，繼續照亮社會角落。</div><div style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee;"><h4 style="margin:0 0 15px 0; font-size:14px; color:#5D4037;">🏆 民眾票選・最想對你說的話：</h4><div style="margin-bottom: 10px; font-size: 13px; color: #444;"><span style="background:#333; color:#fff; border-radius:50%; width:20px; height:20px; display:inline-flex; justify-content:center; align-items:center; font-size:10px; margin-right:8px;">1</span> 辛苦了，謝謝你們一直都在！ <span style="color:#E65100">(3,240)</span></div><div style="margin-bottom: 10px; font-size: 13px; color: #444;"><span style="background:#333; color:#fff; border-radius:50%; width:20px; height:20px; display:inline-flex; justify-content:center; align-items:center; font-size:10px; margin-right:8px;">2</span> 謝謝你們接住了受傷的人。 <span style="color:#E65100">(2,105)</span></div><div style="margin-bottom: 10px; font-size: 13px; color: #444;"><span style="background:#333; color:#fff; border-radius:50%; width:20px; height:20px; display:inline-flex; justify-content:center; align-items:center; font-size:10px; margin-right:8px;">3</span> 希望世界對你，也能溫柔一點。 <span style="color:#E65100">(1,890)</span></div></div></div></div>
 
     <script>
-        // --- SPA 視圖切換邏輯 ---
+        // --- SPA 切換 ---
         function switchView(viewId, tabElement) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if(tabElement) tabElement.classList.add('active');
+            if(tabElement) {
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                tabElement.classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                if(viewId === 'view-game') document.querySelectorAll('.tab-item')[1].classList.add('active');
+            }
+            if(viewId === 'view-game') updateDailyDisplay();
         }
 
-        // --- 核心資料 ---
+        // --- Quotes Logic ---
+        const quotesData = {
+            public: ["辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。"],
+            tech: ["你們修復人心，就像我們修復 Bug 一樣堅持。", "社工是社會的晶片，維持著系統運作，辛苦了！"],
+            finance: ["你們承擔風險守護弱勢，這次換我們守護你。", "這份愛的投資，我們保證長期持有。"],
+            service: ["服務人的累我們都懂，今天換我們服務你。", "微笑背後的辛苦，我們感同身受。"]
+        };
+
         const units = [
-            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600", desc: "在國境之南陪伴140多位憨兒慢飛。", tags: ["#深夜燈塔", "#憨兒依靠"] },
-            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?w=600", desc: "穿梭偏鄉小巷，送的不只是便當是問候。", tags: ["#便當快遞", "#聽故事的人"] }
+            { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600", desc: "在國境之南，陪伴憨兒慢飛。這是一條漫長的路，但我們不曾放棄。", tags: ["#深夜燈塔", "#憨兒依靠"] },
+            { name: "華山基金會", img: "https://images.unsplash.com/photo-1516307365426-bea591f05011?w=600", desc: "穿梭偏鄉小巷，那件背心是獨居長輩唯一的盼望。送的不只是便當，是問候。", tags: ["#便當快遞", "#聽故事的人"] }
         ];
+        const defaultImages = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600", "https://images.unsplash.com/photo-1499209974431-2761388a123d?w=600"];
 
         let isCoinInserted = false;
         let currentUnit = null;
         let selectedTag = "";
         let selectedProp = null; 
+        let userImgData = null;
         let dailyCount = 0;
+        let totalCount = 12540;
         const todayStr = new Date().toLocaleDateString();
+        
+        let myTeamName = new URLSearchParams(window.location.search).get('team');
+        let currentQuoteList = quotesData.public;
 
         const heartToken = document.getElementById('heart-token');
         const btnStartGame = document.getElementById('btn-start-game');
         const stateIdle = document.getElementById('state-idle');
         const stateQuest = document.getElementById('state-quest');
+        const questProgress = document.getElementById('quest-progress');
         
-        // --- 初始化 ---
-        window.onload = function() { checkDailyLimit(); }
+        window.onload = function() { 
+            checkDailyLimit(); 
+            checkEnterpriseMode();
+        }
 
         function checkDailyLimit() {
             const savedDate = localStorage.getItem('gc_last_date');
@@ -359,9 +453,10 @@
                 localStorage.setItem('gc_last_date', todayStr);
                 localStorage.setItem('gc_daily_count', 0);
                 dailyCount = 0;
-            } else { 
-                dailyCount = parseInt(localStorage.getItem('gc_daily_count') || 0); 
-            }
+            } else { dailyCount = parseInt(localStorage.getItem('gc_daily_count') || 0); }
+            
+            const addedTotal = parseInt(localStorage.getItem('gc_total_added') || 0);
+            document.getElementById('global-count-display').innerText = (totalCount + addedTotal).toLocaleString();
             updateDailyDisplay();
         }
 
@@ -375,55 +470,95 @@
             }
         }
 
-        // --- 投幣與按鈕防呆邏輯 ---
+        // --- 企業模式切換 ---
+        function checkEnterpriseMode() {
+            currentQuoteList = quotesData.public; 
+            const entBadgeHero = document.getElementById('ent-badge-hero');
+            const csrHint = document.getElementById('csr-hint');
+
+            entBadgeHero.style.display = 'none';
+            csrHint.style.display = 'none';
+
+            if(myTeamName) {
+                const name = decodeURIComponent(myTeamName);
+                entBadgeHero.style.display = 'inline-block';
+                entBadgeHero.innerText = `| ${name} CSR MATCH`;
+                
+                csrHint.style.display = 'block';
+                csrHint.innerHTML = `✨ 本次送暖將由 <strong>${name}</strong> 額外提撥 $10 公益基金`;
+                
+                if (name.includes('台積電') || name.includes('科技')) currentQuoteList = quotesData.tech;
+                else if (name.includes('富邦') || name.includes('金融')) currentQuoteList = quotesData.finance;
+                else currentQuoteList = quotesData.service;
+            }
+        }
+
+        function forceDemo(name) {
+            const newUrl = new URL(window.location.href);
+            if(name) newUrl.searchParams.set('team', name); else newUrl.searchParams.delete('team');
+            window.history.pushState({}, '', newUrl);
+            myTeamName = name;
+            checkEnterpriseMode();
+            alert(`已切換模式：${name || '一般民眾'}。系統已同步專屬金句與贊助邏輯。`);
+        }
+
+        // --- 投幣與連線邏輯 ---
         function handleCoinInsert() {
             if (dailyCount >= 3) return alert("勇者休息一下，明天再來吧！");
             if (isCoinInserted) return;
             
-            // 隱藏提示
             document.getElementById('insert-hint').style.display = 'none';
-            
-            // 執行掉落動畫
             heartToken.style.animation = "none";
             setTimeout(() => { heartToken.style.animation = "dropIn 0.6s forwards cubic-bezier(0.5, -0.5, 0.5, 1.5)"; }, 10);
             
-            // 解鎖按鈕
             setTimeout(() => {
                 isCoinInserted = true;
-                btnStartGame.innerText = "轉動緣分 (START)";
+                btnStartGame.innerText = "連線中...";
                 btnStartGame.classList.add('unlocked');
-                stateIdle.innerHTML = '<div style="font-size:20px; margin-bottom:10px;">READY!</div>';
+                startGameSpin();
             }, 600);
         }
 
         function handleMainButtonClick() {
             if (dailyCount >= 3) return;
-            
-            // 防呆：如果還沒投幣，點大按鈕會自動幫忙投幣
-            if (!isCoinInserted) {
-                handleCoinInsert();
-            } else {
-                // 已經投幣，啟動轉盤
-                startGameSpin();
-            }
+            if (!isCoinInserted) handleCoinInsert(); 
         }
 
         function startGameSpin() {
             stateIdle.style.display = 'none';
             btnStartGame.style.display = 'none';
-            document.querySelector('.coin-area').style.display = 'none'; // 隱藏投幣區，騰出空間
-            
+            document.querySelector('.coin-area').style.display = 'none'; 
             document.getElementById('state-spinning').style.display = 'block';
 
-            setTimeout(() => { 
-                document.getElementById('state-spinning').style.display = 'none';
-                showQuest(); 
-            }, 1500);
+            const shuffleEl = document.getElementById('shuffle-unit-name');
+            const allUnitNames = units.map(u => u.name).concat(["勵馨基金會", "芒草心慈善協會", "伊甸基金會", "家扶基金會"]);
+            let shuffleCount = 0;
+            const shuffleInterval = setInterval(() => {
+                shuffleEl.innerText = allUnitNames[Math.floor(Math.random() * allUnitNames.length)];
+                shuffleCount++;
+                if (shuffleCount > 15) { 
+                    clearInterval(shuffleInterval);
+                    currentUnit = units[Math.floor(Math.random() * units.length)];
+                    shuffleEl.innerText = `✅ 成功連線：${currentUnit.name}`;
+                    shuffleEl.style.background = "#FFF3E0";
+                    shuffleEl.style.borderColor = "#E65100";
+                    shuffleEl.style.color = "#E65100";
+                    
+                    setTimeout(() => { 
+                        document.getElementById('state-spinning').style.display = 'none';
+                        showQuest(); 
+                        setTimeout(() => {
+                            shuffleEl.style.background = "#f0f0f0";
+                            shuffleEl.style.borderColor = "#ccc";
+                            shuffleEl.style.color = "#333";
+                            shuffleEl.innerText = "正在尋找連線單位...";
+                        }, 500);
+                    }, 1000); 
+                }
+            }, 80);
         }
 
-        // --- 任務流程 (兩步驟表單) ---
         function showQuest() {
-            currentUnit = units[Math.floor(Math.random() * units.length)];
             document.getElementById('quest-img').src = currentUnit.img;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerText = currentUnit.desc;
@@ -435,39 +570,65 @@
                 btn.onclick = () => { document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); selectedTag = tag; };
                 tagContainer.appendChild(btn);
             });
+
+            // 渲染金句
+            const container = document.getElementById('dynamic-presets');
+            container.innerHTML = '';
+            currentQuoteList.forEach(q => {
+                const chip = document.createElement('div');
+                chip.className = 'smart-chip'; chip.innerText = q.slice(0, 10) + '...';
+                chip.onclick = function() { fillInput(q); };
+                container.appendChild(chip);
+            });
             
             stateQuest.style.display = 'flex'; 
-            nextStep(1);
+            questProgress.style.display = 'flex'; 
+            goToStep(1);
         }
 
-        function nextStep(step) {
+        function goToStep(step) {
             document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
             document.getElementById(`step-${step}`).style.display = 'flex';
+            
+            for(let i=1; i<=3; i++) {
+                let qStep = document.getElementById(`q-step-${i}`);
+                if (i === step) {
+                    qStep.classList.add('active'); qStep.classList.remove('completed');
+                } else if (i < step) {
+                    qStep.classList.remove('active'); qStep.classList.add('completed');
+                } else {
+                    qStep.classList.remove('active'); qStep.classList.remove('completed');
+                }
+            }
+            document.querySelector('.screen').scrollTo(0,0);
         }
-        function goToStep2() {
-            if(!selectedTag) return alert("請先選擇一個標籤喔！");
-            nextStep(2);
-        }
-        function backToStep1() { nextStep(1); }
 
         function selectProp(el, name, icon) {
             document.querySelectorAll('.supply-item').forEach(i => i.classList.remove('selected'));
             el.classList.add('selected'); selectedProp = { name, icon };
         }
-
         function fillInput(text) { 
             const input = document.getElementById('msg-input');
             input.value = text; input.style.borderColor = "#E65100";
             setTimeout(() => input.style.borderColor = "#ddd", 300);
         }
+        function previewUserPhoto() {
+            const file = document.getElementById('user-photo-upload').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { userImgData = e.target.result; }
+                reader.readAsDataURL(file);
+            }
+        }
 
-        // --- 預覽與送出 ---
         function generatePreview() {
             const msg = document.getElementById('msg-input').value;
             const sign = document.getElementById('sign-input').value;
+            if(!selectedTag) { alert("請回到 Step 1 選擇一個標籤！"); return goToStep(1); }
             if(!msg || !sign) return alert("請填寫鼓勵的話與署名！");
 
-            document.getElementById('card-img').src = currentUnit.img;
+            const finalImg = userImgData ? userImgData : defaultImages[Math.floor(Math.random() * defaultImages.length)];
+            document.getElementById('card-img').src = finalImg;
             document.getElementById('card-tag').innerText = selectedTag;
             document.getElementById('card-msg').innerText = msg;
             document.getElementById('card-to').innerText = currentUnit.name;
@@ -480,32 +641,137 @@
                 document.getElementById('prop-text').innerText = "贈送 " + selectedProp.name;
             } else { sticker.style.display = 'none'; }
 
+            if(myTeamName) {
+                document.getElementById('ent-receipt').style.display = 'block';
+                document.getElementById('receipt-sponsor-name').innerText = `SPONSORED BY ${decodeURIComponent(myTeamName)}`;
+            } else {
+                document.getElementById('ent-receipt').style.display = 'none';
+            }
+
             document.getElementById('preview-modal').style.display = 'flex';
         }
 
         document.getElementById('btn-confirm').addEventListener('click', () => {
             const btn = document.getElementById('btn-confirm');
-            btn.innerHTML = "生成美圖中...";
+            btn.innerHTML = "發布中...";
             
-            html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true }).then(canvas => {
-                const link = document.createElement('a'); link.download = `GC_LoveCard_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
-                
-                dailyCount++; localStorage.setItem('gc_daily_count', dailyCount); 
-                saveRecord();
-                
-                btn.innerHTML = "✅ 完成！"; 
-                setTimeout(() => { alert("感謝愛心！抽獎券已存入背包，請記得分享至 IG 限動喔！"); location.reload(); }, 1500);
-            });
+            dailyCount++; localStorage.setItem('gc_daily_count', dailyCount); 
+            let totalAdded = parseInt(localStorage.getItem('gc_total_added') || 0);
+            localStorage.setItem('gc_total_added', totalAdded + 1);
+
+            saveRecord();
+            addRecordToWaterfall();
+            
+            setTimeout(() => { 
+                alert("發布成功！已加入祝福瀑布牆。"); 
+                closeModal('preview-modal');
+                switchView('view-waterfall', document.querySelectorAll('.tab-item')[2]); // 第三個tab是瀑布牆
+                resetGame();
+                btn.innerHTML = "✅ 確認送出 (發布至瀑布牆)"; 
+            }, 1000);
         });
 
-        // --- 存檔與背包 ---
         function saveRecord() {
             const records = JSON.parse(localStorage.getItem('gc_records') || "[]");
             records.unshift({
                 id: `GC-${Date.now().toString().slice(-6)}`, date: new Date().toLocaleDateString(),
-                unit: currentUnit.name, prop: selectedProp ? selectedProp.name : "無", msg: document.getElementById('msg-input').value
+                unit: currentUnit.name, prop: selectedProp ? selectedProp.name : "無", msg: document.getElementById('msg-input').value, sign: document.getElementById('sign-input').value
             });
             localStorage.setItem('gc_records', JSON.stringify(records));
+        }
+
+        function addRecordToWaterfall() {
+            const grid = document.getElementById('waterfall-grid');
+            const propHtml = selectedProp ? `<div class="wf-prop">${selectedProp.icon} 贈送 ${selectedProp.name}</div>` : '';
+            const sign = document.getElementById('sign-input').value;
+            const msg = document.getElementById('msg-input').value;
+            const unit = currentUnit.name;
+
+            const newCard = document.createElement('div');
+            newCard.className = 'waterfall-card';
+            newCard.innerHTML = `
+                <div class="wf-head"><strong>${sign}</strong>To ${unit}</div>
+                <div class="wf-msg">${msg}</div>
+                ${propHtml}
+                <div class="wf-actions">
+                    <button class="action-btn-sm" onclick="toggleLike(this)"><span class="icon">🤍</span> <span class="count">0</span></button>
+                    <button class="action-btn-sm" onclick="openCommentModal(this)">💬 <span class="count">0</span></button>
+                </div>
+            `;
+            grid.insertBefore(newCard, grid.firstChild);
+        }
+
+        function resetGame() {
+            isCoinInserted = false;
+            document.getElementById('msg-input').value = "";
+            document.getElementById('sign-input').value = "";
+            document.querySelectorAll('.supply-item').forEach(i => i.classList.remove('selected'));
+            selectedProp = null; selectedTag = ""; userImgData = null;
+            
+            document.getElementById('state-quest').style.display = 'none';
+            document.getElementById('quest-progress').style.display = 'none';
+            document.getElementById('state-idle').style.display = 'block';
+            document.querySelector('.coin-area').style.display = 'flex';
+            
+            const btn = document.getElementById('btn-start-game');
+            btn.style.display = 'block'; btn.innerText = "請先投幣 (INSERT LOVE)"; btn.classList.remove('unlocked');
+            
+            const heart = document.getElementById('heart-token');
+            heart.style.animation = "float 2s infinite"; 
+            document.getElementById('insert-hint').style.display = 'block';
+            
+            document.getElementById('q-step-1').classList.remove('active');
+            document.getElementById('q-step-2').classList.remove('active');
+            document.getElementById('q-step-3').classList.remove('active');
+            
+            checkDailyLimit();
+        }
+
+        // --- 互動功能 ---
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+            const icon = btn.querySelector('.icon');
+            const countSpan = btn.querySelector('.count');
+            let count = parseInt(countSpan.innerText);
+            
+            if(btn.classList.contains('liked')) {
+                icon.innerText = '❤️'; countSpan.innerText = count + 1;
+                btn.style.transform = "scale(1.2)"; setTimeout(() => btn.style.transform = "scale(1)", 200);
+            } else { icon.innerText = '🤍'; countSpan.innerText = count - 1; }
+        }
+
+        let currentCommentBtn = null;
+        let currentWaterfallCard = null;
+
+        function openCommentModal(btn) {
+            currentCommentBtn = btn;
+            currentWaterfallCard = btn.closest('.waterfall-card');
+            document.getElementById('comment-input').value = "";
+            document.getElementById('comment-modal').style.display = 'flex';
+            document.getElementById('comment-input').focus();
+        }
+
+        function submitComment() {
+            const val = document.getElementById('comment-input').value.trim();
+            if(!val) return alert("請輸入內容");
+            
+            const countSpan = currentCommentBtn.querySelector('.count');
+            countSpan.innerText = parseInt(countSpan.innerText) + 1;
+            
+            let commentsDiv = currentWaterfallCard.querySelector('.wf-comments');
+            if(!commentsDiv) {
+                commentsDiv = document.createElement('div');
+                commentsDiv.className = 'wf-comments';
+                currentWaterfallCard.appendChild(commentsDiv);
+            }
+            commentsDiv.style.display = 'block';
+            
+            const newComment = document.createElement('div');
+            newComment.className = 'wf-comment-item';
+            newComment.innerHTML = `<strong style="color:#0277BD;">訪客:</strong> ${val}`;
+            commentsDiv.appendChild(newComment);
+            
+            closeModal('comment-modal');
         }
 
         function openInventory() {
@@ -521,7 +787,6 @@
                         <div style="font-size:13px; color:#555; margin:8px 0; font-style:italic;">"${r.msg}"</div>
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px dashed #eee; padding-top:8px;">
                             ${r.prop !== "無" ? `<div style="font-size:11px; color:#E65100; background:#FFF3E0; padding:2px 6px; border-radius:4px;">🎁 贈送: ${r.prop}</div>` : '<div></div>'}
-                            <button style="background:#0277BD; color:#fff; border:none; padding:5px 12px; border-radius:20px; font-size:11px; cursor:pointer;" onclick='shareRecord(${JSON.stringify(r)})'>📤 轉發分享</button>
                         </div>`;
                     list.appendChild(div);
                 });
@@ -529,12 +794,24 @@
             document.getElementById('inventory-modal').style.display = 'flex';
         }
 
-        function shareRecord(record) {
-            if (navigator.share) {
-                navigator.share({ title: '給社工愛的鼓勵', text: `我在【${record.unit}】留下了這句話：「${record.msg}」。邀請你也來為社工補血！ #像素守護者`, url: window.location.href }).catch(console.error);
-            } else { alert("請截圖分享卡片，或是複製網址邀請朋友！"); }
-        }
+        // --- Modals ---
+        function openSWLayer() { document.getElementById('sw-modal').style.display = 'flex'; }
+        function openHRDashboard() { 
+            const baseP = 1248; const baseM = 3560;
+            const added = parseInt(localStorage.getItem('gc_total_added') || 0);
+            document.getElementById('hr-p-count').innerText = (baseP + added).toLocaleString();
+            document.getElementById('hr-msg-count').innerText = (baseM + (added * 3)).toLocaleString();
 
+            const allQuotes = [...quotesData.public, ...quotesData.tech, ...quotesData.finance, ...quotesData.service];
+            const ranking = allQuotes.map(q => ({ text: q, count: Math.floor(Math.random() * 500) + 100 })).sort((a, b) => b.count - a.count).slice(0, 3);
+
+            let rankHTML = '';
+            ranking.forEach((item, index) => {
+                rankHTML += `<div class="ranking-item"><span class="ranking-badge">${index + 1}</span><span style="flex:1;">${item.text}</span><strong style="color:var(--ent-blue);">${item.count}</strong></div>`;
+            });
+            document.getElementById('hr-ranking-content').innerHTML = rankHTML;
+            document.getElementById('hr-dashboard').style.display = 'flex'; 
+        }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
 </body>
