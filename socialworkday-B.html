@@ -15,7 +15,7 @@
             --text-dark: #2c2c2c;
             --console-body: #F57F17;
             --console-dark: #3E2723;
-            --ent-blue: #0277BD; /* 企業模式專屬藍色 */
+            --ent-blue: #0277BD; 
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
@@ -57,14 +57,14 @@
 
         /* Console */
         .game-console { background-color: var(--console-body); padding: 20px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 500px; border-radius: 0 0 8px 8px; position: relative; }
-        .screen { background: #fff; border: 4px solid #222; height: 650px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; position: relative; overflow-y: auto; }
+        .screen { background: #fff; border: 4px solid #222; height: 650px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; position: relative; overflow-y: auto; overflow-x: hidden; }
 
         /* States */
         .state-idle, .state-spinning { text-align: center; margin-top: 200px; width: 100%; }
         .state-spinning { display: none; }
         .state-quest { display: none; width: 100%; flex-direction: column; height: 100%; }
         
-        /* 步驟容器 (Project Neon 的多步驟邏輯) */
+        /* 步驟容器 */
         .step-container { display: none; flex-direction: column; width: 100%; height: 100%; animation: fadeIn 0.5s forwards; }
         @keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
 
@@ -111,15 +111,20 @@
         .btn-step.primary.enterprise { background: var(--ent-blue); box-shadow: 0 0 10px rgba(2, 119, 189, 0.5); }
         .btn-step:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        /* Coin Area */
+        /* --- Coin Area --- */
         .coin-area { display: flex; justify-content: flex-end; height: 60px; position: relative; margin-bottom: 10px; }
         .coin-slot { width: 16px; height: 45px; background: #111; border: 2px solid #666; border-radius: 4px; position: relative; z-index: 1; top: 10px; box-shadow: inset 0 0 5px #000; }
         .heart-token { font-size: 40px; color: #FF1744; position: absolute; right: 30px; top: 0; cursor: pointer; animation: float 2s infinite; z-index: 10; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));}
-        @keyframes insertCoin { 0% { top: 0; right: 30px; transform: scale(1); opacity: 1; } 50% { top: 15px; right: 0px; transform: scale(0.8); opacity: 1; } 100% { top: 35px; right: 0px; transform: scale(0.2); opacity: 0; } }
+        .insert-hint { position: absolute; right: 80px; top: 15px; font-size: 10px; color: #fff; animation: pulseHint 1.5s infinite; pointer-events: none;}
+        
+        @keyframes insertCoinAnim { 0% { top: 0; right: 30px; transform: scale(1); opacity: 1; } 50% { top: 15px; right: 0px; transform: scale(0.8); opacity: 1; } 100% { top: 35px; right: 0px; transform: scale(0.2); opacity: 0; } }
         @keyframes float { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-8px);} }
+        @keyframes pulseHint { 0%, 100% {opacity: 0.4;} 50% {opacity: 1;} }
 
-        .btn-start-game { background: #999; color: #ccc; border: 4px solid #555; padding: 15px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: not-allowed; }
-        .btn-start-game.unlocked { background: #FF1744; color: #fff; border-color: #880E4F; cursor: pointer; animation: pulse 2s infinite; }
+        /* Main Start Button */
+        .btn-start-game { background: #999; color: #ccc; border: 4px solid #555; padding: 15px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: pointer; transition: 0.3s; }
+        .btn-start-game:active { transform: translateY(2px); }
+        .btn-start-game.unlocked { background: #FF1744; color: #fff; border-color: #880E4F; animation: pulse 2s infinite; }
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
 
         /* --- 3. Footer & Demo --- */
@@ -310,11 +315,12 @@
             </div>
 
             <div class="coin-area">
-                <div style="margin-right: 15px; margin-top: 15px; font-size: 10px; color: #fff;">點擊愛心 ▶</div>
+                <div id="insert-hint" class="insert-hint">點擊愛心 或 按鈕啟動 ▶</div>
                 <div id="heart-token" class="heart-token">❤️</div>
                 <div class="coin-slot"></div>
             </div>
-            <button id="btn-start-game" class="btn-start-game">請先投幣 (INSERT LOVE)</button>
+            
+            <button id="btn-start-game" class="btn-start-game" onclick="handleMainButtonClick()">請先投幣 (INSERT LOVE)</button>
         </div>
     </section>
 
@@ -362,7 +368,7 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button id="btn-confirm" class="action-btn btn-download">✅ 確認送出 (分享 IG)</button>
+                <button id="btn-confirm" class="action-btn btn-download">✅ 確認送出 (儲存分享圖)</button>
                 <button onclick="closeModal('preview-modal')" class="action-btn btn-back">返回修改</button>
             </div>
         </div>
@@ -482,6 +488,7 @@
                 btnStartGame.innerText = "今日次數已達上限 (TOMORROW)";
                 btnStartGame.classList.remove('unlocked');
                 heartToken.style.display = 'none';
+                document.getElementById('insert-hint').style.display = 'none';
             }
         }
 
@@ -522,22 +529,48 @@
             alert(`已切換模式：${name || '一般民眾'}。系統已同步專屬金句與贊助邏輯。`);
         }
 
-        // --- Core Interactions ---
+        // --- Core Interactions (投幣與啟動邏輯修正) ---
 
-        heartToken.addEventListener('click', () => {
+        // 提取投幣邏輯，供愛心與大按鈕共同呼叫
+        function triggerCoinInsertion() {
             if (dailyCount >= 3) return alert("勇者休息一下，明天再來吧！");
             if (isCoinInserted) return;
-            heartToken.style.animation = "insertCoin 0.8s forwards ease-in";
+            
+            // 隱藏提示文字
+            document.getElementById('insert-hint').style.display = 'none';
+            
+            // 執行 CSS 動畫
+            heartToken.style.animation = "none"; // Reset
+            setTimeout(() => {
+                heartToken.style.animation = "insertCoin 0.8s forwards ease-in";
+            }, 10);
+            
+            // 動畫結束後解鎖
             setTimeout(() => {
                 isCoinInserted = true;
                 btnStartGame.innerText = "轉動緣分 (START)";
                 btnStartGame.classList.add('unlocked');
                 stateIdle.innerHTML = '<div style="font-size:20px; margin-bottom:10px;">READY!</div>';
             }, 800);
-        });
+        }
 
-        btnStartGame.addEventListener('click', () => {
-            if (dailyCount >= 3 || !isCoinInserted) return;
+        // 點擊愛心時投幣
+        heartToken.addEventListener('click', triggerCoinInsertion);
+
+        // 點擊大按鈕時的複合邏輯 (UX 防呆關鍵)
+        function handleMainButtonClick() {
+            if (dailyCount >= 3) return; // 沒額度就不理他
+            
+            if (!isCoinInserted) {
+                // 如果還沒投幣，使用者卻點了按鈕 -> 幫他自動投幣！
+                triggerCoinInsertion();
+            } else {
+                // 如果已經投幣了解鎖了 -> 啟動轉盤！
+                startGameSpin();
+            }
+        }
+
+        function startGameSpin() {
             stateIdle.style.display = 'none';
             btnStartGame.style.display = 'none';
             
@@ -552,7 +585,7 @@
                 document.getElementById('state-spinning').style.display = 'none';
                 showQuest(); 
             }, 1500);
-        });
+        }
 
         function showQuest() {
             currentUnit = units[Math.floor(Math.random() * units.length)];
@@ -644,6 +677,8 @@
         document.getElementById('btn-confirm').addEventListener('click', () => {
             const btn = document.getElementById('btn-confirm');
             btn.innerHTML = "生成美圖中...";
+            
+            // 這裡使用 html2canvas 截圖
             html2canvas(document.getElementById('capture-target'), { scale: 2, useCORS: true }).then(canvas => {
                 const link = document.createElement('a'); link.download = `GC_LoveCard_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
                 
@@ -689,6 +724,7 @@
         }
 
         function shareRecord(record) {
+            // Web Share API (手機原生分享)
             if (navigator.share) {
                 navigator.share({
                     title: '給社工愛的鼓勵',
