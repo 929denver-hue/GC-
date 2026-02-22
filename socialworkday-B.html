@@ -18,12 +18,12 @@
         
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; color: var(--text-dark); background-color: var(--soft-bg); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        .view-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 70px; padding-top: 30px; scroll-behavior: smooth; }
+        .view-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 70px; scroll-behavior: smooth; }
         .view { display: none; width: 100%; min-height: 100%; flex-direction: column; align-items: center; padding: 20px; animation: fadeIn 0.4s ease-out; }
         .view.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Demo Bar (測試切換用，固定於最上方) --- */
+        /* --- Demo Bar (測試切換用) --- */
         .demo-bar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; padding: 5px; z-index: 3000; }
         .demo-btn { background: #444; color: #fff; border: 1px solid #666; padding: 4px 10px; font-size: 10px; border-radius: 4px; cursor: pointer; margin: 0 4px; }
         .demo-btn:hover { background: var(--warm-orange); }
@@ -51,7 +51,6 @@
         .btn-go-game { background: #E65100; color: #fff; border: none; padding: 16px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(230,81,0,0.3); cursor: pointer; width: 100%; max-width: 400px; transition: 0.2s; }
         .btn-go-game:active { transform: scale(0.98); }
 
-        /* 企業 CSR 提示 */
         .csr-hint { font-size: 12px; color: var(--ent-blue); text-align: center; margin-bottom: 10px; font-family: 'Noto Sans TC'; border: 1px dashed var(--ent-blue); padding: 8px; border-radius: 4px; background: rgba(2, 119, 189, 0.1); display: none; font-weight:bold; }
 
         /* --- 視圖 2: 遊戲機 --- */
@@ -94,8 +93,11 @@
         .supply-title { font-size: 14px; font-weight: bold; color: var(--warm-orange); }
         .supply-desc { font-size: 11px; color: #666; }
 
-        .smart-chips { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 8px; }
-        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 5px 12px; border-radius: 15px; font-size: 12px; white-space: nowrap; cursor: pointer; }
+        /* [關鍵優化] 金句區域：改為自動換行 (flex-wrap) 解決滑動 bar 問題 */
+        .smart-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .smart-chip:hover { background: #FFE0B2; }
+
         textarea, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; font-size: 14px; outline: none;}
         textarea:focus, input[type="text"]:focus { border-color: var(--warm-orange); }
         
@@ -108,7 +110,7 @@
         .btn-step { flex: 1; background: #333; color: #fff; border: none; padding: 12px; font-family: 'Noto Sans TC'; font-weight:bold; font-size: 13px; cursor: pointer; border-radius: 4px; }
         .btn-step.primary { background: var(--warm-orange); }
 
-        /* 投幣區 */
+        /* 投幣區動畫 */
         .coin-area { display: flex; justify-content: flex-end; align-items: flex-end; height: 60px; padding-right: 10px; position: relative; margin-bottom: 15px; }
         .insert-hint { position: absolute; right: 60px; top: 10px; font-size: 10px; color: #fff; font-family: 'Noto Sans TC'; animation: pulseHint 1.5s infinite; }
         .slot-wrapper { position: relative; width: 40px; height: 60px; display: flex; justify-content: center; align-items: flex-end; }
@@ -123,7 +125,7 @@
         .btn-main-start.unlocked { background: #FF1744; border-color: #880E4F; animation: pulse 2s infinite; box-shadow: 0 4px 0 #880E4F; }
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
         
-        /* --- 視圖 3: 搜尋與致敬 (含隱藏入口) --- */
+        /* --- 視圖 3: 搜尋與致敬 --- */
         #view-search { background: #ECEFF1; justify-content: flex-start; padding-top: 40px; }
         .db-console { max-width: 400px; width: 100%; background: #fff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
         .search-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin: 15px 0; font-size: 14px; background: #fafafa;}
@@ -131,7 +133,6 @@
         .sponsor-list { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
         .sponsor-badge { border: 1px solid #ddd; padding: 8px 15px; border-radius: 30px; font-weight: bold; color: #888; font-size: 0.8rem; background: #fafafa;}
         
-        /* 隱藏入口連結 */
         .secret-links { margin-top: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;}
         .secret-btn { background: transparent; border: 1px dashed #bbb; color: #888; padding: 6px 12px; font-size: 11px; border-radius: 4px; cursor: pointer; text-decoration: none; }
         .secret-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
@@ -157,7 +158,7 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px);}
         .close-btn { cursor: pointer; color: #fff; font-size: 24px; font-weight: bold; }
 
-        /* 預覽卡片與企業收據 */
+        /* Preview Card */
         #capture-target { background: #fff; width: 100%; max-width: 320px; padding: 25px; border-radius: 8px; margin: 0 auto; font-family: 'Noto Serif TC', serif; text-align: left; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .card-header { display: flex; justify-content: space-between; font-size: 10px; color: #999; margin-bottom: 15px; font-family: 'Noto Sans TC'; }
         .card-img-box { width: 100%; height: 200px; overflow: hidden; margin-bottom: 15px; background: #eee; position: relative; border-radius:4px;}
@@ -212,6 +213,9 @@
         <div class="tab-item active" onclick="switchView('view-home', this)">
             <span class="tab-icon">🏠</span><span>首頁</span>
         </div>
+        <div class="tab-item" onclick="switchView('view-game', this)">
+            <span class="tab-icon">🕹️</span><span>任務</span>
+        </div>
         <div class="tab-item" onclick="switchView('view-search', this)">
             <span class="tab-icon">🔍</span><span>搜尋</span>
         </div>
@@ -244,7 +248,7 @@
                 <div style="font-size:10px; color:#999; margin-top:5px; text-align:right;">全台累積 <span id="global-count-display">12,540</span> 則祝福</div>
             </div>
             <div class="home-btn-group">
-                <button class="btn-go-game" onclick="switchView('view-game', null)">開始任務 (START) ▶</button>
+                <button class="btn-go-game" onclick="switchView('view-game', document.querySelectorAll('.tab-item')[1])">開始任務 (START) ▶</button>
             </div>
         </main>
 
@@ -312,7 +316,7 @@
                                 <label>✍️ 您的署名：</label>
                                 <input type="text" id="sign-input" placeholder="如：王小明 / 匿名勇者">
                             </div>
-                            <div class="step-controls"><button class="btn-step" onclick="goToStep(2)">&lt; 返回</button><button class="btn-step primary" id="btn-preview-trigger" onclick="generatePreview()">預覽成果 (PREVIEW)</button></div>
+                            <div class="step-controls"><button class="btn-step" onclick="goToStep(2)">&lt; 返回</button><button class="btn-step primary" onclick="generatePreview()">預覽成果 (PREVIEW)</button></div>
                         </div>
                     </div>
                 </div>
@@ -353,7 +357,10 @@
                     <div class="wf-head"><strong>王小明</strong>To 華山基金會</div>
                     <div class="wf-msg">天氣變冷了，各位社工訪視時也要注意保暖喔！</div>
                     <div class="wf-prop">🍲 贈送 暖心體力湯</div>
-                    <div class="wf-actions"><button class="action-btn-sm" onclick="toggleLike(this)"><span class="icon">🤍</span> <span class="count">24</span></button><button class="action-btn-sm" onclick="openCommentModal(this)">💬 <span class="count">2</span></button></div>
+                    <div class="wf-actions">
+                        <button class="action-btn-sm" onclick="toggleLike(this)"><span class="icon">🤍</span> <span class="count">24</span></button>
+                        <button class="action-btn-sm" onclick="openCommentModal(this)">💬 <span class="count">2</span></button>
+                    </div>
                     <div class="wf-comments" style="display:block;"><div class="wf-comment-item"><strong style="color:#0277BD;">社工小編:</strong> 收到滿滿溫暖，謝謝你！</div><div class="wf-comment-item"><strong style="color:#0277BD;">路人A:</strong> 真的辛苦了！</div></div>
                 </div>
                 <div class="waterfall-card">
@@ -395,6 +402,17 @@
 
     <div id="sw-modal" class="modal-overlay"><div class="sw-box"><div style="text-align:right; margin-bottom:10px;"><span class="close-btn" style="color:#999;" onclick="closeModal('sw-modal')">×</span></div><div class="sw-title">致 親愛的夥伴</div><div class="sw-intro">這些祝福來自真實民眾，每一枚投下的愛心幣，都代表<span class="sw-highlight">有人停下來想到你</span>。<br>請收下這些溫暖，繼續照亮社會角落。</div><div style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee;"><h4 style="margin:0 0 15px 0; font-size:14px; color:#5D4037;">🏆 民眾票選・最想對你說的話：</h4><div style="margin-bottom: 10px; font-size: 13px; color: #444;"><span style="background:#333; color:#fff; border-radius:50%; width:20px; height:20px; display:inline-flex; justify-content:center; align-items:center; font-size:10px; margin-right:8px;">1</span> 辛苦了，謝謝你們一直都在！ <span style="color:#E65100">(3,240)</span></div><div style="margin-bottom: 10px; font-size: 13px; color: #444;"><span style="background:#333; color:#fff; border-radius:50%; width:20px; height:20px; display:inline-flex; justify-content:center; align-items:center; font-size:10px; margin-right:8px;">2</span> 謝謝你們接住了受傷的人。 <span style="color:#E65100">(2,105)</span></div><div style="margin-bottom: 10px; font-size: 13px; color: #444;"><span style="background:#333; color:#fff; border-radius:50%; width:20px; height:20px; display:inline-flex; justify-content:center; align-items:center; font-size:10px; margin-right:8px;">3</span> 希望世界對你，也能溫柔一點。 <span style="color:#E65100">(1,890)</span></div></div></div></div>
 
+    <div id="msg-modal" class="modal-overlay">
+        <div style="background:#fff; width:90%; max-width:320px; border-radius:12px; padding:20px; max-height:75vh; display:flex; flex-direction:column; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 style="margin:0; color:#4E342E; font-size:16px;">選擇更多鼓勵金句</h3>
+                <span style="cursor:pointer; color:#999; font-size:24px; line-height:1;" onclick="closeModal('msg-modal')">×</span>
+            </div>
+            <div style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:8px;" id="msg-modal-list">
+                </div>
+        </div>
+    </div>
+
     <script>
         // --- SPA 切換 ---
         function switchView(viewId, tabElement) {
@@ -403,9 +421,6 @@
             if(tabElement) {
                 document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
                 tabElement.classList.add('active');
-            } else {
-                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-                if(viewId === 'view-game') document.querySelectorAll('.tab-item')[1].classList.add('active');
             }
             if(viewId === 'view-game') updateDailyDisplay();
         }
@@ -417,6 +432,19 @@
             finance: ["你們承擔風險守護弱勢，這次換我們守護你。", "這份愛的投資，我們保證長期持有。"],
             service: ["服務人的累我們都懂，今天換我們服務你。", "微笑背後的辛苦，我們感同身受。"]
         };
+        
+        const extraQuotes = [
+            "辛苦了，謝謝你們一直都在！",
+            "謝謝你們接住了受傷的人。",
+            "世界因為有你們而溫柔。",
+            "願世界對你們溫柔以待。",
+            "請記得照顧好自己，你也很重要。",
+            "你的付出，我們都看到了。",
+            "黑暗中，你們是最溫暖的光。",
+            "謝謝你們撐起社會的防護網。",
+            "再累也要記得吃飯，辛苦了！",
+            "有你們在，真的讓人很安心。"
+        ];
 
         const units = [
             { name: "屏東伯大尼之家", img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600", desc: "在國境之南，陪伴憨兒慢飛。這是一條漫長的路，但我們不曾放棄。", tags: ["#深夜燈塔", "#憨兒依靠"] },
@@ -470,7 +498,7 @@
             }
         }
 
-        // --- 企業模式切換 ---
+        // --- 企業模式 ---
         function checkEnterpriseMode() {
             currentQuoteList = quotesData.public; 
             const entBadgeHero = document.getElementById('ent-badge-hero');
@@ -571,15 +599,23 @@
                 tagContainer.appendChild(btn);
             });
 
-            // 渲染金句
             const container = document.getElementById('dynamic-presets');
             container.innerHTML = '';
             currentQuoteList.forEach(q => {
                 const chip = document.createElement('div');
-                chip.className = 'smart-chip'; chip.innerText = q.slice(0, 10) + '...';
+                chip.className = 'smart-chip'; chip.innerText = q.length > 8 ? q.slice(0, 8) + '...' : q;
                 chip.onclick = function() { fillInput(q); };
                 container.appendChild(chip);
             });
+            
+            const moreBtn = document.createElement('div');
+            moreBtn.className = 'smart-chip'; 
+            moreBtn.style.background = '#eee'; 
+            moreBtn.style.color = '#888'; 
+            moreBtn.style.border = '1px solid #ccc';
+            moreBtn.innerText = '+ 更多';
+            moreBtn.onclick = openMsgModal;
+            container.appendChild(moreBtn);
             
             stateQuest.style.display = 'flex'; 
             questProgress.style.display = 'flex'; 
@@ -665,7 +701,7 @@
             setTimeout(() => { 
                 alert("發布成功！已加入祝福瀑布牆。"); 
                 closeModal('preview-modal');
-                switchView('view-waterfall', document.querySelectorAll('.tab-item')[2]); // 第三個tab是瀑布牆
+                switchView('view-waterfall', document.querySelectorAll('.tab-item')[3]); // 瀑布牆是第4個tab(index 3)
                 resetGame();
                 btn.innerHTML = "✅ 確認送出 (發布至瀑布牆)"; 
             }, 1000);
@@ -795,6 +831,21 @@
         }
 
         // --- Modals ---
+        function openMsgModal() {
+            const list = document.getElementById('msg-modal-list');
+            list.innerHTML = "";
+            extraQuotes.forEach(q => {
+                const div = document.createElement('div');
+                div.style = "padding:12px; background:#fafafa; border:1px solid #eee; border-radius:8px; font-size:13px; color:#555; cursor:pointer; text-align:left; line-height:1.4; transition:0.2s;";
+                div.innerText = q;
+                div.onmouseover = () => { div.style.borderColor = "var(--warm-orange)"; div.style.background = "#FFF3E0"; };
+                div.onmouseout = () => { div.style.borderColor = "#eee"; div.style.background = "#fafafa"; };
+                div.onclick = function() { fillInput(q); closeModal('msg-modal'); };
+                list.appendChild(div);
+            });
+            document.getElementById('msg-modal').style.display = 'flex';
+        }
+
         function openSWLayer() { document.getElementById('sw-modal').style.display = 'flex'; }
         function openHRDashboard() { 
             const baseP = 1248; const baseM = 3560;
