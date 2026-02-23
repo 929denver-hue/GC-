@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC贈物網 - NPO指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bubble { opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s forwards; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar.open { transform: translateX(0); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .typing-dot { width: 6px; height: 6px; background: #f97316; border-radius: 50%; animation: blink 1.4s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased text-slate-800 md:h-screen md:overflow-hidden flex flex-col md:flex-row">
+
+    <div class="w-full md:w-[55%] h-auto md:h-full p-6 md:p-16 flex flex-col justify-center bg-white relative overflow-y-auto no-scrollbar border-b md:border-b-0 md:border-r border-slate-200">
+        <div class="max-w-xl mx-auto w-full">
+            <span class="inline-block py-1 px-3 rounded-full bg-orange-100 text-orange-600 text-xs font-bold mb-6 tracking-wide">給 NPO 夥伴的專屬邀請</span
+            <p class="text-slate-500 text-base md:text-lg mb-8 leading-relaxed">
+                專注打造物資「無償共享」生態圈，運用科技的力量，讓社福團體募集物資更輕鬆、更有效率！
+            </p>
+            
+            <div class="bg-slate-900 rounded-3xl shadow-xl overflow-hidden aspect-video relative group mb-4">
+                <iframe class="w-full h-full" src="https://www.youtube.com/embed/DLnjEWWZycs?rel=0" title="GC 贈物網影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <p class="text-xs text-slate-400 italic mb-8 md:mb-0 text-center">↑ 看看其他公益夥伴如何在GC贈物網獲得支持</p>
+        </div>
+    </div>
+
+    <div class="w-full md:w-[45%] h-[650px] md:h-full bg-slate-50 flex flex-col relative shadow-[-10px_0_30px_rgba(0,0,0,0.02)]">
+        
+        <div class="p-4 bg-white/90 backdrop-blur-md border-b flex justify-between items-center z-10 sticky top-0">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white shadow-inner text-lg">👩‍🏫</div>
+                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                </div>
+                <div>
+                    <h2 class="font-bold text-slate-800 text-sm">GC贈物網 公益小編</h2>
+                    <p class="text-[10px] text-green-600 font-bold">● 在線協助</p>
+                </div>
+            </div>
+            <button onclick="toggleSidebar()" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-1 shadow-sm">
+                📖 營運百科
+            </button>
+        </div>
+
+        <div id="chat-box" class="flex-1 p-5 space-y-5 overflow-y-auto no-scrollbar pb-32">
+            </div>
+
+        <div class="absolute bottom-0 w-full p-4 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent pt-10 flex flex-wrap gap-2 justify-end z-20" id="action-bar">
+            </div>
+    </div>
+
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
+    <aside id="sidebar" class="sidebar fixed top-0 right-0 h-full w-[90%] sm:w-[420px] bg-white z-50 shadow-2xl translate-x-full flex flex-col">
+        <div class="p-5 border-b flex justify-between items-center bg-white">
+            <h3 class="font-black text-slate-800 text-lg">營運百科 (20題)</h3>
+            <button onclick="toggleSidebar()" class="w-8 h-8 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 transition">✕</button>
+        </div>
+        
+        <div class="p-4 border-b bg-slate-50">
+            <input type="text" id="faq-search" oninput="filterFAQ()" placeholder="輸入關鍵字（如：收據、運費）..." class="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 mb-3 shadow-sm transition">
+            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="filter-chips">
+                <button onclick="setCategory('全部')" class="chip active px-3 py-1.5 bg-orange-500 text-white rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">全部</button>
+                <button onclick="setCategory('帳號資格')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">💰 帳號資格</button>
+                <button onclick="setCategory('募集運費')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">🚚 募集運費</button>
+                <button onclick="setCategory('營運後續')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">🧾 營運後續</button>
+            </div>
+        </div>
+
+        <div id="faq-list" class="flex-1 overflow-y-auto p-2 bg-white">
+            </div>
+    </aside>
+
+<script>
+    // --- 1. 20題官方文案資料庫 ---
+    const FAQ_DB = [
+        { id: 1, cat: "帳號資格", q: "如何註冊帳號？", a: "點選「登入/註冊」。輸入手機號碼並通過簡訊驗證後，至「編輯資料」填寫真實姓名與收件資訊（重要：須與證件相符，以免無法領貨）。" },
+        { id: 2, cat: "帳號資格", q: "申請公益帳號需要準備哪些文件？", a: "點選變更「會員身份」，並準備政府立案證明及相關資料。上傳後 7-10 工作日，會有專人為您審核撥電。" },
+        { id: 3, cat: "帳號資格", q: "公益帳號與一般帳號差在哪？", a: "公益帳號刊登需求有首頁露出版位、專屬的「感謝模版」功能，能讓募集效率更高，快速建立信任感。" },
+        { id: 4, cat: "帳號資格", q: "單位聯絡人異動怎麼辦？", a: "點選「交接預告」，將有專人聯繫。或來信告知（shin@give-circle.com）。" },
+        { id: 5, cat: "帳號資格", q: "同一個單位，有分會，還能申請帳號嗎？", a: "可以，仍需特別申請。手機號碼不可重複註冊。" },
+        
+        { id: 6, cat: "募集運費", q: "如何寫需求才會有人送？", a: "秘訣是「規格與用途寫清楚」。例如標明「抽取式衛生紙」而非只寫衛生紙，並說明是給獨居長輩使用，這能幫助贈送者精準評估。" },
+        { id: 7, cat: "募集運費", q: "有什麼東西是禁止募集的？", a: "法令禁止網購寄送的醫療處方藥品。詳見規範：<a href='https://www.give-circle.com/story/22076' target='_blank' class='text-orange-500 font-bold hover:underline'>什麼東西不能送？</a>" },
+        { id: 8, cat: "募集運費", q: "徵求數量達標後，怎麼提前結束？", a: "平台數量達標會自動下架，若是想提前結束，可進入「需求管理」的後台介面，手動關閉或下架。" },
+        { id: 9, cat: "募集運費", q: "可以指定要全新或特定效期的物資嗎？", a: "可以。建議在需求描述中明確標註（例如「僅收全新」、「效期需大於三個月」）。" },
+        { id: 10, cat: "募集運費", q: "大型傢俱適合在平台上募集嗎？", a: "超商與 i郵箱皆有尺寸限制。大型物資建議在描述中註明，並透過站內信與贈送者約定「自取」，或找新竹物流等大型宅配。" },
+        { id: 11, cat: "募集運費", q: "運費無法負擔怎麼辦？", a: "在需求說明頁寫上，無法負擔運費請包涵，並勾選由「贈送者」支付運費。贈送者進行捐贈時就會知道。" },
+        { id: 12, cat: "募集運費", q: "有哪些寄件方式可選？", a: "平台串接了：郵局 i郵箱、全家店到店、萊爾富店到店以及新竹物流。若有其他物流，可以勾選「其他物流」，但此方式需自行追蹤貨態。" },
+        { id: 14, cat: "募集運費", q: "可以合併收取同一人的多項物資嗎？", a: "可以（手機限定功能）。若同一位贈送者有多個物品要寄給您，可透過手機版操作「合併寄送」，節省運費與時間。" },
+        
+        { id: 13, cat: "營運後續", q: "收到壞掉或不符需求的東西怎麼辦？", a: "建議先透過站內私訊了解是否為誤會。若遇惡意寄件，請直接使用「好壞名單」將對方列入黑名單，並通知客服。" },
+        { id: 15, cat: "營運後續", q: "如何開立捐贈收據？", a: "確認捐物收到後，除了到頁面留言感謝。其餘照單位運作方式。平台貼心設定『感謝模版』，讓您輕鬆留下感謝！" },
+        { id: 16, cat: "營運後續", q: "用不到的物資可以轉贈嗎？", a: "可以。若暫無需求，建議與原贈送者打聲招呼後，將物資作為「禮物」重新發佈回禮物池或轉贈，讓愛心繼續流動。" },
+        { id: 17, cat: "營運後續", q: "如何在平台上表達感謝？", a: "平台特別開發了「感謝模版」功能，您可以善用此模版，一鍵發送溫馨的感謝留言給捐物者。" },
+        { id: 18, cat: "營運後續", q: "需要回報物資使用狀況嗎？", a: "我們非常鼓勵！您可以透過「一鍵tag的功能」發布圖文說說，這能大幅提升機構透明度與捐贈者的信任感。" },
+        { id: 19, cat: "營運後續", q: "企業想進行大宗捐贈怎麼對接？", a: "若有大宗專案需求，企業通常會透過首頁「企業合作」專區或信箱 info@give-circle.com 聯繫，由官方協助媒合。" },
+        { id: 20, cat: "營運後續", q: "公益團體可以發起小額募款嗎？", a: "GC贈物網以「募集實體物資」為主要使用目的。" }
+    ];
+
+    // --- 2. 官方對話腳本 (劇情分支) ---
+    const STORY = {
+        start: {
+            msgs: [
+                { side: 'left', text: "哈囉夥伴！我是 GC贈物網 公益小編。辛苦了！是不是常為了找物資預算而發愁？" },
+                { side: 'left', text: "聽說你們想加入，但怕流程太複雜對吧？想先了解哪部分呢？" }
+            ],
+            options: [
+                { text: "費用怎麼算？", next: "cost" },
+                { text: "註冊會很麻煩嗎？", next: "docs" }
+            ]
+        },
+        cost: {
+            msgs: [
+                { side: 'right', text: "說實話，真的不用錢嗎？" },
+                { side: 'left', text: "<b>真的不用錢！</b>我們一毛都不收，資源就留給需要個案！連簡訊驗證費用都由我們吸收喔～<br><span onclick='openSidebar(1)' class='text-orange-500 font-bold cursor-pointer hover:underline'>[查看費率規則]</span>" }
+            ],
+            options: [{ text: "那怎麼募物資？", next: "get" }, { text: "註冊會很麻煩嗎？", next: "docs" }]
+        },
+        docs: {
+            msgs: [
+                { side: 'right', text: "申請會不會很麻煩？要一堆文件？" },
+                { side: 'left', text: "超簡單！註冊會是一般會員身份，之後上傳『政府立案證明』填寫相關資料，公益部將於 <b>7-10個工作天</b> 與您聯繫。" },
+                { side: 'left', text: "在這之前，仍可以用一般會員身份在平台上動作喔！<br><span onclick='openSidebar(2)' class='text-orange-500 font-bold cursor-pointer hover:underline'>[查看應備文件]</span>" }
+            ],
+            options: [{ text: "那怎麼募物資？", next: "get" }, { text: "運費誰出？", next: "shipping" }]
+        },
+        get: {
+            msgs: [
+                { side: 'right', text: "我想知道怎麼要物資比較快？" },
+                { side: 'left', text: "徵求物資的秘訣是：<b>需求原因、需求規格寫清楚</b>。比如：服務經濟弱勢個案，需要抽取式衛生紙10串，送的人才不會給錯。" },
+                { side: 'left', text: "而且能設定募集數量上限，也不怕超量！<br><span onclick='openSidebar(6)' class='text-orange-500 font-bold cursor-pointer hover:underline'>[看募集技巧]</span>" }
+            ],
+            options: [{ text: "最怕運費很貴...", next: "shipping" }]
+        },
+        shipping: {
+            msgs: [
+                { side: 'right', text: "最怕運費很貴..." },
+                { side: 'left', text: "別擔心，可以設定<b>『贈送者負擔』</b>。民眾透過郵局i郵箱、萊爾富寄送都超方便，還有<b>環保集點綠點回饋</b>捐贈者！" },
+                { side: 'left', text: "至於大型家具可以約自取。<br><span onclick='openSidebar(11)' class='text-orange-500 font-bold cursor-pointer hover:underline'>[查看物流規範]</span>" }
+            ],
+            options: [{ text: "收據怎麼開？", next: "receipt" }]
+        },
+        receipt: {
+            msgs: [
+                { side: 'right', text: "收到東西後，收據怎麼處理？" },
+                { side: 'left', text: "確認捐物收到後，除了到頁面留言感謝。其餘照單位運作方式。" },
+                { side: 'left', text: "平台貼心設定『感謝模版』，讓您輕鬆留下感謝！<br><span onclick='openSidebar(15)' class='text-orange-500 font-bold cursor-pointer hover:underline'>[查看收據流程]</span>" }
+            ],
+            options: [{ text: "🚀 我準備好了，立即註冊！", url: "https://www.give-circle.com/npo/signup", primary: true }]
+        }
+    };
+
+    // --- 3. 渲染與互動邏輯 ---
+    const chatBox = document.getElementById('chat-box');
+    const actionBar = document.getElementById('action-bar');
+    let currentCategory = '全部';
+
+    // 對話引擎
+    async function playStory(nodeKey) {
+        const node = STORY[nodeKey];
+        actionBar.innerHTML = ''; 
+        
+        for (const msg of node.msgs) {
+            await showTyping();
+            const div = document.createElement('div');
+            div.className = `flex ${msg.side === 'right' ? 'justify-end' : 'justify-start'} bubble mb-4`;
+            div.innerHTML = `<div class="${msg.side === 'right' ? 'bg-orange-500 text-white rounded-br-none' : 'bg-white text-slate-700 rounded-bl-none border border-slate-200'} p-4 rounded-[1.25rem] shadow-sm max-w-[85%] text-sm leading-relaxed">${msg.text}</div>`;
+            chatBox.appendChild(div);
+            scrollToBottom();
+            await new Promise(r => setTimeout(r, 700)); // 閱讀停頓
+        }
+
+        // 渲染選項按鈕
+        node.options.forEach(opt => {
+            const btn = document.createElement('button');
+            const baseClass = "px-5 py-3 rounded-full text-sm font-bold shadow-sm whitespace-nowrap transition active:scale-95 ";
+            btn.className = opt.primary 
+                ? baseClass + "bg-orange-500 text-white hover:bg-orange-600 shadow-orange-200" 
+                : baseClass + "bg-white border border-orange-200 text-orange-600 hover:bg-orange-50";
+            btn.innerText = opt.text;
+            btn.onclick = () => opt.url ? window.location.href = opt.url : playStory(opt.next);
+            actionBar.appendChild(btn);
+        });
+        scrollToBottom();
+    }
+
+    // 打字動畫
+    function showTyping() {
+        return new Promise(resolve => {
+            const t = document.createElement('div');
+            t.className = "flex justify-start mb-4";
+            t.innerHTML = `<div class="bg-white p-4 rounded-[1.25rem] rounded-bl-none shadow-sm border border-slate-200 flex gap-1 items-center h-10"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+            chatBox.appendChild(t);
+            scrollToBottom();
+            setTimeout(() => { t.remove(); resolve(); }, 1000);
+        });
+    }
+
+    function scrollToBottom() {
+        chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+    }
+
+    // 側邊欄邏輯
+    function toggleSidebar(faqId = null) {
+        const sb = document.getElementById('sidebar');
+        const ov = document.getElementById('sidebar-overlay');
+        const isOpen = sb.classList.contains('translate-x-full');
+        
+        if(isOpen) {
+            sb.classList.remove('translate-x-full');
+            ov.classList.remove('hidden');
+            setTimeout(() => ov.classList.add('opacity-100'), 10);
+        } else {
+            sb.classList.add('translate-x-full');
+            ov.classList.remove('opacity-100');
+            setTimeout(() => ov.classList.add('hidden'), 300);
+        }
+
+        if(faqId) { openSidebar(faqId); }
+    }
+
+    function openSidebar(faqId) {
+        const sb = document.getElementById('sidebar');
+        if(sb.classList.contains('translate-x-full')) toggleSidebar();
+        
+        const item = FAQ_DB.find(f => f.id === faqId);
+        if(item) {
+            setCategory('全部');
+            document.getElementById('faq-search').value = item.q.substring(0, 4); // 用前幾個字搜尋定位
+            filterFAQ();
+            setTimeout(() => {
+                document.querySelectorAll('details').forEach(d => d.open = true);
+            }, 100);
+        }
+    }
+
+    // 百科分類過濾
+    function setCategory(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.chip').forEach(c => {
+            c.classList.remove('bg-orange-500', 'text-white');
+            c.classList.add('bg-white', 'text-slate-600');
+            if(c.innerText.includes(cat) || (cat === '全部' && c.innerText === '全部')) {
+                c.classList.remove('bg-white', 'text-slate-600');
+                c.classList.add('bg-orange-500', 'text-white');
+            }
+        });
+        document.getElementById('faq-search').value = ''; 
+        filterFAQ();
+    }
+
+    function filterFAQ() {
+        const kw = document.getElementById('faq-search').value.toLowerCase();
+        const list = document.getElementById('faq-list');
+        
+        const filtered = FAQ_DB.filter(f => 
+            (currentCategory === '全部' || f.cat === currentCategory) &&
+            (f.q.toLowerCase().includes(kw) || f.a.toLowerCase().includes(kw))
+        );
+
+        list.innerHTML = filtered.map(f => `
+            <details class="group p-5 border-b border-slate-100 cursor-pointer">
+                <summary class="font-bold text-sm text-slate-700 list-none flex justify-between items-center outline-none">
+                    <span class="pr-4 leading-relaxed tracking-wide">Q: ${f.q}</span>
+                    <span class="text-orange-400 group-open:rotate-180 transition-transform flex-shrink-0">▼</span>
+                </summary>
+                <p class="text-xs text-slate-500 mt-3 leading-relaxed pl-3 border-l-2 border-orange-200 tracking-wide">${f.a}</p>
+            </details>
+        `).join('');
+    }
+
+    // 初始化
+    window.onload = () => {
+        filterFAQ();
+        setTimeout(() => playStory('start'), 600);
+    };
+</script>
+</body>
+</html>
