@@ -21,8 +21,9 @@
 
     <div class="w-full md:w-[55%] h-auto md:h-full p-6 md:p-16 flex flex-col justify-center bg-white relative overflow-y-auto no-scrollbar border-b md:border-b-0 md:border-r border-slate-200">
         <div class="max-w-xl mx-auto w-full">
-            <span class="inline-block py-1 px-3 rounded-full bg-orange-100 text-orange-600 text-xs font-bold mb-6 tracking-wide">給 NPO 夥伴的專屬邀請</span
+            <span class="inline-block py-1 px-3 rounded-full bg-orange-100 text-orange-600 text-xs font-bold mb-6 tracking-wide">給 NPO 夥伴的專屬邀請</span>
             <p class="text-slate-500 text-base md:text-lg mb-8 leading-relaxed">
+                <br>
                 專注打造物資「無償共享」生態圈，運用科技的力量，讓社福團體募集物資更輕鬆、更有效率！
             </p>
             
@@ -47,7 +48,7 @@
                 </div>
             </div>
             <button onclick="toggleSidebar()" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-1 shadow-sm">
-                📖 營運百科
+                📖 更多QA
             </button>
         </div>
 
@@ -61,7 +62,7 @@
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
     <aside id="sidebar" class="sidebar fixed top-0 right-0 h-full w-[90%] sm:w-[420px] bg-white z-50 shadow-2xl translate-x-full flex flex-col">
         <div class="p-5 border-b flex justify-between items-center bg-white">
-            <h3 class="font-black text-slate-800 text-lg">營運百科 (20題)</h3>
+            <h3 class="font-black text-slate-800 text-lg">更多QA (20題)</h3>
             <button onclick="toggleSidebar()" class="w-8 h-8 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 transition">✕</button>
         </div>
         
@@ -70,8 +71,8 @@
             <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="filter-chips">
                 <button onclick="setCategory('全部')" class="chip active px-3 py-1.5 bg-orange-500 text-white rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">全部</button>
                 <button onclick="setCategory('帳號資格')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">💰 帳號資格</button>
-                <button onclick="setCategory('募集運費')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">🚚 募集運費</button>
-                <button onclick="setCategory('營運後續')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">🧾 營運後續</button>
+                <button onclick="setCategory('徵求物資')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">🚚 徵求物資</button>
+                <button onclick="setCategory('其他')" class="chip px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold whitespace-nowrap hover:bg-slate-100 transition">🧾 其他</button>
             </div>
         </div>
 
@@ -85,25 +86,25 @@
         { id: 1, cat: "帳號資格", q: "如何註冊帳號？", a: "點選「登入/註冊」。輸入手機號碼並通過簡訊驗證後，至「編輯資料」填寫真實姓名與收件資訊（重要：須與證件相符，以免無法領貨）。" },
         { id: 2, cat: "帳號資格", q: "申請公益帳號需要準備哪些文件？", a: "點選變更「會員身份」，並準備政府立案證明及相關資料。上傳後 7-10 工作日，會有專人為您審核撥電。" },
         { id: 3, cat: "帳號資格", q: "公益帳號與一般帳號差在哪？", a: "公益帳號刊登需求有首頁露出版位、專屬的「感謝模版」功能，能讓募集效率更高，快速建立信任感。" },
-        { id: 4, cat: "帳號資格", q: "單位聯絡人異動怎麼辦？", a: "點選「交接預告」，將有專人聯繫。或來信告知（shin@give-circle.com）。" },
+        { id: 4, cat: "帳號資格", q: "單位聯絡人異動怎麼辦？", a: "點選「交接預告」，將有專人聯繫。或來信告知（<a href='mailto:shin@give-circle.com' class='underline text-orange-500'>shin@give-circle.com</a>）。" },
         { id: 5, cat: "帳號資格", q: "同一個單位，有分會，還能申請帳號嗎？", a: "可以，仍需特別申請。手機號碼不可重複註冊。" },
         
-        { id: 6, cat: "募集運費", q: "如何寫需求才會有人送？", a: "秘訣是「規格與用途寫清楚」。例如標明「抽取式衛生紙」而非只寫衛生紙，並說明是給獨居長輩使用，這能幫助贈送者精準評估。" },
-        { id: 7, cat: "募集運費", q: "有什麼東西是禁止募集的？", a: "法令禁止網購寄送的醫療處方藥品。詳見規範：<a href='https://www.give-circle.com/story/22076' target='_blank' class='text-orange-500 font-bold hover:underline'>什麼東西不能送？</a>" },
-        { id: 8, cat: "募集運費", q: "徵求數量達標後，怎麼提前結束？", a: "平台數量達標會自動下架，若是想提前結束，可進入「需求管理」的後台介面，手動關閉或下架。" },
-        { id: 9, cat: "募集運費", q: "可以指定要全新或特定效期的物資嗎？", a: "可以。建議在需求描述中明確標註（例如「僅收全新」、「效期需大於三個月」）。" },
-        { id: 10, cat: "募集運費", q: "大型傢俱適合在平台上募集嗎？", a: "超商與 i郵箱皆有尺寸限制。大型物資建議在描述中註明，並透過站內信與贈送者約定「自取」，或找新竹物流等大型宅配。" },
-        { id: 11, cat: "募集運費", q: "運費無法負擔怎麼辦？", a: "在需求說明頁寫上，無法負擔運費請包涵，並勾選由「贈送者」支付運費。贈送者進行捐贈時就會知道。" },
-        { id: 12, cat: "募集運費", q: "有哪些寄件方式可選？", a: "平台串接了：郵局 i郵箱、全家店到店、萊爾富店到店以及新竹物流。若有其他物流，可以勾選「其他物流」，但此方式需自行追蹤貨態。" },
-        { id: 14, cat: "募集運費", q: "可以合併收取同一人的多項物資嗎？", a: "可以（手機限定功能）。若同一位贈送者有多個物品要寄給您，可透過手機版操作「合併寄送」，節省運費與時間。" },
+        { id: 6, cat: "徵求物資", q: "如何寫需求才會有人送？", a: "秘訣是「規格與用途寫清楚」。例如標明「抽取式衛生紙」而非只寫衛生紙，並說明是給獨居長輩使用，這能幫助贈送者精準評估。" },
+        { id: 7, cat: "徵求物資", q: "有什麼東西是禁止募集的？", a: "法令禁止網購寄送的醫療處方藥品。詳見規範：<a href='https://www.give-circle.com/story/22076' target='_blank' class='text-orange-500 font-bold hover:underline'>什麼東西不能送？</a>" },
+        { id: 8, cat: "徵求物資", q: "徵求數量達標後，怎麼提前結束？", a: "平台數量達標會自動下架，若是想提前結束，可進入「需求管理」的後台介面，手動關閉或下架。" },
+        { id: 9, cat: "徵求物資", q: "可以指定要全新或特定效期的物資嗎？", a: "可以。建議在需求描述中明確標註（例如「僅收全新」、「效期需大於三個月」）。" },
+        { id: 10, cat: "徵求物資", q: "大型傢俱適合在平台上募集嗎？", a: "超商與 i郵箱皆有尺寸限制。大型物資建議在描述中註明，並透過站內信與贈送者約定「自取」，或找新竹物流等大型宅配。" },
+        { id: 11, cat: "徵求物資", q: "運費無法負擔怎麼辦？", a: "在需求說明頁寫上，無法負擔運費請包涵，並勾選由「贈送者」支付運費。贈送者進行捐贈時就會知道。" },
+        { id: 12, cat: "徵求物資", q: "有哪些寄件方式可選？", a: "平台串接了：郵局 i郵箱、全家店到店、萊爾富店到店以及新竹物流。若有其他物流，可以勾選「其他物流」，但此方式需自行追蹤貨態。" },
+        { id: 14, cat: "徵求物資", q: "可以合併收取同一人的多項物資嗎？", a: "可以（手機限定功能）。若同一位贈送者有多個物品要寄給您，可透過手機版操作「合併寄送」，節省運費與時間。" },
         
-        { id: 13, cat: "營運後續", q: "收到壞掉或不符需求的東西怎麼辦？", a: "建議先透過站內私訊了解是否為誤會。若遇惡意寄件，請直接使用「好壞名單」將對方列入黑名單，並通知客服。" },
-        { id: 15, cat: "營運後續", q: "如何開立捐贈收據？", a: "確認捐物收到後，除了到頁面留言感謝。其餘照單位運作方式。平台貼心設定『感謝模版』，讓您輕鬆留下感謝！" },
-        { id: 16, cat: "營運後續", q: "用不到的物資可以轉贈嗎？", a: "可以。若暫無需求，建議與原贈送者打聲招呼後，將物資作為「禮物」重新發佈回禮物池或轉贈，讓愛心繼續流動。" },
-        { id: 17, cat: "營運後續", q: "如何在平台上表達感謝？", a: "平台特別開發了「感謝模版」功能，您可以善用此模版，一鍵發送溫馨的感謝留言給捐物者。" },
-        { id: 18, cat: "營運後續", q: "需要回報物資使用狀況嗎？", a: "我們非常鼓勵！您可以透過「一鍵tag的功能」發布圖文說說，這能大幅提升機構透明度與捐贈者的信任感。" },
-        { id: 19, cat: "營運後續", q: "企業想進行大宗捐贈怎麼對接？", a: "若有大宗專案需求，企業通常會透過首頁「企業合作」專區或信箱 info@give-circle.com 聯繫，由官方協助媒合。" },
-        { id: 20, cat: "營運後續", q: "公益團體可以發起小額募款嗎？", a: "GC贈物網以「募集實體物資」為主要使用目的。" }
+        { id: 13, cat: "其他", q: "收到壞掉或不符需求的東西怎麼辦？", a: "建議先透過站內私訊了解是否為誤會。若遇惡意寄件，請直接使用「好壞名單」將對方列入黑名單，並通知客服。" },
+        { id: 15, cat: "其他", q: "如何開立捐贈收據？", a: "確認捐物收到後，除了到頁面留言感謝。其餘照單位運作方式。平台貼心設定『感謝模版』，讓您輕鬆留下感謝！" },
+        { id: 16, cat: "其他", q: "用不到的物資可以轉贈嗎？", a: "可以。若暫無需求，建議與原贈送者打聲招呼後，將物資作為「禮物」重新發佈回禮物池或轉贈，讓愛心繼續流動。" },
+        { id: 17, cat: "其他", q: "如何在平台上表達感謝？", a: "平台特別開發了「感謝模版」功能，您可以善用此模版，一鍵發送溫馨的感謝留言給捐物者。" },
+        { id: 18, cat: "其他", q: "需要回報物資使用狀況嗎？", a: "我們非常鼓勵！您可以透過「一鍵tag的功能」發布圖文說說，這能大幅提升機構透明度與捐贈者的信任感。" },
+        { id: 19, cat: "其他", q: "企業想進行大宗捐贈怎麼對接？", a: "若有大宗專案需求，企業通常會透過首頁「企業合作」專區或信箱 <a href='mailto:info@give-circle.com' class='underline text-orange-500'>info@give-circle.com</a> 聯繫，由官方協助媒合。" },
+        { id: 20, cat: "其他", q: "公益團體可以發起小額募款嗎？", a: "GC贈物網以「募集實體物資」為主要使用目的。" }
     ];
 
     // --- 2. 官方對話腳本 (劇情分支) ---
@@ -121,7 +122,7 @@
         cost: {
             msgs: [
                 { side: 'right', text: "說實話，真的不用錢嗎？" },
-                { side: 'left', text: "<b>真的不用錢！</b>我們一毛都不收，資源就留給需要個案！連簡訊驗證費用都由我們吸收喔～<br><span onclick='openSidebar(1)' class='text-orange-500 font-bold cursor-pointer hover:underline'>[查看費率規則]</span>" }
+                { side: 'left', text: "<b>真的不用錢！</b>我們一毛都不收，資源就留給需要個案！連簡訊驗證費用都由我們吸收喔～<br><span onclick='openSidebar(1)' class='text-orange-500 font-bold cursor-pointer hover:underline'>[如何註冊]</span>" }
             ],
             options: [{ text: "那怎麼募物資？", next: "get" }, { text: "註冊會很麻煩嗎？", next: "docs" }]
         },
