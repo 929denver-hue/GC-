@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 給社工愛的鼓勵｜GC贈物網</title>
+    <title>2026給社工愛的鼓勵｜GC贈物網</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Press+Start+2P&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -55,7 +55,7 @@
         /* =========================================
            便條紙拼字視覺 (Sticky Note Wall)
            ========================================= */
-        .sticky-wall-section { width: 100%; max-width: 400px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 25px 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.9); text-align: center; display: none; /* 預設隱藏，累積達5000由JS顯示 */ }
+        .sticky-wall-section { width: 100%; max-width: 400px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 25px 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.9); text-align: center; display: none; }
         .sticky-wall-title { font-size: 14px; color: #8D6E63; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; }
         .sticky-wall-container { display: flex; flex-direction: column; gap: 12px; align-items: center; background: #fafafa; padding: 25px 10px; border-radius: 8px; border: 1px inset #eee; }
         .sticky-word { display: flex; gap: 10px; justify-content: center; }
@@ -75,8 +75,10 @@
         .sticky-progress-text { font-size: 12px; color: #888; margin-top: 20px; font-family: 'Noto Sans TC'; line-height: 1.6;}
         .sticky-progress-text strong { color: #E65100; font-size: 15px;}
 
-        .btn-go-game { background: #E65100; color: #fff; border: none; padding: 16px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(230,81,0,0.3); cursor: pointer; width: 100%; max-width: 400px; transition: 0.2s; }
+        .home-btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; }
+        .btn-go-game { background: #E65100; color: #fff; border: none; padding: 16px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(230,81,0,0.3); cursor: pointer; width: 100%; transition: 0.2s; }
         .btn-go-game:active { transform: scale(0.98); }
+        .btn-secondary { background: #fff; color: #E65100; border: 2px solid #FFCC80; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
         .csr-hint { font-size: 12px; color: var(--ent-blue); text-align: center; margin-bottom: 10px; font-family: 'Noto Sans TC'; border: 1px dashed var(--ent-blue); padding: 8px; border-radius: 4px; background: rgba(2, 119, 189, 0.1); display: none; font-weight:bold; }
         .ent-badge-inline { font-size: 10px; color: var(--ent-blue); border: 1px solid var(--ent-blue); padding: 2px 6px; border-radius: 4px; margin-left: 8px; display: none; background: rgba(2, 119, 189, 0.05); }
@@ -87,8 +89,12 @@
         .game-console { background-color: var(--console-body); padding: 15px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 400px; border-radius: 8px; }
         .screen { background: #fff; border: 4px solid #222; height: 520px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; overflow-y: auto; overflow-x: hidden; position: relative;}
 
-        .state-idle, .state-spinning, .state-steps { text-align: center; margin-top: 100px; font-family: 'Press Start 2P'; width: 100%; }
-        .state-spinning, .state-steps { display: none; margin-top: 150px; }
+        .state-idle, .state-spinning { text-align: center; font-family: 'Press Start 2P'; width: 100%; }
+        .state-idle { margin-top: 130px; transition: 0.2s; }
+        .state-idle:active { transform: scale(0.95); }
+        .state-spinning { display: none; margin-top: 150px; }
+        
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
         .radar-spinner { width: 60px; height: 60px; border: 4px solid #eee; border-top: 4px solid var(--warm-orange); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -128,30 +134,10 @@
         textarea, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; font-size: 14px; outline: none;}
         textarea:focus, input[type="text"]:focus { border-color: var(--warm-orange); }
         
-        .upload-wrapper { position: relative; width: 100%; }
-        .btn-upload { border: 2px dashed #ccc; background: #fff; color: #888; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; font-weight:bold; }
-        .btn-upload:hover { border-color: var(--warm-orange); color: var(--warm-orange); background: #FFF3E0; }
-        .upload-input { position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-
         .step-controls { display: flex; gap: 10px; margin-top: 10px; }
         .btn-step { flex: 1; background: #333; color: #fff; border: none; padding: 12px; font-family: 'Noto Sans TC'; font-weight:bold; font-size: 13px; cursor: pointer; border-radius: 4px; }
         .btn-step.primary { background: var(--warm-orange); }
 
-        /* 投幣區動畫 */
-        .coin-area { display: flex; justify-content: flex-end; align-items: flex-end; height: 60px; padding-right: 10px; position: relative; margin-bottom: 15px; }
-        .insert-hint { position: absolute; right: 60px; top: 10px; font-size: 10px; color: #fff; font-family: 'Noto Sans TC'; animation: pulseHint 1.5s infinite; }
-        .slot-wrapper { position: relative; width: 40px; height: 60px; display: flex; justify-content: center; align-items: flex-end; }
-        .coin-slot { width: 18px; height: 45px; background: #000; border: 2px solid #555; border-radius: 4px; box-shadow: inset 0 0 10px #000; z-index: 2; }
-        .heart-token { font-size: 35px; position: absolute; top: -10px; z-index: 1; cursor: pointer; animation: float 2s infinite; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5)); }
-        
-        @keyframes float { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-8px);} }
-        @keyframes dropIn { 0% { transform: translateY(0) scale(1); opacity: 1; } 30% { transform: translateY(-15px) scale(1.1); opacity: 1; } 100% { transform: translateY(45px) scale(0.1); opacity: 0; } }
-        @keyframes pulseHint { 0%, 100% {opacity: 0.5;} 50% {opacity: 1;} }
-
-        .btn-main-start { background: #999; color: #fff; border: 4px solid #555; padding: 15px; width: 100%; font-family: 'Press Start 2P'; font-size: 12px; cursor: pointer; border-radius: 4px; transition: 0.3s; }
-        .btn-main-start.unlocked { background: #FF1744; border-color: #880E4F; animation: pulse 2s infinite; box-shadow: 0 4px 0 #880E4F; }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
-        
         /* --- 視圖 3: 搜尋與致敬 --- */
         #view-search { background: #ECEFF1; justify-content: flex-start; padding-top: 40px; }
         .db-console { max-width: 400px; width: 100%; background: #fff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
@@ -181,7 +167,7 @@
         .wf-comment-item { border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 4px; }
         .wf-comment-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
-        /* --- Modals --- */
+        /* --- Modals (共用與專屬) --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px);}
         .close-btn { cursor: pointer; color: #fff; font-size: 24px; font-weight: bold; }
 
@@ -263,7 +249,7 @@
                 <strong>社工，讓太陽照不到的地方，依然有光！</strong><br><br>
                 4月2日社工節，<br>
                 讓我們一起為全台社工加油，<br>
-                留下一張愛的便利貼，為他們累積能量。<br>
+                留下一張愛的便利貼，為他們累積能量。
             </div>
             
             <div id="csr-hint" class="csr-hint"></div>
@@ -274,7 +260,7 @@
 
             <div id="sticky-wall-section" class="sticky-wall-section" style="display: none;">
                 <div class="sticky-wall-title">
-                    💡 一張張便利貼，拼出被看見的溫柔
+                    💡 每一份心意，都在拼湊感謝
                     <span id="ent-badge-hero" class="ent-badge-inline">CSR MATCH</span>
                 </div>
                 
@@ -341,12 +327,13 @@
                     </div>
                 </div>
                 <div class="sticky-progress-text">
-                    全台已點亮 <strong id="global-count-display">4,500</strong> 則祝福，這面牆正在被慢慢填滿。
+                    全台累積 <strong id="global-count-display">12,540</strong> 則祝福
                 </div>
             </div>
 
             <div class="home-btn-group">
                 <button class="btn-go-game" onclick="switchView('view-game', null)">開始任務 (START) ▶</button>
+                <button class="btn-go-game btn-secondary" onclick="shareHomePage()">分享活動給好友 📤</button>
             </div>
         </main>
 
@@ -355,9 +342,9 @@
             
             <div class="game-console">
                 <div class="screen">
-                    <div id="state-idle" class="state-idle">
-                        <div style="font-size: 45px; margin-bottom: 20px;">🛡️</div>
-                        <div style="line-height:1.5;">PIXEL QUEST<br><span style="font-size:10px; color:#888;">請投入金幣啟動</span></div>
+                    <div id="state-idle" class="state-idle" style="cursor:pointer;" onclick="startSensing()">
+                        <div style="font-size: 50px; margin-bottom: 20px; animation: pulse 2s infinite;">👆</div>
+                        <div style="line-height:1.5; font-size:14px; font-weight:bold; color:var(--warm-orange);">點擊螢幕開始感應<br><span style="font-size:10px; color:#888; font-weight:normal; margin-top:5px; display:block;">連線需要能量的社福單位</span></div>
                     </div>
 
                     <div id="state-spinning" class="state-spinning">
@@ -407,10 +394,6 @@
                                 <textarea id="msg-input" rows="2" placeholder="也可以自己寫喔..."></textarea>
                             </div>
                             <div class="input-group">
-                                <label>📷 上傳照片 (可選，沒傳會用預設暖圖)：</label>
-                                <div class="upload-wrapper"><button class="btn-upload">上傳一張照片</button><input type="file" id="user-photo-upload" class="upload-input" accept="image/*" onchange="previewUserPhoto()"></div>
-                            </div>
-                            <div class="input-group">
                                 <label>✍️ 您的署名：</label>
                                 <input type="text" id="sign-input" placeholder="如：王小明 / 匿名勇者">
                             </div>
@@ -418,12 +401,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="coin-area">
-                    <div id="insert-hint" class="insert-hint">點擊愛心 或 按鈕 ▶</div>
-                    <div class="slot-wrapper"><div id="heart-token" class="heart-token" onclick="handleCoinInsert()">❤️</div><div class="coin-slot"></div></div>
-                </div>
-                <button id="btn-start-game" class="btn-main-start" onclick="handleMainButtonClick()">請先投幣 (INSERT LOVE)</button>
             </div>
         </main>
 
@@ -543,11 +520,9 @@
         ];
         const defaultImages = ["https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600", "https://images.unsplash.com/photo-1499209974431-2761388a123d?w=600"];
 
-        let isCoinInserted = false;
         let currentUnit = null;
         let selectedTag = "";
         let selectedProp = null; 
-        let userImgData = null;
         let dailyCount = 0;
         let totalCount = 12540;
         const targetCount = 15000;
@@ -556,8 +531,6 @@
         let myTeamName = new URLSearchParams(window.location.search).get('team');
         let currentQuoteList = quotesData.public;
 
-        const heartToken = document.getElementById('heart-token');
-        const btnStartGame = document.getElementById('btn-start-game');
         const stateIdle = document.getElementById('state-idle');
         const stateQuest = document.getElementById('state-quest');
         const questProgress = document.getElementById('quest-progress');
@@ -576,16 +549,24 @@
                 dailyCount = 0;
             } else { dailyCount = parseInt(localStorage.getItem('gc_daily_count') || 0); }
             
+            const addedTotal = parseInt(localStorage.getItem('gc_total_added') || 0);
+            document.getElementById('global-count-display').innerText = (totalCount + addedTotal).toLocaleString();
             updateDailyDisplay();
         }
 
         function updateDailyDisplay() {
             document.getElementById('daily-count-display').innerText = Math.max(0, 3 - dailyCount);
+            const idleEl = document.getElementById('state-idle');
+            if (!idleEl) return;
+            
             if (dailyCount >= 3) {
-                btnStartGame.innerText = "今日次數已達上限 (TOMORROW)";
-                btnStartGame.classList.remove('unlocked');
-                heartToken.style.display = 'none';
-                document.getElementById('insert-hint').style.display = 'none';
+                idleEl.innerHTML = '<div style="font-size: 45px; margin-bottom: 20px;">🛑</div><div style="line-height:1.5; color:var(--warm-orange); font-weight:bold;">今日能量已達上限<br><span style="font-size:10px; color:#888; font-weight:normal; margin-top:5px; display:block;">請明天再來連線</span></div>';
+                idleEl.onclick = null;
+                idleEl.style.cursor = 'default';
+            } else {
+                idleEl.innerHTML = '<div style="font-size: 50px; margin-bottom: 20px; animation: pulse 2s infinite;">👆</div><div style="line-height:1.5; font-size:14px; font-weight:bold; color:var(--warm-orange);">點擊螢幕開始感應<br><span style="font-size:10px; color:#888; font-weight:normal; margin-top:5px; display:block;">連線需要能量的社福單位</span></div>';
+                idleEl.onclick = startSensing;
+                idleEl.style.cursor = 'pointer';
             }
         }
 
@@ -594,13 +575,12 @@
             const added = parseInt(localStorage.getItem('gc_total_added') || 0);
             const currentTotal = totalCount + added;
             
-            // 更新累積數字
             const countEl = document.getElementById('global-count-display');
             if(countEl) countEl.innerText = currentTotal.toLocaleString();
 
             const wallSection = document.getElementById('sticky-wall-section');
             if (currentTotal >= 5000) {
-                wallSection.style.display = 'block'; // 超過 5000 才顯示
+                wallSection.style.display = 'block'; 
                 
                 const allNotes = document.querySelectorAll('.note.on');
                 const baseRevealed = 65; 
@@ -652,32 +632,24 @@
             alert(`已切換模式：${name || '一般民眾'}。系統已同步專屬金句與贊助邏輯。`);
         }
 
-        // --- 投幣與連線邏輯 ---
-        function handleCoinInsert() {
-            if (dailyCount >= 3) return alert("勇者休息一下，明天再來吧！");
-            if (isCoinInserted) return;
-            
-            document.getElementById('insert-hint').style.display = 'none';
-            heartToken.style.animation = "none";
-            setTimeout(() => { heartToken.style.animation = "dropIn 0.6s forwards cubic-bezier(0.5, -0.5, 0.5, 1.5)"; }, 10);
-            
-            setTimeout(() => {
-                isCoinInserted = true;
-                btnStartGame.innerText = "連線中...";
-                btnStartGame.classList.add('unlocked');
-                startGameSpin();
-            }, 600);
+        // --- 首頁分享活動 ---
+        function shareHomePage() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '給社工愛的鼓勵',
+                    text: '4月2日社工節，讓我們一起為全台社工加油，留下一張愛的便利貼！',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert("請複製網址分享給好友！\n" + window.location.href);
+            }
         }
 
-        function handleMainButtonClick() {
-            if (dailyCount >= 3) return;
-            if (!isCoinInserted) handleCoinInsert(); 
-        }
-
-        function startGameSpin() {
-            stateIdle.style.display = 'none';
-            btnStartGame.style.display = 'none';
-            document.querySelector('.coin-area').style.display = 'none'; 
+        // --- 點擊螢幕連線感應 ---
+        function startSensing() {
+            if (dailyCount >= 3) return alert("今日能量已達上限，請明天再來喔！");
+            
+            document.getElementById('state-idle').style.display = 'none';
             document.getElementById('state-spinning').style.display = 'block';
 
             const shuffleEl = document.getElementById('shuffle-unit-name');
@@ -709,7 +681,8 @@
         }
 
         function showQuest() {
-            document.getElementById('quest-img').src = currentUnit.img;
+            const finalImg = defaultImages[Math.floor(Math.random() * defaultImages.length)];
+            document.getElementById('quest-img').src = finalImg;
             document.getElementById('story-unit').innerText = currentUnit.name;
             document.getElementById('story-desc').innerText = currentUnit.desc;
             
@@ -770,14 +743,6 @@
             input.value = text; input.style.borderColor = "#E65100";
             setTimeout(() => input.style.borderColor = "#ddd", 300);
         }
-        function previewUserPhoto() {
-            const file = document.getElementById('user-photo-upload').files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) { userImgData = e.target.result; }
-                reader.readAsDataURL(file);
-            }
-        }
 
         function generatePreview() {
             const msg = document.getElementById('msg-input').value;
@@ -785,7 +750,7 @@
             if(!selectedTag) { alert("請回到 Step 1 選擇一個標籤！"); return goToStep(1); }
             if(!msg || !sign) return alert("請填寫鼓勵的話與署名！");
 
-            const finalImg = userImgData ? userImgData : defaultImages[Math.floor(Math.random() * defaultImages.length)];
+            const finalImg = defaultImages[Math.floor(Math.random() * defaultImages.length)];
             document.getElementById('card-img').src = finalImg;
             document.getElementById('card-tag').innerText = selectedTag;
             document.getElementById('card-msg').innerText = msg;
@@ -819,12 +784,11 @@
 
             saveRecord();
             addRecordToWaterfall();
-            updateStickyWall(); // 讓首頁的牆更新
+            updateStickyWall();
             
             setTimeout(() => { 
                 alert("發布成功！已加入祝福瀑布牆。"); 
                 closeModal('preview-modal');
-                // 沒有任務標籤了，直接切換到 index=2 的標籤(祝福牆)
                 switchView('view-waterfall', document.querySelectorAll('.tab-item')[2]); 
                 resetGame();
                 btn.innerHTML = "✅ 確認送出 (發布至瀑布牆)"; 
@@ -862,29 +826,20 @@
         }
 
         function resetGame() {
-            isCoinInserted = false;
             document.getElementById('msg-input').value = "";
             document.getElementById('sign-input').value = "";
             document.querySelectorAll('.supply-item').forEach(i => i.classList.remove('selected'));
-            selectedProp = null; selectedTag = ""; userImgData = null;
+            selectedProp = null; selectedTag = ""; 
             
             document.getElementById('state-quest').style.display = 'none';
             document.getElementById('quest-progress').style.display = 'none';
             document.getElementById('state-idle').style.display = 'block';
-            document.querySelector('.coin-area').style.display = 'flex';
-            
-            const btn = document.getElementById('btn-start-game');
-            btn.style.display = 'block'; btn.innerText = "請先投幣 (INSERT LOVE)"; btn.classList.remove('unlocked');
-            
-            const heart = document.getElementById('heart-token');
-            heart.style.animation = "float 2s infinite"; 
-            document.getElementById('insert-hint').style.display = 'block';
             
             document.getElementById('q-step-1').classList.remove('active');
             document.getElementById('q-step-2').classList.remove('active');
             document.getElementById('q-step-3').classList.remove('active');
             
-            checkDailyLimit();
+            updateDailyDisplay();
         }
 
         // --- 互動功能 ---
