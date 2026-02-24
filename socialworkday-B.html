@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026給社工愛的鼓勵｜GC贈物網</title>
+    <title>2026給社工愛的鼓勵|GC贈物網</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Press+Start+2P&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -52,9 +52,7 @@
         .home-marquee-text { display: inline-block; font-size: 12px; color: #E65100; padding-left: 100%; animation: homeTicker 20s linear infinite; letter-spacing: 1px; font-weight: bold; }
         @keyframes homeTicker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* =========================================
-           便條紙拼字視覺 (Sticky Note Wall)
-           ========================================= */
+        /* 便條紙拼字視覺 (Sticky Note Wall) */
         .sticky-wall-section { width: 100%; max-width: 400px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 25px 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.9); text-align: center; display: none; }
         .sticky-wall-title { font-size: 14px; color: #8D6E63; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; }
         .sticky-wall-container { display: flex; flex-direction: column; gap: 12px; align-items: center; background: #fafafa; padding: 25px 10px; border-radius: 8px; border: 1px inset #eee; }
@@ -83,16 +81,16 @@
         .csr-hint { font-size: 12px; color: var(--ent-blue); text-align: center; margin-bottom: 10px; font-family: 'Noto Sans TC'; border: 1px dashed var(--ent-blue); padding: 8px; border-radius: 4px; background: rgba(2, 119, 189, 0.1); display: none; font-weight:bold; }
         .ent-badge-inline { font-size: 10px; color: var(--ent-blue); border: 1px solid var(--ent-blue); padding: 2px 6px; border-radius: 4px; margin-left: 8px; display: none; background: rgba(2, 119, 189, 0.05); }
 
-        /* --- 視圖 2: 遊戲機 --- */
+        /* --- 視圖 2: 遊戲機 (無投幣孔版) --- */
         #view-game { background-color: var(--console-dark); background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); justify-content: center; }
         .daily-limit-badge { background: #000; color: #00FF00; padding: 8px 15px; border-radius: 5px; margin-bottom: 15px; border: 2px solid #555; font-size: 10px; font-family: 'Press Start 2P'; text-shadow: 0 0 5px #00FF00; }
         .game-console { background-color: var(--console-body); padding: 15px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 400px; border-radius: 8px; }
-        .screen { background: #fff; border: 4px solid #222; height: 520px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; border-radius: 4px; margin-bottom: 15px; overflow-y: auto; overflow-x: hidden; position: relative;}
+        
+        /* 螢幕設定為 Flex，讓待機畫面可以完美置中 */
+        .screen { background: #fff; border: 4px solid #222; height: 550px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-radius: 4px; overflow-y: auto; overflow-x: hidden; position: relative;}
 
-        .state-idle, .state-spinning { text-align: center; font-family: 'Press Start 2P'; width: 100%; }
-        .state-idle { margin-top: 130px; transition: 0.2s; }
-        .state-idle:active { transform: scale(0.95); }
-        .state-spinning { display: none; margin-top: 150px; }
+        .state-idle, .state-spinning, .state-steps { text-align: center; width: 100%; font-family: 'Noto Sans TC'; margin: auto 0; }
+        .state-spinning, .state-steps { display: none; }
         
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
         .radar-spinner { width: 60px; height: 60px; border: 4px solid #eee; border-top: 4px solid var(--warm-orange); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
@@ -133,7 +131,7 @@
 
         textarea, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; font-size: 14px; outline: none;}
         textarea:focus, input[type="text"]:focus { border-color: var(--warm-orange); }
-        
+
         .step-controls { display: flex; gap: 10px; margin-top: 10px; }
         .btn-step { flex: 1; background: #333; color: #fff; border: none; padding: 12px; font-family: 'Noto Sans TC'; font-weight:bold; font-size: 13px; cursor: pointer; border-radius: 4px; }
         .btn-step.primary { background: var(--warm-orange); }
@@ -215,6 +213,10 @@
         /* 更多金句視窗 */
         #msg-modal-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 8px; }
 
+        /* 回覆留言視窗 */
+        .comment-modal-box { background:#fff; width:90%; max-width:320px; padding:25px; border-radius:12px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .comment-input { width:100%; padding:12px; border:1px solid #ccc; border-radius:6px; margin:15px 0; outline:none; font-family:'Noto Sans TC'; }
+
     </style>
 </head>
 <body>
@@ -260,7 +262,7 @@
 
             <div id="sticky-wall-section" class="sticky-wall-section" style="display: none;">
                 <div class="sticky-wall-title">
-                    💡 每一份心意，都在拼湊感謝
+                    💡 一張張便利貼，拼出被看見的溫柔
                     <span id="ent-badge-hero" class="ent-badge-inline">CSR MATCH</span>
                 </div>
                 
@@ -327,7 +329,8 @@
                     </div>
                 </div>
                 <div class="sticky-progress-text">
-                    全台累積 <strong id="global-count-display">12,540</strong> 則祝福
+                    全台已點亮 <strong id="global-count-display">4,500</strong> 則祝福，這面牆正在被慢慢填滿。<br>
+                    解鎖進度：<strong id="sticky-percent">0</strong>% (目標 5,000 則)
                 </div>
             </div>
 
@@ -341,14 +344,16 @@
             <div class="daily-limit-badge">TODAY'S ENERGY: <span id="daily-count-display">3</span> / 3</div>
             
             <div class="game-console">
-                <div class="screen">
+                <div class="screen" id="console-screen">
+                    
                     <div id="state-idle" class="state-idle" style="cursor:pointer;" onclick="startSensing()">
-                        <div style="font-size: 50px; margin-bottom: 20px; animation: pulse 2s infinite;">👆</div>
-                        <div style="line-height:1.5; font-size:14px; font-weight:bold; color:var(--warm-orange);">點擊螢幕開始感應<br><span style="font-size:10px; color:#888; font-weight:normal; margin-top:5px; display:block;">連線需要能量的社福單位</span></div>
+                        <div style="font-size: 50px; margin-bottom: 15px; animation: pulse 2.5s infinite;">✨</div>
+                        <div style="line-height:1.6; font-size:16px; font-weight:bold; color:#8D6E63;">輕觸螢幕，傳遞溫暖</div>
+                        <div style="font-size:11px; color:#999; margin-top:6px;">看看今天哪位社工，正等候你的打氣</div>
                     </div>
 
                     <div id="state-spinning" class="state-spinning">
-                        <div style="font-size: 12px; color: #E65100; margin-bottom: 15px; font-family:'Press Start 2P';">MATCHING...</div>
+                        <div style="font-size: 13px; color: #8D6E63; margin-bottom: 15px; font-weight:bold; letter-spacing:1px;">正在尋找美好的相遇...</div>
                         <div class="radar-spinner"></div>
                         <div id="shuffle-unit-name" style="margin-top: 30px; font-size: 16px; font-weight: bold; color: #333; background: #f0f0f0; padding: 10px 20px; border-radius: 30px; border: 2px dashed #ccc; font-family:'Noto Sans TC';">
                             正在尋找連線單位...
@@ -393,6 +398,7 @@
                                 <div class="smart-chips" id="dynamic-presets"></div>
                                 <textarea id="msg-input" rows="2" placeholder="也可以自己寫喔..."></textarea>
                             </div>
+                            
                             <div class="input-group">
                                 <label>✍️ 您的署名：</label>
                                 <input type="text" id="sign-input" placeholder="如：王小明 / 匿名勇者">
@@ -401,7 +407,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
         </main>
 
         <main id="view-search" class="view">
@@ -469,7 +475,7 @@
 
     <div id="inventory-modal" class="modal-overlay"><div class="inventory-box"><div class="inventory-header"><span>🎒 勇者背包</span><span class="close-btn" onclick="closeModal('inventory-modal')">×</span></div><div class="inventory-list" id="inventory-list"></div></div></div>
     
-    <div id="comment-modal" class="modal-overlay"><div style="background:#fff; width:90%; max-width:320px; padding:25px; border-radius:12px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);"><h3 style="color:#4E342E; margin-top:0; margin-bottom:5px;">回覆這則祝福</h3><input type="text" id="comment-input" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:6px; margin:15px 0; outline:none; font-family:'Noto Sans TC';" placeholder="說點什麼吧..."><div style="display:flex; gap:10px;"><button class="action-btn btn-back" style="color:#555; border-color:#ccc; padding:10px;" onclick="closeModal('comment-modal')">取消</button><button class="action-btn btn-download" style="padding:10px;" onclick="submitComment()">發佈</button></div></div></div>
+    <div id="comment-modal" class="modal-overlay"><div class="comment-modal-box"><h3 style="color:#4E342E; margin-top:0; margin-bottom:5px;">回覆這則祝福</h3><p style="font-size:12px; color:#888; margin-top:0;">將您的鼓勵疊加在此篇留言下方</p><input type="text" id="comment-input" class="comment-input" placeholder="說點什麼吧..."><div style="display:flex; gap:10px;"><button class="action-btn btn-back" style="color:#555; border-color:#ccc; padding:10px;" onclick="closeModal('comment-modal')">取消</button><button class="action-btn btn-download" style="padding:10px;" onclick="submitComment()">發佈</button></div></div></div>
 
     <div id="hr-dashboard" class="modal-overlay"><div class="hr-dashboard-box"><div class="hr-header"><div><div style="font-size:1.2rem; font-weight:bold; font-family:'Orbitron';">NEON DASHBOARD</div><div style="font-size:0.8rem; opacity:0.8;">企業 ESG 戰情室</div></div><span class="close-btn" onclick="closeModal('hr-dashboard')">✕</span></div><div class="hr-body"><div class="hr-grid"><div class="hr-card"><span class="hr-label">參與同仁人數</span><span class="hr-metric" id="hr-p-count">1,248</span></div><div class="hr-card"><span class="hr-label">累積公益積分</span><span class="hr-metric" id="hr-msg-count">3,560</span></div></div><div class="ranking-list"><h4 style="margin:0 0 15px 0; color:#5D4037; font-size:14px;">🏆 企業內部最熱門金句</h4><div id="hr-ranking-content"></div></div><button style="margin-top:20px; padding:15px; background:var(--ent-blue); color:#fff; border:none; width:100%; border-radius:6px; font-weight:bold;" onclick="alert('報表下載中...')">下載 ESG 結案報告 (PDF)</button></div></div></div>
 
@@ -556,17 +562,16 @@
 
         function updateDailyDisplay() {
             document.getElementById('daily-count-display').innerText = Math.max(0, 3 - dailyCount);
-            const idleEl = document.getElementById('state-idle');
-            if (!idleEl) return;
+            if (!stateIdle) return;
             
             if (dailyCount >= 3) {
-                idleEl.innerHTML = '<div style="font-size: 45px; margin-bottom: 20px;">🛑</div><div style="line-height:1.5; color:var(--warm-orange); font-weight:bold;">今日能量已達上限<br><span style="font-size:10px; color:#888; font-weight:normal; margin-top:5px; display:block;">請明天再來連線</span></div>';
-                idleEl.onclick = null;
-                idleEl.style.cursor = 'default';
+                stateIdle.innerHTML = '<div style="font-size: 45px; margin-bottom: 20px;">🛑</div><div style="line-height:1.5; color:var(--warm-orange); font-weight:bold;">今日能量已達上限<br><span style="font-size:10px; color:#888; font-weight:normal; margin-top:5px; display:block;">請明天再來連線</span></div>';
+                stateIdle.onclick = null;
+                stateIdle.style.cursor = 'default';
             } else {
-                idleEl.innerHTML = '<div style="font-size: 50px; margin-bottom: 20px; animation: pulse 2s infinite;">👆</div><div style="line-height:1.5; font-size:14px; font-weight:bold; color:var(--warm-orange);">點擊螢幕開始感應<br><span style="font-size:10px; color:#888; font-weight:normal; margin-top:5px; display:block;">連線需要能量的社福單位</span></div>';
-                idleEl.onclick = startSensing;
-                idleEl.style.cursor = 'pointer';
+                stateIdle.innerHTML = '<div style="font-size: 50px; margin-bottom: 15px; animation: pulse 2.5s infinite;">✨</div><div style="line-height:1.6; font-size:16px; font-weight:bold; color:#8D6E63;">輕觸螢幕，傳遞溫暖</div><div style="font-size:11px; color:#999; margin-top:6px;">看看今天哪位社工，正等候你的打氣</div>';
+                stateIdle.onclick = startSensing;
+                stateIdle.style.cursor = 'pointer';
             }
         }
 
@@ -649,7 +654,7 @@
         function startSensing() {
             if (dailyCount >= 3) return alert("今日能量已達上限，請明天再來喔！");
             
-            document.getElementById('state-idle').style.display = 'none';
+            stateIdle.style.display = 'none';
             document.getElementById('state-spinning').style.display = 'block';
 
             const shuffleEl = document.getElementById('shuffle-unit-name');
@@ -789,7 +794,7 @@
             setTimeout(() => { 
                 alert("發布成功！已加入祝福瀑布牆。"); 
                 closeModal('preview-modal');
-                switchView('view-waterfall', document.querySelectorAll('.tab-item')[2]); 
+                switchView('view-waterfall', document.querySelectorAll('.tab-item')[2]); // index 2 是瀑布牆
                 resetGame();
                 btn.innerHTML = "✅ 確認送出 (發布至瀑布牆)"; 
             }, 1000);
