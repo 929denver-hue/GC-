@@ -73,68 +73,74 @@
         .sticky-progress-text { font-size: 12px; color: #888; margin-top: 20px; font-family: 'Noto Sans TC'; line-height: 1.6;}
         .sticky-progress-text strong { color: #E65100; font-size: 15px;}
 
-        .home-btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; }
-        .btn-go-game { background: #E65100; color: #fff; border: none; padding: 16px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(230,81,0,0.3); cursor: pointer; width: 100%; transition: 0.2s; }
+        .home-btn-group { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 400px; }
+        .btn-go-game { background: #E65100; color: #fff; border: none; padding: 14px 40px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(230,81,0,0.3); cursor: pointer; transition: 0.2s; min-width: 220px; }
         .btn-go-game:active { transform: scale(0.98); }
-        .btn-secondary { background: #fff; color: #E65100; border: 2px solid #FFCC80; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .btn-secondary { background: transparent; color: #888; border: 1px dashed #ccc; box-shadow: none; font-size: 0.9rem; padding: 10px 30px; }
+        .btn-secondary:hover { color: var(--warm-orange); border-color: var(--warm-orange); }
 
         .csr-hint { font-size: 12px; color: var(--ent-blue); text-align: center; margin-bottom: 10px; font-family: 'Noto Sans TC'; border: 1px dashed var(--ent-blue); padding: 8px; border-radius: 4px; background: rgba(2, 119, 189, 0.1); display: none; font-weight:bold; }
         .ent-badge-inline { font-size: 10px; color: var(--ent-blue); border: 1px solid var(--ent-blue); padding: 2px 6px; border-radius: 4px; margin-left: 8px; display: none; background: rgba(2, 119, 189, 0.05); }
 
-        /* --- 視圖 2: 遊戲機 (無投幣孔版) --- */
-        #view-game { background-color: var(--console-dark); background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); justify-content: center; }
-        .daily-limit-badge { background: #000; color: #00FF00; padding: 8px 15px; border-radius: 5px; margin-bottom: 15px; border: 2px solid #555; font-size: 10px; font-family: 'Press Start 2P'; text-shadow: 0 0 5px #00FF00; }
-        .game-console { background-color: var(--console-body); padding: 15px; border: 6px solid #222; box-shadow: 10px 10px 0 rgba(0,0,0,0.5); width: 100%; max-width: 400px; border-radius: 8px; }
+        /* --- 視圖 2: 連線頁面 (優化為溫馨協調風) --- */
+        #view-game { background: linear-gradient(135deg, #FFF9F2 0%, #FFE0B2 100%); justify-content: center; }
         
-        /* 螢幕設定為 Flex，讓待機畫面可以完美置中 */
-        .screen { background: #fff; border: 4px solid #222; height: 550px; padding: 15px; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-radius: 4px; overflow-y: auto; overflow-x: hidden; position: relative;}
+        .daily-limit-badge { background: rgba(255,255,255,0.8); color: #E65100; padding: 8px 18px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #FFCC80; font-size: 11px; font-weight: bold; box-shadow: 0 2px 10px rgba(230,81,0,0.05); }
+        
+        .game-console { background: #ffffff; padding: 20px; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.06); width: 100%; max-width: 400px; border-radius: 20px; }
+        
+        .screen { background: #fafafa; border: 1px solid #f0f0f0; height: 520px; padding: 20px; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-radius: 12px; overflow-y: auto; overflow-x: hidden; position: relative;}
 
         .state-idle, .state-spinning, .state-steps { text-align: center; width: 100%; font-family: 'Noto Sans TC'; margin: auto 0; }
         .state-spinning, .state-steps { display: none; }
         
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
+        /* 呼吸燈感應圈特效 */
+        .touch-circle { width: 110px; height: 110px; background: #FFF3E0; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; box-shadow: 0 0 0 0 rgba(255,183,77, 0.4); animation: breathing 2.5s infinite; border: 2px dashed #FFB74D; }
+        @keyframes breathing { 0% { box-shadow: 0 0 0 0 rgba(255,183,77, 0.4); transform: scale(1); } 50% { box-shadow: 0 0 0 15px rgba(255,183,77, 0); transform: scale(1.05); } 100% { box-shadow: 0 0 0 0 rgba(255,183,77, 0); transform: scale(1); } }
+
         .radar-spinner { width: 60px; height: 60px; border: 4px solid #eee; border-top: 4px solid var(--warm-orange); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .quest-progress { display: none; justify-content: space-between; width: 100%; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee; position: sticky; top: 0; background: #fff; z-index: 10; }
+        .quest-progress { display: none; justify-content: space-between; width: 100%; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee; position: sticky; top: 0; background: #fafafa; z-index: 10; }
         .q-step { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #ccc; flex: 1; transition: 0.3s; font-weight: bold;}
-        .q-icon { font-size: 18px; margin-bottom: 5px; background: #f5f5f5; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: 0.3s; border: 2px solid transparent;}
+        .q-icon { font-size: 18px; margin-bottom: 5px; background: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: 0.3s; border: 2px solid #eee;}
         .q-step.active { color: var(--warm-orange); }
         .q-step.active .q-icon { background: #FFE0B2; border-color: var(--warm-orange); transform: scale(1.15); box-shadow: 0 0 10px rgba(230,81,0,0.2); }
         .q-step.completed { color: #888; }
-        .q-step.completed .q-icon { background: #e0e0e0; border-color: #aaa; }
+        .q-step.completed .q-icon { background: #e0e0e0; border-color: #ddd; }
 
         .state-quest { display: none; width: 100%; flex-direction: column; }
         .step-container { display: none; flex-direction: column; width: 100%; animation: fadeIn 0.5s; }
         
-        .real-photo-frame { width: 100%; height: 160px; background: #000; margin-bottom: 10px; border: 2px solid #333; border-radius: 4px; overflow: hidden; position: relative;}
+        .real-photo-frame { width: 100%; height: 160px; background: #f5f5f5; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;}
         .real-photo { width: 100%; height: 100%; object-fit: cover; }
-        .unit-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--hope-yellow); padding: 4px 10px; font-size: 14px; font-weight: bold; border: 1px solid var(--hope-yellow); }
+        .unit-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(255,255,255,0.9); color: var(--warm-orange); padding: 4px 12px; font-size: 13px; font-weight: bold; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         
         .input-group { margin-bottom: 15px; }
         .input-group label { font-size: 13px; color: #333; display: block; margin-bottom: 10px; font-weight: bold; }
         .tag-row { display: flex; gap: 8px; flex-wrap: wrap; }
-        .tag-btn { font-size: 13px; padding: 8px 15px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; background: #fafafa; transition: 0.2s;}
+        .tag-btn { font-size: 13px; padding: 8px 15px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; background: #fff; transition: 0.2s;}
         .tag-btn.active { background: var(--warm-orange); color: #fff; border-color: var(--warm-orange); }
 
         .supply-grid { display: flex; flex-direction: column; gap: 8px; }
-        .supply-item { border: 1px solid #ddd; border-radius: 8px; padding: 12px; cursor: pointer; background: #fafafa; display: flex; align-items: center; gap: 10px; transition: 0.2s;}
-        .supply-item.selected { border-color: var(--warm-orange); background: #FFF3E0; box-shadow: 0 2px 5px rgba(230,81,0,0.2); transform: translateX(3px); }
+        .supply-item { border: 1px solid #ddd; border-radius: 8px; padding: 12px; cursor: pointer; background: #fff; display: flex; align-items: center; gap: 10px; transition: 0.2s;}
+        .supply-item.selected { border-color: var(--warm-orange); background: #FFF3E0; box-shadow: 0 2px 5px rgba(230,81,0,0.1); transform: translateX(3px); }
         .supply-icon { font-size: 26px; }
         .supply-content { text-align: left; flex: 1; line-height: 1.4;}
         .supply-title { font-size: 14px; font-weight: bold; color: var(--warm-orange); }
         .supply-desc { font-size: 11px; color: #666; }
 
         .smart-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-        .smart-chip { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .smart-chip { background: #fff; color: #E65100; border: 1px solid #FFCC80; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; transition: 0.2s; }
         .smart-chip:hover { background: #FFE0B2; }
 
-        textarea, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Noto Sans TC'; font-size: 14px; outline: none;}
-        textarea:focus, input[type="text"]:focus { border-color: var(--warm-orange); }
+        textarea, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Noto Sans TC'; font-size: 14px; outline: none; background: #fff; }
+        textarea:focus, input[type="text"]:focus { border-color: var(--warm-orange); box-shadow: 0 0 5px rgba(230,81,0,0.1); }
 
         .step-controls { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-step { flex: 1; background: #333; color: #fff; border: none; padding: 12px; font-family: 'Noto Sans TC'; font-weight:bold; font-size: 13px; cursor: pointer; border-radius: 4px; }
-        .btn-step.primary { background: var(--warm-orange); }
+        .btn-step { flex: 1; background: #eee; color: #555; border: none; padding: 12px; font-family: 'Noto Sans TC'; font-weight:bold; font-size: 13px; cursor: pointer; border-radius: 8px; transition: 0.2s;}
+        .btn-step.primary { background: var(--warm-orange); color: #fff; box-shadow: 0 4px 10px rgba(230,81,0,0.2); }
+        .btn-step:active { transform: scale(0.98); }
 
         /* --- 視圖 3: 搜尋與致敬 --- */
         #view-search { background: #ECEFF1; justify-content: flex-start; padding-top: 40px; }
@@ -164,6 +170,24 @@
         .wf-comments { margin-top: 10px; background: #fafafa; border-radius: 6px; padding: 8px; font-size: 11px; color: #555; }
         .wf-comment-item { border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 4px; }
         .wf-comment-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        /* --- 視圖 5: 獎勵頁面 --- */
+        #view-awards { background: #fff; justify-content: flex-start; padding-top: 30px; }
+        .awards-header-box { text-align: center; margin-bottom: 25px; width: 100%; max-width: 400px; }
+        .awards-title { font-size: 1.8rem; font-weight: bold; color: var(--warm-orange); margin-bottom: 10px; font-family: 'Noto Sans TC'; }
+        .awards-subtitle { font-size: 0.95rem; color: #555; line-height: 1.6; margin-bottom: 15px; }
+        .awards-bonus-box { background: #FFF3E0; border: 1px dashed #FFB74D; padding: 15px; border-radius: 12px; text-align: center; color: #4E342E; font-size: 0.9rem; line-height: 1.5;}
+        
+        .award-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; }
+        .award-card { background: #fff; border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
+        .award-icon { font-size: 35px; background: #fafafa; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; border-radius: 12px; flex-shrink: 0; }
+        .award-info { flex: 1; }
+        .award-title { font-size: 14px; font-weight: bold; color: var(--warm-orange); margin-bottom: 4px; }
+        .award-desc { font-size: 11px; color: #666; line-height: 1.4; }
+        .award-tags { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+        .a-tag { font-size: 9px; padding: 4px 8px; border-radius: 6px; font-weight: bold; white-space: nowrap; }
+        .sw-tag { background: #EFEBE9; color: #5D4037; }
+        .user-tag { background: rgba(2, 119, 189, 0.1); color: var(--ent-blue); border: 1px dashed var(--ent-blue); }
 
         /* --- Modals (共用與專屬) --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px);}
@@ -237,6 +261,9 @@
         <div class="tab-item" onclick="switchView('view-waterfall', this)">
             <span class="tab-icon">💬</span><span>祝福牆</span>
         </div>
+        <div class="tab-item" onclick="switchView('view-awards', this)">
+            <span class="tab-icon">🎁</span><span>獎勵</span>
+        </div>
         <div class="tab-item" onclick="openInventory()">
             <span class="tab-icon">🎒</span><span>背包</span>
         </div>
@@ -262,7 +289,7 @@
 
             <div id="sticky-wall-section" class="sticky-wall-section" style="display: none;">
                 <div class="sticky-wall-title">
-                    💡 一張張便利貼，拼出被看見的溫柔
+                    💡 每一份心意，拼出被看見的溫柔
                     <span id="ent-badge-hero" class="ent-badge-inline">CSR MATCH</span>
                 </div>
                 
@@ -329,8 +356,8 @@
                     </div>
                 </div>
                 <div class="sticky-progress-text">
-                    全台已點亮 <strong id="global-count-display">4,500</strong> 則祝福，這面牆正在被慢慢填滿。<br>
-                    解鎖進度：<strong id="sticky-percent">0</strong>% (目標 5,000 則)
+                    全台累積 <strong id="global-count-display">12,540</strong> 則祝福<br>
+                    解鎖進度：<strong id="sticky-percent">0</strong>% (目標 15,000 則)
                 </div>
             </div>
 
@@ -347,16 +374,18 @@
                 <div class="screen" id="console-screen">
                     
                     <div id="state-idle" class="state-idle" style="cursor:pointer;" onclick="startSensing()">
-                        <div style="font-size: 50px; margin-bottom: 15px; animation: pulse 2.5s infinite;">✨</div>
+                        <div class="touch-circle">
+                            <div style="font-size: 45px;">✨</div>
+                        </div>
                         <div style="line-height:1.6; font-size:16px; font-weight:bold; color:#8D6E63;">輕觸螢幕，傳遞溫暖</div>
-                        <div style="font-size:11px; color:#999; margin-top:6px;">看看今天哪位社工，正等候你的打氣</div>
+                        <div style="font-size:12px; color:#999; margin-top:8px;">看看今天哪位社工，正等候你的打氣</div>
                     </div>
 
                     <div id="state-spinning" class="state-spinning">
-                        <div style="font-size: 13px; color: #8D6E63; margin-bottom: 15px; font-weight:bold; letter-spacing:1px;">正在尋找美好的相遇...</div>
+                        <div style="font-size: 13px; color: #8D6E63; margin-bottom: 20px; font-weight:bold; letter-spacing:1px;">正在為您尋找美好的相遇...</div>
                         <div class="radar-spinner"></div>
-                        <div id="shuffle-unit-name" style="margin-top: 30px; font-size: 16px; font-weight: bold; color: #333; background: #f0f0f0; padding: 10px 20px; border-radius: 30px; border: 2px dashed #ccc; font-family:'Noto Sans TC';">
-                            正在尋找連線單位...
+                        <div id="shuffle-unit-name" style="margin-top: 35px; font-size: 16px; font-weight: bold; color: #333; background: #fff; padding: 12px 25px; border-radius: 30px; border: 2px dashed #ddd; font-family:'Noto Sans TC'; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+                            搜尋連線單位中...
                         </div>
                     </div>
 
@@ -396,7 +425,7 @@
                             <div class="input-group">
                                 <label>💬 寫下鼓勵 (點擊自動填入)：</label>
                                 <div class="smart-chips" id="dynamic-presets"></div>
-                                <textarea id="msg-input" rows="2" placeholder="也可以自己寫喔..."></textarea>
+                                <textarea id="msg-input" rows="3" placeholder="也可以自己寫喔..."></textarea>
                             </div>
                             
                             <div class="input-group">
@@ -407,7 +436,7 @@
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </main>
 
         <main id="view-search" class="view">
@@ -449,6 +478,54 @@
                     <div class="wf-msg">照顧憨兒是一件不容易的事，這點小小心意希望能給你們一點力量。</div>
                     <div class="wf-prop">☀️ 贈送 顏值守護霜</div>
                     <div class="wf-actions"><button class="action-btn-sm" onclick="toggleLike(this)"><span class="icon">🤍</span> <span class="count">18</span></button><button class="action-btn-sm" onclick="openCommentModal(this)">💬 <span class="count">0</span></button></div>
+                </div>
+            </div>
+        </main>
+
+        <main id="view-awards" class="view">
+            <div class="awards-header-box">
+                <div class="awards-title">🎁 能量補給大賞</div>
+                <div class="awards-subtitle">感謝贊助商提供 <strong style="color:var(--warm-orange); font-size:1.1rem;">160 份</strong> 實體補給<br>將全數贈予站內的社工夥伴！</div>
+                <div class="awards-bonus-box">
+                    🔥 <strong>達標加碼活動</strong> 🔥<br>
+                    當 THANK YOU 牆累積達 <strong>15,000 則</strong>，<br>
+                    將額外抽出 <strong style="color:var(--ent-blue);">各 10 位</strong> 參與留言的溫暖會員！
+                </div>
+            </div>
+
+            <div class="award-list">
+                <div class="award-card">
+                    <div class="award-icon">🍲</div>
+                    <div class="award-info">
+                        <div class="award-title">鼎王麻辣鍋 (暖心體力湯)</div>
+                        <div class="award-desc">下班後，也有人希望你被好好照顧。</div>
+                    </div>
+                    <div class="award-tags">
+                        <span class="a-tag sw-tag">社工 160份</span>
+                        <span class="a-tag user-tag">加碼抽 10份</span>
+                    </div>
+                </div>
+                <div class="award-card">
+                    <div class="award-icon">🚿</div>
+                    <div class="award-info">
+                        <div class="award-title">艾瑪絲 (淨化防禦水)</div>
+                        <div class="award-desc">洗掉一整天的疲憊，好好放鬆。</div>
+                    </div>
+                    <div class="award-tags">
+                        <span class="a-tag sw-tag">社工 160份</span>
+                        <span class="a-tag user-tag">加碼抽 10份</span>
+                    </div>
+                </div>
+                <div class="award-card">
+                    <div class="award-icon">☀️</div>
+                    <div class="award-info">
+                        <div class="award-title">蓓朵娜 (顏值守護霜)</div>
+                        <div class="award-desc">為你擋掉外界的消耗與豔陽。</div>
+                    </div>
+                    <div class="award-tags">
+                        <span class="a-tag sw-tag">社工 160份</span>
+                        <span class="a-tag user-tag">加碼抽 10份</span>
+                    </div>
                 </div>
             </div>
         </main>
@@ -515,7 +592,7 @@
         };
         
         const extraQuotes = [
-            "辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。",
+            "辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有 মিলিটারি而溫柔。",
             "願世界對你們溫柔以待。", "請記得照顧好自己，你也很重要。", "你的付出，我們都看到了。",
             "黑暗中，你們是最溫暖的光。", "謝謝你們撐起社會的防護網。", "再累也要記得吃飯，辛苦了！", "有你們在，真的讓人很安心。"
         ];
@@ -569,7 +646,8 @@
                 stateIdle.onclick = null;
                 stateIdle.style.cursor = 'default';
             } else {
-                stateIdle.innerHTML = '<div style="font-size: 50px; margin-bottom: 15px; animation: pulse 2.5s infinite;">✨</div><div style="line-height:1.6; font-size:16px; font-weight:bold; color:#8D6E63;">輕觸螢幕，傳遞溫暖</div><div style="font-size:11px; color:#999; margin-top:6px;">看看今天哪位社工，正等候你的打氣</div>';
+                // 替換為溫馨的感應圈UI
+                stateIdle.innerHTML = '<div class="touch-circle"><div style="font-size: 45px;">✨</div></div><div style="line-height:1.6; font-size:18px; font-weight:bold; color:#8D6E63;">輕觸螢幕，傳遞溫暖</div><div style="font-size:12px; color:#999; margin-top:8px;">看看今天哪位社工，正等候你的打氣</div>';
                 stateIdle.onclick = startSensing;
                 stateIdle.style.cursor = 'pointer';
             }
@@ -678,7 +756,7 @@
                             shuffleEl.style.background = "#f0f0f0";
                             shuffleEl.style.borderColor = "#ccc";
                             shuffleEl.style.color = "#333";
-                            shuffleEl.innerText = "正在尋找連線單位...";
+                            shuffleEl.innerText = "正在為您搜尋連線單位...";
                         }, 500);
                     }, 1000); 
                 }
