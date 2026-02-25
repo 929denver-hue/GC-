@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026給社工愛的鼓勵|GC贈物網</title>
+    <title>2026 給社工愛的鼓勵 - 像素守護者</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&family=Press+Start+2P&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -18,7 +18,7 @@
         
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; color: var(--text-dark); background-color: var(--soft-bg); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        .view-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 70px; scroll-behavior: smooth; }
+        .view-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 80px; scroll-behavior: smooth; }
         .view { display: none; width: 100%; min-height: 100%; flex-direction: column; align-items: center; padding: 20px; animation: fadeIn 0.4s ease-out; }
         .view.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -28,7 +28,7 @@
         .demo-btn { background: #444; color: #fff; border: 1px solid #666; padding: 4px 10px; font-size: 10px; border-radius: 4px; cursor: pointer; margin: 0 4px; }
         .demo-btn:hover { background: var(--warm-orange); }
 
-        /* --- 底部導覽列 (4 個，專業膠囊按鈕) --- */
+        /* --- 底部導覽列 (5 個) --- */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: #fafafa; border-top: 1px solid #eaeaea; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); padding: 0 8px; }
         .tab-item { background: transparent; color: #aaa; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; flex: 1; height: 100%; transition: 0.2s all; }
         .tab-item:hover { color: var(--warm-orange); }
@@ -47,29 +47,24 @@
         
         .poetry-box { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.8; color: #6D4C41; box-shadow: 0 8px 25px rgba(0,0,0,0.03); width: 100%; max-width: 400px; text-align: left; }
         
-        /* 首頁跑馬燈 */
         .home-marquee-box { width: 100%; max-width: 400px; background: rgba(255, 204, 128, 0.2); border-radius: 8px; padding: 8px 12px; margin-bottom: 20px; overflow: hidden; white-space: nowrap; display: flex; align-items: center; border: 1px solid rgba(255, 204, 128, 0.4); }
         .home-marquee-text { display: inline-block; font-size: 12px; color: #E65100; padding-left: 100%; animation: homeTicker 20s linear infinite; letter-spacing: 1px; font-weight: bold; }
         @keyframes homeTicker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* 便條紙拼字視覺 (Sticky Note Wall) */
+        /* 便條紙拼字視覺 */
         .sticky-wall-section { width: 100%; max-width: 400px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 25px 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.9); text-align: center; display: none; }
         .sticky-wall-title { font-size: 14px; color: #8D6E63; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; }
         .sticky-wall-container { display: flex; flex-direction: column; gap: 12px; align-items: center; background: #fafafa; padding: 25px 10px; border-radius: 8px; border: 1px inset #eee; }
         .sticky-word { display: flex; gap: 10px; justify-content: center; }
-        
         .letter-grid { display: grid; gap: 2px; }
         .letter-grid.w3 { grid-template-columns: repeat(3, 12px); }
         .letter-grid.w4 { grid-template-columns: repeat(4, 12px); }
-        
         .note { width: 12px; height: 12px; background: transparent; border-radius: 1px; transition: 0.4s all; }
         .note.on { background: #e0e0e0; box-shadow: inset -1px -1px 2px rgba(0,0,0,0.05); }
-        
         .note.on.revealed { background: #FFD54F; box-shadow: 1px 1px 3px rgba(0,0,0,0.15); transform: rotate(-3deg); border-bottom-right-radius: 3px;}
         .note.on.revealed:nth-child(2n) { transform: rotate(4deg); background: #FFCC80; }
         .note.on.revealed:nth-child(3n) { transform: rotate(-5deg); background: #FFE082; }
         .note.on.revealed:nth-child(5n) { transform: rotate(2deg); background: #FFB74D; }
-        
         .sticky-progress-text { font-size: 12px; color: #888; margin-top: 20px; font-family: 'Noto Sans TC'; line-height: 1.6;}
         .sticky-progress-text strong { color: #E65100; font-size: 15px;}
 
@@ -82,22 +77,17 @@
         .csr-hint { font-size: 12px; color: var(--ent-blue); text-align: center; margin-bottom: 10px; font-family: 'Noto Sans TC'; border: 1px dashed var(--ent-blue); padding: 8px; border-radius: 4px; background: rgba(2, 119, 189, 0.1); display: none; font-weight:bold; }
         .ent-badge-inline { font-size: 10px; color: var(--ent-blue); border: 1px solid var(--ent-blue); padding: 2px 6px; border-radius: 4px; margin-left: 8px; display: none; background: rgba(2, 119, 189, 0.05); }
 
-        /* --- 視圖 2: 連線頁面 (優化為溫馨協調風) --- */
+        /* --- 視圖 2: 遊戲機 --- */
         #view-game { background: linear-gradient(135deg, #FFF9F2 0%, #FFE0B2 100%); justify-content: center; }
-        
         .daily-limit-badge { background: rgba(255,255,255,0.8); color: #E65100; padding: 8px 18px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #FFCC80; font-size: 11px; font-weight: bold; box-shadow: 0 2px 10px rgba(230,81,0,0.05); }
-        
         .game-console { background: #ffffff; padding: 20px; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.06); width: 100%; max-width: 400px; border-radius: 20px; }
-        
         .screen { background: #fafafa; border: 1px solid #f0f0f0; height: 520px; padding: 20px; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-radius: 12px; overflow-y: auto; overflow-x: hidden; position: relative;}
 
         .state-idle, .state-spinning, .state-steps { text-align: center; width: 100%; font-family: 'Noto Sans TC'; margin: auto 0; }
         .state-spinning, .state-steps { display: none; }
         
-        /* 呼吸燈感應圈特效 */
         .touch-circle { width: 110px; height: 110px; background: #FFF3E0; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; box-shadow: 0 0 0 0 rgba(255,183,77, 0.4); animation: breathing 2.5s infinite; border: 2px dashed #FFB74D; }
         @keyframes breathing { 0% { box-shadow: 0 0 0 0 rgba(255,183,77, 0.4); transform: scale(1); } 50% { box-shadow: 0 0 0 15px rgba(255,183,77, 0); transform: scale(1.05); } 100% { box-shadow: 0 0 0 0 rgba(255,183,77, 0); transform: scale(1); } }
-
         .radar-spinner { width: 60px; height: 60px; border: 4px solid #eee; border-top: 4px solid var(--warm-orange); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -241,6 +231,19 @@
         .comment-modal-box { background:#fff; width:90%; max-width:320px; padding:25px; border-radius:12px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .comment-input { width:100%; padding:12px; border:1px solid #ccc; border-radius:6px; margin:15px 0; outline:none; font-family:'Noto Sans TC'; }
 
+        /* [NEW] Success Modal (感謝頁) */
+        .success-box { background: #fff; width: 90%; max-width: 320px; padding: 30px 20px; border-radius: 16px; text-align: center; box-shadow: 0 15px 40px rgba(230,81,0,0.2); animation: popIn 0.3s; position: relative;}
+        @keyframes popIn { 0% {transform: scale(0.8); opacity:0;} 100% {transform: scale(1); opacity:1;} }
+        .success-icon { font-size: 50px; margin-bottom: 15px; display: inline-block; animation: pulse 2s infinite; }
+        .success-title { font-size: 1.4rem; color: var(--text-dark); font-weight: bold; margin-bottom: 10px; }
+        .success-desc { font-size: 0.95rem; color: #666; margin-bottom: 25px; line-height: 1.5; }
+        .prize-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; background: #fafafa; padding: 15px; border-radius: 12px; }
+        .prize-mini { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .prize-emoji { font-size: 24px; background: #fff; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .prize-label { font-size: 10px; color: #888; }
+        .btn-share { background: #1877F2; color: #fff; width: 100%; padding: 12px; border-radius: 30px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-close-success { background: transparent; color: #999; border: none; font-size: 12px; cursor: pointer; text-decoration: underline; }
+
     </style>
 </head>
 <body>
@@ -284,7 +287,7 @@
             <div id="csr-hint" class="csr-hint"></div>
 
             <div class="home-marquee-box">
-                <div class="home-marquee-text">王小明 提供能量祝福 &nbsp;❤️&nbsp; Sarah 提供能量祝福 &nbsp;❤️&nbsp; 匿名勇者 提供能量祝福 &nbsp;❤️&nbsp; 陳媽媽 提供能量祝福 &nbsp;❤️&nbsp; 林先生 提供能量祝福</div>
+                <div class="home-marquee-text">集氣抽獎中🔥 感謝鼎王、蓓朵娜、艾瑪絲 熱情贊助❤️ 祝大家中獎！一起好運爆棚 ✨</div>
             </div>
 
             <div id="sticky-wall-section" class="sticky-wall-section" style="display: none;">
@@ -292,67 +295,18 @@
                     💡 每一份心意，拼出被看見的溫柔
                     <span id="ent-badge-hero" class="ent-badge-inline">CSR MATCH</span>
                 </div>
-                
                 <div class="sticky-wall-container">
                     <div class="sticky-word">
-                        <div class="letter-grid w3">
-                            <div class="note on"></div><div class="note on"></div><div class="note on"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                        </div>
-                        <div class="letter-grid w3">
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note on"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                        </div>
-                        <div class="letter-grid w3">
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note on"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                        </div>
-                        <div class="letter-grid w4">
-                            <div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div>
-                        </div>
-                        <div class="letter-grid w3">
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note"></div>
-                            <div class="note on"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                        </div>
+                        <div class="letter-grid w3"><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note"></div></div>
+                        <div class="letter-grid w3"><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div></div>
+                        <div class="letter-grid w3"><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div></div>
+                        <div class="letter-grid w4"><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div></div>
+                        <div class="letter-grid w3"><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div></div>
                     </div>
                     <div class="sticky-word">
-                        <div class="letter-grid w3">
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                        </div>
-                        <div class="letter-grid w3">
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                        </div>
-                        <div class="letter-grid w3">
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note on"></div><div class="note"></div><div class="note on"></div>
-                            <div class="note"></div><div class="note on"></div><div class="note"></div>
-                        </div>
+                        <div class="letter-grid w3"><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note"></div><div class="note on"></div><div class="note"></div></div>
+                        <div class="letter-grid w3"><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div></div>
+                        <div class="letter-grid w3"><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div><div class="note on"></div><div class="note"></div></div>
                     </div>
                 </div>
                 <div class="sticky-progress-text">
@@ -374,9 +328,7 @@
                 <div class="screen" id="console-screen">
                     
                     <div id="state-idle" class="state-idle" style="cursor:pointer;" onclick="startSensing()">
-                        <div class="touch-circle">
-                            <div style="font-size: 45px;">✨</div>
-                        </div>
+                        <div class="touch-circle"><div style="font-size: 45px;">✨</div></div>
                         <div style="line-height:1.6; font-size:16px; font-weight:bold; color:#8D6E63;">輕觸螢幕，傳遞溫暖</div>
                         <div style="font-size:12px; color:#999; margin-top:8px;">看看今天哪位社工，正等候你的打氣</div>
                     </div>
@@ -550,6 +502,23 @@
         </div>
     </div>
 
+    <div id="success-modal" class="modal-overlay">
+        <div class="success-box">
+            <div class="success-icon">🎉</div>
+            <div class="success-title">傳送成功！</div>
+            <div class="success-desc">您剛剛點亮了一張便利貼！<br>感謝您成為社工背後的光。</div>
+            
+            <div class="prize-row">
+                <div class="prize-mini"><div class="prize-emoji">🍲</div><span class="prize-label">鼎王</span></div>
+                <div class="prize-mini"><div class="prize-emoji">🚿</div><span class="prize-label">艾瑪絲</span></div>
+                <div class="prize-mini"><div class="prize-emoji">☀️</div><span class="prize-label">蓓朵娜</span></div>
+            </div>
+            
+            <button class="btn-share" onclick="shareHomePage()">分享活動給好友 📤</button>
+            <button class="btn-close-success" onclick="closeSuccessAndGo()">去瀑布牆看看大家 ➔</button>
+        </div>
+    </div>
+
     <div id="inventory-modal" class="modal-overlay"><div class="inventory-box"><div class="inventory-header"><span>🎒 勇者背包</span><span class="close-btn" onclick="closeModal('inventory-modal')">×</span></div><div class="inventory-list" id="inventory-list"></div></div></div>
     
     <div id="comment-modal" class="modal-overlay"><div class="comment-modal-box"><h3 style="color:#4E342E; margin-top:0; margin-bottom:5px;">回覆這則祝福</h3><p style="font-size:12px; color:#888; margin-top:0;">將您的鼓勵疊加在此篇留言下方</p><input type="text" id="comment-input" class="comment-input" placeholder="說點什麼吧..."><div style="display:flex; gap:10px;"><button class="action-btn btn-back" style="color:#555; border-color:#ccc; padding:10px;" onclick="closeModal('comment-modal')">取消</button><button class="action-btn btn-download" style="padding:10px;" onclick="submitComment()">發佈</button></div></div></div>
@@ -592,7 +561,7 @@
         };
         
         const extraQuotes = [
-            "辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有 মিলিটারি而溫柔。",
+            "辛苦了，謝謝你們一直都在！", "謝謝你們接住了受傷的人。", "世界因為有你們而溫柔。",
             "願世界對你們溫柔以待。", "請記得照顧好自己，你也很重要。", "你的付出，我們都看到了。",
             "黑暗中，你們是最溫暖的光。", "謝謝你們撐起社會的防護網。", "再累也要記得吃飯，辛苦了！", "有你們在，真的讓人很安心。"
         ];
@@ -646,7 +615,6 @@
                 stateIdle.onclick = null;
                 stateIdle.style.cursor = 'default';
             } else {
-                // 替換為溫馨的感應圈UI
                 stateIdle.innerHTML = '<div class="touch-circle"><div style="font-size: 45px;">✨</div></div><div style="line-height:1.6; font-size:18px; font-weight:bold; color:#8D6E63;">輕觸螢幕，傳遞溫暖</div><div style="font-size:12px; color:#999; margin-top:8px;">看看今天哪位社工，正等候你的打氣</div>';
                 stateIdle.onclick = startSensing;
                 stateIdle.style.cursor = 'pointer';
@@ -756,7 +724,7 @@
                             shuffleEl.style.background = "#f0f0f0";
                             shuffleEl.style.borderColor = "#ccc";
                             shuffleEl.style.color = "#333";
-                            shuffleEl.innerText = "正在為您搜尋連線單位...";
+                            shuffleEl.innerText = "正在尋找連線單位...";
                         }, 500);
                     }, 1000); 
                 }
@@ -870,13 +838,19 @@
             updateStickyWall();
             
             setTimeout(() => { 
-                alert("發布成功！已加入祝福瀑布牆。"); 
                 closeModal('preview-modal');
-                switchView('view-waterfall', document.querySelectorAll('.tab-item')[2]); // index 2 是瀑布牆
+                // 顯示感謝頁
+                document.getElementById('success-modal').style.display = 'flex';
                 resetGame();
                 btn.innerHTML = "✅ 確認送出 (發布至瀑布牆)"; 
-            }, 1000);
+            }, 800);
         });
+
+        // 感謝頁的跳轉邏輯
+        function closeSuccessAndGo() {
+            closeModal('success-modal');
+            switchView('view-waterfall', document.querySelectorAll('.tab-item')[2]); 
+        }
 
         function saveRecord() {
             const records = JSON.parse(localStorage.getItem('gc_records') || "[]");
