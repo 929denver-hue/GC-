@@ -51,16 +51,16 @@
                 <div>
                     <label class="block text-lg font-bold mb-2">📸 ① 單位代表照片（請提供 2 張） <span class="text-red-500">*</span></label>
                     <p class="text-sm text-gray-500 mb-3">
-                        建議提供「橫式」照片，至少需上傳 1 張，上限 2 張。單張請勿超過 5MB。<br>
-                        <span class="text-red-500 font-bold">⚠️ 提醒：請務必留意服務對象隱私遮蔽，並確認已取得相關授權。</span>
+                        至少上傳 1 張，上限 2 張。單張小於 5MB。<br>
+                        <span class="text-red-500 font-bold">⚠️ 提醒：請務必留意服務對象隱私遮蔽，並確認已取得授權。</span>
                     </p>
-                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-yellow-400 transition cursor-pointer bg-gray-50 relative group">
-                        <input type="file" id="photoUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/jpeg, image/png" multiple required onchange="updateFileCount()">
-                        <div id="uploadPrompt" class="group-hover:scale-105 transition-transform">
+                    <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:border-yellow-400 transition cursor-pointer bg-gray-50 relative group">
+                        <input type="file" id="photoUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/jpeg, image/png" multiple required onchange="updateFileCount()">
+                        <div class="relative z-10 pointer-events-none group-hover:scale-105 transition-transform">
                             <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-2"></i>
                             <p class="text-gray-600 font-bold">點擊或拖曳照片至此</p>
+                            <p id="fileCountText" class="text-green-600 font-bold mt-2 hidden"></p>
                         </div>
-                        <p id="fileCountText" class="text-green-600 font-bold mt-2 hidden"></p>
                     </div>
                 </div>
 
@@ -94,41 +94,17 @@
                 <h2 class="text-xl font-bold text-yellow-800"><i class="fa-solid fa-lightbulb mr-2"></i> 填寫靈感與範例</h2>
                 <button type="button" onclick="closeModal('inspirationModal')" class="text-gray-400 hover:text-gray-800 text-2xl">&times;</button>
             </div>
-            
             <div class="p-6 space-y-6 overflow-y-auto">
-                <h3 class="font-bold text-xl text-gc-dark border-l-4 border-yellow-400 pl-3">【星光兒童關懷協會 - 完整範例】</h3>
-                
-                <div>
-                    <h4 class="font-bold text-gray-800 mb-2 underline underline-offset-4 decoration-yellow-400">🏷 單位溫暖標籤（請提供 3 個）：</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 font-medium">
-                        <span>• 「為孩子撐傘的人」</span>
-                        <span>• 「陪伴阿公阿嬤聊天的耳朵」</span>
-                        <span>• 「接住快撐不住的家庭」</span>
-                        <span>• 「在暗巷中點燈的人」</span>
-                        <span>• 「城市裡的裂縫縫補者」</span>
+                <h3 class="font-bold text-xl text-gc-dark border-l-4 border-yellow-400 pl-3">【星光兒童關懷協會 - 範例】</h3>
+                <div class="text-sm text-gray-600 space-y-4">
+                    <p><strong>標籤：</strong>「為孩子撐傘的人」、「陪伴阿公阿嬤聊天的耳朵」、「接住快撐不住的家庭」</p>
+                    <div class="bg-gray-50 p-4 rounded border italic leading-relaxed">
+                        我們守護著社區裡放學後無處可去的邊緣孩子。第一線社工不只是老師，更是避風港。社工的角色就像是站在懸崖邊的人，努力拉住每一個可能墜落的小生命。我們最想讓大眾知道：「這些孩子需要的不是同情，而是一個願意相信他們會變好的大人。」只要給予足夠的愛與等待，每一顆受傷的種子，都能開出美麗的花。
                     </div>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-gray-800 mb-2 underline underline-offset-4 decoration-yellow-400">📝 單位介紹（約 300 字）：</h4>
-                    <div class="text-sm md:text-base leading-relaxed bg-gray-50 p-4 rounded-lg border border-gray-200 text-gray-600">
-                        我們守護著社區裡，放學後無處可去、或是家庭失去功能的邊緣孩子。在這裡，第一線社工不只是輔導課業的老師，更是孩子們的「情緒避風港」。我們的日常，是從聽孩子抱怨學校瑣事開始，在一次次的共餐與陪伴中，慢慢建立起脆弱的信任感；我們也穿梭在各個脆弱家庭之間，協助家長連結社福資源，減輕他們的重擔。<br><br>
-                        社工的角色，就像是站在懸崖邊的人，努力拉住每一個可能墜落的小生命。我們最想讓社會大眾知道：「這些孩子需要的不是同情，而是一個願意相信他們會變好的大人。」只要給予足夠的愛與等待，每一顆受傷的種子，都能開出美麗的花。
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-gray-800 mb-2 underline underline-offset-4 decoration-yellow-400">📸 ① 單位代表照片（2張）：</h4>
-                    <p class="text-sm text-gray-600">
-                        請挑選最能代表貴單位服務精神的日常照片。<br>
-                        <strong>建議方向：</strong>社工服務的背影、溫暖的陪伴畫面、或是辦公室裡奮鬥的日常。<br>
-                        <span class="text-red-500 font-bold italic">※ 溫馨提醒：為保護服務對象，請務必留意隱私遮蔽（如背影、模糊處理或使用貼圖）並確認已取得相關授權。</span>
-                    </p>
                 </div>
             </div>
-
             <div class="p-4 bg-gray-50 text-center border-t">
-                <button type="button" onclick="closeModal('inspirationModal')" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-10 rounded-full transition shadow-sm">我了解了</button>
+                <button type="button" onclick="closeModal('inspirationModal')" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-10 rounded-full transition">我了解了</button>
             </div>
         </div>
     </div>
@@ -149,14 +125,14 @@
                 </div>
             </div>
             <div class="bg-gray-50 p-4 flex gap-3 border-t shrink-0">
-                <button type="button" onclick="closeModal('previewModal')" class="flex-1 bg-white border border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-100 transition" id="btnBack">返回修改</button>
+                <button type="button" onclick="closeModal('previewModal')" class="flex-1 bg-white border border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-100 transition">返回修改</button>
                 <button type="button" onclick="submitData()" class="flex-1 bg-yellow-400 text-gray-800 font-bold py-3 rounded-xl hover:bg-yellow-500 transition shadow-md flex justify-center items-center" id="btnSubmit">確認送出 💛</button>
             </div>
         </div>
     </div>
 
     <script>
-        // 已經綁定您最新部署的 Apps Script URL
+        // 已更換為您提供的 Web App URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZbYksrIhDnbhkTs8vlXg3tRiWULo5Bgj60DEFdFXfsRczyVoYYq3lH-Z1FL056yo8/exec';
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -171,16 +147,13 @@
 
         function generatePreview() {
             const form = document.getElementById('mainForm');
-            // 驗證必填欄位
             if (!form.checkValidity()) { form.reportValidity(); return; }
-            if (document.getElementById('photoUpload').files.length === 0) { alert('請至少上傳 1 張代表照片喔！'); return; }
+            if (document.getElementById('photoUpload').files.length === 0) { alert('請至少上傳 1 張照片喔！'); return; }
 
-            // 填入資料
             document.getElementById('previewName').innerText = document.getElementById('unitName').value;
             document.getElementById('previewIntro').innerText = document.getElementById('introText').value;
             document.getElementById('previewTags').innerHTML = [1,2,3].map(i => `<span class="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full font-bold"># ${document.getElementById('tag'+i).value}</span>`).join('');
 
-            // 讀取第一張照片作為預覽圖
             const reader = new FileReader();
             reader.onload = e => {
                 const container = document.getElementById('previewImageContainer');
@@ -188,20 +161,15 @@
                 document.getElementById('previewPlaceholder').style.display = 'none';
             };
             reader.readAsDataURL(document.getElementById('photoUpload').files[0]);
-            
-            // 開啟預覽視窗
             openModal('previewModal');
         }
 
         async function submitData() {
             const btn = document.getElementById('btnSubmit');
-            const back = document.getElementById('btnBack');
-            // 鎖定按鈕防止連點
-            btn.disabled = back.disabled = true;
+            btn.disabled = true;
             btn.innerHTML = '<div class="loader mr-2"></div> 傳送中...';
 
             try {
-                // 準備資料與照片轉碼
                 const payload = {
                     unitName: document.getElementById('unitName').value,
                     contactName: document.getElementById('contactName').value,
@@ -216,25 +184,14 @@
                     })))
                 };
 
-                // 傳送 API
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
                 const result = await res.json();
-
                 if (result.status === "success") {
-                    alert('🎉 感謝您的填寫！資料與照片已順利傳送至 GC 贈物網。');
-                    closeModal('previewModal');
-                    document.getElementById('mainForm').reset();
-                    updateFileCount(); updateCharCount();
-                } else { 
-                    alert('❌ 失敗：' + result.message); 
-                }
-            } catch (e) { 
-                alert('連線失敗，請檢查網路狀態或確認伺服器。'); 
-            } finally { 
-                // 恢復按鈕
-                btn.disabled = back.disabled = false; 
-                btn.innerHTML = '確認送出 💛'; 
-            }
+                    alert('🎉 感謝您的填寫！資料已成功送出。');
+                    location.reload(); 
+                } else { alert('❌ 失敗：' + result.message); }
+            } catch (e) { alert('連線異常，請確認網路或 Apps Script 權限。'); }
+            finally { btn.disabled = false; btn.innerHTML = '確認送出 💛'; }
         }
     </script>
 </body>
