@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC 贈物網 - 物資需求調查</title>
+    <style>
+        :root { --primary-color: #ff8c00; --bg-color: #f9f9f9; }
+        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg-color); padding: 20px; color: #333; line-height: 1.5; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h2 { color: var(--primary-color); text-align: center; border-bottom: 2px solid var(--primary-color); padding-bottom: 15px; margin-top: 0; }
+        .section-title { font-size: 1.1em; font-weight: bold; margin: 25px 0 12px; color: #fff; background: var(--primary-color); padding: 8px 15px; border-radius: 4px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        
+        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+        .item-card { border: 1px solid #ddd; padding: 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; background: #fff; font-size: 0.95em; }
+        .item-card:hover { border-color: var(--primary-color); }
+        .item-card input { margin-right: 10px; }
+        
+        .clothes-matrix { background: #fffdf9; border: 1px solid #ffe0b3; padding: 15px; border-radius: 8px; }
+        .sub-label { font-size: 0.9em; color: #777; margin-bottom: 5px; margin-top: 10px; font-weight: bold; }
+        
+        input[type="text"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .other-input { margin-top: 8px; display: none; }
+        .btn-submit { background: var(--primary-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 1.2em; cursor: pointer; margin-top: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(255,140,0,0.3); }
+        .hidden { display: none; }
+        #loading { display:none; text-align:center; color: var(--primary-color); font-weight:bold; margin-top:10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>物資需求與資源去化意願調查</h2>
+    <p style="text-align:center; color:#666; font-size: 0.9em;">GC 贈物網將負擔物流費用並先行篩選物資，協助資源精準媒合。</p>
+
+    <form id="surveyForm">
+        <div class="section-title">一、單位基本資訊</div>
+        <div class="form-group">
+            <label>單位全銜 *</label>
+            <input type="text" name="org_name" required>
+        </div>
+
+        <div class="form-group">
+            <label>單位服務類型 *</label>
+            <select name="org_type" onchange="checkOtherType(this, 'other_org_type_div')" required>
+                <option value="">請選擇服務類型</option>
+                <option value="兒少福利">兒少福利 (孤兒院、課輔、安置)</option>
+                <option value="長者服務">長者服務 (獨居、長照、日間照顧)</option>
+                <option value="身心障礙">身心障礙 (心智、肢體、復健)</option>
+                <option value="弱勢家庭">弱勢家庭/低收物資支援</option>
+                <option value="婦女服務">婦女服務 (受暴、單親、安置)</option>
+                <option value="偏鄉教育">偏鄉/原民教育發展</option>
+                <option value="動物保護">動物保護 (流浪動物、收容)</option>
+                <option value="other">其他</option>
+            </select>
+            <div id="other_org_type_div" class="other-input">
+                <input type="text" name="other_org_type_text" placeholder="請註明您的服務類型...">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label>聯繫人 *</label>
+                <input type="text" name="contact" required>
+            </div>
+            <div class="form-group">
+                <label>聯絡電話 *</label>
+                <input type="text" name="phone" required>
+            </div>
+        </div>
+
+        <div class="section-title">二、長期物資需求類別 (多選)</div>
+        <div class="checkbox-grid">
+            <label class="item-card"><input type="checkbox" name="needs" value="文具用品"> 文具用品</label>
+            <label class="item-card"><input type="checkbox" name="needs" value="民生必需品"> 民生必需品</label>
+            <label class="item-card"><input type="checkbox" name="needs" value="食品乾貨"> 食品乾貨</label>
+            <label class="item-card"><input type="checkbox" name="needs" value="各類家電"> 各類家電</label>
+            <label class="item-card"><input type="checkbox" name="needs" value="數位3C"> 數位 3C 設備</label>
+            <label class="item-card"><input type="checkbox" onclick="toggleElement('otherNeedsDiv')"> 其他</label>
+        </div>
+        <div id="otherNeedsDiv" class="other-input">
+            <input type="text" name="other_needs_text" placeholder="請註明其他物資需求...">
+        </div>
+
+        <div class="section-title">三、近期二手衣專案需求</div>
+        <div class="form-group">
+            <label>是否有二手衣需求？</label>
+            <div style="display:flex; gap:20px; margin-bottom:10px;">
+                <label><input type="radio" name="clothes" value="yes" onclick="toggleDisplay('clothesBox', true)"> 有</label>
+                <label><input type="radio" name="clothes" value="no" onclick="toggleDisplay('clothesBox', false)" checked> 無</label>
+            </div>
+        </div>
+
+        <div id="clothesBox" class="hidden clothes-matrix">
+            <div class="sub-label">● 性別需求</div>
+            <div class="checkbox-grid">
+                <label class="item-card"><input type="checkbox" name="c_sex" value="男"> 男生</label>
+                <label class="item-card"><input type="checkbox" name="c_sex" value="女"> 女生</label>
+                <label class="item-card"><input type="checkbox" name="c_sex" value="不限"> 不限</label>
+            </div>
+
+            <div class="sub-label">● 年齡/尺寸</div>
+            <div class="checkbox-grid">
+                <label class="item-card"><input type="checkbox" name="c_age" value="嬰幼兒"> 嬰幼兒(0-3歲)</label>
+                <label class="item-card"><input type="checkbox" name="c_age" value="兒童"> 兒童(4-12歲)</label>
+                <label class="item-card"><input type="checkbox" name="c_age" value="青少年"> 青少年</label>
+                <label class="item-card"><input type="checkbox" name="c_age" value="成人"> 成人</label>
+            </div>
+
+            <div class="sub-label">● 需求季節</div>
+            <div class="checkbox-grid">
+                <label class="item-card"><input type="checkbox" name="c_season" value="夏季"> 夏季</label>
+                <label class="item-card"><input type="checkbox" name="c_season" value="冬季"> 冬季</label>
+                <label class="item-card"><input type="checkbox" name="c_season" value="不限"> 不限</label>
+            </div>
+        </div>
+
+        <div class="section-title">四、資源去化管道了解</div>
+        <div class="form-group">
+            <label>若物資不全然符合需求，單位可去化之方式？ (多選)</label>
+            <div class="checkbox-grid">
+                <label class="item-card"><input type="checkbox" name="channels" value="義賣"> 定期/不定期義賣</label>
+                <label class="item-card"><input type="checkbox" name="channels" value="二手小舖"> 實體二手小舖</label>
+                <label class="item-card"><input type="checkbox" name="channels" value="轉贈友團"> 轉贈合作友團</label>
+                <label class="item-card"><input type="checkbox" onclick="toggleElement('otherChannelsDiv')"> 其他</label>
+            </div>
+            <div id="otherChannelsDiv" class="other-input">
+                <input type="text" name="other_channels_text" placeholder="請註明其他管道...">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">確認提交調查表</button>
+        <div id="loading">正在提交資料，請稍候...</div>
+    </form>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz8Pzv6XJ0d_OBSqlmKyAlCIrc5pmZ-RW0NODLKSPzQBT6s-KJVey7Lnqc1oaGEz_fN/exec';
+    const form = document.getElementById('surveyForm');
+    const btn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+
+    // 處理下拉選單
+    function checkOtherType(select, targetId) {
+        document.getElementById(targetId).style.display = (select.value === 'other') ? 'block' : 'none';
+    }
+    // 處理區塊顯示
+    function toggleDisplay(id, show) {
+        document.getElementById(id).style.display = show ? 'block' : 'none';
+    }
+    // 處理其他輸入框
+    function toggleElement(id) {
+        const el = document.getElementById(id);
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // 提交表單至 Google Sheet
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        loading.style.display = 'block';
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                alert('感謝您的回覆！資料已成功同步至 Google 試算表。');
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                loading.style.display = 'none';
+                form.reset();
+                // 重置隱藏區塊
+                document.getElementById('clothesBox').style.display = 'none';
+                document.getElementById('other_org_type_div').style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert('提交失敗，請檢查網路連線或聯繫特助。');
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                loading.style.display = 'none';
+            });
+    });
+</script>
+
+</body>
+</html>
