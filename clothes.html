@@ -23,22 +23,18 @@
         .btn-submit { background: var(--primary-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 1.2em; cursor: pointer; margin-top: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(255,140,0,0.3); }
         .hidden { display: none; }
         #loading { display:none; text-align:center; color: var(--primary-color); font-weight:bold; margin-top:10px; }
+        .link-text { color: #007bff; text-decoration: underline; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-<div style="margin-bottom: 30px;">
-    <h2 style="color: #ff8c00; text-align: center; border-bottom: 2px solid #ff8c00; padding-bottom: 15px; margin-top: 0;">
-        2026GC贈物網第一季 物資需求調查表
-    </h2>
-    
-    <p style="text-align: left; color: #555; font-size: 1em; line-height: 1.8; background: #fff9f0; padding: 20px; border-radius: 8px; border: 1px dashed #ff8c00; margin-top: 20px;">
-        為精準媒合優質資源，GC贈物網誠邀您填寫本調查。<br>
-        本專案<strong>「GC代贈」</strong>，由團隊預先完成進行篩選與分類，確保物資達8成新以上。<br><br>
-        同時支持優質公益單位，贊助該運費，依貴單位的需求進行媒合，節省人力負擔，讓愛心資源效益最大化。
+    <h2>2026GC贈物網第一季 物資需求調查表</h2>
+    <p style="text-align:center; color:#666; font-size: 0.9em; line-height: 1.8;">
+        為精準媒合優質資源，GC贈物網誠邀您填寫本調查。本專案<a href="https://drive.google.com/file/d/1D84_h6dns_p03G3Wi-BgmN4D1csmGmVO/view?usp=sharing" target="_blank" class="link-text">「GC代贈」</a>，由團隊預先完成進行篩選與分類，確保物資達8成新以上。<br>
+        同時支持優質公益單位，贊助該運費，依貴單位的需求進行媒合，節省人力負擔，讓愛心資源效益最大化
     </p>
-</div>
+
     <form id="surveyForm">
         <div class="section-title">一、單位基本資訊</div>
         <div class="form-group">
@@ -52,7 +48,7 @@
                 <option value="">請選擇服務類型</option>
                 <option value="兒少福利">兒少福利</option>
                 <option value="長者服務">長者服務 </option>
-                <option value="身心障礙">身心障礙 )</option>
+                <option value="身心障礙">身心障礙</option>
                 <option value="弱勢家庭">弱勢家庭</option>
                 <option value="婦女服務">婦女服務 </option>
                 <option value="偏鄉教育">偏鄉</option>
@@ -81,7 +77,7 @@
             <label class="item-card"><input type="checkbox" name="needs" value="民生必需品"> 民生必需品</label>
             <label class="item-card"><input type="checkbox" name="needs" value="食品乾貨"> 食品乾貨</label>
             <label class="item-card"><input type="checkbox" name="needs" value="各類家電"> 各類家電</label>
-            <label class="item-card"><input type="checkbox" name="needs" value="數位3C"> 數位3C設備</label>
+            <label class="item-card"><input type="checkbox" name="needs" value="數位3C"> 數位 3C 設備</label>
             <label class="item-card"><input type="checkbox" onclick="toggleElement('otherNeedsDiv')"> 其他</label>
         </div>
         <div id="otherNeedsDiv" class="other-input">
@@ -116,6 +112,16 @@
                 <label class="item-card"><input type="checkbox" name="c_season" value="夏季"> 夏季</label>
                 <label class="item-card"><input type="checkbox" name="c_season" value="冬季"> 冬季</label>
                 <label class="item-card"><input type="checkbox" name="c_season" value="不限"> 不限</label>
+            </div>
+            <div class="sub-label">● 需求數量</div>
+            <div class="checkbox-grid">
+                <label class="item-card"><input type="radio" name="c_qty" value="50件"> 50件</label>
+                <label class="item-card"><input type="radio" name="c_qty" value="100件"> 100件</label>
+                <label class="item-card"><input type="radio" name="c_qty" value="200件"> 200件</label>
+                <label class="item-card"><input type="radio" name="c_qty" value="其他" onclick="toggleElement('otherQtyDiv')"> 其他</label>
+            </div>
+            <div id="otherQtyDiv" class="other-input">
+                <input type="text" name="other_qty_text" placeholder="請填寫具體數量...">
             </div>
         </div>
 
@@ -155,7 +161,6 @@
         el.style.display = (el.style.display === 'block') ? 'none' : 'block';
     }
 
-    // 核心修正：手動處理 FormData，將多選欄位串接為字串
     form.addEventListener('submit', e => {
         e.preventDefault();
         btn.disabled = true;
@@ -164,30 +169,27 @@
 
         const rawFormData = new FormData(form);
         const processedData = new URLSearchParams();
-
-        // 建立一個物件來暫存所有值
         const tempObj = {};
 
         rawFormData.forEach((value, key) => {
             if (tempObj[key]) {
-                tempObj[key] = tempObj[key] + ", " + value; // 如果鍵已存在，就用逗號串接
+                tempObj[key] = tempObj[key] + ", " + value;
             } else {
                 tempObj[key] = value;
             }
         });
 
-        // 將處理後的物件放入 URLSearchParams
         for (const key in tempObj) {
             processedData.append(key, tempObj[key]);
         }
 
         fetch(scriptURL, { 
             method: 'POST', 
-            mode: 'no-cors', // 增加穩定性
+            mode: 'no-cors', 
             body: processedData 
         })
         .then(() => {
-            alert('感謝您的填寫！資料將自動同步至 GC贈物網 公益部資料庫。未來有適合資源時，我們將依照此表主動聯繫。');
+            alert('感謝您的填寫！資料將自動同步至 GC贈物網公益部資料庫。未來有適合資源時，我們將依照此表主動聯繫。');
             btn.disabled = false;
             btn.style.opacity = '1';
             loading.style.display = 'none';
