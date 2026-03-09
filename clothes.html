@@ -5,35 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GC贈物網-2026第一季物資需求調查</title>
     <style>
-        :root { --primary-color: #ff8c00; --bg-color: #f9f9f9; }
-        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg-color); padding: 20px; color: #333; line-height: 1.5; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        h2 { color: var(--primary-color); text-align: center; border-bottom: 2px solid var(--primary-color); padding-bottom: 15px; margin-top: 0; }
-        .section-title { font-size: 1.1em; font-weight: bold; margin: 25px 0 12px; color: #fff; background: var(--primary-color); padding: 8px 15px; border-radius: 4px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; }
-        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
-        .item-card { border: 1px solid #ddd; padding: 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; background: #fff; font-size: 0.95em; }
-        .item-card:hover { border-color: var(--primary-color); }
-        .item-card input { margin-right: 10px; }
-        .clothes-matrix { background: #fffdf9; border: 1px solid #ffe0b3; padding: 15px; border-radius: 8px; }
-        .sub-label { font-size: 0.9em; color: #777; margin-bottom: 5px; margin-top: 10px; font-weight: bold; }
-        input[type="text"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
-        .other-input { margin-top: 8px; display: none; }
-        .btn-submit { background: var(--primary-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 1.2em; cursor: pointer; margin-top: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(255,140,0,0.3); }
+        :root { --primary-color: #ff8c00; --bg-color: #f9f9f9; --highlight-bg: #fffcf0; }
+        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg-color); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h2 { color: var(--primary-color); text-align: center; margin-bottom: 10px; font-weight: bold; }
+        
+        /* 美化說明區塊介面 */
+        .intro-box {
+            background-color: var(--highlight-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0 35px 0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.03);
+        }
+        .intro-text {
+            color: #555;
+            font-size: 0.95em;
+            margin: 0;
+            text-align: justify;
+        }
+        .link-style {
+            color: var(--primary-color);
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .section-title { font-size: 1.1em; font-weight: bold; margin: 30px 0 15px; color: #fff; background: var(--primary-color); padding: 10px 15px; border-radius: 6px; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 10px; font-weight: 600; color: #444; }
+        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+        .item-card { border: 1px solid #ddd; padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; background: #fff; transition: 0.3s; }
+        .item-card:hover { border-color: var(--primary-color); background: var(--highlight-bg); }
+        .item-card input { margin-right: 12px; }
+        .clothes-matrix { background: #fffdf9; border: 1px solid #ffe0b3; padding: 20px; border-radius: 10px; }
+        .sub-label { font-size: 0.9em; color: var(--primary-color); margin-bottom: 8px; margin-top: 15px; font-weight: bold; border-left: 3px solid var(--primary-color); padding-left: 8px; }
+        input[type="text"], select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .other-input { margin-top: 10px; display: none; }
+        .btn-submit { background: var(--primary-color); color: white; border: none; padding: 16px; width: 100%; border-radius: 30px; font-size: 1.2em; cursor: pointer; margin-top: 40px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(255,140,0,0.4); }
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
         .hidden { display: none; }
-        #loading { display:none; text-align:center; color: var(--primary-color); font-weight:bold; margin-top:10px; }
-        .link-text { color: #007bff; text-decoration: underline; cursor: pointer; }
+        #loading { display:none; text-align:center; color: var(--primary-color); font-weight:bold; margin-top:15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>2026GC贈物網第一季 物資需求調查表</h2>
-    <p style="text-align:center; color:#666; font-size: 0.9em; line-height: 1.8;">
-        為精準媒合優質資源，GC贈物網誠邀您填寫本調查。本專案<a href="https://drive.google.com/file/d/1D84_h6dns_p03G3Wi-BgmN4D1csmGmVO/view?usp=sharing" target="_blank" class="link-text">「GC代贈」</a>，由團隊預先完成進行篩選與分類，確保物資達8成新以上。<br>
-        同時支持優質公益單位，贊助運費，依貴單位的需求進行媒合，節省人力負擔，讓愛心資源效益最大化。
-    </p>
+    
+    <div class="intro-box">
+        <p class="intro-text">
+            為精準媒合優質資源，GC贈物網誠邀您填寫本調查。本專案<a href="https://drive.google.com/file/d/1D84_h6dns_p03G3Wi-BgmN4D1csmGmVO/view?usp=sharing" target="_blank" class="link-style">「GC代贈」</a>，由團隊預先完成進行篩選與分類，確保物資達8成新以上。<br><br>
+            並支持優質公益單位，贊助此專案運費，依貴單位的需求進行媒合，節省人力負擔，讓愛心資源效益最大化。
+        </p>
+    </div>
 
     <form id="surveyForm">
         <div class="section-title">一、單位基本資訊</div>
@@ -47,10 +72,10 @@
             <select name="org_type" onchange="checkOtherType(this, 'other_org_type_div')" required>
                 <option value="">請選擇服務類型</option>
                 <option value="兒少福利">兒少福利</option>
-                <option value="長者服務">長者服務 </option>
+                <option value="長者服務">長者服務</option>
                 <option value="身心障礙">身心障礙</option>
                 <option value="弱勢家庭">弱勢家庭</option>
-                <option value="婦女服務">婦女服務 </option>
+                <option value="婦女服務">婦女服務</option>
                 <option value="偏鄉教育">偏鄉</option>
                 <option value="動物保護">動物保護</option>
                 <option value="其他">其他</option>
@@ -60,7 +85,7 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="form-group">
                 <label>聯繫人 *</label>
                 <input type="text" name="contact" required>
@@ -87,7 +112,7 @@
         <div class="section-title">三、8成新二手衣專案需求?</div>
         <div class="form-group">
             <label>是否有二手衣需求？</label>
-            <div style="display:flex; gap:20px; margin-bottom:10px;">
+            <div style="display:flex; gap:30px; margin-bottom:15px;">
                 <label><input type="radio" name="clothes" value="yes" onclick="toggleDisplay('clothesBox', true)"> 有</label>
                 <label><input type="radio" name="clothes" value="no" onclick="toggleDisplay('clothesBox', false)" checked> 無</label>
             </div>
@@ -140,7 +165,7 @@
         </div>
 
         <button type="submit" class="btn-submit" id="submitBtn">確認提交調查表</button>
-        <div id="loading">正在提交資料到試算表...</div>
+        <div id="loading">正在提交資料，請稍候...</div>
     </form>
 </div>
 
@@ -189,7 +214,7 @@
             body: processedData 
         })
         .then(() => {
-            alert('感謝您的填寫！資料將自動同步至 GC贈物網公益部資料庫。未來有適合資源時，我們將依照此表主動聯繫。');
+            alert('感謝您的填寫！資料將自動同步至 GC贈物網 公益部資料庫。未來有適合資源時，我們將依照此表主動聯繫。');
             btn.disabled = false;
             btn.style.opacity = '1';
             loading.style.display = 'none';
@@ -198,7 +223,7 @@
         })
         .catch(error => {
             console.error('Error!', error.message);
-            alert('提交出現異常，請檢查試算表是否已更新。');
+            alert('系統忙碌中，請聯繫特助確認。');
             btn.disabled = false;
             btn.style.opacity = '1';
             loading.style.display = 'none';
