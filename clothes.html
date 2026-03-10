@@ -41,11 +41,31 @@
         .clothes-matrix { background: #fffdf9; border: 1px solid #ffe0b3; padding: 20px; border-radius: 10px; }
         .sub-label { font-size: 0.9em; color: var(--primary-color); margin-bottom: 8px; margin-top: 15px; font-weight: bold; border-left: 3px solid var(--primary-color); padding-left: 8px; }
         input[type="text"], select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 100px; resize: vertical; }
         .other-input { margin-top: 10px; display: none; }
-        .btn-submit { background: var(--primary-color); color: white; border: none; padding: 16px; width: 100%; border-radius: 30px; font-size: 1.2em; cursor: pointer; margin-top: 40px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(255,140,0,0.4); }
+        .btn-submit { background: var(--primary-color); color: white; border: none; padding: 16px; width: 100%; border-radius: 30px; font-size: 1.2em; cursor: pointer; margin-top: 20px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(255,140,0,0.4); }
         .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
         .hidden { display: none; }
         #loading { display:none; text-align:center; color: var(--primary-color); font-weight:bold; margin-top:15px; }
+
+        /* 新增連結區塊樣式 */
+        .info-links {
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 30px;
+            border: 1px solid #d0e3ff;
+        }
+        .info-links a {
+            display: block;
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        .info-links a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -56,8 +76,9 @@
     <div class="intro-box">
         <p class="intro-text">
             為精準媒合優質資源，GC贈物網誠邀您填寫本調查。<br>
-            本專案<a href="https://drive.google.com/file/d/1D84_h6dns_p03G3Wi-BgmN4D1csmGmVO/view?usp=sharing" target="_blank" class="link-style">「GC代贈」</a>，由團隊預先完成進行篩選與分類，確保物資達8成新以上。<br><br>
-            並支持優質公益單位，贊助此專案運費，依貴單位的需求進行媒合，節省人力負擔，讓愛心資源效益最大化。
+            <a href="https://drive.google.com/file/d/1D84_h6dns_p03G3Wi-BgmN4D1csmGmVO/view?usp=sharing" target="_blank" class="link-style">「GC代贈」專案</a>，由團隊預先完成進行篩選、分類，確保物資達8成新以上。<br>
+            平台支持優質公益單位，贊助GC代贈專案運費，依貴單位的需求進行媒合，節省人力負擔，讓愛心資源效益最大化。<br>
+            請於20260320前填寫表單，謝謝您！
         </p>
     </div>
 
@@ -88,11 +109,11 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="form-group">
-                <label>聯繫人 *</label>
+                <label>聯繫人*</label>
                 <input type="text" name="contact" required>
             </div>
             <div class="form-group">
-                <label>聯絡電話 *</label>
+                <label>聯絡電話*</label>
                 <input type="text" name="phone" required>
             </div>
         </div>
@@ -120,26 +141,26 @@
         </div>
 
         <div id="clothesBox" class="hidden clothes-matrix">
-            <div class="sub-label">● 性別需求</div>
+            <div class="sub-label">性別需求</div>
             <div class="checkbox-grid">
                 <label class="item-card"><input type="checkbox" name="c_sex" value="男"> 男生</label>
                 <label class="item-card"><input type="checkbox" name="c_sex" value="女"> 女生</label>
                 <label class="item-card"><input type="checkbox" name="c_sex" value="不限"> 不限</label>
             </div>
-            <div class="sub-label">● 年齡/尺寸</div>
+            <div class="sub-label">年齡/尺寸</div>
             <div class="checkbox-grid">
                 <label class="item-card"><input type="checkbox" name="c_age" value="嬰幼兒"> 嬰幼兒</label>
                 <label class="item-card"><input type="checkbox" name="c_age" value="兒童"> 兒童</label>
                 <label class="item-card"><input type="checkbox" name="c_age" value="青少年"> 青少年</label>
                 <label class="item-card"><input type="checkbox" name="c_age" value="成人"> 成人</label>
             </div>
-            <div class="sub-label">● 需求季節</div>
+            <div class="sub-label">需求季節</div>
             <div class="checkbox-grid">
                 <label class="item-card"><input type="checkbox" name="c_season" value="夏季"> 夏季</label>
                 <label class="item-card"><input type="checkbox" name="c_season" value="冬季"> 冬季</label>
                 <label class="item-card"><input type="checkbox" name="c_season" value="不限"> 不限</label>
             </div>
-            <div class="sub-label">● 需求數量</div>
+            <div class="sub-label">需求數量</div>
             <div class="checkbox-grid">
                 <label class="item-card"><input type="radio" name="c_qty" value="50件"> 50件</label>
                 <label class="item-card"><input type="radio" name="c_qty" value="100件"> 100件</label>
@@ -163,6 +184,16 @@
             <div id="otherChannelsDiv" class="other-input">
                 <input type="text" name="other_channels_text" placeholder="請註明其他管道...">
             </div>
+        </div>
+
+        <div class="form-group">
+            <label>想跟GC贈物網公益部說的話..</label>
+            <textarea name="user_comment" placeholder="歡迎留下您的回饋或建議..."></textarea>
+        </div>
+
+        <div class="info-links">
+            <a href="https://m.give-circle.com/greenpoint?VNK=e1da0e9e" target="_blank">🎉 GC贈物網x環保署 合作上線！民眾寄取件完成媒合即可累積環保綠點</a>
+            <a href="https://npo.give-circle.com/" target="_blank">🔗 GC贈物網公益相關介紹</a>
         </div>
 
         <button type="submit" class="btn-submit" id="submitBtn">確認提交調查表</button>
