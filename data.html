@@ -116,6 +116,7 @@
         let totalVol = 0;
         // 找到這行並加上 hct: 0
        const providerSum = { ibox: 0, hilife: 0, fami: 0, hct: 0 };
+        const monthlySum = {}; //
         // 先算目前篩選範圍內的總數
         filtered.forEach(d => {
             const p = d.Provider.toLowerCase().trim();
