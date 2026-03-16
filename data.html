@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
-        :root { --ibox: #90ee90; --hilife: #e74c3c; --fami: #add8e6; --bg: #f4f7f9; }
+        :root { --ibox: #90ee90; --hilife: #e74c3c; --fami: #add8e6; --hct: #f39c12; --bg: #f4f7f9; }
         body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
         .container { max-width: 1200px; margin: auto; }
         .layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
@@ -41,6 +41,8 @@
                 <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="ibox" checked> i郵箱</label>
                 <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富</label>
                 <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="fami" checked> 全家</label>
+               <label style="display:block; margin-bottom:8px;"> <input type="checkbox" class="prov-check" value="hct" checked> 新竹物流
+</label>
             </div>
             <div class="filter-group">
                 <div class="filter-header">2. 時間區間 <span class="select-all" onclick="toggleAll('.date-check')">全選/反選</span></div>
@@ -112,9 +114,8 @@
         const filtered = allRawData.filter(d => provs.includes(d.Provider.toLowerCase().trim()) && selectedDates.includes(formatDate(d.Month || d.Date)));
 
         let totalVol = 0;
-        const providerSum = { ibox: 0, hilife: 0, fami: 0 };
-        const monthlySum = {};
-        
+        // 找到這行並加上 hct: 0
+       const providerSum = { ibox: 0, hilife: 0, fami: 0, hct: 0 };
         // 先算目前篩選範圍內的總數
         filtered.forEach(d => {
             const p = d.Provider.toLowerCase().trim();
@@ -177,7 +178,7 @@
     }
 
     function updateCharts(labels, provs, data, pSum) {
-        const colors = { ibox: '#90ee90', hilife: '#e74c3c', fami: '#add8e6' };
+        const colors = { ibox: '#90ee90', hilife: '#e74c3c', fami: '#add8e6', hct: '#003366' };
         const ctxV = document.getElementById('volChart').getContext('2d');
         if (volChart) volChart.destroy();
         volChart = new Chart(ctxV, {
