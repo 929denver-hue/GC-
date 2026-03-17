@@ -72,26 +72,25 @@
     box-shadow: 0 4px 12px rgba(211, 47, 47, 0.1);
     box-sizing: border-box;
     width: calc(100% - 40px);
-    text-align: center; /* [新增] 讓內部文字置中 */
+    text-align: center; 
   }
   
   .alert-title {
     color: var(--alert-red);
-    font-size: 1.275rem; /* [修改] 原 1.15rem，放大約 2px */
+    font-size: 1.275rem; 
     font-weight: 900;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
-    justify-content: center; /* [新增] 讓 flex 排版的文字與圖示置中 */
+    justify-content: center; 
     gap: 8px;
   }
   
   .alert-text {
     color: #333;
-    font-size: 1.125rem; /* [修改] 原 1rem，精準放大 2px */
+    font-size: 1.125rem; 
     font-weight: 600;
   }
-  /* -------------------------- */
 
   .container {
     max-width: 900px;
@@ -170,7 +169,6 @@
 
   @media (min-width: 768px) {
     header h1 { font-size: 1.5rem; }
-    /* [修改] 電腦版也同步等比例放大 2px */
     .alert-banner { padding: 20px 30px; }
     .alert-title { font-size: 1.45rem; } 
     .alert-text { font-size: 1.25rem; }
@@ -185,24 +183,26 @@
     .step-content { width: 45%; padding: 40px; }
     .step-content h2 { font-size: 1.4rem; }
   }
-/* --- 局部文字深藍色 --- */
-  .text-blue {
-    color: var(--hi-life-blue);
-  }
 
+  /* --- [已修復] 局部文字深藍色：加上 !important 強制覆蓋 --- */
+  .text-blue {
+    color: var(--hi-life-blue) !important;
+  }
 </style>
 </head>
 <body>
 
 <header>
-<h1><span class="text-blue">GC贈物網</span> - 萊爾富<span class="text-blue">寄件教學</span></h1>  <div class="progress-wrapper">
+  <h1><span class="text-blue">GC贈物網</span> - 萊爾富<span class="text-blue">寄件教學</span></h1>  
+  <div class="progress-wrapper">
     <div class="progress-fill" id="progressFill"></div>
   </div>
 </header>
 
 <div class="alert-banner">
   <div class="alert-title">⚠️ 千萬別直覺點首頁的<br>「店到店」！</div>
-<div class="alert-text">請跟著下方順序點擊萊爾富機台，飛快順利找到 <span class="text-blue"> GC贈物網 </span> 專屬寄件入口。</div></div>
+  <div class="alert-text">請跟著下方順序點擊萊爾富機台，飛快順利找到 <span class="text-blue">GC贈物網</span> 專屬寄件入口。</div>
+</div>
 
 <div class="container" id="stepsContainer">
   
@@ -238,7 +238,7 @@
 
   <article class="step-card" data-step="4">
     <div class="step-img-box">
-      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-13-03-bfxFAD6SlGioyQt8FbMHzi1qCCgY733Xfo18lhaY.jpeg" alt="輸入寄件代碼、手機末三碼" loading="lazy">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-13-15-QIMPM1KCc8KLifSTlbLizTo87UANPpgEYQvYUVvB.jpeg" alt="輸入寄件代碼、手機末三碼" loading="lazy">
     </div>
     <div class="step-content">
       <span class="step-badge">STEP 4</span>
@@ -248,7 +248,7 @@
 
   <article class="step-card" data-step="5">
     <div class="step-img-box">
-      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-13-09-wQ0L8ryms9hgFwHJEkWYZJjKSKsnyNwoBuj8LvaG.jpeg" alt="確認資訊無誤後，點選[ 列印寄件單 ]" loading="lazy">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-13-22-zobtg6ruditBpyMXUs5RfDZz2CtHHURna1UhN8S9.jpeg" alt="確認資訊無誤後，點選[ 列印寄件單 ]" loading="lazy">
     </div>
     <div class="step-content">
       <span class="step-badge">STEP 5</span>
@@ -281,7 +281,8 @@
 
     const updateProgress = (step) => {
       const percentage = (step / totalSteps) * 100;
-      progressFill..width = `${percentage}%`;
+      // [已修復] 這裡原本被誤刪成 progressFill..width，已補回 .style.
+      progressFill.style.width = `${percentage}%`;
     };
     updateProgress(maxStepReached);
 
