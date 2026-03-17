@@ -23,8 +23,8 @@
         
         /* 錯誤紅框標示樣式 */
         .error-highlight {
-            border: 2px solid #ef4444 !important; /* Tailwind red-500 */
-            background-color: #fef2f2 !important; /* Tailwind red-50 */
+            border: 2px solid #ef4444 !important;
+            background-color: #fef2f2 !important;
             border-radius: 0.5rem;
             transition: all 0.3s;
         }
@@ -44,8 +44,8 @@
 
     <main class="max-w-3xl mx-auto mt-12 md:mt-16 bg-white shadow-md rounded-none md:rounded-lg overflow-hidden" id="main-container">
         <div class="bg-indigo-600 text-white p-6">
-            <h1 class="text-2xl font-bold">GC贈物網影響力評估:社工</h1>
-            <p class="mt-2 text-indigo-100">您好:<br>請根據您參與GC贈物網的經驗填答以下問題,問卷預計花費您10分鐘寶貴的時間。</p>
+            <h1 class="text-2xl font-bold">GC贈物網影響力評估：社工</h1>
+            <p class="mt-2 text-indigo-100">您好：<br>請根據您參與GC贈物網的經驗填答以下問題，問卷預計花費您10分鐘寶貴的時間。</p>
             <p class="mt-1 text-sm text-indigo-200"><span class="text-red-400 font-bold">*</span>表示必填問題</p>
         </div>
 
@@ -55,7 +55,7 @@
                 <p class="text-sm text-gray-500 mb-6">請依據您的主觀感受與認知回答</p>
 
                 <div class="mb-8">
-                    <label class="block font-semibold mb-3 text-lg">1. 您參與GC贈物網及社工表揚活動時,是否在下列面向有所收穫? <span class="text-red-500 font-bold">*</span></label>
+                    <label class="block font-semibold mb-3 text-lg">1. 您參與GC贈物網及社工表揚活動時，是否在下列面向有所收穫？ <span class="text-red-500 font-bold">*</span></label>
                     <div class="table-container overflow-x-auto border-0 md:border border-gray-200 rounded">
                         <table class="w-full text-sm text-left whitespace-nowrap">
                             <thead class="bg-gray-50 border-b hidden md:table-header-group">
@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="mb-8">
-                    <label class="block font-semibold mb-3 text-lg">2. 和其他相似的活動相比,您在GC贈物網及社工表揚活動的收穫是否特別? <span class="text-red-500 font-bold">*</span></label>
+                    <label class="block font-semibold mb-3 text-lg">2. 和其他相似的活動相比，您在GC贈物網及社工表揚活動的收穫是否特別？ <span class="text-red-500 font-bold">*</span></label>
                     <div class="table-container overflow-x-auto border-0 md:border border-gray-200 rounded">
                         <table class="w-full text-sm text-left whitespace-nowrap">
                             <thead class="bg-gray-50 border-b hidden md:table-header-group">
@@ -88,7 +88,7 @@
             <section class="bg-indigo-50/50 p-4 rounded-xl" id="points-section-container">
                 <h2 class="text-xl font-bold border-b border-gray-200 pb-2 mb-4">價值結構</h2>
                 <p class="text-sm text-gray-700 mb-4 bg-white border border-indigo-100 p-3 rounded shadow-sm">
-                    根據參與GC贈物網及社工表揚活動的經驗,如果您手上有100點,請依照您認為的價值大小來分配點數給以下四項,四項加總100即可。
+                    根據參與GC贈物網及社工表揚活動的經驗，如果您手上有100點，請依照您認為的價值大小來分配點數給以下四項，四項加總100即可。
                 </p>
 
                 <div class="sticky top-10 bg-indigo-50/90 backdrop-blur py-3 z-10 border-b border-indigo-200 mb-6 -mx-4 px-4">
@@ -124,7 +124,7 @@
             <section>
                 <h2 class="text-xl font-bold border-b border-gray-200 pb-2 mb-4">精進之處</h2>
                 <div class="mb-8">
-                    <label class="block font-semibold mb-3 text-lg">1. 請問您認為GC贈物網尚可再精進/提升之處? <span class="text-red-500 font-bold">*</span></label>
+                    <label class="block font-semibold mb-3 text-lg">1. 請問您認為GC贈物網尚可再精進/提升之處？ <span class="text-red-500 font-bold">*</span></label>
                     <div class="table-container overflow-x-auto border-0 md:border border-gray-200 rounded">
                         <table class="w-full text-sm text-left whitespace-nowrap">
                             <thead class="bg-gray-50 border-b hidden md:table-header-group">
@@ -144,6 +144,10 @@
                 </div>
             </section>
         </form>
+
+        <div class="pb-8 pt-4 text-center text-sm text-gray-400 border-t border-gray-100 mx-6">
+            這份問卷是在 樹冠影響力投資股份有限公司 中建立
+        </div>
     </main>
 
     <div id="sticky-footer" class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] z-40 flex flex-col md:flex-row justify-between items-center gap-3">
@@ -151,7 +155,9 @@
             <span id="footer-msg" class="text-gray-500 font-medium">請完成所有必填項目與點數分配</span>
         </div>
         <div class="flex gap-4 w-full md:w-auto justify-end">
-            <button type="button" class="text-sm text-gray-500 hover:text-gray-800 px-2" onclick="clearForm()">清除重填</button>
+            <button type="button" class="text-sm font-bold text-gray-400 hover:text-red-500 transition-colors px-2 py-2" onclick="clearForm()">
+                清除表單
+            </button>
             <button type="submit" form="impactForm" id="submit-btn" class="bg-indigo-600 text-white px-8 py-3 rounded font-bold hover:bg-indigo-700 transition-colors w-full md:w-auto shadow-md">
                 送出問卷
             </button>
@@ -159,20 +165,18 @@
     </div>
 
     <script>
-        // --- 1. 資料配置 (替換為 GC贈物網) ---
         const matrixItems1 = ["獎品好又實用", "獲得表揚後履歷加值", "從其他社工同儕的作為中學習許多", "GC贈物網平台會員不時的鼓勵令人感動", "企業贊助的心意令人感動", "政府對社工的表揚令人鼓舞", "媒體的報導令人鼓舞", "表揚活動結識很多志同道合夥伴", "表揚活動結識很多潛在的資源提供方"];
         const labels1 = ["非常顯著", "顯著", "有些", "不認為或不確定"];
         
         const matrixItems3 = ["希望更多地方政府也能響應", "希望增加表揚活動志工分享交流機會", "希望促成更多企業參與", "希望能連結更多媒體參與報導", "希望平台有更明顯的社工故事露出", "活動前後的行政效率"];
         const labels3 = ["滿意", "無意見", "希望改善", "非常需要改善"];
 
-        // --- 2. 矩陣題生成 ---
         function generateEnhancedMatrix(tbodyId, items, namePrefix, labels) {
             const tbody = document.getElementById(tbodyId);
             items.forEach((item, index) => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-50 transition-colors border-transparent border-2"; // 預留 border 空間防跳動
-                tr.dataset.name = `${namePrefix}_${index}`; // 供防呆驗證定位
+                tr.className = "hover:bg-gray-50 transition-colors border-transparent border-2"; 
+                tr.dataset.name = `${namePrefix}_${index}`; 
                 let tds = `<td class="p-3 font-medium whitespace-normal text-gray-800">${item}</td>`;
                 labels.forEach((label) => {
                     tds += `
@@ -194,21 +198,20 @@
             tr.parentElement.querySelectorAll('tr').forEach(r => {
                 r.classList.remove('matrix-row-selected');
             });
-            tr.classList.remove('error-highlight'); // 清除錯誤紅框
+            tr.classList.remove('error-highlight');
             tr.classList.add('matrix-row-selected');
             document.getElementById('impactForm').dispatchEvent(new Event('change'));
-            updateOverallProgress(); // 更新全局進度
+            updateOverallProgress();
         }
 
         generateEnhancedMatrix('q1-tbody', matrixItems1, 'q1', labels1);
         generateEnhancedMatrix('q2-tbody', matrixItems1, 'q2', ["難以取代", "相對較高", "差不多", "不如其他"]);
         generateEnhancedMatrix('q7-tbody', matrixItems3, 'q7', labels3);
 
-        // --- 3. 點數驗證邏輯 ---
         function calculatePoints() {
             let total = 0;
             document.querySelectorAll('.point-input').forEach(input => { 
-                input.closest('.point-container').classList.remove('error-highlight'); // 清除錯誤紅框
+                input.closest('.point-container').classList.remove('error-highlight'); 
                 const val = parseInt(input.value);
                 if (!isNaN(val)) total += val; 
             });
@@ -234,18 +237,15 @@
             input.addEventListener('input', calculatePoints);
         });
 
-        // --- 4. 全局進度引擎 ---
         function updateOverallProgress() {
-            const totalRequired = 9 + 9 + 4 + 6; // Q1(9) + Q2(9) + Points(4) + Q7(6)
+            const totalRequired = 9 + 9 + 4 + 6; 
             let answered = 0;
 
-            // 計算矩陣題
             ['q1', 'q2'].forEach(prefix => {
                 for(let i=0; i<9; i++) if(document.querySelector(`input[name="${prefix}_${i}"]:checked`)) answered++;
             });
             for(let i=0; i<6; i++) if(document.querySelector(`input[name="q7_${i}"]:checked`)) answered++;
 
-            // 計算點數題 (有填數字就算一個進度)
             document.querySelectorAll('.point-input').forEach(input => {
                 if(input.value !== '' && !isNaN(parseInt(input.value))) answered++;
             });
@@ -255,15 +255,14 @@
             document.getElementById('overall-progress-text').innerText = `${percentage}%`;
         }
 
-        // --- 5. 自動暫存 ---
         const form = document.getElementById('impactForm');
         form.addEventListener('change', () => {
             const data = Object.fromEntries(new FormData(form).entries());
-            localStorage.setItem('gc_survey_v2', JSON.stringify(data));
+            localStorage.setItem('gc_survey_v3', JSON.stringify(data));
         });
 
         window.addEventListener('DOMContentLoaded', () => {
-            const draft = localStorage.getItem('gc_survey_v2');
+            const draft = localStorage.getItem('gc_survey_v3');
             if (draft) {
                 const data = JSON.parse(draft);
                 Object.entries(data).forEach(([key, value]) => {
@@ -284,31 +283,34 @@
             updateOverallProgress();
         });
 
+        // 獨立且強化的清除表單功能
         function clearForm() {
-            if(confirm('確定要清除所有填寫進度嗎？')) {
+            if(confirm('確定要清除所有填寫進度嗎？這將無法復原。')) {
+                // 1. 重置表單數值
                 form.reset();
-                localStorage.removeItem('gc_survey_v2');
+                // 2. 清除暫存
+                localStorage.removeItem('gc_survey_v3');
+                // 3. 移除所有視覺選取與錯誤狀態
                 document.querySelectorAll('.matrix-row-selected').forEach(el => el.classList.remove('matrix-row-selected'));
                 document.querySelectorAll('.error-highlight').forEach(el => el.classList.remove('error-highlight'));
+                // 4. 重新計算點數與進度（歸零）
                 calculatePoints();
                 updateOverallProgress();
-                window.scrollTo(0, 0);
+                // 5. 畫面平滑捲回最上方
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // --- 6. 送出驗證與 AJAX ---
         const GOOGLE_APP_URL = 'https://script.google.com/macros/s/AKfycbyN782K3M3RGxCSJu6R02gijd3OW53XUd8V7BLO9hDaZ-akhJmgGr8_gsd3gcs2TiL1EQ/exec'; 
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // 清除之前的錯誤標示
             document.querySelectorAll('.error-highlight').forEach(el => el.classList.remove('error-highlight'));
             
             let isValid = true;
             let firstInvalidEl = null;
 
-            // 驗證矩陣題 Q1, Q2
             ['q1', 'q2'].forEach(prefix => {
                 for(let i=0; i<9; i++) {
                     if(!document.querySelector(`input[name="${prefix}_${i}"]:checked`)) {
@@ -320,7 +322,6 @@
                 }
             });
             
-            // 驗證矩陣題 Q7
             for(let i=0; i<6; i++) {
                 if(!document.querySelector(`input[name="q7_${i}"]:checked`)) {
                     isValid = false;
@@ -330,7 +331,6 @@
                 }
             }
 
-            // 驗證點數題是否有填寫
             let totalPoints = 0;
             document.querySelectorAll('.point-input').forEach(input => {
                 if(input.value === '') {
@@ -342,24 +342,20 @@
                 totalPoints += (parseInt(input.value) || 0);
             });
 
-            // 驗證點數總和是否為 100
             if(isValid && totalPoints !== 100) {
                 isValid = false;
                 const pointsSection = document.getElementById('points-section-container');
                 pointsSection.classList.add('error-highlight');
                 firstInvalidEl = pointsSection;
-                alert(`價值結構的點數加總必須剛好為 100 點！ (目前為 ${totalPoints} 點)`);
+                alert(`價值結構的點數加總必須剛好為 100 點！（目前為 ${totalPoints} 點）`);
             }
 
-            // 阻擋送出並滾動到錯誤處
             if(!isValid) {
-                // 平滑滾動至第一個錯誤點，並預留上方 header 的空間
                 const y = firstInvalidEl.getBoundingClientRect().top + window.scrollY - 80;
                 window.scrollTo({ top: y, behavior: 'smooth' });
                 return;
             }
 
-            // --- 驗證通過，開始送出 ---
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
             submitBtn.innerHTML = `
@@ -381,9 +377,9 @@
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    localStorage.removeItem('gc_survey_v2');
+                    localStorage.removeItem('gc_survey_v3');
                     document.getElementById('sticky-footer').style.display = 'none';
-                    document.querySelector('.fixed.top-0').style.display = 'none'; // 隱藏進度條
+                    document.querySelector('.fixed.top-0').style.display = 'none'; 
                     document.getElementById('main-container').innerHTML = `
                         <div class="p-12 text-center bg-white rounded-lg shadow-md mt-8">
                             <div class="text-6xl mb-4">🎉</div>
