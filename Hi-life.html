@@ -1,28 +1,308 @@
-<div style="max-width: 600px; margin: 20px auto; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; font-family: Arial, sans-serif;">
-  <div style="background-color: #fff3cd; padding: 16px; border-bottom: 1px solid #ffeeba;">
-    <h4 style="color: #e74c3c; margin: 0 0 8px 0; font-size: 18px; font-weight: bold;">
-      ⚠️ 千萬別直覺點首頁的「店到店」！
-    </h4>
-    <p style="color: #cc0000; margin: 0; font-size: 15px; line-height: 1.5;">
-      請跟著順序點擊萊爾富機台，飛快順利找到GC贈物網寄件入口。
-    </p>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GC贈物網 - 萊爾富Life-ET 寄件教學</title>
+<style>
+  :root {
+    --hi-life-red: #E60012;
+    --hi-life-blue: #0055A4;
+    --alert-red: #d32f2f;
+    --alert-bg: #ffebee;
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-main: #2c3e50;
+    --transition-speed: 0.6s;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 16px 20px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+  
+  header h1 {
+    margin: 0 0 12px 0;
+    font-size: 1.25rem;
+    color: var(--hi-life-red);
+    letter-spacing: 0.5px;
+  }
+
+  .progress-wrapper {
+    background: #e9ecef;
+    border-radius: 8px;
+    height: 6px;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--hi-life-red), #ff4d4d);
+    width: 0%; 
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  /* --- 修改重點區段：警告標語 --- */
+  .alert-banner {
+    background-color: var(--alert-bg);
+    border-left: 6px solid var(--alert-red);
+    max-width: 860px;
+    margin: 24px auto 10px auto;
+    padding: 16px 20px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.1);
+    box-sizing: border-box;
+    width: calc(100% - 40px);
+    text-align: center; /* [新增] 讓內部文字置中 */
+  }
+  
+  .alert-title {
+    color: var(--alert-red);
+    font-size: 1.275rem; /* [修改] 原 1.15rem，放大約 2px */
+    font-weight: 900;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* [新增] 讓 flex 排版的文字與圖示置中 */
+    gap: 8px;
+  }
+  
+  .alert-text {
+    color: #333;
+    font-size: 1.125rem; /* [修改] 原 1rem，精準放大 2px */
+    font-weight: 600;
+  }
+  /* -------------------------- */
+
+  .container {
+    max-width: 900px;
+    margin: 30px auto 40px auto;
+    padding: 0 20px;
+  }
+
+  .step-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    margin-bottom: 40px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity var(--transition-speed) ease-out, transform var(--transition-speed) ease-out;
+  }
+
+  .step-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .step-img-box {
+    width: 100%;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .step-img-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  .step-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .step-badge {
+    align-self: flex-start;
+    background: var(--hi-life-blue);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  .step-content h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-main);
+    line-height: 1.4;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--hi-life-red);
+    margin: 20px 0 60px 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(230, 0, 18, 0.05);
+  }
+
+  @media (min-width: 768px) {
+    header h1 { font-size: 1.5rem; }
+    /* [修改] 電腦版也同步等比例放大 2px */
+    .alert-banner { padding: 20px 30px; }
+    .alert-title { font-size: 1.45rem; } 
+    .alert-text { font-size: 1.25rem; }
+    
+    .step-card { flex-direction: row; min-height: 300px; }
+    .step-card:nth-child(even) { flex-direction: row-reverse; }
+    
+    .step-img-box { width: 55%; border-bottom: none; }
+    .step-card:nth-child(odd) .step-img-box { border-right: 1px solid #eee; }
+    .step-card:nth-child(even) .step-img-box { border-left: 1px solid #eee; }
+
+    .step-content { width: 45%; padding: 40px; }
+    .step-content h2 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>GC贈物網 - 萊爾富寄件教學</h1>
+  <div class="progress-wrapper">
+    <div class="progress-fill" id="progressFill"></div>
   </div>
+</header>
+
+<div class="alert-banner">
+  <div class="alert-title">⚠️ 千萬別直覺點首頁的「店到店」！</div>
+  <div class="alert-text">請跟著下方順序點擊萊爾富機台，飛快順利找到 GC贈物網 專屬寄件入口。</div>
 </div>
 
-  <div style="background-color: #f8f9fa; padding: 16px; text-align: center;">
-    <p style="margin: 0 0 12px 0; color: #333; font-weight: bold; font-size: 16px;">✨ 正確通關密語：「生、店、寄」</p>
-    <div style="display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap;">
-      <span style="background-color: #28a745; color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(40,167,69,0.3);">1️⃣ 生活服務</span>
-      <span style="color: #28a745; font-weight: bold;">➔</span>
-      <span style="background-color: #28a745; color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(40,167,69,0.3);">2️⃣ 店到店寄件單列印</span>
-      <span style="color: #28a745; font-weight: bold;">➔</span>
-      <span style="background-color: #28a745; color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(40,167,69,0.3);">3️⃣ 寄件服務</span>
+<div class="container" id="stepsContainer">
+  
+  <article class="step-card" data-step="1">
+    <div class="step-img-box">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-12-40-1nIctQKYhTA6pNx3vc4IXlqPqoxo7Zw1TfzGe2F6.jpeg" alt="至 Life-ET 點選 [ 生活服務 ]" loading="lazy">
     </div>
-  </div>
+    <div class="step-content">
+      <span class="step-badge">STEP 1</span>
+      <h2>至 Life-ET 點選 [ 生活服務 ]</h2>
+    </div>
+  </article>
 
-  <div style="padding: 16px; text-align: center; background-color: #ffffff;">
-    <img src="https://d2hrw3sjxwwsb1.cloudfront.net/gift/2026-03-17-14-15-50-gU7hHBpG0dhdYZxuU5UFneXrz0NGQiy8IODvIHnm.png" alt="萊爾富機台操作步驟圖" style="max-width: 100%; height: auto; border-radius: 4px; border: 1px solid #eee;">
-    <p style="color: #888; font-size: 13px; margin-top: 10px;">▲ 照著綠色步驟，後續輸入代碼即可順利印單。</p>
+  <article class="step-card" data-step="2">
+    <div class="step-img-box">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-12-50-q5CKYXCV4iyYNHnE5VVibITfllIlqepLa0Ecyg49.jpeg" alt="點選[ 店到店 寄件單列印 ]" loading="lazy">
+    </div>
+    <div class="step-content">
+      <span class="step-badge">STEP 2</span>
+      <h2>點選[ 店到店 寄件單列印 ]</h2>
+    </div>
+  </article>
+
+  <article class="step-card" data-step="3">
+    <div class="step-img-box">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-12-56-eAbOTwYLltlmDzrJNr7vLl5DYIEqv3NEni8DOluh.jpeg" alt="點選 [ 寄件服務 ]" loading="lazy">
+    </div>
+    <div class="step-content">
+      <span class="step-badge">STEP 3</span>
+      <h2>點選 [ 寄件服務 ]</h2>
+    </div>
+  </article>
+
+  <article class="step-card" data-step="4">
+    <div class="step-img-box">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-13-03-bfxFAD6SlGioyQt8FbMHzi1qCCgY733Xfo18lhaY.jpeg" alt="輸入寄件代碼、手機末三碼" loading="lazy">
+    </div>
+    <div class="step-content">
+      <span class="step-badge">STEP 4</span>
+      <h2>輸入寄件代碼、手機末三碼</h2>
+    </div>
+  </article>
+
+  <article class="step-card" data-step="5">
+    <div class="step-img-box">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-13-09-wQ0L8ryms9hgFwHJEkWYZJjKSKsnyNwoBuj8LvaG.jpeg" alt="確認資訊無誤後，點選[ 列印寄件單 ]" loading="lazy">
+    </div>
+    <div class="step-content">
+      <span class="step-badge">STEP 5</span>
+      <h2>確認資訊無誤後，點選[ 列印寄件單 ]</h2>
+    </div>
+  </article>
+
+  <article class="step-card" data-step="6">
+    <div class="step-img-box">
+      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-03-17-15-13-15-QIMPM1KCc8KLifSTlbLizTo87UANPpgEYQvYUVvB.jpeg" alt="將寄件單貼好包裹上，至櫃檯繳費寄件" loading="lazy">
+    </div>
+    <div class="step-content">
+      <span class="step-badge">STEP 6</span>
+      <h2>將寄件單貼好包裹上，<br>至櫃檯繳費寄件</h2>
+    </div>
+  </article>
+
+  <div class="footer-note">
+    ▲ 照著上述步驟，立即順利寄出🥂
   </div>
 
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll('.step-card');
+    const progressFill = document.getElementById('progressFill');
+    const totalSteps = cards.length; 
+    let maxStepReached = 1;
+
+    const updateProgress = (step) => {
+      const percentage = (step / totalSteps) * 100;
+      progressFill.style.width = `${percentage}%`;
+    };
+    updateProgress(maxStepReached);
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -15% 0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          const currentStep = parseInt(entry.target.getAttribute('data-step'), 10);
+          if (currentStep > maxStepReached) {
+            maxStepReached = currentStep;
+            updateProgress(maxStepReached);
+          }
+        }
+      });
+    }, observerOptions);
+
+    cards.forEach(card => observer.observe(card));
+  });
+</script>
+</body>
+</html>
