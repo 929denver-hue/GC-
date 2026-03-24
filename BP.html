@@ -1,0 +1,27 @@
+// 財務計算核心 logic.ts
+export const PRICING_MODEL = {
+  L: 16800,
+  H: 18800,
+  DISCOUNT: 10800,
+  COMMISSION_RATE: 0.05, // 5% 佣金
+};
+
+export interface MonthlyRecord {
+  month: string;
+  salesCount: { L: number; H: number; DISCOUNT: number };
+  actualOpEx: number; // 實際營業支出 (薪資、AWS等)
+}
+
+export const calculateFinancials = (record: MonthlyRecord) => {
+  const revenue = 
+    record.salesCount.L * PRICING_MODEL.L +
+    record.salesCount.H * PRICING_MODEL.H +
+    record.salesCount.DISCOUNT * PRICING_MODEL.DISCOUNT;
+
+  const variableCost = revenue * PRICING_MODEL.COMMISSION_RATE;
+  const grossProfit = revenue - variableCost;
+  const netProfit = grossProfit - record.actualOpEx;
+  const margin = revenue > 0 ? (grossProfit / revenue) : 0;
+
+  return { revenue, grossProfit, netProfit, margin };
+};
