@@ -8,42 +8,37 @@
   <style>
     @media print { .no-print { display: none; } }
     body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
-    .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    .input-focus { @apply focus:ring-2 focus:ring-blue-500 outline-none transition-all; }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 text-slate-900">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
+    // --- 硬編碼：你提供的年度固定支出指標 ---
+    const YEARLY_FIXED_COSTS = {
+      2025: 9540000,
+      2026: 12900000,
+      2027: 15296000,
+      2028: 17852000,
+      2029: 20474000
+    };
+
     const App = () => {
-      // 預設數據
-      const [data, setData] = useState(Array.from({length:12}, (_,i)=>({month:i+1, countPro:0, countGroup:0, projectIncome:0, year:2026})));
+      const [data, setData] = useState(Array.from({length:12}, (_,i)=>({month:i+1, countPro:0, countGroup:0, otherIncome:0, year:2026})));
       const [loading, setLoading] = useState(true);
       const [targetYear, setTargetYear] = useState(2026);
       const [projPrice, setProjPrice] = useState(500000);
 
-      // --- 董事會定義參數 ---
-      const config = {
-        baseYear: 2025,
-        baseStaff: 8,          // 2025 基礎人數
-        staffAddRate: 2,       // 每年增加 2 人
-        avgSalary: 63000,      // 含勞健保月成本
-        baseAdmin: 150000,     // 2025 基礎管銷/月
-        adminGrowth: 0.10,     // 每年複利成長 10%
-        projComm: 0.10,        // 專案佣金 10%
-        pricePro: 2500,        // Pro 月費
-        priceGroup: 25000      // Group 月費
-      };
-
-      // 初始化：抓取雲端資料
+      // 1. 初始化讀取
       useEffect(() => {
         if (typeof google !== 'undefined') {
           google.script.run.withSuccessHandler(resJson => {
             const res = JSON.parse(resJson);
             if (res.status === "success" && res.rows.length > 0) {
-              setData(res.rows.map(r => ({ month:r[0], countPro:r[1], countGroup:r[2], projectIncome:r[3], year:r[4] })));
+              setData(res.rows.map(r => ({ month:r[0], countPro:r[1], countGroup:r[2], otherIncome:r[3], year:r[4] })));
             }
             setLoading(false);
           }).getCloudData();
@@ -52,32 +47,27 @@
         }
       }, []);
 
-      // 核心計算邏輯
+      // 2. 計算邏輯 (核心：固定成本平攤 + 佣金支出)
       const summary = useMemo(() => {
-        const yearDiff = targetYear - config.baseYear;
-        
-        // 1. 人事費用：每年 +2 人 (2025:8, 2026:10, 2027:12...)
-        const staffCount = config.baseStaff + (config.staffAddRate * yearDiff);
-        const monthlyLabor = staffCount * config.avgSalary;
-
-        // 2. 管銷費用：每年成長 10% (複利)
-        const monthlyAdmin = config.baseAdmin * Math.pow((1 + config.adminGrowth), yearDiff);
+        const annualFixed = YEARLY_FIXED_COSTS[targetYear] || 20474000;
+        const monthlyFixed = annualFixed / 12;
 
         const rows = data.map(m => {
-          const revSub = (m.countPro * config.pricePro) + (m.countGroup * config.priceGroup);
-          const commExp = m.projectIncome * config.projComm;
-          const profit = (revSub + m.projectIncome) - (monthlyLabor + monthlyAdmin + commExp);
-          return { ...m, revSub, profit };
+          const revSub = (m.countPro * 2500) + (m.countGroup * 25000); // 訂閱月費預估
+          const commExp = m.otherIncome * 0.10; // 專案/廣告佣金 10%
+          const monthlyProfit = (revSub + m.otherIncome) - (monthlyFixed + commExp);
+          return { ...m, revSub, monthlyProfit };
         });
 
-        const netProfit = rows.reduce((s, r) => s + r.profit, 0);
-        // 打平試算：剩餘缺口 / (單一專案單價 * 0.9)
-        const projectsNeeded = netProfit < 0 ? Math.ceil(Math.abs(netProfit) / (projPrice * 0.9)) : 0;
+        const annualNet = rows.reduce((s, r) => s + r.monthlyProfit, 0);
+        // 需補足專案數：缺口 / (單價 * 0.9)
+        const projectsNeeded = annualNet < 0 ? Math.ceil(Math.abs(annualNet) / (projPrice * 0.9)) : 0;
 
-        return { rows, netProfit, projectsNeeded, monthlyLabor, monthlyAdmin };
+        return { rows, annualNet, projectsNeeded, annualFixed, monthlyFixed };
       }, [data, targetYear, projPrice]);
 
       const handleSave = () => {
+        if (typeof google === 'undefined') return alert("目前為離線模式");
         setLoading(true);
         google.script.run.withSuccessHandler(msg => {
           setLoading(false);
@@ -85,65 +75,69 @@
         }).saveToCloud(JSON.stringify(data));
       };
 
-      if (loading) return <div className="h-screen flex items-center justify-center font-bold text-slate-400 animate-pulse">與雲端 Excel 同步中...</div>;
+      if (loading) return <div className="h-screen flex items-center justify-center font-bold text-slate-400 animate-pulse">與雲端同步中...</div>;
 
       return (
-        <div className="p-6 md:p-12 max-w-7xl mx-auto">
-          <header className="flex justify-between items-center mb-12">
+        <div className="p-4 md:p-10 max-w-7xl mx-auto">
+          {/* 標題與連結 */}
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
             <div>
-              <h1 className="text-4xl font-black text-slate-800 tracking-tighter italic">GC <span className="text-blue-600">STRATEGY</span></h1>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></span>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">董事會決策支援系統</p>
+              <div className="flex items-center gap-3">
+                <h1 className="text-4xl font-black text-slate-900 tracking-tighter">GC <span className="text-blue-600">DASHBOARD</span></h1>
+                <a href="https://docs.google.com/spreadsheets/d/1gduJ3RoZwUJraa05hlfStjUBMAShKPy6/edit?usp=sharing" target="_blank" className="no-print text-xs bg-slate-200 hover:bg-slate-300 text-slate-600 font-bold py-1 px-3 rounded-full transition-all">
+                  🔗 原始預算表
+                </a>
               </div>
+              <p className="text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest">董事會財務模擬與紀錄系統</p>
             </div>
-            <div className="flex gap-4 no-print">
+            
+            <div className="flex gap-3 no-print">
               <select value={targetYear} onChange={e => setTargetYear(+e.target.value)} className="bg-white border-2 border-slate-100 rounded-2xl px-4 py-2 font-bold shadow-sm outline-none">
-                {[2025, 2026, 2027, 2028].map(y => <option key={y} value={y}>{y} 年度決策</option>)}
+                {[2025, 2026, 2027, 2028, 2029].map(y => <option key={y} value={y}>{y} 年度決策</option>)}
               </select>
-              <button onClick={handleSave} className="bg-blue-600 text-white px-8 py-2 rounded-2xl font-bold hover:bg-slate-800 transition-all shadow-xl shadow-blue-100">同步雲端 Excel</button>
+              <button onClick={handleSave} className="bg-slate-900 text-white px-8 py-2 rounded-2xl font-bold hover:bg-blue-600 transition-all shadow-xl shadow-blue-100">同步至雲端 Excel</button>
             </div>
           </header>
 
-          {/* 數據摘要卡片 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {/* 指標卡片 */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
             <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-50">
-              <p className="text-xs font-black text-slate-300 uppercase mb-2 tracking-widest">年度預估淨利</p>
-              <h2 className={`text-4xl font-black ${summary.netProfit < 0 ? 'text-red-500' : 'text-emerald-500'}`}>
-                NT$ {summary.netProfit.toLocaleString()}
-              </h2>
+              <div className="text-xs font-black text-slate-300 uppercase mb-2 tracking-widest">年度預估淨利 (負綠正紅)</div>
+              <div className={`text-3xl font-black ${summary.annualNet < 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                NT$ {summary.annualNet.toLocaleString()}
+              </div>
             </div>
             <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-50">
-              <p className="text-xs font-black text-slate-300 uppercase mb-2 tracking-widest">{targetYear} 人事月成本 (+2人/年)</p>
-              <h2 className="text-4xl font-black text-slate-700">NT$ {summary.monthlyLabor.toLocaleString()}</h2>
+              <div className="text-xs font-black text-slate-300 uppercase mb-2 tracking-widest">{targetYear} 年度固定總成本</div>
+              <div className="text-3xl font-black text-slate-700">NT$ {summary.annualFixed.toLocaleString()}</div>
             </div>
             <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-50">
-              <p className="text-xs font-black text-slate-300 uppercase mb-2 tracking-widest">{targetYear} 管銷月成本 (+10%/年)</p>
-              <h2 className="text-4xl font-black text-slate-700">NT$ {summary.monthlyAdmin.toLocaleString()}</h2>
+              <div className="text-xs font-black text-slate-300 uppercase mb-2 tracking-widest">每月損平門檻 (平攤)</div>
+              <div className="text-3xl font-black text-slate-700">NT$ {Math.round(summary.monthlyFixed).toLocaleString()}</div>
             </div>
           </div>
 
-          {/* 數據錄入表格 */}
-          <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100 mb-12">
+          {/* 數據表格 */}
+          <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100 mb-10">
             <table className="w-full text-left">
-              <thead className="bg-slate-50 border-b border-slate-100">
+              <thead className="bg-slate-50">
                 <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                   <th className="p-8">月份</th>
-                  <th className="p-8 text-blue-600">GC-PRO (家)</th>
-                  <th className="p-8 text-indigo-600">GC-GROUP (家)</th>
-                  <th className="p-8 text-emerald-600 font-bold">專案/廣告收入</th>
-                  <th className="p-8 text-right">當月損益</th>
+                  <th className="p-8">GC-PRO (家)</th>
+                  <th className="p-8">GC-GROUP (家)</th>
+                  <th className="p-8 text-blue-600">專案/廣告收入 (NT$)</th>
+                  <th className="p-8 text-right font-bold">當月淨損益</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {data.map((r, i) => (
-                  <tr key={i} className="hover:bg-blue-50/30 transition-colors">
+                  <tr key={i} className="hover:bg-slate-50/50 transition-colors">
                     <td className="p-8 font-black text-slate-300">{r.month}月</td>
-                    <td className="p-8"><input type="number" className="w-24 bg-transparent border-b-2 border-slate-100 focus:border-blue-500 outline-none p-1 font-bold transition-all" value={r.countPro} onChange={e => {const n=[...data]; n[i].countPro=+e.target.value; setData(n);}} /></td>
-                    <td className="p-8"><input type="number" className="w-24 bg-transparent border-b-2 border-slate-100 focus:border-indigo-500 outline-none p-1 font-bold transition-all" value={r.countGroup} onChange={e => {const n=[...data]; n[i].countGroup=+e.target.value; setData(n);}} /></td>
-                    <td className="p-8"><input type="number" className="w-36 bg-transparent border-b-2 border-slate-100 focus:border-emerald-500 outline-none p-1 font-bold text-emerald-600 transition-all" value={r.projectIncome} onChange={e => {const n=[...data]; n[i].projectIncome=+e.target.value; setData(n);}} /></td>
-                    <td className={`p-8 text-right font-black ${summary.rows[i].profit < 0 ? 'text-red-300' : 'text-slate-400'}`}>
-                      NT$ {summary.rows[i].profit.toLocaleString()}
+                    <td className="p-8"><input type="number" className="w-20 border-b-2 border-slate-100 input-focus p-1 font-bold" value={r.countPro} onChange={e => {const n=[...data]; n[i].countPro=+e.target.value; setData(n);}} /></td>
+                    <td className="p-8"><input type="number" className="w-20 border-b-2 border-slate-100 input-focus p-1 font-bold" value={r.countGroup} onChange={e => {const n=[...data]; n[i].countGroup=+e.target.value; setData(n);}} /></td>
+                    <td className="p-8"><input type="number" className="w-36 border-b-2 border-slate-100 input-focus p-1 font-bold text-blue-600" value={r.otherIncome} onChange={e => {const n=[...data]; n[i].otherIncome=+e.target.value; setData(n);}} /></td>
+                    <td className={`p-8 text-right font-black ${summary.rows[i].monthlyProfit < 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {summary.rows[i].monthlyProfit.toLocaleString()}
                     </td>
                   </tr>
                 ))}
@@ -151,21 +145,21 @@
             </table>
           </div>
 
-          {/* 底部打平試算器 */}
-          <div className="bg-slate-900 rounded-[3rem] p-12 text-white flex flex-col md:flex-row justify-between items-center shadow-2xl shadow-blue-900/20">
-            <div className="mb-8 md:mb-0">
-              <h3 className="text-3xl font-black mb-2 uppercase tracking-tighter">專案打平模擬器</h3>
-              <p className="text-slate-400 font-medium">基於當前年度虧損缺口，試算所需補足之專案量</p>
+          {/* 打平試算器 */}
+          <div className="bg-slate-900 rounded-[3rem] p-10 text-white flex flex-col md:flex-row justify-between items-center shadow-2xl shadow-blue-900/20">
+            <div>
+              <h3 className="text-2xl font-black mb-1 uppercase tracking-tighter">專案打平模擬</h3>
+              <p className="text-slate-400 text-sm font-medium">若年度獲利為負(綠色)，系統自動計算所需專案缺口</p>
             </div>
-            <div className="flex items-center gap-12">
+            <div className="flex items-center gap-10 mt-6 md:mt-0">
               <div className="text-center">
-                <span className="text-[10px] font-black text-blue-400 uppercase block mb-3 tracking-widest">預計專案單價 NT$</span>
-                <input type="number" className="bg-slate-800 border-none text-white text-3xl font-black rounded-3xl p-6 w-52 outline-none ring-2 ring-slate-700 focus:ring-blue-500 transition-all" 
+                <span className="text-[10px] font-black text-blue-400 uppercase block mb-2 tracking-widest">預計專案單價</span>
+                <input type="number" className="bg-slate-800 border-none text-white text-2xl font-black rounded-2xl p-4 w-44 outline-none ring-2 ring-slate-700 focus:ring-blue-500" 
                   value={projPrice} onChange={e => setProjPrice(+e.target.value)} />
               </div>
-              <div className="text-right border-l border-slate-800 pl-12">
-                <span className="text-[10px] font-black text-orange-400 uppercase block mb-3 tracking-widest">尚需承接數量</span>
-                <h3 className="text-7xl font-black text-white tracking-tighter">{summary.projectsNeeded} <span className="text-xl text-slate-500">個</span></h3>
+              <div className="text-right border-l border-slate-800 pl-10">
+                <span className="text-[10px] font-black text-orange-400 uppercase block mb-2 tracking-widest">尚需承接數量</span>
+                <h3 className="text-6xl font-black">{summary.projectsNeeded} <span className="text-xl text-slate-500 italic">個</span></h3>
               </div>
             </div>
           </div>
