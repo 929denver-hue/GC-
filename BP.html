@@ -1,48 +1,190 @@
-/** * 依照檔案「定價總表」與「產品成本」定義的配置 
- */
-const DEFAULT_CONFIG = {
-  pricing: { L: 16800, H: 18800, DISCOUNT: 10800 },
-  commissionRate: 0.05,            // 檔案：佣金 5%
-  unitSoftwareCost: 2352,         // 檔案：軟體服務單位成本
-  staffCapacity: 500,             // 檔案：每人服務 500 家
-  monthlySalaryPerStaff: 35000,    // 檔案：基本薪資 35,000
-  laborBurdenMultiplier: 1.8,      // 假設：勞健保與獎金係數 (使 35k 換算後符合檔案勞務成本)
-  fixedCosts: {
-    hosting: 360000 / 12,          // 檔案：AWS 360,000/年
-    bandwidth: 12000 / 12,         // 檔案：網路頻寬 12,000/年
-    devAmortization: 1500000 / 12, // 檔案：軟體開發費用分攤
-  }
-};
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 GC 財務損益動態追蹤器</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', 'Microsoft JhengHei', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
 
-/** * 完全依照檔案算式的計算引擎 
- */
-function calculateGCFinancials(monthlySales: { L: number; H: number; DISCOUNT: number }, config = DEFAULT_CONFIG) {
-  const { L, H, DISCOUNT } = monthlySales;
-  const totalQty = L + H + DISCOUNT;
+    <script type="text/babel">
+        const { useState, useMemo } = React;
 
-  // 1. 營收計算 (Revenue)
-  const revenue = (L * config.pricing.L) + (H * config.pricing.H) + (DISCOUNT * config.pricing.DISCOUNT);
+        const App = () => {
+            // 1. 初始化配置 (完全依照檔案參數)
+            const [config, setConfig] = useState({
+                priceL: 16800,
+                priceH: 18800,
+                priceDiscount: 10800,
+                commissionRate: 0.05,
+                unitSoftCost: 2352, // 軟體服務單位成本
+                staffCapacity: 500, // 每人服務 500 家
+                avgSalary: 63000,   // 含勞健保月成本 (檔案 4人/302.4萬換算)
+                fixedAws: 360000,   // 年
+                fixedBandwidth: 12000, // 年
+                fixedDev: 1500000,  // 軟體開發分攤
+                fixedOther: 1800000 // 其他費用分攤
+            });
 
-  // 2. 變動成本 (Variable Costs)
-  const commission = revenue * config.commissionRate;
-  const softwareServiceCost = totalQty * config.unitSoftwareCost;
+            // 12個月的數據錄入
+            const [monthlyData, setMonthlyData] = useState(
+                Array.from({ length: 12 }, (_, i) => ({ month: i + 1, L: 0, H: 0, Discount: 0 }))
+            );
 
-  // 3. 人力成本 (Labor Cost) - 檔案邏輯：累積客戶數 / 服務人力
-  const requiredStaff = Math.ceil(totalQty / config.staffCapacity);
-  // 檔案 2025 年 4 人對應 3,024,000，換算每月每人約 63,000 (含勞健保/獎金)
-  const monthlyLaborCost = requiredStaff * 63000; 
+            // 2. 核心計算引擎 (對齊 Excel 算式)
+            const summary = useMemo(() => {
+                let cumulativeQty = 0;
+                const rows = monthlyData.map(m => {
+                    const rev = (m.L * config.priceL) + (m.H * config.priceH) + (m.Discount * config.priceDiscount);
+                    const qty = m.L + m.H + m.Discount;
+                    cumulativeQty += qty;
 
-  // 4. 固定成本 (Fixed Costs)
-  const totalFixedCost = config.fixedCosts.hosting + config.fixedCosts.bandwidth + config.fixedCosts.devAmortization;
+                    const commission = rev * config.commissionRate;
+                    const softCost = qty * config.unitSoftCost;
+                    const staffNeeded = Math.ceil(cumulativeQty / config.staffCapacity) || 0;
+                    const laborCost = staffNeeded * config.avgSalary;
+                    const grossProfit = rev - commission - softCost - laborCost;
 
-  // 5. 毛利與淨利
-  const grossProfit = revenue - commission - softwareServiceCost - monthlyLaborCost;
-  const netProfit = grossProfit - totalFixedCost;
+                    return { ...m, rev, qty, commission, softCost, staffNeeded, laborCost, grossProfit };
+                });
 
-  return {
-    revenue,
-    costs: { commission, softwareServiceCost, labor: monthlyLaborCost, fixed: totalFixedCost },
-    profit: { grossProfit, netProfit, margin: revenue > 0 ? grossProfit / revenue : 0 },
-    metrics: { requiredStaff, BEP_Qty: Math.ceil(totalFixedCost / (config.pricing.L - (config.pricing.L * config.commissionRate) - config.unitSoftwareCost)) }
-  };
-}
+                const totalRev = rows.reduce((sum, r) => sum + r.rev, 0);
+                const totalGrossProfit = rows.reduce((sum, r) => sum + r.grossProfit, 0);
+                const totalFixed = (config.fixedAws + config.fixedBandwidth + config.fixedDev + config.fixedOther);
+                const netProfit = totalGrossProfit - totalFixed;
+                const margin = totalRev > 0 ? (totalGrossProfit / totalRev) * 100 : 0;
+
+                return { rows, totalRev, totalGrossProfit, netProfit, margin, cumulativeQty };
+            }, [config, monthlyData]);
+
+            // UI 處理函式
+            const updateConfig = (e) => {
+                const { name, value } = e.target;
+                setConfig(prev => ({ ...prev, [name]: parseFloat(value) || 0 }));
+            };
+
+            const updateMonthly = (idx, field, val) => {
+                const next = [...monthlyData];
+                next[idx][field] = parseInt(val) || 0;
+                setMonthlyData(next);
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8">
+                    <div className="max-w-7xl mx-auto">
+                        <header className="flex justify-between items-center mb-8">
+                            <div>
+                                <h1 className="text-3xl font-bold text-slate-800">GC 財務損益即時追蹤</h1>
+                                <p className="text-slate-500">同步自：2026GC定價＆損平表 v0321</p>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-sm font-medium text-slate-400">年度預估淨利</div>
+                                <div className={`text-3xl font-black ${summary.netProfit < 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+                                    NT$ {summary.netProfit.toLocaleString()}
+                                </div>
+                            </div>
+                        </header>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                            {/* 配置面板 */}
+                            <section className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                <h2 className="font-bold text-lg mb-4 flex items-center text-slate-700">
+                                    <span className="w-2 h-6 bg-blue-500 rounded mr-2"></span>參數修改
+                                </h2>
+                                <div className="space-y-4">
+                                    <label className="block">
+                                        <span className="text-xs text-slate-400 font-bold uppercase">L 方案定價</span>
+                                        <input type="number" name="priceL" value={config.priceL} onChange={updateConfig} className="w-full mt-1 p-2 bg-slate-50 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                                    </label>
+                                    <label className="block">
+                                        <span className="text-xs text-slate-400 font-bold uppercase">H 方案定價</span>
+                                        <input type="number" name="priceH" value={config.priceH} onChange={updateConfig} className="w-full mt-1 p-2 bg-slate-50 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                                    </label>
+                                    <label className="block">
+                                        <span className="text-xs text-slate-400 font-bold uppercase">特惠價方案</span>
+                                        <input type="number" name="priceDiscount" value={config.priceDiscount} onChange={updateConfig} className="w-full mt-1 p-2 bg-slate-50 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                                    </label>
+                                    <label className="block">
+                                        <span className="text-xs text-slate-400 font-bold uppercase">佣金比 (目前 {(config.commissionRate*100).toFixed(0)}%)</span>
+                                        <input type="range" min="0" max="0.2" step="0.01" name="commissionRate" value={config.commissionRate} onChange={updateConfig} className="w-full mt-2" />
+                                    </label>
+                                    <div className="pt-4 border-t">
+                                        <h3 className="text-xs font-bold text-slate-400 mb-2 uppercase">固定年成本分攤</h3>
+                                        <div className="text-sm space-y-1 text-slate-600">
+                                            <div className="flex justify-between"><span>AWS/頻寬:</span><span>NT$ 37.2萬</span></div>
+                                            <div className="flex justify-between"><span>軟體開發:</span><span>NT$ 150萬</span></div>
+                                            <div className="flex justify-between"><span>其他分攤:</span><span>NT$ 180萬</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* 主表單 */}
+                            <section className="lg:col-span-3 space-y-6">
+                                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                                    <table className="w-full text-left table-auto">
+                                        <thead className="bg-slate-50 text-slate-500 text-xs uppercase">
+                                            <tr>
+                                                <th className="px-4 py-3">月份</th>
+                                                <th className="px-4 py-3 text-blue-600">L 數量</th>
+                                                <th className="px-4 py-3 text-indigo-600">H 數量</th>
+                                                <th className="px-4 py-3 text-emerald-600">特惠 數量</th>
+                                                <th className="px-4 py-3">預估營收</th>
+                                                <th className="px-4 py-3">人力</th>
+                                                <th className="px-4 py-3">當月損益</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-100">
+                                            {summary.rows.map((r, i) => (
+                                                <tr key={i} className="hover:bg-blue-50 transition-colors">
+                                                    <td className="px-4 py-3 font-bold text-slate-400">{r.month}月</td>
+                                                    <td className="px-4 py-3"><input type="number" value={r.L} onChange={e => updateMonthly(i, 'L', e.target.value)} className="w-16 p-1 border rounded" /></td>
+                                                    <td className="px-4 py-3"><input type="number" value={r.H} onChange={e => updateMonthly(i, 'H', e.target.value)} className="w-16 p-1 border rounded" /></td>
+                                                    <td className="px-4 py-3"><input type="number" value={r.Discount} onChange={e => updateMonthly(i, 'Discount', e.target.value)} className="w-16 p-1 border rounded" /></td>
+                                                    <td className="px-4 py-3 text-sm font-medium">NT$ {r.rev.toLocaleString()}</td>
+                                                    <td className="px-4 py-3 text-sm font-medium text-slate-500">{r.staffNeeded} 人</td>
+                                                    <td className={`px-4 py-3 text-sm font-bold ${r.grossProfit < 0 ? 'text-red-400' : 'text-slate-700'}`}>NT$ {r.grossProfit.toLocaleString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* 年度統計卡片 */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-500">
+                                        <div className="text-sm text-slate-400 font-medium">年度總營收</div>
+                                        <div className="text-2xl font-bold text-slate-800">NT$ {summary.totalRev.toLocaleString()}</div>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-emerald-500">
+                                        <div className="text-sm text-slate-400 font-medium">預估毛利率</div>
+                                        <div className={`text-2xl font-bold ${summary.margin < 70 ? 'text-red-500' : 'text-emerald-600'}`}>
+                                            {summary.margin.toFixed(1)}%
+                                        </div>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-slate-800">
+                                        <div className="text-sm text-slate-400 font-medium">累計客戶數</div>
+                                        <div className="text-2xl font-bold text-slate-800">{summary.cumulativeQty.toLocaleString()} <span className="text-sm font-normal text-slate-400">家</span></div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
