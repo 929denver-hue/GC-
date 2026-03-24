@@ -3,113 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPO 單位服務檢索系統</title>
+    <title>NPO 單位資源檢索系統</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap');
-        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
-        .glass-morphism { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto+Sans+TC', sans-serif; background-color: #f1f5f9; }
+        .active-chip { background-color: #2563eb !important; color: white !important; border-color: #2563eb !important; }
+        .card-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-transition:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-900 min-h-screen">
+<body class="text-slate-800">
 
-    <nav class="sticky top-0 z-30 glass-morphism border-b border-slate-200 px-4 py-3">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">N</div>
-                <span class="font-bold text-lg tracking-tight">NPO 檢索中心</span>
+    <div id="app" class="max-w-7xl mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6 bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight">單位服務資源地圖</h1>
+                <p class="text-slate-500 mt-2 flex items-center justify-center md:justify-start">
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                    即時同步雲端試算表 ‧ 共 <span id="totalCount" class="font-bold text-slate-900 mx-1">--</span> 個單位
+                </p>
             </div>
-            <div class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">
-                自動同步中
+            <div class="w-48 h-48">
+                <canvas id="categoryChart"></canvas>
             </div>
         </div>
-    </nav>
 
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <div class="grid lg:grid-cols-12 gap-6 mb-8">
-            <div class="lg:col-span-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="font-bold text-slate-800">服務類別比例</h3>
-                    <span id="dataStatus" class="text-[10px] text-green-500 font-bold bg-green-50 px-2 py-0.5 rounded-full">LIVE</span>
+        <div class="sticky top-4 z-30 mb-8 space-y-4">
+            <div class="relative group">
+                <input type="text" id="searchInput" 
+                    class="w-full bg-white border-2 border-slate-200 p-5 pl-14 rounded-2xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-xl shadow-sm"
+                    placeholder="搜尋單位名稱、業務關鍵字或說明...">
+                <svg class="w-6 h-6 text-slate-400 absolute left-5 top-5 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <div id="categoryChips" class="flex flex-wrap gap-2 py-2">
                 </div>
-                <div class="h-[240px] relative">
-                    <canvas id="categoryChart"></canvas>
-                </div>
-            </div>
-
-            <div class="lg:col-span-8 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-center">
-                <h2 class="text-2xl font-bold mb-2">想找哪方面的服務？</h2>
-                <p class="text-slate-500 mb-6">支援搜尋單位全名、類別或備註內容</p>
-                
-                <div class="relative group">
-                    <input type="text" id="searchInput" 
-                        class="w-full bg-slate-50 border-2 border-slate-100 p-5 pl-14 rounded-2xl outline-none focus:border-blue-500 focus:bg-white transition-all text-xl shadow-sm"
-                        placeholder="輸入關鍵字，例如：長照、青少年、諮商...">
-                    <svg class="w-7 h-7 text-slate-400 absolute left-5 top-5 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </div>
-                
-                <div id="filterIndicator" class="mt-4 flex flex-wrap gap-2">
-                    </div>
-            </div>
         </div>
 
-        <div class="flex justify-between items-center mb-6 px-2">
-            <h3 class="font-bold text-lg text-slate-700">單位清單 (<span id="matchCount">0</span>)</h3>
-            <div class="flex gap-2">
-                <button onclick="sortData('asc')" class="p-2 hover:bg-white rounded-md border text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg></button>
-            </div>
+        <div id="loading" class="flex flex-col items-center justify-center py-20 text-slate-400">
+            <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+            正在載入 700 筆資料...
         </div>
 
-        <div id="loader" class="py-20 text-center text-slate-400 animate-pulse">正在讀取雲端 700 筆資料...</div>
-        <div id="listContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-        
-        <div id="emptyState" class="hidden py-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200">
-            <div class="text-4xl mb-4">🔍</div>
-            <p class="text-slate-500 font-medium">找不到相符的單位</p>
-            <button onclick="resetSearch()" class="mt-2 text-blue-600 hover:underline">清除所有過濾條件</button>
+        <div id="listContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            </div>
+
+        <div id="emptyState" class="hidden text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+            <div class="text-5xl mb-4">😶</div>
+            <h3 class="text-xl font-bold text-slate-800">找不到相符的單位</h3>
+            <p class="text-slate-500 mt-2">請嘗試更換關鍵字或選擇其他服務類別</p>
+            <button onclick="resetFilters()" class="mt-6 px-6 py-2 bg-slate-100 hover:bg-slate-200 rounded-full font-medium text-slate-600 transition-colors">重設所有過濾條件</button>
         </div>
-    </main>
+    </div>
 
     <script>
-        // 設定區
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSTGT8qXuH6EljApOaz67UkU6lSWTYF5jTRIFc7NxHw6R5pU-J0o5xW8oHEvB90egZhGBLtJj72BTlE/pub?gid=255315722&single=true&output=csv'; 
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSTGT8qXuH6EljApOaz67UkU6lSWTYF5jTRIFc7NxHw6R5pU-J0o5xW8oHEvB90egZhGBLtJj72BTlE/pub?gid=255315722&single=true&output=csv';
+        
         let rawData = [];
+        let currentCategory = '全部';
         let chart = null;
-        const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#64748b'];
 
-        // 初始化
+        // 啟動
+        init();
+
         async function init() {
             Papa.parse(CSV_URL, {
                 download: true,
                 header: true,
-                skipEmptyLines: true,
                 complete: (results) => {
                     rawData = results.data.filter(d => d['單位全名']);
-                    document.getElementById('loader').remove();
-                    renderAll(rawData);
+                    document.getElementById('loading').remove();
+                    document.getElementById('totalCount').innerText = rawData.length;
+                    
+                    renderCategoryChips();
+                    renderChart();
+                    updateView();
                     setupListeners();
                 }
             });
         }
 
-        function renderAll(data) {
-            updateStats(data);
-            renderList(data);
-            renderChart(data);
+        // 動態生成類別按鈕
+        function renderCategoryChips() {
+            const categories = ['全部', ...new Set(rawData.map(item => item['服務類別']).filter(c => c))];
+            const container = document.getElementById('categoryChips');
+            
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat}')" 
+                    class="chip-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:border-blue-300 hover:bg-blue-50 transition-all shadow-sm ${cat === '全部' ? 'active-chip' : ''}">
+                    ${cat}
+                </button>
+            `).join('');
         }
 
-        // 列表渲染 (優化版：一次只顯示部分)
+        // 設定類別
+        window.setCategory = (cat) => {
+            currentCategory = cat;
+            document.querySelectorAll('.chip-btn').forEach(btn => {
+                btn.classList.toggle('active-chip', btn.innerText === cat);
+            });
+            updateView();
+        };
+
+        // 更新視覺畫面 (搜尋 + 類別 複合過濾)
+        function updateView() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = rawData.filter(item => {
+                const matchCategory = currentCategory === '全部' || item['服務類別'] === currentCategory;
+                const matchSearch = Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm));
+                return matchCategory && matchSearch;
+            });
+
+            renderList(filtered);
+        }
+
+        // 渲染卡片列表
         function renderList(data) {
             const container = document.getElementById('listContainer');
             const empty = document.getElementById('emptyState');
-            document.getElementById('matchCount').innerText = data.length;
-
+            
             if (data.length === 0) {
                 container.innerHTML = '';
                 empty.classList.remove('hidden');
@@ -117,92 +133,64 @@
             }
 
             empty.classList.add('hidden');
-            // 只渲染前 100 筆確保順暢，700 筆可分段或直接渲染(現代電腦OK)
             container.innerHTML = data.map(item => `
-                <div class="group bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
+                <div class="bg-white p-7 rounded-3xl border border-slate-100 shadow-sm card-transition flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase bg-slate-50 px-2 py-1 rounded">ID: ${item['系統id']}</span>
-                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">${item['服務類別'] || '未分類'}</span>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded tracking-tighter uppercase font-mono">ID ${item['系統id']}</span>
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">${item['服務類別']}</span>
                         </div>
-                        <h4 class="text-lg font-bold text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">${item['單位全名']}</h4>
-                        <div class="text-sm text-slate-500 leading-relaxed line-clamp-4">
-                            ${item['說明備註'] ? item['說明備註'].replace(/\n/g, '<br>') : '<span class="italic text-slate-300">暫無說明資訊</span>'}
+                        <h3 class="text-xl font-bold text-slate-800 leading-tight mb-4 group-hover:text-blue-600">${item['單位全名']}</h3>
+                        <div class="text-slate-500 text-sm leading-relaxed border-t border-slate-50 pt-4">
+                            ${item['說明備註'] ? item['說明備註'].replace(/\n/g, '<br>') : '<span class="italic text-slate-300 font-normal">無詳細說明資料</span>'}
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // 圖表渲染
-        function renderChart(data) {
+        // 渲染圓餅圖
+        function renderChart() {
             const ctx = document.getElementById('categoryChart').getContext('2d');
-            const counts = data.reduce((acc, cur) => {
-                const cat = cur['服務類別'] || '未分類';
+            const counts = rawData.reduce((acc, cur) => {
+                const cat = cur['服務類別'] || '其他';
                 acc[cat] = (acc[cat] || 0) + 1;
                 return acc;
             }, {});
 
-            if (chart) chart.destroy();
             chart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: Object.keys(counts),
                     datasets: [{
                         data: Object.values(counts),
-                        backgroundColor: colors,
-                        hoverOffset: 10,
-                        borderWidth: 4,
-                        borderColor: '#ffffff'
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#64748b'],
+                        borderWidth: 0,
+                        hoverOffset: 15
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
-                    cutout: '75%',
+                    cutout: '80%',
                     plugins: { legend: { display: false } },
                     onClick: (e, items) => {
                         if (items.length > 0) {
                             const label = chart.data.labels[items[0].index];
-                            applyFilter(label);
+                            setCategory(label);
                         }
                     }
                 }
             });
         }
 
-        // 搜尋邏輯
         function setupListeners() {
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                applyFilter(e.target.value);
-            });
+            document.getElementById('searchInput').addEventListener('input', updateView);
         }
 
-        function applyFilter(keyword) {
-            const input = document.getElementById('searchInput');
-            if (input.value !== keyword) input.value = keyword;
-
-            const filtered = rawData.filter(item => 
-                Object.values(item).some(val => 
-                    String(val).toLowerCase().includes(keyword.toLowerCase())
-                )
-            );
-            renderList(filtered);
-            // 搜尋時不重新渲染 Chart，維持全貌感，僅更新列表
-        }
-
-        function resetSearch() {
+        window.resetFilters = () => {
             document.getElementById('searchInput').value = '';
-            renderList(rawData);
-        }
-
-        function updateStats(data) {
-            const tagsContainer = document.getElementById('filterIndicator');
-            const topCats = [...new Set(data.map(d => d['服務類別']))].slice(0, 5);
-            tagsContainer.innerHTML = `<span class="text-sm text-slate-400 self-center mr-2">快速過濾：</span>` + 
-                topCats.map(c => `<button onclick="applyFilter('${c}')" class="text-xs font-medium bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg hover:bg-blue-100 hover:text-blue-600 transition-colors">${c}</button>`).join('');
-        }
-
-        init();
+            setCategory('全部');
+        };
     </script>
 </body>
 </html>
