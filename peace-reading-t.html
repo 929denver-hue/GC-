@@ -3,142 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GC夢想閱章 - 老師端管理後台</title>
+    <title>GC夢想閱章 - 老師端管理系統 (含個人詳細紀錄)</title>
     <style>
-        :root { --primary: #27ae60; --secondary: #3498db; --bg: #f8faf9; --text: #2c3e50; }
-        body { font-family: "PingFang TC", sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; padding-bottom: 100px; }
-        .container { max-width: 800px; margin: 0 auto; }
+        :root { --primary: #27ae60; --secondary: #3498db; --bg: #f0f2f5; --text: #2c3e50; }
+        body { font-family: "PingFang TC", sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .hidden { display: none; }
 
-        /* 綜合紀錄看板 (今日成效) */
-        .summary-dashboard { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 25px; border-top: 5px solid var(--primary); }
-        .dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; margin-top: 15px; }
-        .dash-item b { font-size: 22px; color: var(--primary); display: block; }
-        .dash-item span { font-size: 11px; color: #888; }
+        /* 頂部導航 */
+        .top-nav { background: white; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .back-btn { background: none; border: 1px solid #ddd; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-right: 15px; }
 
-        /* 學生個人紀錄卡片 */
-        .student-card { background: white; border-radius: 12px; padding: 18px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; }
-        .student-card.active { border-right: 4px solid var(--primary); }
-        .edit-btn { position: absolute; top: 15px; right: 15px; cursor: pointer; opacity: 0.5; font-size: 14px; }
+        /* 卡片樣式 */
+        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        h3 { margin-top: 0; border-left: 4px solid var(--primary); padding-left: 10px; }
 
-        .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .metric-box { background: #f9f9f9; padding: 10px; border-radius: 8px; text-align: center; font-size: 12px; border: 1px solid #eee; }
-        .metric-box b { color: var(--secondary); font-size: 15px; }
+        /* 數據網格 */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
+        .stat-item b { display: block; font-size: 20px; color: var(--primary); }
+        .stat-item span { font-size: 11px; color: #888; }
+
+        /* 歷史列表表格 */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th { background: #f8f9fa; text-align: left; padding: 10px; border-bottom: 2px solid #eee; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        .status-pill { padding: 2px 8px; border-radius: 10px; font-size: 11px; color: white; }
+        .bg-green { background: var(--primary); }
 
         /* 句子結構 % 進度條 */
-        .structure-wrap { margin-top: 15px; }
-        .structure-label { font-size: 12px; display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .progress-bg { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-fill { background: var(--primary); height: 100%; transition: width 0.5s; }
+        .struct-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; width: 60px; }
+        .struct-fill { height: 100%; background: var(--secondary); }
 
-        /* 功能按鈕區 */
-        .fixed-bottom { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; display: flex; gap: 10px; z-index: 100; }
-        .btn-main { flex: 1; padding: 15px; border-radius: 30px; border: none; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 15px; }
-        .btn-upload { background: var(--primary); }
-        .btn-report { background: var(--text); }
+        /* 列表按鈕 */
+        .view-detail-btn { background: var(--secondary); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; float: right; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="summary-dashboard">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="margin:0; font-size:18px;">保生國小：今日綜合紀錄</h2>
-            <div style="font-size:12px; color:#999;">2026/04/07 (第12週)</div>
-        </div>
-        <div class="dashboard-grid">
-            <div class="dash-item"><b id="sum-att">0</b><span>今日出席</span></div>
-            <div class="dash-item"><b id="sum-hours">0</b><span>累積時數</span></div>
-            <div class="dash-item"><b id="sum-struct">0%</b><span>平均結構</span></div>
-            <div class="dash-item"><b id="sum-works">0</b><span>待歸檔作品</span></div>
-        </div>
+<div id="view-class" class="container">
+    <div class="card">
+        <h2 style="margin:0;">保生國小：寫作班級管理</h2>
+        <p style="color:#666; font-size:14px;">點擊「查看個人紀錄」追蹤孩子三年的長線成長</p>
     </div>
 
-    <div id="student-list">
+    <div id="class-list">
         </div>
 </div>
 
-<div class="fixed-bottom">
-    <button class="btn-main btn-upload" onclick="batchUpload()">📸 一鍵拍照/上傳全班作品</button>
-    <button class="btn-main btn-report" onclick="generateTodayReport()">📊 今日成效總結</button>
+<div id="view-detail" class="hidden">
+    <div class="top-nav">
+        <button class="back-btn" onclick="showClassView()">⬅ 返回列表</button>
+        <h2 id="detail-name" style="margin:0;">學童成長紀錄</h2>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h3>長期成長總覽 (跨年度累積)</h3>
+            <div class="stats-grid">
+                <div class="stat-item"><b id="det-att">0</b><span>累積出席</span></div>
+                <div class="stat-item"><b id="det-hours">0</b><span>上課總時數</span></div>
+                <div class="stat-item"><b id="det-works">0</b><span>作品總件數</span></div>
+                <div class="stat-item"><b id="det-wish">90%</b><span>夢想達成率</span></div>
+            </div>
+            <div style="margin-top:20px; padding:15px; background:#fff8e1; border-radius:8px;">
+                <div style="font-size:13px; color:#e67e22; font-weight:bold;">年度心願契約：【專業球鞋】</div>
+                <div style="font-size:12px; color:#666;">解鎖條件：累計發表達 50 次，目前已完成 42 次 (84%)</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>單次課堂紀錄明細 (時間軸)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>日期/週次</th>
+                        <th>出席</th>
+                        <th>發表/提問</th>
+                        <th>結構%</th>
+                        <th>作品紀錄</th>
+                    </tr>
+                </thead>
+                <tbody id="detail-history">
+                    </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script>
-    // 學生數據：包含個人化目標與三年累積
-    let students = [
-        { id: 1, name: "林小明", attCount: 45, hours: 90, sentenceStr: 65, speech: 3, ask: 1, works: 12, wish: "球鞋" },
-        { id: 2, name: "陳阿花", attCount: 48, hours: 96, sentenceStr: 85, speech: 5, ask: 2, works: 20, wish: "烤箱" }
+    // 模擬後端數據：包含三年累積摘要與每一堂課的歷史
+    const students = [
+        { 
+            id: 1, name: "林小明", wish: "專業球鞋", attCount: 45, hours: 90, works: 12, 
+            history: [
+                { date: "2026/04/07 (W12)", status: "出席", speech: 3, ask: 1, struct: 65, workThumb: "📸 已歸檔" },
+                { date: "2026/03/31 (W11)", status: "出席", speech: 2, ask: 0, struct: 60, workThumb: "📸 已歸檔" },
+                { date: "2026/03/24 (W10)", status: "出席", speech: 4, ask: 2, struct: 55, workThumb: "📸 已歸檔" }
+            ]
+        },
+        { 
+            id: 2, name: "陳阿花", wish: "迷你烤箱", attCount: 48, hours: 96, works: 20, 
+            history: [
+                { date: "2026/04/07 (W12)", status: "出席", speech: 5, ask: 2, struct: 85, workThumb: "📸 已歸檔" },
+                { date: "2026/03/31 (W11)", status: "出席", speech: 4, ask: 1, struct: 80, workThumb: "📸 已歸檔" }
+            ]
+        }
     ];
 
-    function render() {
-        const list = document.getElementById('student-list');
+    function renderClassList() {
+        const list = document.getElementById('class-list');
         list.innerHTML = students.map(s => `
-            <div class="student-card active">
-                <span class="edit-btn" onclick="editData(${s.id})">編修 ✏️</span>
-                <div style="font-weight:bold;">${s.name} <span style="font-size:11px; font-weight:normal; color:#888;">(目標：${s.wish})</span></div>
-                
-                <div class="metrics-row">
-                    <div class="metric-box">累積出席<br><b>${s.attCount}</b> 次</div>
-                    <div class="metric-box">上課時數<br><b>${s.hours}</b> h</div>
-                    <div class="metric-box">作品追蹤<br><b>${s.works}</b> 件</div>
-                </div>
-
-                <div class="structure-wrap">
-                    <div class="structure-label">
-                        <span>句子結構完整度</span>
-                        <b style="color:var(--primary)">${s.sentenceStr}%</b>
-                    </div>
-                    <div class="progress-bg">
-                        <div class="progress-fill" style="width:${s.sentenceStr}%"></div>
-                    </div>
-                </div>
-
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button style="flex:1; font-size:12px; padding:5px; border-radius:5px; border:1px solid #ddd; background:#fff;" onclick="quickAdd(${s.id}, 'speech')">發表 +1</button>
-                    <button style="flex:1; font-size:12px; padding:5px; border-radius:5px; border:1px solid #ddd; background:#fff;" onclick="quickAdd(${s.id}, 'ask')">提問 +1</button>
+            <div class="card" style="border-left: 5px solid var(--primary);">
+                <button class="view-detail-btn" onclick="showDetailView(${s.id})">查看個人紀錄</button>
+                <div style="font-weight:bold; font-size:18px;">${s.name}</div>
+                <div style="font-size:12px; color:#666; margin:5px 0;">年度心願：${s.wish}</div>
+                <div style="display:flex; gap:15px; font-size:11px; margin-top:10px;">
+                    <span>📍 累積出席：${s.attCount}次</span>
+                    <span>📍 作品總數：${s.works}件</span>
                 </div>
             </div>
         `).join('');
-        updateSummary();
     }
 
-    function updateSummary() {
-        const avgStruct = (students.reduce((a, b) => a + b.sentenceStr, 0) / students.length).toFixed(0);
-        const totalHours = students.reduce((a, b) => a + b.hours, 0);
-        document.getElementById('sum-att').innerText = students.length;
-        document.getElementById('sum-hours').innerText = totalHours;
-        document.getElementById('sum-struct').innerText = avgStruct + "%";
-        document.getElementById('sum-works').innerText = students.reduce((a, b) => a + b.works, 0);
-    }
-
-    function quickAdd(id, type) {
+    function showDetailView(id) {
         const s = students.find(x => x.id === id);
-        s[type]++;
-        render();
+        document.getElementById('view-class').classList.add('hidden');
+        document.getElementById('view-detail').classList.remove('hidden');
+        
+        // 填充詳細紀錄
+        document.getElementById('detail-name').innerText = `${s.name} 的成長存摺`;
+        document.getElementById('det-att').innerText = s.attCount;
+        document.getElementById('det-hours').innerText = s.hours;
+        document.getElementById('det-works').innerText = s.works;
+
+        const historyBody = document.getElementById('detail-history');
+        historyBody.innerHTML = s.history.map(h => `
+            <tr>
+                <td>${h.date}</td>
+                <td><span class="status-pill bg-green">${h.status}</span></td>
+                <td>說:${h.speech} / 問:${h.ask}</td>
+                <td>
+                    <div class="struct-bar"><div class="struct-fill" style="width:${h.struct}%"></div></div>
+                    <span style="font-size:10px; color:#888;">${h.struct}%</span>
+                </td>
+                <td style="color:var(--secondary); cursor:pointer;">${h.workThumb}</td>
+            </tr>
+        `).join('');
     }
 
-    function editData(id) {
-        const s = students.find(x => x.id === id);
-        const newStruct = prompt(`編修 ${s.name} 的句子結構完整度 (%)：`, s.sentenceStr);
-        if (newStruct !== null) {
-            s.sentenceStr = parseInt(newStruct);
-            render();
-        }
+    function showClassView() {
+        document.getElementById('view-detail').classList.add('hidden');
+        document.getElementById('view-class').classList.remove('hidden');
     }
 
-    function batchUpload() {
-        alert("GC 系統正啟動 AI 自動歸檔流程：\n1. 正在辨識 25 份作品中的姓名標籤...\n2. 正在分析每份作品的句子結構與字數...\n3. 系統已自動將作品撥入各學生「專屬空間」。\n\n老師可進各別學生卡片進行追蹤。");
-        students.forEach(s => {
-            s.works++;
-            s.hours += 2; // 模擬今日上課 2 小時
-        });
-        render();
-    }
-
-    function generateTodayReport() {
-        alert("今日成效總結已生成：\n- 總出席率：100%\n- 句子結構平均進步：5%\n- 提問勇氣點數：顯著提升\n\n報告已同步發送至 GC 贈物網公益部與企業贊助端。");
-    }
-
-    render();
+    // 初始化
+    renderClassList();
 </script>
 
 </body>
