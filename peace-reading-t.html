@@ -3,162 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GC夢想閱章 - 老師端管理系統 (含個人詳細紀錄)</title>
+    <title>GC夢想閱章 - 契約與考核管理系統</title>
     <style>
-        :root { --primary: #27ae60; --secondary: #3498db; --bg: #f0f2f5; --text: #2c3e50; }
+        :root { --primary: #27ae60; --secondary: #3498db; --bg: #f5f7f9; --text: #2c3e50; --accent: #e67e22; --danger: #e74c3c; }
         body { font-family: "PingFang TC", sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
         
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .hidden { display: none; }
+        .page { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
+        .page.active { display: block; }
 
-        /* 頂部導航 */
-        .top-nav { background: white; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .back-btn { background: none; border: 1px solid #ddd; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-right: 15px; }
-
-        /* 卡片樣式 */
+        /* 契約卡片 */
         .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        h3 { margin-top: 0; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .goal-tag { background: #fff3e0; color: var(--accent); padding: 4px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; margin-bottom: 10px; display: inline-block; }
 
-        /* 數據網格 */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
-        .stat-item b { display: block; font-size: 20px; color: var(--primary); }
-        .stat-item span { font-size: 11px; color: #888; }
+        /* 考核追蹤表格 */
+        .target-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .target-table th { text-align: left; font-size: 12px; color: #888; padding: 8px; border-bottom: 1px solid #eee; }
+        .target-table td { padding: 12px 8px; border-bottom: 1px solid #eee; font-size: 14px; }
+        
+        .status-badge { padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+        .status-ok { background: #e8f5e9; color: var(--primary); }
+        .status-wait { background: #fff3e0; color: var(--accent); }
 
-        /* 歷史列表表格 */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        th { background: #f8f9fa; text-align: left; padding: 10px; border-bottom: 2px solid #eee; }
-        td { padding: 10px; border-bottom: 1px solid #eee; }
-        .status-pill { padding: 2px 8px; border-radius: 10px; font-size: 11px; color: white; }
-        .bg-green { background: var(--primary); }
+        /* 獎勵領取區 */
+        .reward-banner { padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; margin-top: 20px; }
+        .reward-locked { background: #f8f9fa; color: #999; border: 1px dashed #ccc; }
+        .reward-ready { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 4px 10px rgba(230,126,34,0.3); animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-        /* 句子結構 % 進度條 */
-        .struct-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; width: 60px; }
-        .struct-fill { height: 100%; background: var(--secondary); }
+        /* 表單樣式 */
+        .modal { background: white; border-radius: 15px; padding: 25px; border: 1px solid #ddd; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; margin-bottom: 5px; color: #666; }
+        .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
 
-        /* 列表按鈕 */
-        .view-detail-btn { background: var(--secondary); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; float: right; }
+        .btn-detail { background: var(--secondary); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; float: right; }
     </style>
 </head>
 <body>
 
-<div id="view-class" class="container">
-    <div class="card">
-        <h2 style="margin:0;">保生國小：寫作班級管理</h2>
-        <p style="color:#666; font-size:14px;">點擊「查看個人紀錄」追蹤孩子三年的長線成長</p>
+<div id="page-class" class="page active">
+    <div class="card" style="background: var(--primary); color: white;">
+        <h2 style="margin:0;">保生國小：夢想契約進度追蹤</h2>
+        <p style="opacity: 0.9; font-size: 14px;">老師可點擊「設定考核」為不同孩子量身打造達標門檻</p>
     </div>
 
-    <div id="class-list">
+    <div id="student-list">
         </div>
 </div>
 
-<div id="view-detail" class="hidden">
-    <div class="top-nav">
-        <button class="back-btn" onclick="showClassView()">⬅ 返回列表</button>
-        <h2 id="detail-name" style="margin:0;">學童成長紀錄</h2>
+<div id="page-detail" class="page">
+    <div onclick="showPage('page-class')" style="margin-bottom:20px; cursor:pointer; color:var(--secondary);">⬅ 返回班級列表</div>
+    
+    <div class="card">
+        <h2 id="det-name">學生姓名</h2>
+        <div class="goal-tag" id="det-goal-text">年度目標：未設定</div>
+        
+        <h3>🏆 考核達標進度</h3>
+        <table class="target-table">
+            <thead>
+                <tr>
+                    <th>考核項目</th>
+                    <th>考核目標</th>
+                    <th>目前數據</th>
+                    <th>狀態</th>
+                </tr>
+            </thead>
+            <tbody id="target-body">
+                </tbody>
+        </table>
+
+        <div id="reward-status" class="reward-banner reward-locked">
+            🔒 尚未達成所有考核指標
+        </div>
     </div>
 
-    <div class="container">
-        <div class="card">
-            <h3>長期成長總覽 (跨年度累積)</h3>
-            <div class="stats-grid">
-                <div class="stat-item"><b id="det-att">0</b><span>累積出席</span></div>
-                <div class="stat-item"><b id="det-hours">0</b><span>上課總時數</span></div>
-                <div class="stat-item"><b id="det-works">0</b><span>作品總件數</span></div>
-                <div class="stat-item"><b id="det-wish">90%</b><span>夢想達成率</span></div>
-            </div>
-            <div style="margin-top:20px; padding:15px; background:#fff8e1; border-radius:8px;">
-                <div style="font-size:13px; color:#e67e22; font-weight:bold;">年度心願契約：【專業球鞋】</div>
-                <div style="font-size:12px; color:#666;">解鎖條件：累計發表達 50 次，目前已完成 42 次 (84%)</div>
-            </div>
+    <div class="card modal">
+        <h3>⚙️ 個別化契約與考核設定</h3>
+        <div class="form-group">
+            <label>年度心願禮物</label>
+            <input type="text" id="edit-wish">
         </div>
-
-        <div class="card">
-            <h3>單次課堂紀錄明細 (時間軸)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>日期/週次</th>
-                        <th>出席</th>
-                        <th>發表/提問</th>
-                        <th>結構%</th>
-                        <th>作品紀錄</th>
-                    </tr>
-                </thead>
-                <tbody id="detail-history">
-                    </tbody>
-            </table>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group"><label>目標出席次數</label><input type="number" id="t-att"></div>
+            <div class="form-group"><label>目標發表次數</label><input type="number" id="t-speech"></div>
+            <div class="form-group"><label>目標作品件數</label><input type="number" id="t-works"></div>
+            <div class="form-group"><label>目標結構完整度 (%)</label><input type="number" id="t-struct"></div>
         </div>
+        <button onclick="saveContract()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">更新並儲存契約</button>
     </div>
 </div>
 
 <script>
-    // 模擬後端數據：包含三年累積摘要與每一堂課的歷史
-    const students = [
+    // 學生數據：包含實際數據與考核目標
+    let students = [
         { 
-            id: 1, name: "林小明", wish: "專業球鞋", attCount: 45, hours: 90, works: 12, 
-            history: [
-                { date: "2026/04/07 (W12)", status: "出席", speech: 3, ask: 1, struct: 65, workThumb: "📸 已歸檔" },
-                { date: "2026/03/31 (W11)", status: "出席", speech: 2, ask: 0, struct: 60, workThumb: "📸 已歸檔" },
-                { date: "2026/03/24 (W10)", status: "出席", speech: 4, ask: 2, struct: 55, workThumb: "📸 已歸檔" }
-            ]
+            id: 1, name: "林小明", goal: "克服上台恐懼", wish: "專業球鞋", 
+            actual: { att: 42, speech: 35, works: 8, struct: 65 },
+            target: { att: 45, speech: 50, works: 10, struct: 80 }
         },
         { 
-            id: 2, name: "陳阿花", wish: "迷你烤箱", attCount: 48, hours: 96, works: 20, 
-            history: [
-                { date: "2026/04/07 (W12)", status: "出席", speech: 5, ask: 2, struct: 85, workThumb: "📸 已歸檔" },
-                { date: "2026/03/31 (W11)", status: "出席", speech: 4, ask: 1, struct: 80, workThumb: "📸 已歸檔" }
-            ]
+            id: 2, name: "陳阿花", goal: "提升寫作邏輯", wish: "烘焙烤箱", 
+            actual: { att: 48, speech: 62, works: 15, struct: 85 },
+            target: { att: 45, speech: 40, works: 12, struct: 80 }
         }
     ];
 
-    function renderClassList() {
-        const list = document.getElementById('class-list');
-        list.innerHTML = students.map(s => `
-            <div class="card" style="border-left: 5px solid var(--primary);">
-                <button class="view-detail-btn" onclick="showDetailView(${s.id})">查看個人紀錄</button>
-                <div style="font-weight:bold; font-size:18px;">${s.name}</div>
-                <div style="font-size:12px; color:#666; margin:5px 0;">年度心願：${s.wish}</div>
-                <div style="display:flex; gap:15px; font-size:11px; margin-top:10px;">
-                    <span>📍 累積出席：${s.attCount}次</span>
-                    <span>📍 作品總數：${s.works}件</span>
+    let currentId = null;
+
+    function renderList() {
+        const list = document.getElementById('student-list');
+        list.innerHTML = students.map(s => {
+            const isDone = checkReady(s);
+            return `
+                <div class="card" style="border-left: 6px solid ${isDone ? '#f39c12' : '#ddd'}">
+                    <button class="btn-detail" onclick="viewDetail(${s.id})">查看與考核</button>
+                    <div class="goal-tag">心願：${s.wish}</div>
+                    <div style="font-weight:bold; font-size:18px;">${s.name} ${isDone ? '🌟' : ''}</div>
+                    <div style="font-size:12px; color:#888; margin-top:5px;">
+                        目前的總平均達成率：${calculateOverall(s)}%
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
-    function showDetailView(id) {
+    function viewDetail(id) {
+        currentId = id;
         const s = students.find(x => x.id === id);
-        document.getElementById('view-class').classList.add('hidden');
-        document.getElementById('view-detail').classList.remove('hidden');
+        showPage('page-detail');
+        document.getElementById('det-name').innerText = s.name;
+        document.getElementById('det-goal-text').innerText = `年度目標：${s.goal} (預計獎勵：${s.wish})`;
         
-        // 填充詳細紀錄
-        document.getElementById('detail-name').innerText = `${s.name} 的成長存摺`;
-        document.getElementById('det-att').innerText = s.attCount;
-        document.getElementById('det-hours').innerText = s.hours;
-        document.getElementById('det-works').innerText = s.works;
+        // 填寫編輯表單
+        document.getElementById('edit-wish').value = s.wish;
+        document.getElementById('t-att').value = s.target.att;
+        document.getElementById('t-speech').value = s.target.speech;
+        document.getElementById('t-works').value = s.target.works;
+        document.getElementById('t-struct').value = s.target.struct;
 
-        const historyBody = document.getElementById('detail-history');
-        historyBody.innerHTML = s.history.map(h => `
-            <tr>
-                <td>${h.date}</td>
-                <td><span class="status-pill bg-green">${h.status}</span></td>
-                <td>說:${h.speech} / 問:${h.ask}</td>
-                <td>
-                    <div class="struct-bar"><div class="struct-fill" style="width:${h.struct}%"></div></div>
-                    <span style="font-size:10px; color:#888;">${h.struct}%</span>
-                </td>
-                <td style="color:var(--secondary); cursor:pointer;">${h.workThumb}</td>
-            </tr>
-        `).join('');
+        renderTargetTable(s);
     }
 
-    function showClassView() {
-        document.getElementById('view-detail').classList.add('hidden');
-        document.getElementById('view-class').classList.remove('hidden');
+    function renderTargetTable(s) {
+        const metrics = [
+            { label: "累積出席", key: "att", unit: "次" },
+            { label: "發表/提問", key: "speech", unit: "次" },
+            { label: "作品累積", key: "works", unit: "件" },
+            { label: "句子結構", key: "struct", unit: "%" }
+        ];
+
+        const tbody = document.getElementById('target-body');
+        tbody.innerHTML = metrics.map(m => {
+            const act = s.actual[m.key];
+            const tar = s.target[m.key];
+            const ok = act >= tar;
+            return `
+                <tr>
+                    <td>${m.label}</td>
+                    <td>${tar}${m.unit}</td>
+                    <td style="color:${ok ? '#27ae60' : '#333'}"><b>${act}${m.unit}</b></td>
+                    <td><span class="status-badge ${ok ? 'status-ok' : 'status-wait'}">${ok ? '已達標' : '努力中'}</span></td>
+                </tr>
+            `;
+        }).join('');
+
+        const banner = document.getElementById('reward-status');
+        if(checkReady(s)) {
+            banner.className = "reward-banner reward-ready";
+            banner.innerHTML = `✨ 恭喜達成！解鎖獎勵：【${s.wish}】 🎁`;
+        } else {
+            banner.className = "reward-banner reward-locked";
+            banner.innerHTML = `🔒 尚未達成所有指標 (目前總進度 ${calculateOverall(s)}%)`;
+        }
     }
 
-    // 初始化
-    renderClassList();
+    function saveContract() {
+        const s = students.find(x => x.id === currentId);
+        s.wish = document.getElementById('edit-wish').value;
+        s.target.att = parseInt(document.getElementById('t-att').value);
+        s.target.speech = parseInt(document.getElementById('t-speech').value);
+        s.target.works = parseInt(document.getElementById('t-works').value);
+        s.target.struct = parseInt(document.getElementById('t-struct').value);
+        
+        renderTargetTable(s);
+        renderList();
+        alert("考核目標已更新！數據將自動對比。");
+    }
+
+    function calculateOverall(s) {
+        const keys = ['att', 'speech', 'works', 'struct'];
+        let totalProgress = 0;
+        keys.forEach(k => {
+            totalProgress += Math.min((s.actual[k] / s.target[k]) * 100, 100);
+        });
+        return (totalProgress / 4).toFixed(0);
+    }
+
+    function checkReady(s) {
+        return s.actual.att >= s.target.att && 
+               s.actual.speech >= s.target.speech && 
+               s.actual.works >= s.target.works && 
+               s.actual.struct >= s.target.struct;
+    }
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    renderList();
 </script>
 
 </body>
