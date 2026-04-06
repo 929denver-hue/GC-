@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC贈物網 - 老師極簡紀錄後台</title>
+    <style>
+        :root {
+            --primary-green: #27ae60;
+            --bg-gray: #f4f7f6;
+            --text-dark: #2c3e50;
+            --accent-orange: #f39c12;
+        }
+
+        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background: var(--bg-gray); color: var(--text-dark); margin: 0; padding: 0; }
+        
+        /* 頁首管理資訊 */
+        header { background: white; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); sticky: top; z-index: 100; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .class-info { font-size: 14px; color: #666; margin-top: 5px; }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
+
+        /* 集中管理狀態欄 - 讓老師一眼看出今日進度 */
+        .mgmt-bar { background: var(--primary-green); color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-around; text-align: center; }
+        .mgmt-item span { display: block; font-size: 18px; font-weight: bold; }
+        .mgmt-item label { font-size: 11px; opacity: 0.9; }
+
+        /* 學生紀錄卡片 */
+        .student-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid transparent; }
+        .student-card.active { border-left-color: var(--primary-green); }
+        
+        .student-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .student-name { font-size: 18px; font-weight: bold; }
+        .student-goal { font-size: 12px; color: var(--accent-orange); background: #fff8e1; padding: 2px 8px; border-radius: 4px; }
+
+        /* 五大指標操作區 */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .tally-btn { background: #f9f9f9; border: 1px solid #eee; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: 0.2s; }
+        .tally-btn:active { background: #e8f5e9; transform: scale(0.95); }
+        .tally-btn b { color: var(--primary-green); font-size: 16px; }
+        .tally-label { display: block; font-size: 11px; color: #888; margin-top: 4px; }
+
+        /* 底部功能區 */
+        .global-actions { position: fixed; bottom: 0; width: 100%; max-width: 600px; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; gap: 10px; box-sizing: border-box; }
+        .btn-main { flex: 1; padding: 12px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-photo { background: var(--primary-green); color: white; }
+        .btn-survey { background: var(--primary-green); color: white; opacity: 0.8; }
+
+        /* 標籤：年資累積 */
+        .year-tag { font-size: 10px; background: #eee; padding: 2px 5px; border-radius: 3px; color: #777; margin-left: 5px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-top">
+        <h2 style="margin:0; font-size: 20px;">保生國小：夢想閱章</h2>
+        <div style="text-align: right;">
+            <div style="font-weight:bold;">2026/04/07</div>
+            <div class="class-info">寫作陪伴班 (共 25 人)</div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="mgmt-bar">
+        <div class="mgmt-item"><span id="m-attendance">0</span><label>今日出席</label></div>
+        <div class="mgmt-item"><span id="m-speech">0</span><label>發表次數</label></div>
+        <div class="mgmt-item"><span id="m-works">0</span><label>作品採集</label></div>
+    </div>
+
+    <div id="student-list">
+        </div>
+
+    <div style="height: 100px;"></div> </div>
+
+<div class="global-actions">
+    <button class="btn-main btn-photo" onclick="alert('開啟相機：請拍攝全班練習紙，AI 將自動辨識結構並歸檔作品集')">📸 拍下全班作品</button>
+    <button class="btn-main btn-survey" onclick="alert('已生成今日心情 QR Code，請引導學生掃碼填寫課後問卷')">📱 心情問卷</button>
+</div>
+
+<script>
+    // 模擬後端讀取的「個人化目標」與「三年累積數據」
+    const students = [
+        { id: 1, name: "林小明", year: 2, goal: "成為籃球員", wish: "專業球鞋", currentSpeech: 0, totalSpeech: 45 },
+        { id: 2, name: "陳阿花", year: 3, goal: "開烘焙坊", wish: "迷你烤箱", currentSpeech: 0, totalSpeech: 120 },
+        { id: 3, name: "王大寶", year: 1, goal: "當工程師", wish: "邏輯積木", currentSpeech: 0, totalSpeech: 12 }
+    ];
+
+    let attendanceCount = 0;
+    let globalWorks = 0;
+
+    function renderStudents() {
+        const list = document.getElementById('student-list');
+        list.innerHTML = students.map(s => `
+            <div class="student-card" id="card-${s.id}">
+                <div class="student-header">
+                    <div>
+                        <span class="student-name">${s.name}</span>
+                        <span class="year-tag">第 ${s.year} 年累積</span>
+                    </div>
+                    <div class="student-goal">目標：${s.wish}</div>
+                </div>
+                
+                <div class="action-grid">
+                    <div class="tally-btn" onclick="tallyAttendance(${s.id})">
+                        <b id="att-${s.id}">☐</b>
+                        <span class="tally-label">📖 閱讀參與 (出席)</span>
+                    </div>
+                    <div class="tally-btn" onclick="tallySpeech(${s.id})">
+                        <b>+<span id="speech-${s.id}">${s.currentSpeech}</span></b>
+                        <span class="tally-label">📖 表達信心 (發表)</span>
+                    </div>
+                </div>
+                <div style="font-size: 10px; color: #999; margin-top: 8px; text-align: right;">
+                    三年總計發表：${s.totalSpeech + s.currentSpeech} 次
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function tallyAttendance(id) {
+        const card = document.getElementById(`card-${id}`);
+        const attLabel = document.getElementById(`att-${id}`);
+        if (attLabel.innerText === "☐") {
+            attLabel.innerText = "☑";
+            attLabel.style.color = "#27ae60";
+            card.classList.add('active');
+            attendanceCount++;
+        } else {
+            attLabel.innerText = "☐";
+            attLabel.style.color = "#ccc";
+            card.classList.remove('active');
+            attendanceCount--;
+        }
+        document.getElementById('m-attendance').innerText = attendanceCount;
+    }
+
+    function tallySpeech(id) {
+        const s = students.find(x => x.id === id);
+        s.currentSpeech++;
+        document.getElementById(`speech-${id}`).innerText = s.currentSpeech;
+        
+        let totalSpeechCount = students.reduce((a, b) => a + b.currentSpeech, 0);
+        document.getElementById('m-speech').innerText = totalSpeechCount;
+        
+        // 自動勾選出席 (如果有發表一定有出席)
+        const attLabel = document.getElementById(`att-${id}`);
+        if (attLabel.innerText === "☐") tallyAttendance(id);
+    }
+
+    // 初始化畫面
+    renderStudents();
+</script>
+
+</body>
+</html>
