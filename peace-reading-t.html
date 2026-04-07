@@ -145,15 +145,15 @@
                     <div class="progress-stats-overview">
                         <div class="prog-item">
                             <label>出席進度</label>
-                            <b>${s.att}</b> <small>/ ${s.target.att}</small>
+                            <b style="${s.att >= s.target.att ? 'color: var(--primary);' : ''}">${s.att}</b> <small>/ ${s.target.att}</small>
                         </div>
                         <div class="prog-item">
                             <label>發表進度</label>
-                            <b>${s.speech}</b> <small>/ ${s.target.speech}</small>
+                            <b style="${s.speech >= s.target.speech ? 'color: var(--primary);' : ''}">${s.speech}</b> <small>/ ${s.target.speech}</small>
                         </div>
                         <div class="prog-item">
                             <label>提問進度</label>
-                            <b>${s.ask}</b> <small>/ ${s.target.ask}</small>
+                            <b style="${s.ask >= s.target.ask ? 'color: var(--primary);' : ''}">${s.ask}</b> <small>/ ${s.target.ask}</small>
                         </div>
                     </div>
 
