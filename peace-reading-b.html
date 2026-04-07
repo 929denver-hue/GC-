@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC夢想閱章 - 企業端社會影響力看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --corp-primary: #1b4d3e; --corp-secondary: #27ae60; --gold: #d4af37; --bg: #f0f2f5; --text: #2c3e50; }
+        body { font-family: "PingFang TC", sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px; }
+
+        /* 頂部投資摘要 */
+        .impact-header { background: linear-gradient(135deg, var(--corp-primary), var(--corp-secondary)); color: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px; text-align: center; }
+        .main-stat { font-size: 48px; font-weight: bold; color: #fff; margin: 10px 0; }
+        .sub-text { font-size: 18px; opacity: 0.9; letter-spacing: 1px; }
+
+        /* 五大指標數據卡 */
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-bottom: 4px solid var(--corp-secondary); }
+        .stat-card b { font-size: 24px; color: var(--corp-secondary); display: block; }
+        .stat-card span { font-size: 11px; color: #888; }
+
+        /* 能力轉譯區 (ESG 語言) */
+        .translation-section { background: white; border-radius: 20px; padding: 30px; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; background: #f8f9fa; padding: 15px; font-size: 14px; color: #666; }
+        td { padding: 15px; border-bottom: 1px solid #eee; font-size: 15px; }
+        .capability-tag { background: #e8f5e9; color: var(--corp-secondary); padding: 4px 10px; border-radius: 5px; font-weight: bold; font-size: 13px; }
+
+        /* 成長證據與情感爆點 */
+        .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .evidence-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .case-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .compare-box { display: flex; justify-content: space-between; background: #f9f9f9; padding: 15px; border-radius: 12px; }
+        .compare-item b { display: block; font-size: 20px; color: var(--corp-primary); }
+        
+        /* 夢想獎勵解鎖區 */
+        .reward-unlock { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border-radius: 20px; padding: 30px; text-align: center; margin-top: 30px; }
+        .reward-val { font-size: 32px; font-weight: bold; margin: 10px 0; }
+
+        .btn-interact { background: white; color: var(--corp-primary); border: none; padding: 10px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="impact-header">
+        <div class="sub-text">您的資源投入，已成功換取了孩童</div>
+        <div class="main-stat">1,095 天 的堅持與改變</div>
+        <div class="sub-text">這不只是捐贈，是一場高報酬的生命投資。</div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><b>95%</b><span>學童穩定參與<br>(長期韌性)</span></div>
+        <div class="stat-card"><b>+42%</b><span>提問能力提升<br>(自主思辨)</span></div>
+        <div class="stat-card"><b>3,200+</b><span>累積公開發表<br>(溝通競爭力)</span></div>
+        <div class="stat-card"><b>+35%</b><span>邏輯結構提升<br>(敘事清晰度)</span></div>
+        <div class="stat-card"><b>180 份</b><span>數位成長履歷<br>(數位資產)</span></div>
+    </div>
+
+    <div class="translation-section">
+        <h3 style="margin:0;">📊 ESG 社會影響力能力轉譯</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>老師日常紀錄</th>
+                    <th>企業端能力轉譯</th>
+                    <th>未來人才意義</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>📖 出席穩定度</td>
+                    <td><span class="capability-tag">心理韌性建立</span></td>
+                    <td>培養孩童在面對長期任務時的「穩定自律能力」。</td>
+                </tr>
+                <tr>
+                    <td>📖 提問與思辨</td>
+                    <td><span class="capability-tag">自主解決力</span></td>
+                    <td>從被動接收到主動提問，奠定「職場洞察力」。</td>
+                </tr>
+                <tr>
+                    <td>📖 結構化寫作</td>
+                    <td><span class="capability-tag">敘事邏輯力</span></td>
+                    <td>強化組織訊息的能力，確保跨領域「溝通精準度」。</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="evidence-grid">
+        <div class="evidence-card">
+            <h3 style="margin-top:0; color:var(--corp-primary);">🌟 真實成長見證：小明</h3>
+            <p style="font-size:14px; color:#666;">從「不敢說話」到「清楚表達想法」的轉變軌跡</p>
+            <div class="compare-box">
+                <div class="compare-item"><span>初期狀態</span><b>發表 0 次</b><b>結構 40%</b></div>
+                <div style="font-size:24px; display:flex; align-items:center;">➔</div>
+                <div class="compare-item"><span>累積兩年</span><b>發表 35 次</b><b>結構 65%</b></div>
+            </div>
+            <p style="font-size:13px; margin-top:15px; font-style:italic;">「因為有了您贊助的球鞋，小明為了達標，主動練習次數增加了 3 倍。」</p>
+        </div>
+
+        <div class="evidence-card">
+            <h3 style="margin-top:0; color:var(--corp-primary);">📈 全班群體成長趨勢</h3>
+            <canvas id="growthChart" height="150"></canvas>
+        </div>
+    </div>
+
+    <div class="reward-unlock">
+        <h3 style="margin:0;">🎁 夢想契約達成率</h3>
+        <div class="reward-val">82% 的孩童已透過努力達成目標</div>
+        <p>他們透過累積數據，換取了人生第一次「被肯定」的成功體驗。</p>
+        <button class="btn-interact" onclick="alert('正在生成個別學童的 1,095 天成長證明書...')">點擊下載：全班年度影響力結案報告</button>
+    </div>
+
+</div>
+
+<script>
+    // 渲染群體成長曲線
+    const ctx = document.getElementById('growthChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['第一年', '第二年', '第三年'],
+            datasets: [{
+                label: '提問與發表頻次提升',
+                data: [15, 45, 92],
+                borderColor: '#27ae60',
+                backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+
+</body>
+</html>
