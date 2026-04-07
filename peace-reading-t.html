@@ -3,208 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GC夢想閱章 - 契約與考核管理系統</title>
+    <title>GC夢想閱章 - 老師端全功能管理系統</title>
     <style>
-        :root { --primary: #27ae60; --secondary: #3498db; --bg: #f5f7f9; --text: #2c3e50; --accent: #e67e22; --danger: #e74c3c; }
+        :root { --primary: #27ae60; --secondary: #3498db; --bg: #f4f7f6; --text: #2c3e50; --accent: #f39c12; }
         body { font-family: "PingFang TC", sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
         
         .page { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
         .page.active { display: block; }
 
-        /* 契約卡片 */
-        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .goal-tag { background: #fff3e0; color: var(--accent); padding: 4px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; margin-bottom: 10px; display: inline-block; }
+        /* 1. 老師年度成就看板 */
+        .achievement-header { background: linear-gradient(135deg, #1b4d3e, #27ae60); color: white; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .achievement-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; margin-top: 15px; }
+        .ach-item b { font-size: 24px; display: block; }
+        .ach-item span { font-size: 11px; opacity: 0.8; }
 
-        /* 考核追蹤表格 */
-        .target-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .target-table th { text-align: left; font-size: 12px; color: #888; padding: 8px; border-bottom: 1px solid #eee; }
-        .target-table td { padding: 12px 8px; border-bottom: 1px solid #eee; font-size: 14px; }
+        /* 2. 學生列表卡片 (總覽) */
+        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 6px solid #ddd; position: relative; }
+        .card.goal-met { border-left-color: var(--accent); }
+        .wish-info { background: #fff8e1; color: var(--accent); padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
         
-        .status-badge { padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
-        .status-ok { background: #e8f5e9; color: var(--primary); }
-        .status-wait { background: #fff3e0; color: var(--accent); }
+        /* 快速紀錄區 */
+        .record-grid { display: grid; grid-template-columns: 60px 1fr 1fr 1.2fr; gap: 8px; align-items: end; background: #f9f9f9; padding: 12px; border-radius: 10px; margin-top: 15px; }
+        .input-group { display: flex; flex-direction: column; gap: 4px; }
+        .input-group label { font-size: 10px; color: #777; }
+        .input-wrapper { display: flex; align-items: center; gap: 3px; }
+        .input-wrapper input { width: 35px; padding: 4px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 12px; }
+        .plus-btn { padding: 4px 6px; background: white; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 11px; }
+        .btn-confirm { background: var(--primary); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; }
 
-        /* 獎勵領取區 */
-        .reward-banner { padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; margin-top: 20px; }
-        .reward-locked { background: #f8f9fa; color: #999; border: 1px dashed #ccc; }
-        .reward-ready { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 4px 10px rgba(230,126,34,0.3); animation: pulse 2s infinite; }
-        
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        /* 作品狀態與進度 */
+        .work-status { font-size: 11px; margin-top: 10px; color: var(--primary); font-weight: bold; }
+        .bar-bg { background: #eee; height: 6px; border-radius: 3px; overflow: hidden; margin: 8px 0; }
+        .bar-fill { background: var(--primary); height: 100%; transition: width 0.5s; }
 
-        /* 表單樣式 */
-        .modal { background: white; border-radius: 15px; padding: 25px; border: 1px solid #ddd; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; margin-bottom: 5px; color: #666; }
-        .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
+        /* 詳細頁面樣式 */
+        .detail-header { background: white; padding: 20px; border-radius: 15px; border-top: 6px solid var(--secondary); margin-bottom: 20px; }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        .history-table th { background: #f8f9fa; padding: 10px; text-align: left; }
+        .history-table td { padding: 10px; border-bottom: 1px solid #eee; }
 
-        .btn-detail { background: var(--secondary); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; float: right; }
+        /* 全局按鈕 */
+        .fixed-footer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; z-index: 100; }
+        .btn-batch { width: 100%; padding: 15px; background: var(--secondary); color: white; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-<div id="page-class" class="page active">
-    <div class="card" style="background: var(--primary); color: white;">
-        <h2 style="margin:0;">保生國小：夢想契約進度追蹤</h2>
-        <p style="opacity: 0.9; font-size: 14px;">老師可點擊「設定考核」為不同孩子量身打造達標門檻</p>
+<div id="page-overview" class="page active">
+    <div class="achievement-header">
+        <h2 style="margin:0;">保生國小：年度教學成效總覽</h2>
+        <div class="achievement-grid">
+            <div class="ach-item"><b>1,095</b><span>累積天數</span></div>
+            <div class="ach-item"><b>342</b><span>總時數(h)</span></div>
+            <div class="ach-item"><b id="total-met">0</b><span>達標人數</span></div>
+            <div class="ach-item"><b>25</b><span>陪伴人數</span></div>
+        </div>
     </div>
 
-    <div id="student-list">
-        </div>
+    <div id="student-list"></div>
 </div>
 
 <div id="page-detail" class="page">
-    <div onclick="showPage('page-class')" style="margin-bottom:20px; cursor:pointer; color:var(--secondary);">⬅ 返回班級列表</div>
+    <button onclick="showPage('page-overview')" style="margin-bottom:20px; cursor:pointer; background:none; border:1px solid #ddd; padding:5px 10px; border-radius:5px;">⬅ 返回總覽</button>
     
-    <div class="card">
-        <h2 id="det-name">學生姓名</h2>
-        <div class="goal-tag" id="det-goal-text">年度目標：未設定</div>
-        
-        <h3>🏆 考核達標進度</h3>
-        <table class="target-table">
-            <thead>
-                <tr>
-                    <th>考核項目</th>
-                    <th>考核目標</th>
-                    <th>目前數據</th>
-                    <th>狀態</th>
-                </tr>
-            </thead>
-            <tbody id="target-body">
-                </tbody>
-        </table>
-
-        <div id="reward-status" class="reward-banner reward-locked">
-            🔒 尚未達成所有考核指標
+    <div class="detail-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 id="det-name">學童姓名</h2>
+            <button onclick="editGoal()" style="background:none; border:1px solid var(--secondary); color:var(--secondary); padding:5px 12px; border-radius:15px; cursor:pointer; font-size:12px;">⚙️ 設定目標/心願</button>
         </div>
+        <div id="det-goal" style="color:#666; font-size:14px; margin: 10px 0;">目標：克服上台恐懼</div>
+        <div id="det-wish" class="wish-info">🎁 心願：專業球鞋</div>
     </div>
 
-    <div class="card modal">
-        <h3>⚙️ 個別化契約與考核設定</h3>
-        <div class="form-group">
-            <label>年度心願禮物</label>
-            <input type="text" id="edit-wish">
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="form-group"><label>目標出席次數</label><input type="number" id="t-att"></div>
-            <div class="form-group"><label>目標發表次數</label><input type="number" id="t-speech"></div>
-            <div class="form-group"><label>目標作品件數</label><input type="number" id="t-works"></div>
-            <div class="form-group"><label>目標結構完整度 (%)</label><input type="number" id="t-struct"></div>
-        </div>
-        <button onclick="saveContract()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">更新並儲存契約</button>
+    <div class="card">
+        <h3>📅 歷史紀錄與編修</h3>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>發表</th>
+                    <th>提問</th>
+                    <th>結構%</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+        </table>
     </div>
 </div>
 
+<div class="fixed-footer">
+    <button class="btn-batch" onclick="batchUpload()">📸 一鍵上傳全班作品 (AI 自動分類)</button>
+</div>
+
 <script>
-    // 學生數據：包含實際數據與考核目標
     let students = [
-        { 
-            id: 1, name: "林小明", goal: "克服上台恐懼", wish: "專業球鞋", 
-            actual: { att: 42, speech: 35, works: 8, struct: 65 },
-            target: { att: 45, speech: 50, works: 10, struct: 80 }
-        },
-        { 
-            id: 2, name: "陳阿花", goal: "提升寫作邏輯", wish: "烘焙烤箱", 
-            actual: { att: 48, speech: 62, works: 15, struct: 85 },
-            target: { att: 45, speech: 40, works: 12, struct: 80 }
-        }
+        { id: 1, name: "林小明", year: 2, wish: "專業球鞋", goal: "克服上台發言的勇氣", speech: 35, ask: 12, struct: 65, target: 50, hasNewWork: false, logs: [
+            { date: "2026/04/07", speech: 3, ask: 1, struct: 70 },
+            { date: "2026/03/31", speech: 2, ask: 0, struct: 65 }
+        ]},
+        { id: 2, name: "陳阿花", year: 3, wish: "迷你烤箱", goal: "提升寫作邏輯完整度", speech: 62, ask: 25, struct: 85, target: 60, hasNewWork: false, logs: [
+            { date: "2026/04/07", speech: 5, ask: 2, struct: 85 }
+        ]}
     ];
 
-    let currentId = null;
-
-    function renderList() {
+    function renderOverview() {
         const list = document.getElementById('student-list');
         list.innerHTML = students.map(s => {
-            const isDone = checkReady(s);
+            const isMet = s.speech >= s.target;
+            const progress = Math.min((s.speech / s.target) * 100, 100);
             return `
-                <div class="card" style="border-left: 6px solid ${isDone ? '#f39c12' : '#ddd'}">
-                    <button class="btn-detail" onclick="viewDetail(${s.id})">查看與考核</button>
-                    <div class="goal-tag">心願：${s.wish}</div>
-                    <div style="font-weight:bold; font-size:18px;">${s.name} ${isDone ? '🌟' : ''}</div>
-                    <div style="font-size:12px; color:#888; margin-top:5px;">
-                        目前的總平均達成率：${calculateOverall(s)}%
+                <div class="card ${isMet ? 'goal-met' : ''}">
+                    <div class="student-header">
+                        <div>
+                            <span style="font-size:18px; font-weight:bold; cursor:pointer; color:var(--secondary);" onclick="viewDetail(${s.id})">${s.name} 🔍</span>
+                            <span style="font-size:11px; color:#888; margin-left:8px;">第 ${s.year} 年</span>
+                        </div>
+                        <div class="wish-info">🎁 ${s.wish}</div>
                     </div>
+                    <div style="font-size:13px; color:#666; margin-bottom:5px;">目標：${s.goal}</div>
+                    <div class="bar-bg"><div class="bar-fill" style="width:${progress}%"></div></div>
+
+                    <div class="record-grid">
+                        <div class="input-group"><label>出席</label><input type="checkbox" checked style="width:18px; height:18px;"></div>
+                        <div class="input-group">
+                            <label>發表</label>
+                            <div class="input-wrapper"><input type="number" id="sp-${s.id}" value="0"><button class="plus-btn" onclick="add(${s.id},'sp')">+1</button></div>
+                        </div>
+                        <div class="input-group">
+                            <label>提問</label>
+                            <div class="input-wrapper"><input type="number" id="as-${s.id}" value="0"><button class="plus-btn" onclick="add(${s.id},'as')">+1</button></div>
+                        </div>
+                        <div class="input-group">
+                            <label>結構%</label>
+                            <div class="input-wrapper"><input type="number" id="st-${s.id}" placeholder="%" style="width:50px;"><button class="btn-confirm" onclick="save(${s.id})">確定</button></div>
+                        </div>
+                    </div>
+                    ${s.hasNewWork ? `<div class="work-status">✅ 今日作品已 AI 分類並歸檔</div>` : ''}
                 </div>
             `;
         }).join('');
+        document.getElementById('total-met').innerText = students.filter(x => x.speech >= x.target).length;
     }
 
+    function add(id, type) { 
+        const el = document.getElementById(`${type}-${id}`);
+        el.value = parseInt(el.value) + 1;
+    }
+
+    function save(id) {
+        const s = students.find(x => x.id === id);
+        const sp = parseInt(document.getElementById(`sp-${id}`).value);
+        const ask = parseInt(document.getElementById(`as-${id}`).value);
+        const st = document.getElementById(`st-${id}`).value;
+
+        s.speech += sp;
+        s.ask += ask;
+        // 存入單次歷史
+        s.logs.unshift({ date: "2026/04/07", speech: sp, ask: ask, struct: st || s.struct });
+        
+        document.getElementById(`sp-${id}`).value = 0;
+        document.getElementById(`as-${id}`).value = 0;
+        renderOverview();
+        alert(`${s.name} 本日紀錄已存入個人歷史空間。`);
+    }
+
+    let currentId = null;
     function viewDetail(id) {
         currentId = id;
         const s = students.find(x => x.id === id);
         showPage('page-detail');
-        document.getElementById('det-name').innerText = s.name;
-        document.getElementById('det-goal-text').innerText = `年度目標：${s.goal} (預計獎勵：${s.wish})`;
+        document.getElementById('det-name').innerText = s.name + " 的成長存摺";
+        document.getElementById('det-goal').innerText = "學習目標：" + s.goal;
+        document.getElementById('det-wish').innerText = "🎁 心願禮物：" + s.wish;
         
-        // 填寫編輯表單
-        document.getElementById('edit-wish').value = s.wish;
-        document.getElementById('t-att').value = s.target.att;
-        document.getElementById('t-speech').value = s.target.speech;
-        document.getElementById('t-works').value = s.target.works;
-        document.getElementById('t-struct').value = s.target.struct;
-
-        renderTargetTable(s);
+        const body = document.getElementById('history-body');
+        body.innerHTML = s.logs.map((l, i) => `
+            <tr>
+                <td>${l.date}</td>
+                <td>${l.speech}</td>
+                <td>${l.ask}</td>
+                <td>${l.struct}%</td>
+                <td style="color:var(--secondary); cursor:pointer;" onclick="editLog(${i})">編修</td>
+            </tr>
+        `).join('');
     }
 
-    function renderTargetTable(s) {
-        const metrics = [
-            { label: "累積出席", key: "att", unit: "次" },
-            { label: "發表/提問", key: "speech", unit: "次" },
-            { label: "作品累積", key: "works", unit: "件" },
-            { label: "句子結構", key: "struct", unit: "%" }
-        ];
-
-        const tbody = document.getElementById('target-body');
-        tbody.innerHTML = metrics.map(m => {
-            const act = s.actual[m.key];
-            const tar = s.target[m.key];
-            const ok = act >= tar;
-            return `
-                <tr>
-                    <td>${m.label}</td>
-                    <td>${tar}${m.unit}</td>
-                    <td style="color:${ok ? '#27ae60' : '#333'}"><b>${act}${m.unit}</b></td>
-                    <td><span class="status-badge ${ok ? 'status-ok' : 'status-wait'}">${ok ? '已達標' : '努力中'}</span></td>
-                </tr>
-            `;
-        }).join('');
-
-        const banner = document.getElementById('reward-status');
-        if(checkReady(s)) {
-            banner.className = "reward-banner reward-ready";
-            banner.innerHTML = `✨ 恭喜達成！解鎖獎勵：【${s.wish}】 🎁`;
-        } else {
-            banner.className = "reward-banner reward-locked";
-            banner.innerHTML = `🔒 尚未達成所有指標 (目前總進度 ${calculateOverall(s)}%)`;
-        }
-    }
-
-    function saveContract() {
+    function editGoal() {
         const s = students.find(x => x.id === currentId);
-        s.wish = document.getElementById('edit-wish').value;
-        s.target.att = parseInt(document.getElementById('t-att').value);
-        s.target.speech = parseInt(document.getElementById('t-speech').value);
-        s.target.works = parseInt(document.getElementById('t-works').value);
-        s.target.struct = parseInt(document.getElementById('t-struct').value);
-        
-        renderTargetTable(s);
-        renderList();
-        alert("考核目標已更新！數據將自動對比。");
+        const g = prompt("設定新的學習目標：", s.goal);
+        const w = prompt("設定新的心願禮物：", s.wish);
+        if(g) s.goal = g;
+        if(w) s.wish = w;
+        viewDetail(currentId);
+        renderOverview();
     }
 
-    function calculateOverall(s) {
-        const keys = ['att', 'speech', 'works', 'struct'];
-        let totalProgress = 0;
-        keys.forEach(k => {
-            totalProgress += Math.min((s.actual[k] / s.target[k]) * 100, 100);
-        });
-        return (totalProgress / 4).toFixed(0);
-    }
-
-    function checkReady(s) {
-        return s.actual.att >= s.target.att && 
-               s.actual.speech >= s.target.speech && 
-               s.actual.works >= s.target.works && 
-               s.actual.struct >= s.target.struct;
+    function batchUpload() {
+        alert("AI 自動分類中...");
+        setTimeout(() => {
+            students.forEach(s => s.hasNewWork = true);
+            renderOverview();
+            alert("全班作品已自動撥入個人作品集！");
+        }, 1000);
     }
 
     function showPage(id) {
@@ -212,8 +213,7 @@
         document.getElementById(id).classList.add('active');
     }
 
-    renderList();
+    renderOverview();
 </script>
-
 </body>
 </html>
