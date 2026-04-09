@@ -1,0 +1,196 @@
+import React, { useState, useEffect } from 'react';
+
+// --- 1. 型別定義 ---
+interface RedemptionData {
+  period: string;
+  totalAmount: number;
+  txCount: number;
+  avgTxAmount: number;
+  dailyAvgAmount: number;
+  dailyAvgTx: number;
+}
+
+interface AppScriptResponse {
+  status: string;
+  data: RedemptionData[];
+  message?: string;
+  lastUpdated?: string;
+}
+
+// 替換為你的真實 API URL
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5jCKD79xeEc0YnJ9mbxI7nw4XstID4dEqFA8fXoLXMGGgP7IClS_IQ9YBchNrfK2D/exec';
+
+// --- 2. 成長率卡片元件 ---
+const GrowthKpiCard: React.FC<{ 
+  title: string; 
+  unit: string; 
+  current: number; 
+  previous?: number; 
+}> = ({ title, unit, current, previous }) => {
+  const hasPrevious = previous !== undefined && previous !== null;
+  const growthRate = hasPrevious 
+    ? (previous === 0 ? 100 : ((current - previous) / previous) * 100) 
+    : 0;
+
+  const isPositive = growthRate > 0;
+  const isNegative = growthRate < 0;
+  const trendColor = isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500';
+  const trendIcon = isPositive ? '↑' : isNegative ? '↓' : '−';
+
+  return (
+    <div className="p-5 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col transition-all hover:shadow-md">
+      <span className="text-gray-500 text-sm font-medium">{title}</span>
+      <div className="mt-2 flex items-baseline gap-2">
+        <span className="text-3xl font-bold text-gray-900">
+          {current.toLocaleString()} <span className="text-sm font-normal text-gray-500">{unit}</span>
+        </span>
+      </div>
+      {hasPrevious ? (
+        <div className={`mt-3 text-sm font-semibold flex items-center gap-1 bg-gray-50 w-fit px-2 py-1 rounded ${trendColor}`}>
+          <span>{trendIcon} {Math.abs(growthRate).toFixed(1)}%</span>
+          <span className="text-gray-400 font-normal text-xs ml-1">vs 上期 ({previous.toLocaleString()})</span>
+        </div>
+      ) : (
+        <div className="mt-3 text-xs text-gray-400 bg-gray-50 w-fit px-2 py-1 rounded">無上期比較資料</div>
+      )}
+    </div>
+  );
+};
+
+// --- 3. 主儀表板元件 ---
+export default function App() {
+  const [data, setData] = useState<RedemptionData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastSync, setLastSync] = useState<string>('');
+
+  useEffect(() => {
+    const fetchRealData = async () => {
+      try {
+        setLoading(true);
+        // 使用你的 API 網址發送請求
+        const response = await fetch(APPS_SCRIPT_URL);
+        
+        // 檢查是否為 JSON 格式 (防禦 Google 導向登入頁的雷)
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("API 回傳的不是 JSON。請確認 Apps Script 部署權限為「所有人」且網址正確。");
+        }
+
+        const result: AppScriptResponse = await response.json();
+        
+        if (result.status === 'success') {
+          setData(result.data);
+          setLastSync(new Date().toLocaleString('zh-TW'));
+        } else {
+          throw new Error(result.message || '資料讀取失敗');
+        }
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRealData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center justify-center space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        <p className="text-gray-500 font-medium animate-pulse">正在從 Google Sheets 同步最新資料...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+        <div className="bg-red-50 text-red-700 p-6 rounded-lg border border-red-200 max-w-lg w-full">
+          <h3 className="text-lg font-bold flex items-center gap-2">⚠️ 資料連線異常</h3>
+          <p className="mt-2 text-sm">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 取得最新與上一期的資料
+  const currentData = data[data.length - 1];
+  const previousData = data.length > 1 ? data[data.length - 2] : null;
+
+  if (!currentData) return <div className="p-8">目前試算表中沒有有效資料。</div>;
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6 md:p-10 font-sans">
+      <div className="max-w-6xl mx-auto">
+        <header className="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-gray-900">綠點兌換成長儀表板</h1>
+            <p className="text-gray-500 mt-1">目前數據期間：{currentData.period}</p>
+          </div>
+          <div className="text-sm text-gray-400 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+            🔄 最後同步：{lastSync}
+          </div>
+        </header>
+        
+        {/* KPI Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <GrowthKpiCard 
+            title="總兌換金額" unit="NT$" 
+            current={currentData.totalAmount} 
+            previous={previousData?.totalAmount} 
+          />
+          <GrowthKpiCard 
+            title="總兌換筆數" unit="筆" 
+            current={currentData.txCount} 
+            previous={previousData?.txCount} 
+          />
+          <GrowthKpiCard 
+            title="每日平均金額 (真實成長)" unit="NT$/日" 
+            current={currentData.dailyAvgAmount} 
+            previous={previousData?.dailyAvgAmount} 
+          />
+          <GrowthKpiCard 
+            title="每日平均筆數 (真實熱度)" unit="筆/日" 
+            current={currentData.dailyAvgTx} 
+            previous={previousData?.dailyAvgTx} 
+          />
+        </div>
+
+        {/* 原始資料表 (供查核用) */}
+        <div className="mt-12 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+            <h3 className="font-bold text-gray-700">近期資料明細</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-gray-500 uppercase bg-white border-b">
+                <tr>
+                  <th className="px-6 py-3">期別 (月份)</th>
+                  <th className="px-6 py-3 text-right">總金額</th>
+                  <th className="px-6 py-3 text-right">總筆數</th>
+                  <th className="px-6 py-3 text-right">單筆平均</th>
+                  <th className="px-6 py-3 text-right">日均金額</th>
+                  <th className="px-6 py-3 text-right">日均筆數</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row, index) => (
+                  <tr key={index} className="border-b last:border-0 hover:bg-gray-50">
+                    <td className="px-6 py-4 font-medium text-gray-900">{row.period}</td>
+                    <td className="px-6 py-4 text-right">NT$ {row.totalAmount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-right">{row.txCount.toLocaleString()} 筆</td>
+                    <td className="px-6 py-4 text-right">NT$ {row.avgTxAmount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-right">NT$ {row.dailyAvgAmount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-right">{row.dailyAvgTx} 筆</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
