@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>綠點兌換成長儀表板</title>
+    <title>綠點兌換儀表板</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 font-sans border-t-4 border-green-600 min-h-screen">
@@ -23,7 +23,7 @@
     <div id="dashboard" class="hidden max-w-6xl mx-auto p-6 md:p-10">
         <header class="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-green-950">綠點兌換成長儀表板</h1>
+                <h1 class="text-2xl font-extrabold text-green-950">綠點兌換儀表板</h1>
                 <p id="current-period" class="text-gray-500 mt-1">目前數據期間：載入中...</p>
             </div>
             <div class="text-sm text-green-700 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
@@ -57,14 +57,14 @@
         </div>
     </div>
 
-    <script>
+   <script>
         // 替換成你的 Google Apps Script API 網址
         const API_URL = 'https://script.google.com/macros/s/AKfycbyAt4Qnuavlb3lyq_MoeJRbmxXYwftepFUEvqTJhLl7BwXNgzHxSZQK3AUKuNbcJ7jw/exec';
 
         // 格式化數字 (加入千分位)
         const formatNumber = (num) => Number(num).toLocaleString('en-US');
 
-        // 生成單個 KPI 卡片的 HTML 字串
+        // 生成單個 KPI 卡片的 HTML 字串 (與原本相同)
         function generateKpiCardHTML(title, unit, current, previous) {
             const hasPrevious = previous !== undefined && previous !== null;
             let growthRate = 0;
@@ -97,10 +97,40 @@
             `;
         }
 
+        // --- 加強版：具備 Timeout 機制的 Fetch ---
+        async function fetchWithTimeout(resource, options = {}) {
+            const { timeout = 8000 } = options; // 預設 8 秒超時
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            
+            try {
+                const response = await fetch(resource, {
+                    ...options,
+                    signal: controller.signal
+                });
+                clearTimeout(id);
+                return response;
+            } catch (error) {
+                clearTimeout(id);
+                if (error.name === 'AbortError') {
+                    throw new Error('API 回應超時 (超過 8 秒)。請檢查網路或 Google Sheets 權限設定。');
+                }
+                throw error;
+            }
+        }
+
         // 啟動函數
         async function initDashboard() {
             try {
-                const response = await fetch(API_URL);
+                // 1. 使用帶有超時機制的 fetch
+                const response = await fetchWithTimeout(API_URL);
+                
+                // 2. 防禦 CORS 轉址地雷：檢查回傳的是否真的是 JSON
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                     throw new Error("API 沒有回傳標準 JSON。這通常是因為 Google Apps Script 的存取權限沒有設定為「所有人 (Anyone)」，導致被 Google 登入頁面攔截。");
+                }
+
                 const result = await response.json();
 
                 if (result.status !== 'success') {
@@ -116,11 +146,11 @@
                 const currentData = data[data.length - 1];
                 const previousData = data.length > 1 ? data[data.length - 2] : null;
 
-                // 1. 更新頭部資訊
+                // 更新頭部資訊
                 document.getElementById('current-period').innerText = `目前數據期間：${currentData.period}`;
                 document.getElementById('last-sync').innerText = new Date().toLocaleString('zh-TW');
 
-                // 2. 渲染 KPI 卡片
+                // 渲染 KPI 卡片
                 const kpiContainer = document.getElementById('kpi-container');
                 kpiContainer.innerHTML = `
                     ${generateKpiCardHTML('總兌換金額', 'NT$', currentData.totalAmount, previousData?.totalAmount)}
@@ -129,7 +159,7 @@
                     ${generateKpiCardHTML('每日平均筆數 (真實熱度)', '筆/日', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
                 `;
 
-                // 3. 渲染表格
+                // 渲染表格
                 const tableBody = document.getElementById('table-body');
                 tableBody.innerHTML = data.map(row => `
                     <tr class="border-b last:border-0 hover:bg-green-50">
@@ -147,14 +177,14 @@
                 document.getElementById('dashboard').classList.remove('hidden');
 
             } catch (error) {
-                // 顯示錯誤畫面
+                // 顯示錯誤畫面與詳細原因
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('error-screen').classList.remove('hidden');
                 document.getElementById('error-message').innerText = error.message;
+                console.error("Dashboard Error:", error);
             }
         }
 
-        // 網頁載入完成後執行
         window.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
