@@ -6,6 +6,7 @@
     <title>綠點兌換成長儀表板</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 </head>
 <body class="bg-gray-50 font-sans border-t-4 border-green-600 min-h-screen">
 
@@ -32,11 +33,18 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container">
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container"></div>
 
         <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 class="font-bold text-green-700 mb-4">歷月兌換趨勢 (雙軸折線圖)</h3>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h3 class="font-bold text-green-700">歷月兌換數據比較</h3>
+                <select id="metric-selector" class="border border-gray-200 rounded-lg px-4 py-2 text-sm text-green-800 bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer font-medium">
+                    <option value="totalAmount">總兌換金額 (NT$)</option>
+                    <option value="txCount">總兌換筆數 (筆)</option>
+                    <option value="dailyAvgAmount">每日平均金額 (NT$/日)</option>
+                    <option value="dailyAvgTx">每日平均筆數 (筆/日)</option>
+                </select>
+            </div>
             <div class="relative h-72 w-full">
                 <canvas id="trendChart"></canvas>
             </div>
@@ -58,40 +66,40 @@
                             <th class="px-6 py-3 text-right">日均筆數</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body">
-                        </tbody>
+                    <tbody id="table-body"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        // 你的試算表 ID
         const SPREADSHEET_ID = '1UfbFi9gS0mpYokTvGgdgmi4ujmSQwz14HG1_i_IcDbU'; 
         const SHEET_NAME = '兌換紀錄';
         const FAST_API_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
-        const formatNumber = (num) => Number(num).toLocaleString('en-US');
+        // 修改：使用原生的 toLocaleString，設定最多顯示兩位小數並自動四捨五入
+        const formatNumber = (num) => {
+            return Number(num).toLocaleString('en-US', {
+                maximumFractionDigits: 2
+            });
+        };
 
-        // 生成 KPI 卡片
+        // 輔助計算函數：將數字四捨五入至小數點後兩位
+        const roundToTwo = (num) => Math.round(num * 100) / 100;
+
+        let myChart = null;
+        let globalData = [];
+
         function generateKpiCardHTML(title, unit, current, previous) {
             const hasPrevious = previous !== undefined && previous !== null;
             let growthRate = 0;
             if (hasPrevious) {
                 growthRate = previous === 0 ? 100 : ((current - previous) / previous) * 100;
             }
-
             const isPositive = growthRate > 0;
             const isNegative = growthRate < 0;
             const trendColor = isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500';
             const trendIcon = isPositive ? '↑' : isNegative ? '↓' : '−';
-
-            const trendHtml = hasPrevious 
-                ? `<div class="mt-3 text-sm font-semibold flex items-center gap-1 bg-gray-50 w-fit px-2 py-1 rounded ${trendColor}">
-                    <span>${trendIcon} ${Math.abs(growthRate).toFixed(1)}%</span>
-                    <span class="text-gray-400 font-normal text-xs ml-1">vs 上期 (${formatNumber(previous)})</span>
-                   </div>`
-                : `<div class="mt-3 text-xs text-gray-400 bg-gray-50 w-fit px-2 py-1 rounded">無比較資料</div>`;
 
             return `
                 <div class="p-5 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col transition-all hover:shadow-md">
@@ -101,140 +109,81 @@
                             ${formatNumber(current)} <span class="text-sm font-normal text-gray-500">${unit}</span>
                         </span>
                     </div>
-                    ${trendHtml}
+                    ${hasPrevious ? `<div class="mt-3 text-sm font-semibold flex items-center gap-1 bg-gray-50 w-fit px-2 py-1 rounded ${trendColor}">
+                        <span>${trendIcon} ${Math.abs(growthRate).toFixed(1)}%</span>
+                        <span class="text-gray-400 font-normal text-xs ml-1">vs 上期 (${formatNumber(previous)})</span>
+                    </div>` : `<div class="mt-3 text-xs text-gray-400 bg-gray-50 w-fit px-2 py-1 rounded">無上期資料</div>`}
                 </div>
             `;
         }
 
-        // 繪製 Chart.js 折線圖
-        function renderChart(data) {
+        function renderInteractiveChart(metricKey) {
             const ctx = document.getElementById('trendChart').getContext('2d');
-            
-            // 萃取圖表所需的陣列資料
-            const labels = data.map(item => item.period);
-            const amountData = data.map(item => item.totalAmount);
-            const countData = data.map(item => item.txCount);
+            const metricConfigs = {
+                'totalAmount': { label: '總兌換金額 (NT$)', color: '#16a34a' },
+                'txCount': { label: '總兌換筆數 (筆)', color: '#16a34a' },
+                'dailyAvgAmount': { label: '每日平均金額 (NT$/日)', color: '#16a34a' },
+                'dailyAvgTx': { label: '每日平均筆數 (筆/日)', color: '#16a34a' }
+            };
+            const config = metricConfigs[metricKey];
+            const labels = globalData.map(item => item.period);
+            const chartData = globalData.map(item => item[metricKey]);
 
-            new Chart(ctx, {
-                type: 'line',
+            if (myChart) myChart.destroy();
+            Chart.register(ChartDataLabels);
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: '總兌換金額 (NT$)',
-                            data: amountData,
-                            borderColor: '#16a34a', // Tailwind green-600
-                            backgroundColor: 'rgba(22, 163, 74, 0.1)',
-                            borderWidth: 3,
-                            pointBackgroundColor: '#16a34a',
-                            yAxisID: 'y',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: '總兌換筆數 (筆)',
-                            data: countData,
-                            borderColor: '#9ca3af', // Tailwind gray-400
-                            borderWidth: 2,
-                            borderDash: [5, 5], // 虛線區隔
-                            pointBackgroundColor: '#9ca3af',
-                            yAxisID: 'y1',
-                            tension: 0.3
-                        }
-                    ]
+                    datasets: [{
+                        label: config.label,
+                        data: chartData,
+                        backgroundColor: config.color + 'CC',
+                        borderColor: config.color,
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
+                    layout: { padding: { top: 30 } },
                     plugins: {
-                        legend: { position: 'top' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) label += ': ';
-                                    if (context.parsed.y !== null) {
-                                        label += formatNumber(context.parsed.y);
-                                    }
-                                    return label;
-                                }
-                            }
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            formatter: (value) => formatNumber(value),
+                            color: config.color,
+                            font: { weight: 'bold', size: 11 }
                         }
                     },
                     scales: {
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: { display: true, text: '金額 (NT$)' },
-                            beginAtZero: true
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: { display: true, text: '筆數 (筆)' },
-                            beginAtZero: true,
-                            grid: { drawOnChartArea: false } // 不重複畫網格線
-                        }
+                        y: { beginAtZero: true, ticks: { callback: (v) => formatNumber(v) } }
                     }
                 }
             });
         }
 
+        document.getElementById('metric-selector').addEventListener('change', (e) => renderInteractiveChart(e.target.value));
+
         async function initDashboard() {
             try {
-                // 1. 取得資料
                 const response = await fetch(FAST_API_URL);
-                if (!response.ok) throw new Error(`網路請求失敗，狀態碼：${response.status}`);
                 const text = await response.text();
-                
-                // 2. ★ 防彈版 JSON 解析邏輯 ★
-                // 尋找 google.visualization.Query.setResponse({ ... }) 裡面的 JSON
-                const jsonPrefix = "setResponse(";
-                const startIndex = text.indexOf(jsonPrefix);
-                
-                if (startIndex === -1) {
-                    // 如果找不到特徵字串，代表 Google 回傳了 HTML (通常是權限沒開導致被導向登入頁)
-                    throw new Error("試算表權限遭阻擋。請確認 Google Sheets 已經設定為「知道連結的人皆可檢視」。");
-                }
-
-                // 擷取 { ... } 的部分
-                const jsonString = text.substring(startIndex + jsonPrefix.length, text.length - 2);
-                let rawResult;
-                try {
-                    rawResult = JSON.parse(jsonString);
-                } catch (e) {
-                    throw new Error("JSON 解析失敗，試算表內可能有無法辨識的特殊字元。");
-                }
-
-                if (rawResult.status === 'error') {
-                     throw new Error(`Google Sheets 錯誤: ${rawResult.errors[0].message}`);
-                }
-                if (!rawResult.table || !rawResult.table.rows) {
-                     throw new Error("資料格式異常，找不到表格資料。");
-                }
-
-                // 3. 處理與清洗資料
+                const jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+                const rawResult = JSON.parse(jsonString);
                 const rows = rawResult.table.rows;
-                const data = rows.map(row => {
-                    const getVal = (cell) => cell ? cell.v : null;
-                    
-                    const periodLabel = String(getVal(row.c[0]) || "");
-                    const totalAmountStr = String(getVal(row.c[1]) || "0").replace(/[^0-9.-]+/g,"");
-                    const totalAmount = Number(totalAmountStr) || 0;
-                    const txCount = Number(getVal(row.c[2])) || 0;
 
-                    // 天數推算防呆
-                    let effectiveDays = 30; 
-                    if (periodLabel.includes("2/9-2/28")) effectiveDays = 20;
-                    else if (periodLabel === "202603") effectiveDays = 31;
-                    else if (periodLabel.includes("04") || periodLabel.includes("06") || periodLabel.includes("09") || periodLabel.includes("11")) effectiveDays = 30;
-                    else if (periodLabel.includes("01") || periodLabel.includes("05") || periodLabel.includes("07") || periodLabel.includes("08") || periodLabel.includes("10") || periodLabel.includes("12")) effectiveDays = 31;
+                globalData = rows.map(row => {
+                    const getVal = (cell) => cell ? cell.v : null;
+                    const periodLabel = String(getVal(row.c[0]) || "");
+                    const totalAmount = Number(String(getVal(row.c[1]) || "0").replace(/[^0-9.-]+/g,"")) || 0;
+                    const txCount = Number(getVal(row.c[2])) || 0;
+                    
+                    // 讀取 Excel 第 4 欄 (D 欄) 作為天數
+                    const days = Number(getVal(row.c[3])) || 30; 
 
                     const safeDiv = (num, den) => den === 0 ? 0 : num / den;
                     
@@ -242,19 +191,16 @@
                         period: periodLabel,
                         totalAmount: totalAmount,
                         txCount: txCount,
-                        avgTxAmount: Math.round(safeDiv(totalAmount, txCount)),
-                        dailyAvgAmount: Math.round(safeDiv(totalAmount, effectiveDays)),
-                        dailyAvgTx: Number(safeDiv(txCount, effectiveDays).toFixed(2))
+                        // 修改：所有平均指標都套用小數點後第二位四捨五入
+                        avgTxAmount: roundToTwo(safeDiv(totalAmount, txCount)),
+                        dailyAvgAmount: roundToTwo(safeDiv(totalAmount, days)),
+                        dailyAvgTx: roundToTwo(safeDiv(txCount, days))
                     };
-                }).filter(item => item.totalAmount > 0); // 過濾掉空行
+                }).filter(item => item.totalAmount > 0);
 
-                if (data.length === 0) throw new Error('試算表中沒有有效資料。');
+                const currentData = globalData[globalData.length - 1];
+                const previousData = globalData.length > 1 ? globalData[globalData.length - 2] : null;
 
-                // 取最新兩期
-                const currentData = data[data.length - 1];
-                const previousData = data.length > 1 ? data[data.length - 2] : null;
-
-                // 4. 渲染 UI
                 document.getElementById('current-period').innerText = `目前數據期間：${currentData.period}`;
                 document.getElementById('last-sync').innerText = new Date().toLocaleString('zh-TW');
 
@@ -262,26 +208,22 @@
                 kpiContainer.innerHTML = `
                     ${generateKpiCardHTML('總兌換金額', 'NT$', currentData.totalAmount, previousData?.totalAmount)}
                     ${generateKpiCardHTML('總兌換筆數', '筆', currentData.txCount, previousData?.txCount)}
-                    ${generateKpiCardHTML('每日平均金額 (真實成長)', 'NT$/日', currentData.dailyAvgAmount, previousData?.dailyAvgAmount)}
-                    ${generateKpiCardHTML('每日平均筆數 (真實熱度)', '筆/日', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
+                    ${generateKpiCardHTML('每日平均金額 (按Excel天數)', 'NT$/日', currentData.dailyAvgAmount, previousData?.dailyAvgAmount)}
+                    ${generateKpiCardHTML('每日平均筆數 (按Excel天數)', '筆/日', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
                 `;
 
-                const tableBody = document.getElementById('table-body');
-                tableBody.innerHTML = data.map(row => `
+                document.getElementById('table-body').innerHTML = globalData.map(row => `
                     <tr class="border-b last:border-0 hover:bg-green-50">
                         <td class="px-6 py-4 font-medium text-gray-900">${row.period}</td>
-                        <td class="px-6 py-4 text-right text-green-700 font-semibold">NT$ ${formatNumber(row.totalAmount)}</td>
+                        <td class="px-6 py-4 text-right font-semibold text-green-700">NT$ ${formatNumber(row.totalAmount)}</td>
                         <td class="px-6 py-4 text-right">${formatNumber(row.txCount)} 筆</td>
                         <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.avgTxAmount)}</td>
                         <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.dailyAvgAmount)}</td>
-                        <td class="px-6 py-4 text-right">${row.dailyAvgTx} 筆</td>
+                        <td class="px-6 py-4 text-right text-green-600">${formatNumber(row.dailyAvgTx)} 筆</td>
                     </tr>
                 `).join('');
 
-                // 5. 渲染圖表
-                renderChart(data);
-
-                // 顯示畫面
+                renderInteractiveChart('totalAmount');
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
 
@@ -289,10 +231,8 @@
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('error-screen').classList.remove('hidden');
                 document.getElementById('error-message').innerText = error.message;
-                console.error("Dashboard Error:", error);
             }
         }
-
         window.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
