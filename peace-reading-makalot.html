@@ -1,190 +1,296 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>世界和平會 x 聚陽實業 x GC 夢想閱章 - 影響力累積與作品看板</title>
-    <style>
-        :root { --primary: #1b4d3e; --secondary: #27ae60; --gold: #b8860b; --warm-bg: #fffdfb; --text: #2c3e50; --sdg-blue: #0369a1; }
-        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background: var(--warm-bg); color: var(--text); margin: 0; padding: 0; }
-        
-        .container { max-width: 1250px; margin: 0 auto; padding: 30px 15px; } /* 微調寬度與內距 */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界和平會x聚陽實業xGC 夢想閱章 - 影響力見證看板</title>
+    <style>
+        :root { 
+            --primary: #2d5a27; /* 深森林綠 */
+            --secondary: #4a7c44; 
+            --gold: #b8860b; 
+            --warm-bg: #fdf6e3; /* 溫潤米色，更有紙張溫度 */
+            --card-bg: #ffffff;
+            --text: #3e2723; /* 深咖啡色文字，比純黑溫柔 */
+            --sdg-blue: #0369a1;
+            --paper-yellow: #fffdf0; /* 老師評語的小紙條顏色 */
+        }
 
-        /* 1. 頂部看板：年度累積影響力 */
-        .hero-banner { background: linear-gradient(135deg, var(--primary), #2d6a4f); color: white; border-radius: 24px; padding: 35px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); margin-bottom: 30px; }
-        .hero-banner h1 { margin: 0; font-size: 26px; letter-spacing: 1px; font-weight: 800; }
-        .hero-banner p { opacity: 0.9; margin: 12px 0 25px 0; font-size: 15px; line-height: 1.7; max-width: 900px; font-weight: 500; }
-        
-        .impact-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 25px; max-width: 700px;}
-        .metric-item b { font-size: 32px; display: block; color: #ffca28; }
-        .metric-item span { font-size: 11px; opacity: 0.8; letter-spacing: 1px; }
+        body { 
+            font-family: "PingFang TC", "Microsoft JhengHei", serif; 
+            background-color: var(--warm-bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 0; 
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        /* 2. ESG 價值說明 */
-        .esg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
-        .esg-tag { background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 12px; font-size: 10px; text-align: center; box-shadow: 0 3px 5px rgba(0,0,0,0.02); line-height: 1.4; }
-        .esg-tag b { color: var(--sdg-blue); display: block; margin-bottom: 2px; }
+        /* 1. 頂部看板：感性引言與總量 */
+        .hero-banner { 
+            background: linear-gradient(135deg, #1b4d3e 0%, #3d6a4b 100%); 
+            color: white; 
+            border-radius: 40px; 
+            padding: 50px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
 
-        /* 3. 學生卡片網格區域 - 讓一次能看到多一點 */
-        .section-header { font-size: 22px; font-weight: bold; margin-bottom: 20px; border-left: 5px solid var(--secondary); padding-left: 12px; color: var(--primary); }
-        
-        .student-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); /* 自動調整，一行多個 */
-            gap: 20px;
-            margin-bottom: 40px;
-        }
+        /* 裝飾性背景 */
+        .hero-banner::after {
+            content: "1095 Days";
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+            font-size: 80px;
+            font-weight: 900;
+            opacity: 0.05;
+        }
 
-        .student-track-card { background: white; border-radius: 20px; padding: 0; border: 1px solid #f0f3f5; box-shadow: 0 6px 15px rgba(0,0,0,0.03); overflow: hidden; display: flex; flex-direction: column; }
-        
-        .track-head { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; background: #fafbfc; }
-        .st-info h4 { margin: 0; font-size: 20px; color: var(--primary); }
-        .st-info span { font-size: 12px; color: #94a3b8; }
-        .journey-milestone { background: #ecfdf5; color: #065f46; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: bold; }
+        .hero-banner h1 { margin: 0; font-size: 32px; letter-spacing: 2px; font-weight: 800; border-bottom: 2px solid rgba(255,255,255,0.3); display: inline-block; padding-bottom: 10px; }
+        .hero-banner p { opacity: 0.95; margin: 25px 0 35px 0; font-size: 18px; line-height: 1.8; max-width: 850px; font-weight: 400; }
+        
+        .impact-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; }
+        .metric-item b { font-size: 42px; display: block; color: #ffca28; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .metric-item span { font-size: 13px; opacity: 0.8; letter-spacing: 1px; font-weight: bold;}
 
-        .track-tabs { display: flex; background: #f8fafc; padding: 5px 20px; gap: 6px; }
-        .tab { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; color: #94a3b8; }
-        .tab.active { background: white; color: var(--secondary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .tab.disabled { opacity: 0.3; cursor: not-allowed; }
+        /* 2. ESG 價值區：專業但不失優雅 */
+        .esg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 50px; }
+        .esg-tag { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 18px; 
+            font-size: 12px; 
+            text-align: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+            border-bottom: 4px solid var(--secondary);
+        }
+        .esg-tag b { color: var(--sdg-blue); display: block; margin-bottom: 5px; font-size: 14px; }
 
-        /* 卡片內部佈局調整 - 圖片變小 */
-        .track-body { display: grid; grid-template-columns: 1fr; gap: 15px; padding: 20px; flex-grow: 1; }
-        
-        .narrative-col { display: flex; flex-direction: column; gap: 12px; }
-        .teacher-box { background: #fffdf5; padding: 15px; border-radius: 12px; border-left: 4px solid #ffca28; position: relative; }
-        .teacher-box p { font-size: 13px; line-height: 1.6; color: #475569; margin: 0; font-style: italic; }
-        
-        .att-display { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 10px 15px; border-radius: 10px; }
-        .att-display b { font-size: 22px; color: var(--primary); }
-        .att-display span { font-size: 12px; color: #94a3b8; }
+        /* 3. 學生卡片網格 */
+        .section-header { font-size: 26px; font-weight: bold; margin-bottom: 30px; color: var(--primary); text-align: center; }
+        .section-header::after { content: "✨"; margin-left: 10px; }
 
-        /* 作品範例展示 - 縮小區域 */
-        .work-col { text-align: left; padding-top: 10px; border-top: 1px dashed #eee; }
-        .work-sample-box { background: #fff; padding: 6px; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 5px 10px rgba(0,0,0,0.05); transform: rotate(-1deg); transition: 0.3s; cursor: pointer; max-width: 250px; margin: 0 auto;}
-        .work-sample-box:hover { transform: rotate(0deg); }
-        .work-image-placeholder { width: 100%; height: 150px; /* 大幅縮小圖片高度 */ background: #f1f5f9; border-radius: 5px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .work-caption { font-size: 11px; color: #64748b; margin-top: 8px; text-align: center; font-style: italic; }
+        .student-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 30px;
+        }
 
-        /* 底部心願區 */
-        .track-footer { padding: 15px 20px; background: #fafbfc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-        .wish-name { font-size: 14px; font-weight: bold; color: var(--primary); }
+        .student-track-card { 
+            background: var(--card-bg); 
+            border-radius: 30px; 
+            padding: 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            transition: transform 0.3s ease;
+        }
+        .student-track-card:hover { transform: translateY(-5px); }
+        
+        .track-head { 
+            padding: 25px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: #f9fbf9;
+            border-bottom: 1px solid #eee;
+        }
+        .st-info h4 { margin: 0; font-size: 24px; color: var(--primary); }
+        .st-info span { font-size: 13px; color: #8d6e63; font-weight: bold; }
+        .journey-milestone { 
+            background: #e8f5e9; 
+            color: #2e7d32; 
+            padding: 6px 15px; 
+            border-radius: 50px; 
+            font-size: 12px; 
+            font-weight: bold;
+            border: 1px solid #c8e6c9;
+        }
 
-        .footer-note { text-align: center; padding: 40px; color: #cbd5e1; font-size: 12px; letter-spacing: 1px; }
-    </style>
+        .track-tabs { display: flex; background: #fdfdfd; padding: 10px 30px; gap: 8px; }
+        .tab { padding: 6px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; color: #a1887f; border: 1px solid #eee; }
+        .tab.active { background: var(--secondary); color: white; border-color: var(--secondary); }
+
+        .track-body { padding: 25px 30px; flex-grow: 1; }
+        
+        .att-display { display: inline-flex; align-items: center; gap: 10px; background: #fdf6e3; padding: 8px 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ede7f6; }
+        .att-display b { font-size: 26px; color: var(--primary); }
+        .att-display span { font-size: 12px; color: #6d4c41; font-weight: bold; }
+
+        /* 老師評語：設計成手寫紙條感 */
+        .teacher-box { 
+            background: var(--paper-yellow); 
+            padding: 20px; 
+            border-radius: 5px; 
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            margin-bottom: 25px;
+            transform: rotate(0.5deg);
+        }
+        .teacher-box::after {
+            content: "Teacher's Note";
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            font-size: 10px;
+            background: #ffecb3;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #795548;
+            font-weight: bold;
+        }
+        .teacher-box p { font-size: 14px; line-height: 1.8; color: #4e342e; margin: 0; }
+
+        /* 作品預覽：設計成照片感 */
+        .work-col { text-align: center; padding: 15px; background: #f1f1f1; border-radius: 15px; }
+        .work-sample-box { 
+            background: white; 
+            padding: 10px 10px 30px 10px; /* 底部留白像拍立得 */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+            transform: rotate(-1.5deg); 
+            display: inline-block;
+            max-width: 200px;
+        }
+        .work-image-placeholder { 
+            width: 180px; 
+            height: 120px; 
+            background: #e0e0e0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+        }
+        .work-caption { font-size: 11px; color: #795548; margin-top: 15px; font-weight: bold; font-family: "Courier New", cursive; }
+
+        /* 底部心願 */
+        .track-footer { 
+            padding: 20px 30px; 
+            background: #fffcf0; 
+            border-top: 1px solid #f9eeb3; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .wish-name { font-size: 15px; font-weight: bold; color: var(--gold); }
+        .wish-name::before { content: "❤"; margin-right: 8px; }
+
+        .footer-note { text-align: center; padding: 80px 20px; color: #a1887f; font-size: 13px; letter-spacing: 1px; }
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="hero-banner">
-        <h1>世界和平會 x 聚陽實業 x GC 夢想閱章 - 影響力累積與作品看板</h1>
-        <p>在保生國小，我們深信真正的改變，始於孩子意識到「我的努力，能換來夢想」的那一刻。這份閱讀與寫作陪伴，不僅紀錄他們的創作軌跡，更見證他們跨越猶豫、堅持不懈的蛻變過程。讓我們一同深入他們的筆尖，看見生命成長的重量。</p>
-        
-        <div class="impact-metrics">
-            <div class="metric-item"><b>92%</b><span>全班平均出席率</span></div>
-            <div class="metric-item"><b>20 名</b><span>偏鄉學生</span></div>
-            <div class="metric-item"><b>25+</b><span>累積精選作品</span></div>
-        </div>
-    </div>
+    <div class="hero-banner">
+        <h1>聚陽實業xGC贈物網x世界和平會 ｜ 看見那一道‧夢想閱章</h1>
+        <p>「這不是一份遙不可及的藍圖，而是孩子紮實踩下的每一個腳印。」<br>
+        我們深信真正的改變，始於孩子意識到「我的努力，能離夢想越來越近」。<br>
+        這份閱讀與寫作陪伴，不只紀錄字句的成長，更見證孩子的蛻變。</p>
+        
+        <div class="impact-metrics">
+            <div class="metric-item"><b>92%</b><span>全班平均出席率</span></div>
+            <div class="metric-item"><b>20 名</b><span>保生國小受助孩童</span></div>
+            <div class="metric-item"><b>25+</b><span>本學期精選作品</span></div>
+        </div>
+    </div>
 
-    <div class="esg-grid">
-        <div class="esg-tag"><b>SDG 4.1 穩定學習行為</b>提升完成基礎教育機會。</div>
-        <div class="esg-tag"><b>SDG 4.7 培養批判思考</b>與永續素養能力。</div>
-        <div class="esg-tag"><b>SDG 10.2 促進弱勢族群</b>的社會參與與包容。</div>
-    </div>
+    <div class="esg-grid">
+        <div class="esg-tag"><b>SDG 4.1 穩定學習行為</b>提升完成基礎教育機會。</div>
+        <div class="esg-tag"><b>SDG 4.7 培養批判思考</b>與永續素養能力。</div>
+        <div class="esg-tag"><b>SDG 10.2 促進弱勢族群</b>的社會參與與包容。</div>
+    </div>
 
-    <div class="section-header">成長軌跡見證：每一個微小卻真實的步伐</div>
+    <div class="section-header">成長軌跡見證</div>
 
-        <div class="student-list">
-                <div class="student-track-card">
-            <div class="track-head">
-                <div class="st-info">
-                    <h4>林小洵</h4>
-                    <span>加入歷程：第一年 ‧ 保生國小</span>
-                </div>
-                <div class="journey-milestone">🌱 第一年：能量啟航期</div>
-            </div>
-            
-            <div class="track-tabs">
-                <div class="tab active">第一年 (2026)</div>
-                <div class="tab disabled">第二年</div>
-                <div class="tab disabled">第三年</div>
-            </div>
+    <div class="student-list">
+        
+        <div class="student-track-card">
+            <div class="track-head">
+                <div class="st-info">
+                    <h4>林小洵</h4>
+                    <span>陪伴歷程：第一年 (萌芽期)</span>
+                </div>
+                <div class="journey-milestone">🌱 第一年 ‧ 2026</div>
+            </div>
+            
+            <div class="track-tabs">
+                <div class="tab active">Journey 01</div>
+                <div class="tab disabled">Year 02</div>
+                <div class="tab disabled">Year 03</div>
+            </div>
 
-            <div class="track-body">
-                <div class="narrative-col">
-                    <div class="att-display">
-                        <b>92%</b>
-                    <span>年度累積出席率 (SDG 4.1)</span>
-                    </div>
-                    <div class="teacher-box">
-                        <p>「小洵剛加入時對文字有些畏懼，常需要老師引導。但最近他開始學會用簡單的句子寫出他的心情，雖然只有幾句話，但結構非常清晰。這份勇氣是第一年最棒的成長。」</p>
-                    </div>
-                </div>
-                <div class="work-col">
-                    <div class="work-sample-box">
-                        <div class="work-image-placeholder">
-                            <div style="text-align:center; padding:10px;">
-                                <span style="font-size:30px;">📝</span><br>
-                                <small style="color:#94a3b8; font-size:10px;">[ 作品掃描預覽 ]</small>
-                            </div>
-                        </div>
-                        <div class="work-caption">小洵的圖文習作</div>
-                    </div>
-                </div>
-            </div>
+            <div class="track-body">
+                <div class="att-display">
+                    <b>92%</b>
+                    <span>穩定學習出席率 (SDG 4.1)</span>
+                </div>
+                <div class="teacher-box">
+                    <p>「小洵這學期的筆觸變得輕快許多。從最初對寫作的猶豫，到現在能用三五句話描繪心情，我們看見了他眼底那份對表達的渴望正在悄悄發芽。」</p>
+                </div>
+                
+                <div class="work-col">
+                    <div class="work-sample-box">
+                        <div class="work-image-placeholder">
+                            <span style="font-size:40px;">📝</span>
+                        </div>
+                        <div class="work-caption">小洵：我的第一個故事</div>
+                    </div>
+                </div>
+            </div>
 
-            <div class="track-footer">
-                <div class="wish-name">期待心願：<b>彩色鉛筆組</b></div>
-            </div>
-        </div>
+            <div class="track-footer">
+                <div class="wish-name">期待心願禮物：彩色鉛筆組</div>
+            </div>
+        </div>
 
-                <div class="student-track-card">
-            <div class="track-head">
-                <div class="st-info">
-                    <h4>陳小黑</h4>
-                    <span>加入歷程：第二年 ‧ 保生國小</span>
-                </div>
-                <div class="journey-milestone" style="background:#eef2ff; color:#4338ca;">🌳 第二年：深耕成長期</div>
-            </div>
-            
-            <div class="track-tabs">
-                <div class="tab">第一年 (2025)</div>
-                <div class="tab active">第二年 (2026)</div>
-                <div class="tab disabled">第三年</div>
-            </div>
+        <div class="student-track-card">
+            <div class="track-head">
+                <div class="st-info">
+                    <h4>陳小黑</h4>
+                    <span>陪伴歷程：第二年 (成長期)</span>
+                </div>
+                <div class="journey-milestone" style="background:#fff3e0; color:#e65100; border-color:#ffe0b2;">🌳 第二年 ‧ 2026</div>
+            </div>
+            
+            <div class="track-tabs">
+                <div class="tab">Year 01</div>
+                <div class="tab active">Journey 02</div>
+                <div class="tab disabled">Year 03</div>
+            </div>
 
-            <div class="track-body">
-                <div class="narrative-col">
-                    <div class="att-display">
-                        <b>98%</b>
-                    <span>年度累積出席率 (SDG 4.1)</span>
-                    </div>
-                    <div class="teacher-box">
-                        <p>「進入第二年，小黑已經能獨立完成一篇短文。他的文字非常有畫面感，並能運用形容詞表達細膩的情緒。相比去年，他在邏輯敘事上的進步有目共睹。」</p>
-                    </div>
-                </div>
-                <div class="work-col">
-                    <div class="work-sample-box">
-                        <div class="work-image-placeholder">
-                            <div style="text-align:center; padding:10px;">
-                                <span style="font-size:30px;">🖋️</span><br>
-                                <small style="color:#94a3b8; font-size:10px;">[ 作品掃描預覽 ]</small>
-                            </div>
-                        </div>
-                        <div class="work-caption">小黑的敘事寫作</div>
-                    </div>
-                </div>
-            </div>
+            <div class="track-body">
+                <div class="att-display">
+                    <b>98%</b>
+                    <span>穩定學習出席率 (SDG 4.1)</span>
+                </div>
+                <div class="teacher-box">
+                    <p>「小黑的邏輯進步非常驚人。他現在不只能寫出完整的敘事，還會運用觀察到的細節來豐富文章。文字對他而言，已成為通往更廣大世界的橋樑。」</p>
+                </div>
+                
+                <div class="work-col">
+                    <div class="work-sample-box">
+                        <div class="work-image-placeholder" style="background:#d7ccc8;">
+                            <span style="font-size:40px;">🖋️</span>
+                        </div>
+                        <div class="work-caption">小黑：我眼中的保生</div>
+                    </div>
+                </div>
+            </div>
 
-            <div class="track-footer">
-                <div class="wish-name">期待心願：<b>專業烤箱</b></div>
-            </div>
-        </div>
-        
-                
-    </div>
-        <div class="footer-note">
-        本計畫對接夢想閱章追蹤紀錄‧陪伴保生國小學童的成長時光
-    </div>
+            <div class="track-footer">
+                <div class="wish-name">期待心願禮物：帥氣黑色後背包</div>
+            </div>
+        </div>
+
+        </div>
+
+    <div class="footer-note">
+        本計畫由聚陽實業支持‧GC夢想閱章 紀錄提供 ‧ 每一滴汗水都值得被看見
+    </div>
 </div>
 
 </body>
