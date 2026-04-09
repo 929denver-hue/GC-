@@ -1,70 +1,16 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>綠點兌換儀表板</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 font-sans border-t-4 border-green-600 min-h-screen">
+<script>
+        // 替換成你剛剛複製的 試算表 ID
+        const SPREADSHEET_ID = '1UfbFi9gS0mpYokTvGgdgmi4ujmSQwz14HG1_i_IcDbU'; 
+        // 你的分頁名稱
+        const SHEET_NAME = '兌換紀錄';
 
-    <div id="loading-screen" class="min-h-screen flex flex-col items-center justify-center space-y-4">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-        <p class="text-green-700 font-medium animate-pulse">正在從 Google Sheets 同步最新資料...</p>
-    </div>
-
-    <div id="error-screen" class="hidden min-h-screen flex justify-center items-start pt-10">
-        <div class="bg-red-50 text-red-700 p-6 rounded-lg border border-red-200 max-w-lg w-full">
-            <h3 class="text-lg font-bold flex items-center gap-2">⚠️ 資料連線異常</h3>
-            <p id="error-message" class="mt-2 text-sm"></p>
-        </div>
-    </div>
-
-    <div id="dashboard" class="hidden max-w-6xl mx-auto p-6 md:p-10">
-        <header class="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
-            <div>
-                <h1 class="text-2xl font-extrabold text-green-950">綠點兌換儀表板</h1>
-                <p id="current-period" class="text-gray-500 mt-1">目前數據期間：載入中...</p>
-            </div>
-            <div class="text-sm text-green-700 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
-                🔄 最後同步：<span id="last-sync"></span>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container">
-            </div>
-
-        <div class="mt-12 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 bg-green-50">
-                <h3 class="font-bold text-green-700">近期資料明細</h3>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-green-700 uppercase bg-white border-b">
-                        <tr>
-                            <th class="px-6 py-3">期別 (月份)</th>
-                            <th class="px-6 py-3 text-right">總金額</th>
-                            <th class="px-6 py-3 text-right">總筆數</th>
-                            <th class="px-6 py-3 text-right">單筆平均</th>
-                            <th class="px-6 py-3 text-right">日均金額</th>
-                            <th class="px-6 py-3 text-right">日均筆數</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-   <script>
-        // 替換成你的 Google Apps Script API 網址
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyAt4Qnuavlb3lyq_MoeJRbmxXYwftepFUEvqTJhLl7BwXNgzHxSZQK3AUKuNbcJ7jw/exec';
+        // 這是 Google 底層的高速 JSON API 網址
+        const FAST_API_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
         // 格式化數字 (加入千分位)
         const formatNumber = (num) => Number(num).toLocaleString('en-US');
 
-        // 生成單個 KPI 卡片的 HTML 字串 (與原本相同)
+        // 生成單個 KPI 卡片的 HTML 字串
         function generateKpiCardHTML(title, unit, current, previous) {
             const hasPrevious = previous !== undefined && previous !== null;
             let growthRate = 0;
@@ -97,60 +43,54 @@
             `;
         }
 
-        // --- 加強版：具備 Timeout 機制的 Fetch ---
-        async function fetchWithTimeout(resource, options = {}) {
-            const { timeout = 8000 } = options; // 預設 8 秒超時
-            const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), timeout);
-            
-            try {
-                const response = await fetch(resource, {
-                    ...options,
-                    signal: controller.signal
-                });
-                clearTimeout(id);
-                return response;
-            } catch (error) {
-                clearTimeout(id);
-                if (error.name === 'AbortError') {
-                    throw new Error('API 回應超時 (超過 8 秒)。請檢查網路或 Google Sheets 權限設定。');
-                }
-                throw error;
-            }
-        }
-
         // 啟動函數
         async function initDashboard() {
             try {
-                // 1. 使用帶有超時機制的 fetch
-                const response = await fetchWithTimeout(API_URL);
+                // 1. 呼叫高速 API
+                const response = await fetch(FAST_API_URL);
+                const text = await response.text();
                 
-                // 2. 防禦 CORS 轉址地雷：檢查回傳的是否真的是 JSON
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                     throw new Error("API 沒有回傳標準 JSON。這通常是因為 Google Apps Script 的存取權限沒有設定為「所有人 (Anyone)」，導致被 Google 登入頁面攔截。");
-                }
+                // Google API 會回傳一段包裝過的 JSON，我們需要把它切出來
+                const jsonString = text.match(/(?<=.*\().*(?=\);)/s)[0];
+                const rawResult = JSON.parse(jsonString);
 
-                const result = await response.json();
+                // 2. 前端瞬間處理資料 (取代原本 Apps Script 的工作)
+                const rows = rawResult.table.rows;
+                const data = rows.map(row => {
+                    // Google API 讀出來的值可能會包裝在 v 裡面
+                    const getVal = (cell) => cell ? cell.v : null;
+                    
+                    const periodLabel = String(getVal(row.c[0]) || "");
+                    const totalAmountStr = String(getVal(row.c[1]) || "0").replace(/[^0-9.-]+/g,"");
+                    const totalAmount = Number(totalAmountStr) || 0;
+                    const txCount = Number(getVal(row.c[2])) || 0;
 
-                if (result.status !== 'success') {
-                    throw new Error(result.message || '資料讀取失敗');
-                }
+                    let effectiveDays = 30; 
+                    if (periodLabel.includes("2/9-2/28")) effectiveDays = 20;
+                    else if (periodLabel === "202603") effectiveDays = 31;
 
-                const data = result.data;
-                if (!data || data.length === 0) {
-                    throw new Error('試算表中沒有有效資料');
-                }
+                    const safeDiv = (num, den) => den === 0 ? 0 : num / den;
+                    
+                    return {
+                        period: periodLabel,
+                        totalAmount: totalAmount,
+                        txCount: txCount,
+                        avgTxAmount: Math.round(safeDiv(totalAmount, txCount)),
+                        dailyAvgAmount: Math.round(safeDiv(totalAmount, effectiveDays)),
+                        dailyAvgTx: Number(safeDiv(txCount, effectiveDays).toFixed(2))
+                    };
+                }).filter(item => item.totalAmount > 0); // 過濾掉完全空白的行
 
-                // 取得最新與上一期資料
+                if (!data || data.length === 0) throw new Error('試算表中沒有有效資料');
+
+                // 取最新與上一期資料
                 const currentData = data[data.length - 1];
                 const previousData = data.length > 1 ? data[data.length - 2] : null;
 
-                // 更新頭部資訊
+                // 渲染畫面 (與之前相同)
                 document.getElementById('current-period').innerText = `目前數據期間：${currentData.period}`;
                 document.getElementById('last-sync').innerText = new Date().toLocaleString('zh-TW');
 
-                // 渲染 KPI 卡片
                 const kpiContainer = document.getElementById('kpi-container');
                 kpiContainer.innerHTML = `
                     ${generateKpiCardHTML('總兌換金額', 'NT$', currentData.totalAmount, previousData?.totalAmount)}
@@ -159,7 +99,6 @@
                     ${generateKpiCardHTML('每日平均筆數 (真實熱度)', '筆/日', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
                 `;
 
-                // 渲染表格
                 const tableBody = document.getElementById('table-body');
                 tableBody.innerHTML = data.map(row => `
                     <tr class="border-b last:border-0 hover:bg-green-50">
@@ -172,12 +111,10 @@
                     </tr>
                 `).join('');
 
-                // 隱藏 Loading，顯示儀表板
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
 
             } catch (error) {
-                // 顯示錯誤畫面與詳細原因
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('error-screen').classList.remove('hidden');
                 document.getElementById('error-message').innerText = error.message;
@@ -187,5 +124,3 @@
 
         window.addEventListener('DOMContentLoaded', initDashboard);
     </script>
-</body>
-</html>
