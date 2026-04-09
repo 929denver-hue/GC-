@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 // --- 1. 型別定義 ---
 interface RedemptionData {
@@ -17,10 +17,10 @@ interface AppScriptResponse {
   lastUpdated?: string;
 }
 
-// 替換為你的真實 API URL
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5jCKD79xeEc0YnJ9mbxI7nw4XstID4dEqFA8fXoLXMGGgP7IClS_IQ9YBchNrfK2D/exec';
+// 替換為您的真實 API URL
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyAt4Qnuavlb3lyq_MoeJRbmxXYwftepFUEvqTJhLl7BwXNgzHxSZQK3AUKuNbcJ7jw/exec';
 
-// --- 2. 成長率卡片元件 ---
+// --- 2. 成長率卡片元件 (修改 UI 顏色為綠色，維持標準趨勢顏色) ---
 const GrowthKpiCard: React.FC<{ 
   title: string; 
   unit: string; 
@@ -34,14 +34,18 @@ const GrowthKpiCard: React.FC<{
 
   const isPositive = growthRate > 0;
   const isNegative = growthRate < 0;
+  
+  // 趨勢顏色邏輯：綠色正成長，紅色負成長 (通用標準)
   const trendColor = isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500';
   const trendIcon = isPositive ? '↑' : isNegative ? '↓' : '−';
 
   return (
     <div className="p-5 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col transition-all hover:shadow-md">
-      <span className="text-gray-500 text-sm font-medium">{title}</span>
+      {/* 修改卡片標題顏色為特定的綠色 ( text-green-700) */}
+      <span className="text-green-700 text-sm font-medium">{title}</span>
       <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-3xl font-bold text-gray-900">
+        {/* 當月大字維持標準灰色/文字色，或改為深綠色 (這裡選擇特定的深綠色 text-green-950) */}
+        <span className="text-3xl font-bold text-green-950">
           {current.toLocaleString()} <span className="text-sm font-normal text-gray-500">{unit}</span>
         </span>
       </div>
@@ -68,7 +72,7 @@ export default function App() {
     const fetchRealData = async () => {
       try {
         setLoading(true);
-        // 使用你的 API 網址發送請求
+        // 使用您的 API 網址發送請求
         const response = await fetch(APPS_SCRIPT_URL);
         
         // 檢查是否為 JSON 格式 (防禦 Google 導向登入頁的雷)
@@ -98,8 +102,9 @@ export default function App() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center justify-center space-y-4">
+        {/* 這裡可以將 Loading 動畫顏色也改成綠色 */}
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-        <p className="text-gray-500 font-medium animate-pulse">正在從 Google Sheets 同步最新資料...</p>
+        <p className="text-green-700 font-medium animate-pulse">正在從 Google Sheets 同步最新資料...</p>
       </div>
     );
   }
@@ -115,26 +120,28 @@ export default function App() {
     );
   }
 
-  // 取得最新與上一期的資料
+  // 取最新兩期的資料進行比較
   const currentData = data[data.length - 1];
   const previousData = data.length > 1 ? data[data.length - 2] : null;
 
   if (!currentData) return <div className="p-8">目前試算表中沒有有效資料。</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 md:p-10 font-sans">
+    <div className="min-h-screen bg-gray-50 p-6 md:p-10 font-sans border-t-4 border-green-600">
       <div className="max-w-6xl mx-auto">
         <header className="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900">綠點兌換成長儀表板</h1>
+            {/* 頁面標題改為特定的深綠色 text-green-950 */}
+            <h1 className="text-2xl font-extrabold text-green-950">綠點兌換成長儀表板</h1>
             <p className="text-gray-500 mt-1">目前數據期間：{currentData.period}</p>
           </div>
-          <div className="text-sm text-gray-400 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+          {/* 同步時間灰色文字改為特定的綠色 ( text-green-700) */}
+          <div className="text-sm text-green-700 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
             🔄 最後同步：{lastSync}
           </div>
         </header>
         
-        {/* KPI Grid */}
+        {/* KPI Grid (UI 綠色，趨勢標準紅綠) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <GrowthKpiCard 
             title="總兌換金額" unit="NT$" 
@@ -158,14 +165,16 @@ export default function App() {
           />
         </div>
 
-        {/* 原始資料表 (供查核用) */}
+        {/* 原始資料表 (供查核用，通用 UI 綠色) */}
         <div className="mt-12 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-            <h3 className="font-bold text-gray-700">近期資料明細</h3>
+          {/* 表格區塊標題改為綠色背景 text-green-700 */}
+          <div className="px-6 py-4 border-b border-gray-100 bg-green-50">
+            <h3 className="font-bold text-green-700">近期資料明細</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-gray-500 uppercase bg-white border-b">
+              {/* 表格標題灰色改為特定的綠色 ( text-green-700) */}
+              <thead className="text-xs text-green-700 uppercase bg-white border-b">
                 <tr>
                   <th className="px-6 py-3">期別 (月份)</th>
                   <th className="px-6 py-3 text-right">總金額</th>
@@ -177,7 +186,7 @@ export default function App() {
               </thead>
               <tbody>
                 {data.map((row, index) => (
-                  <tr key={index} className="border-b last:border-0 hover:bg-gray-50">
+                  <tr key={index} className="border-b last:border-0 hover:bg-green-50">
                     <td className="px-6 py-4 font-medium text-gray-900">{row.period}</td>
                     <td className="px-6 py-4 text-right">NT$ {row.totalAmount.toLocaleString()}</td>
                     <td className="px-6 py-4 text-right">{row.txCount.toLocaleString()} 筆</td>
