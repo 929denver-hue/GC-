@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界和平會 x 聚陽實業 x GC 夢想閱章 - 影響力累積與作品看板</title>
+    <style>
+        :root { --primary: #1b4d3e; --secondary: #27ae60; --gold: #b8860b; --warm-bg: #fffdfb; --text: #2c3e50; --sdg-blue: #0369a1; }
+        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background: var(--warm-bg); color: var(--text); margin: 0; padding: 0; }
+        
+        .container { max-width: 1150px; margin: 0 auto; padding: 40px 20px; }
+
+        /* 1. 頂部看板：年度累積影響力 */
+        .hero-banner { background: linear-gradient(135deg, var(--primary), #2d6a4f); color: white; border-radius: 32px; padding: 45px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-bottom: 40px; }
+        .hero-banner h1 { margin: 0; font-size: 30px; letter-spacing: 2px; font-weight: 800; }
+        .hero-banner p { opacity: 0.9; margin: 15px 0 35px 0; font-size: 18px; line-height: 1.8; max-width: 850px; font-weight: 500; }
+        
+        .impact-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; }
+        .metric-item b { font-size: 38px; display: block; color: #ffca28; }
+        .metric-item span { font-size: 12px; opacity: 0.8; letter-spacing: 1px; }
+
+        /* 2. ESG 價值說明 (更新內容) */
+        .esg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 40px; }
+        .esg-tag { background: white; border: 1px solid #e2e8f0; padding: 12px; border-radius: 15px; font-size: 11px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); line-height: 1.4; }
+        .esg-tag b { color: var(--sdg-blue); display: block; margin-bottom: 4px; }
+
+        /* 3. 學生個人化軌跡卡片 */
+        .section-header { font-size: 24px; font-weight: bold; margin-bottom: 25px; border-left: 6px solid var(--secondary); padding-left: 15px; color: var(--primary); }
+        .student-track-card { background: white; border-radius: 28px; padding: 0; border: 1px solid #f0f3f5; margin-bottom: 40px; box-shadow: 0 12px 40px rgba(0,0,0,0.03); overflow: hidden; }
+        
+        .track-head { padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; }
+        .st-info h4 { margin: 0; font-size: 26px; color: var(--primary); }
+        .st-info span { font-size: 14px; color: #94a3b8; }
+        .journey-milestone { background: #ecfdf5; color: #065f46; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: bold; }
+
+        .track-tabs { display: flex; background: #f8fafc; padding: 8px 40px; gap: 10px; }
+        .tab { padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer; color: #94a3b8; }
+        .tab.active { background: white; color: var(--secondary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab.disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .track-body { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; padding: 40px; }
+        
+        .narrative-col { display: flex; flex-direction: column; gap: 25px; }
+        .teacher-box { background: #fffdf5; padding: 25px; border-radius: 20px; border-left: 5px solid #ffca28; position: relative; }
+        .teacher-box p { font-size: 15px; line-height: 1.8; color: #475569; margin: 0; font-style: italic; }
+        
+        .att-display { display: flex; align-items: center; gap: 15px; background: #f8fafc; padding: 15px 25px; border-radius: 15px; }
+        .att-display b { font-size: 28px; color: var(--primary); }
+        .att-display span { font-size: 13px; color: #94a3b8; }
+
+        /* 作品範例展示 */
+        .work-col { text-align: left; }
+        .work-sample-box { background: #fff; padding: 10px; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: rotate(-2deg); transition: 0.3s; cursor: pointer; }
+        .work-sample-box:hover { transform: rotate(0deg); }
+        .work-image-placeholder { width: 100%; height: 280px; background: #f1f5f9; border-radius: 5px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .work-caption { font-size: 12px; color: #64748b; margin-top: 10px; text-align: center; font-style: italic; }
+
+        /* 底部心願區 */
+        .track-footer { padding: 25px 40px; background: #fafbfc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .wish-name { font-size: 16px; font-weight: bold; color: var(--primary); }
+
+        .footer-note { text-align: center; padding: 60px; color: #cbd5e1; font-size: 13px; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero-banner">
+        <h1>世界和平會 x 聚陽實業 x GC 夢想閱章 - 影響力累積與作品看板</h1>
+        <p>在保生國小，這不只是一個數字，而是無數次舉手前的猶豫、無數回擦掉重寫的堅持。
+我們深信，真正的改變從不發生在「施捨」的瞬間，而是在孩子意識到「我的努力，能換來夢想」的那一刻。
+這份閱讀、寫作陪伴，不只記錄孩子的寫作，更是記錄他們如何蛻變，在文字裡找到自己的重量。</p>
+        
+        <div class="impact-metrics">
+            <div class="metric-item"><b>92%</b><span>全班平均出席率</span></div>
+            <div class="metric-item"><b>20 名</b><span>偏鄉學生</span></div>
+            <div class="metric-item"><b>25+</b><span>累積精選作品</span></div>
+        </div>
+    </div>
+
+    <div class="esg-grid">
+        <div class="esg-tag"><b>SDG 4.1 穩定學習行為</b>提升完成基礎教育機會。</div>
+        <div class="esg-tag"><b>SDG 4.7 培養批判思考</b>與永續素養能力。</div>
+        <div class="esg-tag"><b>SDG 10.2 促進弱勢族群</b>的社會參與與包容。</div>
+    </div>
+
+    <div class="section-header">成長軌跡見證：每一個微小卻真實的步伐</div>
+
+    <div class="student-track-card">
+        <div class="track-head">
+            <div class="st-info">
+                <h4>林小洵</h4>
+                <span>加入歷程：第一年 ‧ 保生國小</span>
+            </div>
+            <div class="journey-milestone">🌱 第一年：能量啟航期</div>
+        </div>
+        
+        <div class="track-tabs">
+            <div class="tab active">第一年 (2026)</div>
+            <div class="tab disabled">第二年</div>
+            <div class="tab disabled">第三年</div>
+        </div>
+
+        <div class="track-body">
+            <div class="narrative-col">
+                <div class="att-display">
+                    <b>92%</b>
+                    <span>年度累積出席率 (SDG 4.1)</span>
+                </div>
+                <div class="teacher-box">
+                    <p>「小洵剛加入時對文字有些畏懼，常需要老師引導。但最近他開始學會用簡單的句子寫出他的心情，雖然只有幾句話，但結構非常清晰。這份勇氣是第一年最棒的成長。」</p>
+                </div>
+            </div>
+            <div class="work-col">
+                <div style="font-size: 13px; font-weight: bold; margin-bottom: 15px; color: var(--primary);">期末精選作品範例：</div>
+                <div class="work-sample-box">
+                    <div class="work-image-placeholder">
+                        <div style="text-align:center; padding:20px;">
+                            <span style="font-size:40px;">📝</span><br>
+                            <small style="color:#94a3b8;">[ 作品掃描預覽 ]<br>我的最愛</small>
+                        </div>
+                    </div>
+                    <div class="work-caption">2026/04/09 小洵的圖文習作</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="track-footer">
+            <div class="wish-name">期待心願：<b>彩色鉛筆組</b></div>
+        </div>
+    </div>
+
+    <div class="student-track-card">
+        <div class="track-head">
+            <div class="st-info">
+                <h4>陳小黑</h4>
+                <span>加入歷程：第二年 ‧ 保生國小</span>
+            </div>
+            <div class="journey-milestone" style="background:#eef2ff; color:#4338ca;">🌳 第二年：深耕成長期</div>
+        </div>
+        
+        <div class="track-tabs">
+            <div class="tab">第一年 (2025)</div>
+            <div class="tab active">第二年 (2026)</div>
+            <div class="tab disabled">第三年</div>
+        </div>
+
+        <div class="track-body">
+            <div class="narrative-col">
+                <div class="att-display">
+                    <b>98%</b>
+                    <span>年度累積出席率 (SDG 4.1)</span>
+                </div>
+                <div class="teacher-box">
+                    <p>「進入第二年，小黑已經能獨立完成一篇短文。他的文字非常有畫面感，並能運用形容詞表達細膩的情緒。相比去年，他在邏輯敘事上的進步有目共睹。」</p>
+                </div>
+            </div>
+            <div class="work-col">
+                <div style="font-size: 13px; font-weight: bold; margin-bottom: 15px; color: var(--primary);">期末精選作品範例：</div>
+                <div class="work-sample-box">
+                    <div class="work-image-placeholder">
+                        <div style="text-align:center; padding:20px;">
+                            <span style="font-size:40px;">🖋️</span><br>
+                            <small style="color:#94a3b8;">[ 作品掃描預覽 ]<br>我眼中的保生國小</small>
+                        </div>
+                    </div>
+                    <div class="work-caption">2026/04/07 小黑的敘事寫作</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="track-footer">
+            <div class="wish-name">期待心願：<b>專業烤箱</b></div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        本計畫對接夢想閱章追蹤紀錄‧陪伴保生國小學童的成長時光
+    </div>
+</div>
+
+</body>
+</html>
