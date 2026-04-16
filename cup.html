@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>金士頓馬克杯申請意願表</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen py-10 px-4 font-sans">
+  <div class="max-w-xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden" id="app-container">
+    
+    <div id="header-bg" class="p-8 text-white transition-colors duration-500 bg-gradient-to-br from-red-700 to-black">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-bold border border-white/30 px-2 py-1 rounded">OFFICIAL PROJECT</span>
+        <span class="text-xs opacity-70 italic">截止時間：4/20 (一) 12:00</span>
+      </div>
+      <h1 class="text-2xl font-black">金士頓馬克杯申請意願表</h1>
+      <p id="header-desc" class="mt-2 text-sm opacity-80">歡迎填寫物資需求，收單後將統一評估配發。</p>
+    </div>
+
+    <div id="expired-view" class="hidden p-12 text-center space-y-4">
+      <div class="text-5xl">☕</div>
+      <h2 class="text-xl font-bold text-gray-800">活動已截止收單</h2>
+      <p class="text-gray-500 text-sm">我們會盡快進行統計與審核，並透過 Email 通知結果。</p>
+      <a href="https://www.give-circle.com" class="inline-block mt-4 text-red-600 font-medium hover:underline">回到 GC 贈物網首頁</a>
+    </div>
+
+    <form id="application-form" class="p-8 space-y-8">
+      
+      <div class="space-y-3">
+        <label class="text-sm font-bold text-gray-500">💡 使用情境參考</label>
+        <div class="rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+          <img src="https://drive.google.com/uc?export=view&id=1IX6CF9yPqacvmJCBLWWZp3mk4bn8NfcB" alt="Kingston Mug Ideas" class="w-full h-auto">
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block font-bold text-gray-800">期望申請數量 (上限 100)</label>
+        <input type="number" id="quantity" min="1" max="100" value="1" required class="w-full border-2 border-gray-100 rounded-xl p-4 focus:border-red-600 focus:outline-none text-lg font-medium">
+      </div>
+
+      <div class="space-y-3">
+        <label class="block font-bold text-gray-800">用途簡述 (200字內)</label>
+        <div class="flex flex-wrap gap-2" id="quick-tags">
+          <button type="button" class="tag-btn text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">+ 筆筒</button>
+          <button type="button" class="tag-btn text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">+ 盆栽</button>
+          <button type="button" class="tag-btn text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">+ 擴香</button>
+          <button type="button" class="tag-btn text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">+ 活動贈禮</button>
+          <button type="button" class="tag-btn text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">+ 義賣</button>
+          <button type="button" class="tag-btn text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">+ 收納</button>
+        </div>
+        <textarea id="purpose" required maxlength="200" placeholder="請簡述這批馬克杯將如何協助您的計畫..." class="w-full border-2 border-gray-100 rounded-xl p-4 h-32 focus:border-red-600 focus:outline-none resize-none"></textarea>
+      </div>
+
+      <label class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
+        <input type="checkbox" id="willShare" class="mt-1 h-5 w-5 rounded border-gray-300 text-red-600">
+        <span class="text-sm text-gray-600">願意在收到後於社群分享並標記 <strong>#Kingston #GC贈物網</strong></span>
+      </label>
+
+      <button type="submit" id="submit-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-5 rounded-2xl shadow-lg transform active:scale-[0.98] transition-all disabled:bg-gray-300">
+        送出申請需求
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // ==========================================
+    // ⚠️ 設定區：請在此填入您的 GAS 部署網址
+    // ==========================================
+const GAS_URL = "https://script.google.com/macros/s/AKfycby0NzoHIVj4i9oVSUPjLwAMzoHp-qXcHSjwVH7L4ygyaT-NNFX47U4rhozYJFp0Ta8r/exec"; 
+const DEADLINE = new Date('2026-04-20T12:00:00+08:00'); // 台灣時間 4/20 12:00
+
+    // 抓取 DOM 元素
+    const form = document.getElementById('application-form');
+    const expiredView = document.getElementById('expired-view');
+    const headerBg = document.getElementById('header-bg');
+    const headerDesc = document.getElementById('header-desc');
+    const purposeInput = document.getElementById('purpose');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // 檢查截止時間邏輯
+    function checkDeadline() {
+      if (new Date() > DEADLINE) {
+        form.classList.add('hidden');
+        expiredView.classList.remove('hidden');
+        // 切換 Header 顏色為灰色
+        headerBg.className = "p-8 text-white transition-colors duration-500 bg-gray-700";
+        headerDesc.textContent = '本活動已圓滿結束，感謝各大公益團體參與。';
+        return true;
+      }
+      return false;
+    }
+
+    // 網頁載入時檢查一次，之後每分鐘檢查一次
+    checkDeadline();
+    setInterval(checkDeadline, 60000);
+
+    // 快捷標籤點擊邏輯
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tag = e.target.textContent.replace('+ ', '');
+        if (purposeInput.value) {
+          purposeInput.value += `, ${tag}`;
+        } else {
+          purposeInput.value = tag;
+        }
+      });
+    });
+
+    // 表單送出邏輯
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // 雙重檢查是否過期
+      if (checkDeadline()) return;
+
+      if (GAS_URL === "YOUR_GAS_URL_HERE") {
+        alert("工程師提醒：請先在原始碼第 86 行填寫 Google Apps Script 網址！");
+        return;
+      }
+
+      // 取得表單資料
+      const quantity = document.getElementById('quantity').value;
+      const purpose = purposeInput.value;
+      const willShare = document.getElementById('willShare').checked;
+
+      // 按鈕鎖定狀態
+      submitBtn.disabled = true;
+      submitBtn.textContent = '資料傳送中...';
+
+      try {
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          redirect: "follow",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ 
+            userId: "Charity_User", // 若無登入系統則維持字串
+            quantity: parseInt(quantity), 
+            purpose: purpose, 
+            willShare: willShare 
+          })
+        });
+
+        const result = await response.json();
+        
+        if (result.status === "success") {
+          alert('需求意願已提交成功！感謝您的參與。');
+          form.reset(); // 清空表單
+        } else {
+          alert('提交失敗：' + result.message);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('系統異常，請稍後再試。');
+      } finally {
+        // 解除按鈕鎖定
+        submitBtn.disabled = false;
+        submitBtn.textContent = '送出申請需求';
+      }
+    });
+  </script>
+</body>
+</html>
