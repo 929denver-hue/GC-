@@ -10,21 +10,19 @@
       theme: {
         extend: {
           colors: {
-            // 定義專業企業藍 (Slate Slate Blue)
             primary: {
               50: '#f0f4f8',
               100: '#d9e2ec',
-              500: '#334e68', // 按鈕主要顏色
-              600: '#243b53', // 按鈕 Hover 顏色
+              500: '#334e68', 
+              600: '#243b53', 
               700: '#102a43',
-              800: '#001a33', // Header 漸層尾端
+              800: '#001a33', 
             },
-            // 定義大地灰藍色 (Slate Gray)
             slate: {
-              50: '#f5f7fa', // 整體背景色
-              200: '#eaeaea', // 邊框與分割線
-              600: '#486581', // 輔助文字與標籤文字
-              800: '#102a43', // Header 漸層開頭
+              50: '#f5f7fa', 
+              200: '#eaeaea', 
+              600: '#486581', 
+              800: '#102a43', 
             }
           }
         }
@@ -57,17 +55,17 @@
       
       <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg shadow-inner">
         <h4 class="text-amber-800 font-bold text-sm mb-1.5 flex items-center gap-1.5">
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+          <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
           物品情況說明
         </h4>
         <p class="text-amber-700 text-xs leading-relaxed">
-          本物品為全新，但製作過程中杯身產生細微刮痕，<strong>基於衛生安全不建議作為飲具使用</strong>。但杯身設計可愛，非常適合以下用途：
+          本物品為全新，但製作過程中杯身產生細微刮痕，基於衛生安全不建議作為飲具使用。但杯身設計可愛，非常適合以下用途
         </p>
       </div>
 
       <div class="space-y-3">
         <div class="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center min-h-[200px]">
-          <img src="https://drive.google.com/thumbnail?id=1IX6CF9yPqacvmJCBLWWZp3mk4bn8NfcB&sz=w1000" alt="馬克杯用途參考" class="w-full h-auto object-cover">
+          <img src="https://drive.google.com/uc?export=view&id=1IX6CF9yPqacvmJCBLWWZp3mk4bn8NfcB" alt="馬克杯用途參考" class="w-full h-auto object-cover">
         </div>
         <p class="text-[10px] text-slate-600 text-center font-medium leading-relaxed">
           用途參考：盆栽、筆筒、擴香收納、小飾品擺放等，<strong class="text-primary-500">期待單位發揮創意 ✨</strong>
@@ -116,9 +114,6 @@
   </div>
 
   <script>
-    // ==========================================
-    // ⚠️ 此處維持原本的設定與邏輯
-    // ==========================================
     const GAS_URL = "https://script.google.com/macros/s/AKfycbxR3XL1uf3iPLpZW-ZiosITTYxDlQKQLuXecKXThGtjuj3nSI82DVkoVrQWIHogm73m/exec"; 
     const DEADLINE = new Date('2026-04-20T12:00:00+08:00');
 
@@ -128,7 +123,6 @@
     const purposeInput = document.getElementById('purpose');
     const submitBtn = document.getElementById('submit-btn');
 
-    // 檢查截止時間邏輯 (僅變更 Header 顏色為 slate-400)
     function checkDeadline() {
       if (new Date() > DEADLINE) {
         form.classList.add('hidden');
@@ -142,17 +136,14 @@
     checkDeadline();
     setInterval(checkDeadline, 60000);
 
-    // 快捷標籤點擊邏輯
     document.querySelectorAll('.tag-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const tag = e.target.textContent.replace('+ ', '');
         purposeInput.value = purposeInput.value ? `${purposeInput.value}, ${tag}` : tag;
-        // 點擊標籤後自動將焦點移回 Textarea
         purposeInput.focus();
       });
     });
 
-    // 表單送出邏輯 (維持原本邏輯與文案)
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (checkDeadline()) return;
@@ -186,8 +177,6 @@
           alert('提交錯誤：' + result.message);
         }
       } catch (err) {
-        // 因 CORS 問題，有時會發生錯誤但實際上已送出，
-        // 在不更改後台腳本的情況下，保持此處邏輯。
         console.error(err);
         alert('需求申請已送出！GC後續將透過 Line 與您聯繫。');
         form.reset();
