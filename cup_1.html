@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kingston 馬克杯需求申請表</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f4f8',
+              100: '#d9e2ec',
+              500: '#334e68', 
+              600: '#243b53', 
+              700: '#102a43',
+              800: '#001a33', 
+            },
+            slate: {
+              50: '#f5f7fa', 
+              200: '#eaeaea', 
+              600: '#486581', 
+              800: '#102a43', 
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 min-h-screen py-10 px-4 font-sans text-slate-900">
+  <div class="max-w-xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-slate-200" id="app-container">
+    
+    <div id="header-bg" class="p-8 text-white bg-gradient-to-br from-slate-800 to-primary-800">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-medium border border-white/20 px-2 py-1 rounded bg-white/5">GC贈物網 x Kingston</span>
+        <span class="text-xs opacity-70 italic">截止時間：4/20 (一) 12:00</span>
+      </div>
+      <h1 class="text-2xl font-extrabold tracking-tight">Kingston 馬克杯需求申請</h1>
+      <p id="header-desc" class="mt-2 text-sm opacity-90 leading-relaxed max-w-md">
+        待物品進倉後，將協助寄出，運費由GC贊助支付。
+      </p>
+    </div>
+
+    <div id="expired-view" class="hidden p-12 text-center space-y-4">
+      <div class="text-5xl">☕</div>
+      <h2 class="text-xl font-bold text-slate-800">活動已截止收單</h2>
+      <p class="text-slate-500 text-sm leading-relaxed">我們會盡快進行統計與分配，後續將透過 Line 聯繫。<br>感謝您的參與！</p>
+      <a href="https://www.give-circle.com" class="inline-block mt-4 text-primary-500 font-bold hover:text-primary-600 hover:underline transition">回到 GC 贈物網首頁</a>
+    </div>
+
+    <form id="application-form" class="p-8 space-y-7">
+      
+      <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg shadow-inner">
+        <h4 class="text-amber-800 font-bold text-sm mb-1.5 flex items-center gap-1.5">
+          <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+          物品情況說明
+        </h4>
+        <p class="text-amber-700 text-xs leading-relaxed">
+          本物品為全新，但製作過程中杯身產生細微刮痕，基於衛生安全不建議作為飲具使用。但杯身設計可愛，非常適合以下用途
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <div class="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center min-h-[200px]">
+          <img src="https://drive.google.com/thumbnail?id=1IX6CF9yPqacvmJCBLWWZp3mk4bn8NfcB&sz=w1000" referrerpolicy="no-referrer" alt="馬克杯用途參考" class="w-full h-auto object-cover">
+        </div>
+        <p class="text-[10px] text-slate-600 text-center font-medium leading-relaxed">
+          用途參考：盆栽、筆筒、擴香收納、小飾品擺放等，<strong class="text-primary-500">期待單位發揮創意 ✨</strong>
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-6">
+        <div class="space-y-1.5">
+          <label class="block text-sm font-bold text-slate-800">申請人姓名</label>
+          <input type="text" id="applicantName" required class="w-full border border-slate-200 rounded-lg p-3 focus:ring-2 focus:ring-primary-100 focus:border-primary-500 focus:outline-none transition text-sm">
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-sm font-bold text-slate-800">申請單位名稱</label>
+          <input type="text" id="organization" required class="w-full border border-slate-200 rounded-lg p-3 focus:ring-2 focus:ring-primary-100 focus:border-primary-500 focus:outline-none transition text-sm">
+        </div>
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block text-sm font-bold text-slate-800">Line ID <span class="text-xs font-normal text-slate-500">(申請後將透過 Line 聯繫)</span></label>
+        <input type="text" id="lineId" required placeholder="請確認 ID 已開啟搜尋或提供連結" class="w-full border border-slate-200 rounded-lg p-3 focus:ring-2 focus:ring-primary-100 focus:border-primary-500 focus:outline-none transition text-sm">
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block text-sm font-bold text-slate-800">期望申請數量 <span class="text-xs font-normal text-slate-500">(上限50個)</span></label>
+        <input type="number" id="quantity" min="1" max="50" value="1" required class="w-full border border-slate-200 rounded-lg p-3 focus:ring-2 focus:ring-primary-100 focus:border-primary-500 focus:outline-none font-semibold text-lg text-primary-700">
+      </div>
+
+      <div class="space-y-3">
+        <label class="block text-sm font-bold text-slate-800">用途簡述</label>
+        
+        <div class="flex flex-wrap gap-2.5" id="quick-tags">
+          <button type="button" class="tag-btn text-[11px] font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded hover:bg-primary-500 hover:text-white transition-all">+ 盆栽</button>
+          <button type="button" class="tag-btn text-[11px] font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded hover:bg-primary-500 hover:text-white transition-all">+ 筆筒</button>
+          <button type="button" class="tag-btn text-[11px] font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded hover:bg-primary-500 hover:text-white transition-all">+ 擴香收納</button>
+          <button type="button" class="tag-btn text-[11px] font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded hover:bg-primary-500 hover:text-white transition-all">+ 小飾品擺放</button>
+          <button type="button" class="tag-btn text-[11px] font-medium bg-slate-50 text-slate-500 px-3 py-1.5 rounded hover:bg-slate-200 hover:text-slate-800 border border-slate-100 transition-all">+ 其他</button>
+        </div>
+        
+        <textarea id="purpose" required maxlength="100" placeholder="請簡述您的計畫用途 (100字內)..." class="w-full border border-slate-200 rounded-lg p-3.5 h-32 focus:ring-2 focus:ring-primary-100 focus:border-primary-500 focus:outline-none resize-none text-sm leading-relaxed"></textarea>
+      </div>
+
+      <button type="submit" id="submit-btn" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary-100 transform active:scale-[0.98] transition-all disabled:bg-slate-300 disabled:shadow-none">
+        確認送出申請需求
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxR3XL1uf3iPLpZW-ZiosITTYxDlQKQLuXecKXThGtjuj3nSI82DVkoVrQWIHogm73m/exec"; 
+    const DEADLINE = new Date('2026-04-20T12:00:00+08:00');
+
+    const form = document.getElementById('application-form');
+    const expiredView = document.getElementById('expired-view');
+    const headerBg = document.getElementById('header-bg');
+    const purposeInput = document.getElementById('purpose');
+    const submitBtn = document.getElementById('submit-btn');
+
+    function checkDeadline() {
+      if (new Date() > DEADLINE) {
+        form.classList.add('hidden');
+        expiredView.classList.remove('hidden');
+        headerBg.className = "p-8 text-white bg-slate-400 transition-colors duration-500";
+        return true;
+      }
+      return false;
+    }
+
+    checkDeadline();
+    setInterval(checkDeadline, 60000);
+
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tag = e.target.textContent.replace('+ ', '');
+        purposeInput.value = purposeInput.value ? `${purposeInput.value}, ${tag}` : tag;
+        purposeInput.focus();
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (checkDeadline()) return;
+      if (GAS_URL === "YOUR_GAS_URL_HERE") return alert("請先設定 GAS 網址！");
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '傳送中...';
+
+      const payload = {
+        applicant: document.getElementById('applicantName').value,
+        organization: document.getElementById('organization').value,
+        lineId: document.getElementById('lineId').value,
+        quantity: parseInt(document.getElementById('quantity').value),
+        purpose: purposeInput.value
+      };
+
+      try {
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          redirect: "follow",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        
+        if (result.status === "success") {
+          alert('需求申請已送出！GC後續將透過 Line 與您聯繫。');
+          form.reset();
+        } else {
+          alert('提交錯誤：' + result.message);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('需求申請已送出！GC後續將透過 Line 與您聯繫。\n(Note: 若無立刻收到通知屬正常現象)');
+        form.reset();
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '確認送出申請需求';
+      }
+    });
+  </script>
+</body>
+</html>
