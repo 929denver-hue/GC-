@@ -88,7 +88,6 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* 有一點浮起來的感覺 */
 }
 
-
     .status-success { background:#e6fffa; color:#047857; border:1px solid #99f6e4; }
     .status-error   { background:#fee2e2; color:#991b1b; border:1px solid #fecaca; }
     .status-warning { background:#fef9c3; color:#854d0e; border:1px solid #fde047; }
@@ -164,17 +163,14 @@
 <body>
   <h1>GC贈物網｜包裹異常通報表單</h1>
 
-  <!-- ✅ 顯示在最上方的狀態列 -->
   <div id="status"></div>
 
-  <!-- 只讀展示區：載入單號後顯示摘要 -->
   <section id="overviewCard" class="card" aria-live="polite">
     <h2>案件摘要</h2>
     <div id="overviewStatus"><span class="badge warn">尚未載入單號</span></div>
     <div class="meta" id="overviewMeta" style="display:none"></div>
   </section>
 
-  <!-- 通報者表單 -->
   <form id="reportForm">
     <label>託運單號</label>
     <div style="display:flex; gap:8px; align-items:center;">
@@ -198,6 +194,9 @@
       <option value="7-11">7-11</option>
       <option value="全家">全家</option>
     </select>
+
+    <label>寄件櫃機</label>
+    <input type="text" id="sender_cabinet">
 
     <label>收件人姓名</label>
     <input type="text" id="recv_name">
@@ -227,7 +226,6 @@
 
   <h1 style="margin-top:32px; text-align:center; color:#2c7a7b;">查詢者更新區</h1>
 
-  <!-- 查詢者更新區表單 -->
   <form id="queryForm">
     <label>託運單號（與上方相同）</label>
     <div style="display:flex; gap:8px; align-items:center;">
@@ -317,6 +315,7 @@
         item_url:  document.getElementById('item_url').value.trim(),
         ship_date: document.getElementById('ship_date').value,
         ship_method: document.getElementById('ship_method').value,
+        sender_cabinet: document.getElementById('sender_cabinet').value.trim(), // ✅ 新增的欄位
         recv_name: document.getElementById('recv_name').value.trim(),
         recv_phone: document.getElementById('recv_phone').value.trim(),
         recv_addr:  document.getElementById('recv_addr').value.trim(),
@@ -435,7 +434,7 @@
       metaBox.innerHTML = `
         <div><b>贈物</b>${itemLink}</div>
         <div><b>寄件方式／日期</b>${d.ship_method||''} ／ ${d.ship_date||''}</div>
-        <div><b>收件人</b>${d.recv_name||''}／${d.recv_phone||''}</div>
+        <div><b>寄件櫃機</b>${d.sender_cabinet||''}</div> <div><b>收件人</b>${d.recv_name||''}／${d.recv_phone||''}</div>
         <div><b>據點</b>${d.recv_addr||''}</div>
         <div><b>問題類型</b>${d.issue_type||''}</div>
         <div><b>異常簡述</b>${d.brief||''}</div>
@@ -480,6 +479,7 @@
         setIf('item_url', d.item_url);
         setIf('ship_date', d.ship_date);
         setIf('ship_method', d.ship_method);
+        setIf('sender_cabinet', d.sender_cabinet); // ✅ 新增的載入邏輯
         setIf('recv_name', d.recv_name);
         setIf('recv_phone', d.recv_phone);
         setIf('recv_addr', d.recv_addr);
