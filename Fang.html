@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decode Chinese Characters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 平滑滾動與 details 原生標籤樣式微調 */
+        html { scroll-behavior: smooth; }
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed antialiased">
+
+    <!-- Global Alert -->
+    <div class="bg-yellow-200 text-yellow-900 px-4 py-3 text-center text-sm font-bold shadow-sm">
+        💻 Best viewed on laptop, tablet, or desktop. 📱 Mobile may not display properly.
+    </div>
+
+    <!-- Hero Section -->
+    <header class="max-w-4xl mx-auto pt-16 pb-12 px-6 text-center">
+        <div class="inline-block bg-blue-100 text-blue-800 text-sm px-4 py-1 rounded-full font-semibold mb-6">
+            Before launch, this course was tested by more than 30 students and refined based on their feedback.
+        </div>
+        <h1 class="text-5xl font-black text-slate-900 mb-8">Decode Chinese Characters</h1>
+        
+        <div class="grid md:grid-cols-2 gap-4 text-left">
+            <div class="bg-white p-6 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                <strong>Part I:</strong> Unlock 80% of Chinese Characters: The Phonetic-Semantic Mastery Course (Currently in Soft Launch)
+            </div>
+            <div class="bg-slate-100 p-6 rounded-xl border border-slate-200 text-slate-500">
+                <strong>Part II:</strong> See the Whole System: The Six Principles & Core Components Course (still developing)
+            </div>
+        </div>
+    </header>
+
+    <!-- Why Section -->
+    <section class="max-w-4xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8">
+        <div>
+            <h2 class="text-2xl font-bold mb-4 border-b-2 border-slate-200 pb-2">Why Did I Create This Course</h2>
+            <p class="mb-4">I noticed students struggling with rote memorization; it's painful and inefficient. I want to give you the "source code" to help you decode the logic between phonetic and semantic components.</p>
+            <p class="mb-2 font-bold">When you learn one character, you are entering a network.</p>
+            <ul class="list-disc pl-5 space-y-1 mb-4 text-slate-700">
+                <li>Phonetic components give you sound clues.</li>
+                <li>Semantic components guide meaning.</li>
+            </ul>
+            <p>When you understand the system, you begin to see patterns. You will learn how characters are built, how components work, and how to recognize patterns that make learning significantly easier.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+            <h2 class="text-2xl font-bold mb-4 text-blue-900">Why Do You Need This Course</h2>
+            <p class="mb-4">If you want:</p>
+            <ul class="space-y-4">
+                <li><strong class="text-slate-900">Efficiency:</strong> Master one phonetic component to predict dozens of characters.</li>
+                <li><strong class="text-slate-900">Logic Over Rote:</strong> Understand the "why" to make memory effortless.</li>
+                <li><strong class="text-slate-900">Reading Intuition:</strong> Develop the intuition to guess the meanings and sounds of new words.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="bg-white py-12 border-y border-slate-200">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-2xl font-bold mb-8">👑 What Students & Readers Say 👑</h2>
+            <div class="grid md:grid-cols-3 gap-6 text-left">
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-100">
+                    <p class="font-bold text-slate-900">Bree, @yilingtheytriarch</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-100">
+                    <p class="font-bold text-slate-900">Hannes Bondason, Speech Therapist from Germany</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-100">
+                    <p class="font-bold text-slate-900">Writer and actor from the USA</p>
+                    <a href="https://www.instagram.com/og.redbeard/" target="_blank" class="text-blue-500 hover:underline text-sm break-all">https://www.instagram.com/og.redbeard/</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="max-w-4xl mx-auto px-6 py-16">
+        <h2 class="text-3xl font-bold text-center mb-10">Content and Course Fee</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Primary Pricing -->
+            <div class="bg-blue-600 text-white rounded-2xl p-8 shadow-xl relative transform md:-translate-y-2">
+                <div class="absolute -top-4 right-4 bg-yellow-400 text-yellow-900 font-bold px-4 py-1 rounded-full shadow">⭐ Current</div>
+                <h3 class="text-xl font-bold mb-4">Current Soft Launch Price：</h3>
+                <p class="text-2xl font-black mb-2">Part I : 35 USD | 1100 NTD | 32 EURO</p>
+            </div>
+            <!-- Secondary Pricing -->
+            <div class="bg-white rounded-2xl p-8 border-2 border-slate-200">
+                <h3 class="text-xl font-bold text-slate-600 mb-4">⭐ Future Regular Price：</h3>
+                <ul class="space-y-3 text-slate-600 font-medium">
+                    <li>Part I : 45 USD | 1450 NTD | 41 EURO</li>
+                    <li>Part II : 35 USD | 1100 NTD | 32 EURO</li>
+                    <li class="pt-3 border-t border-slate-200 text-slate-900 font-bold">Part I + Part II : 70 USD | 2200 NTD | 62 EURO</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Course Details -->
+        <div class="mt-12 bg-slate-50 p-8 rounded-2xl border border-slate-200">
+            <p class="text-center text-lg font-bold mb-8 text-blue-900">This is more than just reading materials. It's a comprehensive learning experience that combines "Learning + Practice + Individual Coaching.”</p>
+            
+            <div class="space-y-8">
+                <div>
+                    <h4 class="font-bold text-lg mb-2">💠 One-Month Access Period (30-day access)</h4>
+                    <p class="mb-2">You can specify your preferred start date. The timeframe is more than enough for you to study at your own pace. (Purchasing Part I and Part II together gives you two months of access.)</p>
+                    <p class="mb-2">Beta readers finish all the content within a night to a week, so 30 days should be more than sufficient. If you need a bit more time, you can extend access for 10USD per week.</p>
+                    <p class="text-blue-700 font-medium bg-blue-50 p-3 rounded">Students who purchase the course during the soft launch period will also have access to Part II, which is currently still in development. Please understand that there is still a lot to improve and refine.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-2">💠 1-on-1 Video Call Consultation (Single Session / 20 Mins)</h4>
+                    <p>You can use this time to ask questions about the course content or any other Chinese-learning concerns, receive direct feedback, clarify any doubts, and get personalized guidance on your Chinese learning journey.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 pt-6 border-t border-slate-200">
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Part I</h4>
+                        <p class="font-bold mb-2">💠 Two Hands-on Worksheets</p>
+                        <p class="mb-2 text-sm">Designed to help you apply what you've learned immediately.</p>
+                        <ul class="text-sm space-y-2 list-disc pl-5">
+                            <li>Worksheet 1: Practicing the Identification of Phonetic–Semantic Compound Characters</li>
+                            <li>Worksheet 2: Phonetic–Semantic Characters with the Periodic Table<br><span class="text-slate-500">(Have you ever thought about learning chemistry through Chinese?)</span></li>
+                        </ul>
+                        <p class="mt-4 text-sm font-bold">See what others say about the worksheet! (Click the triangle to open)<br>by <a href="https://www.instagram.com/og.redbeard/" class="text-blue-500">https://www.instagram.com/og.redbeard/</a></p>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg mb-2">Part II</h4>
+                        <p>🏗️ still developing…</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Purchase -->
+    <section class="max-w-4xl mx-auto px-6 py-12">
+        <h2 class="text-3xl font-bold mb-8 text-center">How to Purchase</h2>
+        <div class="space-y-6">
+            <div class="flex gap-4">
+                <div class="text-2xl">1️⃣</div>
+                <div>
+                    <h3 class="font-bold text-lg">Fill out the booking form and complete payment</h3>
+                    <p class="text-blue-600 font-bold my-1">Decode Chinese Characters｜Course Enrollment Form</p>
+                    <p class="text-sm text-slate-600">This form will guide you step-by-step through registration, payment, and booking a consultation.<br>This is a digital product. All sales are final unless otherwise stated.</p>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <div class="text-2xl">2️⃣</div>
+                <div>
+                    <h3 class="font-bold text-lg">Receive confirmation email and access link</h3>
+                    <p class="text-sm text-slate-600">The email will be sent by “fangfunchinese@gmail.com” and Notion.<br>Please give me up to 36 hours to process this. If you don’t hear back by then, contact me.</p>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <div class="text-2xl">3️⃣</div>
+                <div>
+                    <h3 class="font-bold text-lg">Start learning</h3>
+                    <p class="text-sm text-slate-600">💻 Best viewed on laptop, tablet, or desktop. 📱 Mobile may not display the content properly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Important Notes -->
+    <section class="max-w-4xl mx-auto px-6 pb-16">
+        <div class="bg-red-50 border border-red-200 p-8 rounded-2xl">
+            <h2 class="text-2xl font-bold text-red-700 mb-6">Important Notes</h2>
+            <ul class="space-y-3 text-red-900 list-disc pl-5">
+                <li>This course is based on Traditional Chinese as used in Taiwan and does not introduce the character systems used in other countries. If you are more familiar with Japanese kanji or Simplified Chinese, you may encounter many characters that look unfamiliar in the course.</li>
+                <li>All course materials are organized on Notion. If you don't have an account yet, a sign-up link will be provided in my email. The free version of Notion is all you need to access everything.</li>
+                <li>For the best experience, please view the content on a laptop, tablet, or desktop. Mobile devices may have issues displaying the images.</li>
+                <li>Course content is protected by copyright and is for personal use only. Sharing is not permitted.</li>
+                <li>This course provides 30-day access, not lifetime access. (Purchasing Part I and Part II together gives you two months of access.)</li>
+                <li>After your payment is confirmed, you will receive access to the course via email. Please allow up to 36 hours for processing. If you do not receive the email, contact: fangfunchinese@gmail.com</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="bg-slate-900 text-white py-16">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-8 text-center">The Minds Behind the Course</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-blue-400">About me</h3>
+                    <div class="bg-slate-800 p-4 rounded-lg mb-4 inline-block">
+                        ⭐ 5+ Years Experience<br>
+                        5,000+ Teaching Hours<br>
+                        400+ Successful Students
+                    </div>
+                    <p class="mb-4 text-slate-300 text-sm">With 5 years of experience in both online and offline Mandarin instruction, I have dedicated over 5,000 hours to teaching more than 400 students worldwide. I deeply understand the frustrations learners face with Chinese characters, which is why I’ve distilled my professional insights into this specialized course.</p>
+                    <p class="text-sm">You can find more about me here:<br>📝 My Resume (LinkedIn)</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-blue-400">The Advisory Team: Learner's Perspective</h3>
+                    <p class="text-slate-300 text-sm">This course wasn't created in a vacuum. I collected advice and real-world feedback from a group of dedicated long-term Mandarin learners, my friends and students who have navigated the complexities of Chinese characters for years.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="max-w-4xl mx-auto px-6 py-16">
+        <h2 class="text-3xl font-bold mb-8 text-center">FAQ</h2>
+        <div class="space-y-4">
+            <details class="group bg-white border border-slate-200 rounded-lg shadow-sm">
+                <summary class="flex justify-between items-center font-bold p-6 text-lg text-slate-800">
+                    Can I save the course materials for revision?
+                    <span class="transition group-open:rotate-180">▼</span>
+                </summary>
+                <div class="p-6 pt-0 text-slate-600 border-t border-slate-100 mt-2">
+                    <p class="mb-2">Absolutely! You’re welcome to take notes and save the worksheets for your personal review.</p>
+                    <p>Please note that the course materials are protected by copyright, as they represent a significant investment of time and intellectual effort. I kindly ask that you do not share, reproduce, or publish the materials in any form. Thank you for your understanding and for respecting the integrity of the course content.</p>
+                </div>
+            </details>
+
+            <details class="group bg-white border border-slate-200 rounded-lg shadow-sm">
+                <summary class="flex justify-between items-center font-bold p-6 text-lg text-slate-800">
+                    Why is the access period limited to one month instead of lifetime access?
+                    <span class="transition group-open:rotate-180">▼</span>
+                </summary>
+                <div class="p-6 pt-0 text-slate-600 border-t border-slate-100 mt-2">
+                    <p class="mb-2">Research shows that many learners tend to set aside online courses after purchasing them. That would go against my original intention in creating this course — I truly want you to complete it, not set it aside.</p>
+                    <p class="mb-2">All of my test readers finished it within two weeks (or less), so one month of access is more than enough. The limited access period is designed to support students who are genuinely committed to their learning journey.</p>
+                    <p>You’re also welcome to ask questions during your one-on-one consultation.</p>
+                </div>
+            </details>
+
+            <details class="group bg-white border border-slate-200 rounded-lg shadow-sm">
+                <summary class="flex justify-between items-center font-bold p-6 text-lg text-slate-800">
+                    How to ask a question/ leave a comment?
+                    <span class="transition group-open:rotate-180">▼</span>
+                </summary>
+                <div class="p-6 pt-0 text-slate-600 border-t border-slate-100 mt-2">
+                    <p>You can leave a comment in two ways: either by using the comment box at the top of the page, or by highlighting any part of the text and selecting the comment function. Just press Enter after typing.<br>未命名.mov</p>
+                </div>
+            </details>
+            
+            <details class="group bg-white border border-slate-200 rounded-lg shadow-sm">
+                <summary class="flex justify-between items-center font-bold p-6 text-lg text-slate-800">
+                    Why do I sometimes see a dark background in Notion and other times a light one?
+                    <span class="transition group-open:rotate-180">▼</span>
+                </summary>
+                <div class="p-6 pt-0 text-slate-600 border-t border-slate-100 mt-2">
+                    <p class="mb-2">Notion’s background color automatically switches based on your browser or system appearance settings, so I’m not able to control it. Please check your browser settings.</p>
+                    <p>If you prefer white text on a dark background, please switch to Dark Mode.<br>If you prefer black text on a white background, please switch to Light Mode.</p>
+                </div>
+            </details>
+
+            <details class="group bg-white border border-slate-200 rounded-lg shadow-sm">
+                <summary class="flex justify-between items-center font-bold p-6 text-lg text-slate-800">
+                    Can the text font be a bit larger?
+                    <span class="transition group-open:rotate-180">▼</span>
+                </summary>
+                <div class="p-6 pt-0 text-slate-600 border-t border-slate-100 mt-2">
+                    <p class="mb-2">This is built in Notion, text size in Notion is determined by your browser settings. If you’d like the text to appear larger, please adjust the font size in your browser manually.</p>
+                    <p>For the images, you can click on any image to enlarge it and zoom in further.</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- Footer Links -->
+    <footer class="bg-slate-100 py-12 text-center text-sm text-slate-600 border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-6">
+            <p class="font-bold mb-4">More about me</p>
+            <div class="flex justify-center gap-4 mb-4 flex-wrap">
+                <span>🍀 My official website</span>
+                <span>📝 My Resume (LinkedIn)</span>
+                <span>IG： @fang_fun_chinese</span>
+            </div>
+            <div class="flex justify-center gap-4 mb-8 flex-wrap">
+                <span>About Fang</span> | <span>Mandarin courses with me</span> | <span>How to book a lesson</span><br>
+                <span>Rate</span> | <span>Class Regulations</span> | <span>Students’ Feedback</span> | <span>FAQ</span> | <span>Buy Fang a Bubble Tea</span>
+            </div>
+            <p>Last update: 2026年4月23日 上午12:16 (UTC+8)</p>
+        </div>
+    </footer>
+</body>
+</html>
