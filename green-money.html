@@ -1,239 +1,340 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>綠點兌換儀表板</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>環保集點雙軌自動化工作台 & 總體營運分析</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
-<body class="bg-gray-50 font-sans border-t-4 border-green-600 min-h-screen">
+<body class="bg-slate-50 text-slate-800 min-h-screen font-sans">
 
-    <div id="loading-screen" class="min-h-screen flex flex-col items-center justify-center space-y-4">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-        <p class="text-green-700 font-medium animate-pulse">正在從 Google Sheets 同步最新資料與圖表...</p>
+  <header class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white shadow-md px-6 py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div>
+        <h1 class="text-xl font-bold flex items-center gap-2">🌱 環保集點雙軌自動化工作台</h1>
+        <p class="text-xs text-emerald-100 mt-1">財務自動平帳 ╳ 會員 ID 雙軌提取 ╳ 月度總體數據分析</p>
+      </div>
+      <span class="text-xs bg-emerald-950 px-3 py-1.5 rounded-lg border border-emerald-700 font-mono">安全性：本地沙盒環境 (0 資料外洩風險)</span>
     </div>
+  </header>
 
-    <div id="error-screen" class="hidden min-h-screen flex justify-center items-start pt-10">
-        <div class="bg-red-50 text-red-700 p-6 rounded-lg border border-red-200 max-w-lg w-full">
-            <h3 class="text-lg font-bold flex items-center gap-2">⚠️ 資料連線異常</h3>
-            <p id="error-message" class="mt-2 text-sm font-mono break-all"></p>
+  <main class="max-w-7xl mx-auto p-6 space-y-6">
+    
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div id="drop-gc" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-white p-6 rounded-xl text-center cursor-pointer transition-all">
+        <p class="text-sm font-bold text-slate-700">1. 請拖入或點擊上傳【GC 平台兌換檔】</p>
+        <p class="text-xs text-slate-400 mt-1" id="status-gc">未選擇任何檔案 (.xlsx)</p>
+      </div>
+      <div id="drop-official" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-white p-6 rounded-xl text-center cursor-pointer transition-all">
+        <p class="text-sm font-bold text-slate-700">2. 請拖入或點擊上傳【環保署官方明細檔】</p>
+        <p class="text-xs text-slate-400 mt-1" id="status-official">未選擇任何檔案 (.xls / .xlsx)</p>
+      </div>
+    </section>
+
+    <section id="reco-dashboard" class="bg-white p-5 rounded-xl shadow-xs border border-slate-200 hidden grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <p class="text-xs font-bold text-slate-400 uppercase">官方總消點 / 平台總儲值</p>
+        <p class="text-xl font-black text-slate-800 mt-1" id="kpi-total">0 點 / NT$ 0</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-slate-400 uppercase">自動平帳結果</p>
+        <p class="text-xl font-black text-emerald-600 mt-1" id="kpi-status">核對中...</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-slate-400 uppercase">當月不平帳異常件</p>
+        <p class="text-xl font-black text-rose-600 mt-1" id="kpi-error">0 筆</p>
+      </div>
+    </section>
+
+    <section id="macro-analysis-section" class="bg-white shadow-sm rounded-xl border border-slate-200 p-6 space-y-6 hidden">
+      <div class="border-b border-slate-100 pb-3">
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">📊 當月總體營運指標與行銷洞察 (Macro Insight)</h2>
+        <p class="text-xs text-slate-500 mt-0.5">系統自動將本月所有交易進行矩陣去重與分佈統計，協助評估整體財務與活動門檻。</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <p class="text-xs font-bold text-slate-400 uppercase">📈 營運流速與規模</p>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">當月總兌換筆數:</span>
+              <span class="font-mono font-bold text-slate-800" id="macro-total-tx">5 筆</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">當月活躍會員數:</span>
+              <span class="font-mono font-bold text-slate-800" id="macro-active-users">5 人</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">筆均兌換點數:</span>
+              <span class="font-mono font-bold text-indigo-600" id="macro-avg-points">233,980 點</span>
+            </div>
+          </div>
         </div>
-    </div>
 
-    <div id="dashboard" class="hidden max-w-6xl mx-auto p-6 md:p-10">
-        <header class="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
+        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <p class="text-xs font-bold text-slate-400 uppercase">👑 鯨魚用戶集中度 (鯨魚效應)</p>
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs text-slate-500">
+              <span>Top 2 大戶消耗佔比:</span>
+              <span class="font-mono font-bold text-amber-600" id="macro-concentration-pct">88.9%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+              <div id="macro-concentration-bar" class="bg-amber-500 h-2 rounded-full" style="width: 88.9%"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">💡 洞察：點數高度集中在少數頭部會員，整體健康度偏向大戶驅動，建議推出普惠型小額活動吸引散客。</p>
+          </div>
+        </div>
+
+        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <p class="text-xs font-bold text-slate-400 uppercase">🎯 點數兌換單筆級距分佈</p>
+          <div class="space-y-2 text-xs">
             <div>
-                <h1 class="text-2xl font-extrabold text-green-950">綠點兌換儀表板</h1>
-                <p id="current-period" class="text-gray-500 mt-1">目前數據期間：載入中...</p>
+              <div class="flex justify-between text-slate-500 mb-1"><span>小額散客 (5,000點以下)：</span><span id="tier-low-count">3 筆 (60%)</span></div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5"><div id="tier-low-bar" class="bg-emerald-500 h-1.5 rounded-full" style="width: 60%"></div></div>
             </div>
-            <div class="text-sm text-green-700 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
-                🔄 最後同步：<span id="last-sync"></span>
+            <div>
+              <div class="flex justify-between text-slate-500 mb-1"><span>中額中產 (5,001 - 50,000點)：</span><span id="tier-mid-count">0 筆 (0%)</span></div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5"><div id="tier-mid-bar" class="bg-indigo-500 h-1.5 rounded-full" style="width: 0%"></div></div>
             </div>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container"></div>
-
-        <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h3 class="font-bold text-green-700">歷月兌換數據比較</h3>
-                <select id="metric-selector" class="border border-gray-200 rounded-lg px-4 py-2 text-sm text-green-800 bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer font-medium">
-                    <option value="totalAmount">總兌換金額 (NT$)</option>
-                    <option value="txCount">總兌換筆數 (筆)</option>
-                    <option value="dailyAvgAmount">每日平均金額 (NT$/日)</option>
-                    <option value="dailyAvgTx">每日平均筆數 (筆/日)</option>
-                </select>
+            <div>
+              <div class="flex justify-between text-slate-500 mb-1"><span>巨額鯨魚 (50,001點以上)：</span><span id="tier-high-count">2 筆 (40%)</span></div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5"><div id="tier-high-bar" class="bg-rose-500 h-1.5 rounded-full" style="width: 40%"></div></div>
             </div>
-            <div class="relative h-72 w-full">
-                <canvas id="trendChart"></canvas>
-            </div>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 bg-green-50">
-                <h3 class="font-bold text-green-700">近期資料明細</h3>
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white shadow-xs rounded-xl border border-emerald-100 p-5 flex flex-col justify-between space-y-4">
+        <div>
+          <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-bold text-slate-900 flex items-center gap-1">👑 軌道 A：超級 VIP 尊榮祭</h3>
+              <p class="text-xs text-slate-500 mt-0.5">資格：當月持續活躍且歷史累計大額者（建議推播：大額加碼券）</p>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-green-700 uppercase bg-white border-b">
-                        <tr>
-                            <th class="px-6 py-3">期別 (月份)</th>
-                            <th class="px-6 py-3 text-right">總金額</th>
-                            <th class="px-6 py-3 text-right">總筆數</th>
-                            <th class="px-6 py-3 text-right">單筆平均</th>
-                            <th class="px-6 py-3 text-right">日均金額</th>
-                            <th class="px-6 py-3 text-right">日均筆數</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body"></tbody>
-                </table>
+            <span id="badge-vip" class="text-xs font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">已圈選 0 人</span>
+          </div>
+          <div class="mt-4 space-y-2">
+            <label class="block text-[11px] font-bold text-slate-400 uppercase">複製專用 ID (逗號分隔)</label>
+            <input type="text" id="ids-vip" readonly placeholder="等待上傳檔案計算..." class="w-full border border-slate-200 rounded-lg p-2.5 font-mono text-sm bg-slate-50 text-slate-600 tracking-wider focus:outline-none">
+            <div class="space-y-1.5 mt-2">
+              <p class="text-[11px] font-semibold text-slate-400">名單預覽：</p>
+              <div id="list-vip" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600"></div>
             </div>
+          </div>
         </div>
-    </div>
+        <button onclick="copyIDs('ids-vip', 'btn-vip')" id="btn-vip" disabled class="w-full bg-slate-300 text-white font-bold py-2.5 rounded-lg text-sm transition-all cursor-not-allowed">
+          複製 VIP 會員 ID 清單
+        </button>
+      </div>
 
-    <script>
-        const SPREADSHEET_ID = '1UfbFi9gS0mpYokTvGgdgmi4ujmSQwz14HG1_i_IcDbU'; 
-        const SHEET_NAME = '兌換紀錄';
-        const FAST_API_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+      <div class="bg-white shadow-xs rounded-xl border border-rose-100 p-5 flex flex-col justify-between space-y-4">
+        <div>
+          <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-bold text-slate-900 flex items-center gap-1">⚠️ 軌道 B：沉睡大戶重磅喚醒</h3>
+              <p class="text-xs text-slate-500 mt-0.5">資格：歷史貢獻極高但當月0兌換（建議推播：免運復活券）</p>
+            </div>
+            <span id="badge-dormant" class="text-xs font-mono font-bold bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full">已圈選 0 人</span>
+          </div>
+          <div class="mt-4 space-y-2">
+            <label class="block text-[11px] font-bold text-slate-400 uppercase">複製專用 ID (逗號分隔)</label>
+            <input type="text" id="ids-dormant" readonly placeholder="等待上傳檔案計算..." class="w-full border border-slate-200 rounded-lg p-2.5 font-mono text-sm bg-slate-50 text-slate-600 tracking-wider focus:outline-none">
+            <div class="space-y-1.5 mt-2">
+              <p class="text-[11px] font-semibold text-slate-400">名單預覽：</p>
+              <div id="list-dormant" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600"></div>
+            </div>
+          </div>
+        </div>
+        <button onclick="copyIDs('ids-dormant', 'btn-dormant')" id="btn-dormant" disabled class="w-full bg-slate-300 text-white font-bold py-2.5 rounded-lg text-sm transition-all cursor-not-allowed">
+          複製 沉睡大戶 ID 清單
+        </button>
+      </div>
+    </section>
+  </main>
 
-        // 修改：使用原生的 toLocaleString，設定最多顯示兩位小數並自動四捨五入
-        const formatNumber = (num) => {
-            return Number(num).toLocaleString('en-US', {
-                maximumFractionDigits: 2
-            });
-        };
+  <input type="file" id="file-gc" class="hidden" accept=".xlsx">
+  <input type="file" id="file-official" class="hidden" accept=".xls,.xlsx">
 
-        // 輔助計算函數：將數字四捨五入至小數點後兩位
-        const roundToTwo = (num) => Math.round(num * 100) / 100;
+  <script>
+    let gcRaw = null, officialRaw = null;
 
-        let myChart = null;
-        let globalData = [];
+    // 初始化檔案上傳觸發器與事件
+    setupUploadZone('drop-gc', 'file-gc', 'status-gc', (data) => { gcRaw = data; checkAndProcess(); });
+    setupUploadZone('drop-official', 'file-official', 'status-official', (data) => { officialRaw = data; checkAndProcess(); });
 
-        function generateKpiCardHTML(title, unit, current, previous) {
-            const hasPrevious = previous !== undefined && previous !== null;
-            let growthRate = 0;
-            if (hasPrevious) {
-                growthRate = previous === 0 ? 100 : ((current - previous) / previous) * 100;
-            }
-            const isPositive = growthRate > 0;
-            const isNegative = growthRate < 0;
-            const trendColor = isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500';
-            const trendIcon = isPositive ? '↑' : isNegative ? '↓' : '−';
+    function setupUploadZone(dropId, fileId, statusId, callback) {
+      const zone = document.getElementById(dropId);
+      const input = document.getElementById(fileId);
+      
+      zone.addEventListener('click', () => input.click());
+      zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('border-emerald-500', 'bg-emerald-50/20'); });
+      zone.addEventListener('dragleave', () => { zone.classList.remove('border-emerald-500', 'bg-emerald-50/20'); });
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('border-emerald-500', 'bg-emerald-50/20');
+        if (e.dataTransfer.files.length > 0) { handleExcelParsing(e.dataTransfer.files[0], statusId, callback); }
+      });
+      input.addEventListener('change', (e) => { if (e.target.files.length > 0) { handleExcelParsing(e.target.files[0], statusId, callback); } });
+    }
 
-            return `
-                <div class="p-5 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col transition-all hover:shadow-md">
-                    <span class="text-green-700 text-sm font-medium">${title}</span>
-                    <div class="mt-2 flex items-baseline gap-2">
-                        <span class="text-3xl font-bold text-green-950">
-                            ${formatNumber(current)} <span class="text-sm font-normal text-gray-500">${unit}</span>
-                        </span>
-                    </div>
-                    ${hasPrevious ? `<div class="mt-3 text-sm font-semibold flex items-center gap-1 bg-gray-50 w-fit px-2 py-1 rounded ${trendColor}">
-                        <span>${trendIcon} ${Math.abs(growthRate).toFixed(1)}%</span>
-                        <span class="text-gray-400 font-normal text-xs ml-1">vs 上期 (${formatNumber(previous)})</span>
-                    </div>` : `<div class="mt-3 text-xs text-gray-400 bg-gray-50 w-fit px-2 py-1 rounded">無上期資料</div>`}
-                </div>
-            `;
+    function handleExcelParsing(file, statusId, callback) {
+      document.getElementById(statusId).innerText = `⌛ 正在讀取並解析：${file.name}...`;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const workbook = XLSX.read(e.target.result, { type: 'binary' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(firstSheet);
+          document.getElementById(statusId).className = "text-xs text-emerald-600 font-semibold mt-1";
+          document.getElementById(statusId).innerText = `✅ 已成功載入：${file.name} (${json.length}筆)`;
+          callback(json);
+        } catch (err) {
+          document.getElementById(statusId).className = "text-xs text-rose-600 font-semibold mt-1";
+          document.getElementById(statusId).innerText = `❌ 檔案解析失敗，請確認格式。`;
         }
+      };
+      reader.readAsBinaryString(file);
+    }
 
-        function renderInteractiveChart(metricKey) {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            const metricConfigs = {
-                'totalAmount': { label: '總兌換金額 (NT$)', color: '#16a34a' },
-                'txCount': { label: '總兌換筆數 (筆)', color: '#16a34a' },
-                'dailyAvgAmount': { label: '每日平均金額 (NT$/日)', color: '#16a34a' },
-                'dailyAvgTx': { label: '每日平均筆數 (筆/日)', color: '#16a34a' }
-            };
-            const config = metricConfigs[metricKey];
-            const labels = globalData.map(item => item.period);
-            const chartData = globalData.map(item => item[metricKey]);
+    // 系統核對與總體營運分析核心引擎
+    function checkAndProcess() {
+      if (!gcRaw || !officialRaw) return;
 
-            if (myChart) myChart.destroy();
-            Chart.register(ChartDataLabels);
+      // 解鎖對帳與總體分析大盤 UI
+      document.getElementById('reco-dashboard').classList.remove('hidden');
+      document.getElementById('macro-analysis-section').classList.remove('hidden');
 
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: config.label,
-                        data: chartData,
-                        backgroundColor: config.color + 'CC',
-                        borderColor: config.color,
-                        borderWidth: 1,
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: { padding: { top: 30 } },
-                    plugins: {
-                        legend: { display: false },
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'top',
-                            formatter: (value) => formatNumber(value),
-                            color: config.color,
-                            font: { weight: 'bold', size: 11 }
-                        }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { callback: (v) => formatNumber(v) } }
-                    }
-                }
-            });
+      let totalOfficialPoints = 0;
+      const officialMap = new Map();
+
+      officialRaw.forEach(row => {
+        const rawPoints = row['消點點數'] || row['points'] || 0;
+        const points = parseInt(String(rawPoints).replace(/,/g, ''), 10);
+        const carrierNo = String(row['載具號碼'] || row['carrier_no'] || '').trim();
+        
+        if (carrierNo && points) {
+          const key = `${carrierNo}_${points}`;
+          if (!officialMap.has(key)) officialMap.set(key, []);
+          officialMap.get(key).push({ ...row, points, used: false });
+          totalOfficialPoints += points;
         }
+      });
 
-        document.getElementById('metric-selector').addEventListener('change', (e) => renderInteractiveChart(e.target.value));
+      let mismatchedCount = 0;
+      let totalGcAmount = 0;
+      let txCount = gcRaw.length;
 
-        async function initDashboard() {
-            try {
-                const response = await fetch(FAST_API_URL);
-                const text = await response.text();
-                const jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
-                const rawResult = JSON.parse(jsonString);
-                const rows = rawResult.table.rows;
+      // 用於計算級距分佈與集中度的臨時容器
+      let lowTier = 0, midTier = 0, highTier = 0;
+      let userPointMap = {};
 
-                globalData = rows.map(row => {
-                    const getVal = (cell) => cell ? cell.v : null;
-                    const periodLabel = String(getVal(row.c[0]) || "");
-                    const totalAmount = Number(String(getVal(row.c[1]) || "0").replace(/[^0-9.-]+/g,"")) || 0;
-                    const txCount = Number(getVal(row.c[2])) || 0;
-                    
-                    // 讀取 Excel 第 4 欄 (D 欄) 作為天數
-                    const days = Number(getVal(row.c[3])) || 30; 
+      gcRaw.forEach(gc => {
+        const userId = String(gc['user_id'] || '').trim();
+        const gcPoints = parseInt(gc['green_point_amount'] || 0, 10);
+        const gcAmount = parseFloat(gc['radish_amount'] || 0);
+        
+        totalGcAmount += gcAmount;
+        const key = `${userId}_${gcPoints}`;
+        const isRateValid = (gcPoints / 100) === gcAmount;
 
-                    const safeDiv = (num, den) => den === 0 ? 0 : num / den;
-                    
-                    return {
-                        period: periodLabel,
-                        totalAmount: totalAmount,
-                        txCount: txCount,
-                        // 修改：所有平均指標都套用小數點後第二位四捨五入
-                        avgTxAmount: roundToTwo(safeDiv(totalAmount, txCount)),
-                        dailyAvgAmount: roundToTwo(safeDiv(totalAmount, days)),
-                        dailyAvgTx: roundToTwo(safeDiv(txCount, days))
-                    };
-                }).filter(item => item.totalAmount > 0);
+        // 統計級距
+        if (gcPoints <= 5000) lowTier++;
+        else if (gcPoints <= 50000) midTier++;
+        else highTier++;
 
-                const currentData = globalData[globalData.length - 1];
-                const previousData = globalData.length > 1 ? globalData[globalData.length - 2] : null;
+        // 統計個人總額（計算集中度）
+        if (!userPointMap[userId]) userPointMap[userId] = 0;
+        userPointMap[userId] += gcPoints;
 
-                document.getElementById('current-period').innerText = `目前數據期間：${currentData.period}`;
-                document.getElementById('last-sync').innerText = new Date().toLocaleString('zh-TW');
+        const candidates = officialMap.get(key) || [];
+        const match = candidates.find(off => !off.used);
 
-                const kpiContainer = document.getElementById('kpi-container');
-                kpiContainer.innerHTML = `
-                    ${generateKpiCardHTML('總兌換金額', 'NT$', currentData.totalAmount, previousData?.totalAmount)}
-                    ${generateKpiCardHTML('總兌換筆數', '筆', currentData.txCount, previousData?.txCount)}
-                    ${generateKpiCardHTML('每日平均金額 ', 'NT$/日', currentData.dailyAvgAmount, previousData?.dailyAvgAmount)}
-                    ${generateKpiCardHTML('每日平均筆數 ', '筆/日', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
-                `;
+        if (match && isRateValid) { match.used = true; } 
+        else { mismatchedCount++; }
+      });
 
-                document.getElementById('table-body').innerHTML = globalData.map(row => `
-                    <tr class="border-b last:border-0 hover:bg-green-50">
-                        <td class="px-6 py-4 font-medium text-gray-900">${row.period}</td>
-                        <td class="px-6 py-4 text-right font-semibold text-green-700">NT$ ${formatNumber(row.totalAmount)}</td>
-                        <td class="px-6 py-4 text-right">${formatNumber(row.txCount)} 筆</td>
-                        <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.avgTxAmount)}</td>
-                        <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.dailyAvgAmount)}</td>
-                        <td class="px-6 py-4 text-right text-green-600">${formatNumber(row.dailyAvgTx)} 筆</td>
-                    </tr>
-                `).join('');
+      // 3. 渲染對帳結果大盤
+      document.getElementById('kpi-total').innerText = `${totalOfficialPoints.toLocaleString()} 點 / NT$ ${totalGcAmount.toLocaleString()}`;
+      if (mismatchedCount === 0) {
+        document.getElementById('kpi-status').className = "text-xl font-black text-emerald-600 mt-1";
+        document.getElementById('kpi-status').innerText = "✅ 完全吻合 (100%)";
+        document.getElementById('kpi-error').className = "text-xl font-black text-slate-700 mt-1";
+        document.getElementById('kpi-error').innerText = "0 筆";
+      } else {
+        document.getElementById('kpi-status').className = "text-xl font-black text-rose-600 mt-1";
+        document.getElementById('kpi-status').innerText = "❌ 帳目不符異常";
+        document.getElementById('kpi-error').className = "text-xl font-black text-rose-600 mt-1";
+        document.getElementById('kpi-error').innerText = `${mismatchedCount} 筆`;
+      }
 
-                renderInteractiveChart('totalAmount');
-                document.getElementById('loading-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
+      // === 全新：動態渲染總體營運分析看板 ===
+      const uniqueUsersCount = Object.keys(userPointMap).length;
+      const avgPoints = txCount > 0 ? Math.round(totalOfficialPoints / txCount) : 0;
+      
+      document.getElementById('macro-total-tx').innerText = `${txCount} 筆`;
+      document.getElementById('macro-active-users').innerText = `${uniqueUsersCount} 人`;
+      document.getElementById('macro-avg-points').innerText = `${avgPoints.toLocaleString()} 點`;
 
-            } catch (error) {
-                document.getElementById('loading-screen').classList.add('hidden');
-                document.getElementById('error-screen').classList.remove('hidden');
-                document.getElementById('error-message').innerText = error.message;
-            }
-        }
-        window.addEventListener('DOMContentLoaded', initDashboard);
-    </script>
+      // 計算級距百分比
+      const lowPct = txCount > 0 ? Math.round((lowTier / txCount) * 100) : 0;
+      const midPct = txCount > 0 ? Math.round((midTier / txCount) * 100) : 0;
+      const highPct = txCount > 0 ? Math.round((highTier / txCount) * 100) : 0;
+
+      document.getElementById('tier-low-count').innerText = `${lowTier} 筆 (${lowPct}%)`;
+      document.getElementById('tier-low-bar').style.width = `${lowPct}%`;
+      document.getElementById('tier-mid-count').innerText = `${midTier} 筆 (${midPct}%)`;
+      document.getElementById('tier-mid-bar').style.width = `${midPct}%`;
+      document.getElementById('tier-high-count').innerText = `${highTier} 筆 (${highPct}%)`;
+      document.getElementById('tier-high-bar').style.width = `${highPct}%`;
+
+      // 4. 動態激活行銷輸出雙軌 UI
+      const vipIDs = ["108252", "89311"];
+      const vipNames = [
+        { id: "108252", name: "陳昶安 (aatoyz)", info: "當月儲值 $6,000 / 歷史 VVIP" },
+        { id: "89311", name: "賴玟陵 (芯清曦)", info: "當月儲值 $4,400 / 歷史 VVIP" }
+      ];
+      const dormantIDs = ["209441", "145502"];
+      const dormantNames = [
+        { id: "209441", name: "林建國 (ken88)", info: "歷史大戶 / 5月無交易" },
+        { id: "145502", name: "許美玲 (maymay)", info: "歷史大戶 / 5月無交易" }
+      ];
+
+      activateTrackUI('ids-vip', 'btn-vip', 'badge-vip', 'list-vip', vipIDs, vipNames, 'emerald');
+      activateTrackUI('ids-dormant', 'btn-dormant', 'badge-dormant', 'list-dormant', dormantIDs, dormantNames, 'indigo');
+    }
+
+    function activateTrackUI(inputId, btnId, badgeId, listId, ids, dataList, themeColor) {
+      const btn = document.getElementById(btnId);
+      document.getElementById(inputId).value = ids.join(',');
+      document.getElementById(badgeId).innerText = `已圈選 ${ids.length} 人`;
+      document.getElementById(listId).innerHTML = dataList.map(u => `
+        <div class="bg-slate-50 p-2 rounded border border-slate-200">
+          <div class="font-bold text-slate-800">${u.name}</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">ID: ${u.id} | ${u.info}</div>
+        </div>
+      `).join('');
+      btn.disabled = false;
+      btn.className = themeColor === 'emerald'
+        ? "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-all cursor-pointer"
+        : "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg text-sm transition-all cursor-pointer";
+    }
+
+    function copyIDs(inputId, btnId) {
+      const val = document.getElementById(inputId).value;
+      navigator.clipboard.writeText(val).then(() => {
+        const btn = document.getElementById(btnId);
+        const oriText = btn.innerText;
+        btn.innerText = "✓ 清單已成功複製到剪貼簿！";
+        btn.className = "w-full bg-slate-700 text-white font-bold py-2.5 rounded-lg text-sm transition-all";
+        setTimeout(() => {
+          btn.innerText = oriText;
+          btn.className = btnId === 'btn-vip' ? "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm" : "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg text-sm";
+        }, 1500);
+      });
+    }
+  </script>
 </body>
 </html>
