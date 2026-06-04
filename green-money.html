@@ -1,99 +1,89 @@
-/**
- * 企業級物流對帳模型：修正 DriveApp 權限錯誤之全自動讀檔對帳腳本
- * 核心機制：GitHub 版控 / 0人工複製貼上 / 權限異常熔斷保護 / 多筆交易動態累加去重
- */
-function runAutomatedLogisticsReconciliation() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var dashSheet = ss.getSheetByName("📊 大盤");
-  
-  // 1. 設定您在 Google Drive 建立的【原始報表自動投遞資料夾】唯一 ID
-  // 🔥 安全提醒：請確保填入的是資料夾 ID（網址中 folders/ 後方的亂碼），而非 Sheets 檔案 ID！
-  var FOLDER_ID = "12l6XLGxg5sq5-GtuyY8ahSrDAhVjzefq"; 
-  
-  var folder;
-  var files;
-  
-  // 🛡️ 防禦性工程：全面攔截 DriveApp 權限與 ID 低級錯誤，防止系統崩潰
-  try {
-    folder = DriveApp.getFolderById(FOLDER_ID);
-    files = folder.getFiles();
-  } catch (error) {
-    SpreadsheetApp.getUi().alert(
-      "🚨 雲端資料夾存取安全熔斷", 
-      "原因：執行此腳本的帳號缺乏該 Google Drive 資料夾的存取權限，或資料夾 ID 設定錯誤。\n\n請管理員將該資料夾共用權限設定為「任何知道連結的人皆可檢視」，或將執行同仁加入共用名單。",
-      SpreadsheetApp.getUi().ButtonSet.OK
-    );
-    return; // 安全中斷
-  }
-  
-  var gcSheet = ss.getSheetByName("GC_Raw");
-  var gpSheet = ss.getSheetByName("GreenPoint_Raw");
-  
-  if (!gcSheet || !gpSheet || !dashSheet) {
-    ss.toast("❌ 對帳中編：請確保當前試算表包含 GC_Raw, GreenPoint_Raw 與 📊 大盤 三個頁籤。");
-    return;
-  }
-  
-  // 2. 直接讀取本試算表內貼入/轉換後的 Matrix 陣列
-  var gcValues = gcSheet.getDataRange().getValues();
-  var gpValues = gpSheet.getDataRange().getValues();
-  
-  var historyUserSet = new Set(["89311", "209441", "145502"]); // 歷史老客資料庫
-  var officialMap = new Map();           // Key: 交易序號唯一鍵, Value: 官方點數
-  var userAccumulatedPoints = new Map(); // Key: 會員 ID, Value: 當月動態累加總點數
-  
-  var vipIds = [];
-  var newCustomerIds = [];
-  var dormantIds = ["209441", "145502"];
-  
-  // 3. 第一階段：建立官方雜湊表 (以「交易序號」為唯一對帳錨點)
-  for (var j = 1; j < gpValues.length; j++) {
-    var gpKey = String(gpValues[j][2]).trim(); // C 欄：交易序號唯一鍵
-    var gpPointsRaw = String(gpValues[j][3]);  // D 欄：消點點數
-    var points = parseInt(gpPointsRaw.replace(/,/g, ""), 10); // 自動安全移除官方千分位逗號
-    if (gpKey && !isNaN(points)) {
-      officialMap.set(gpKey, points);
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GC 贈物網 - 環保集點雲端中心化對帳大盤</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen font-sans relative">
+
+  <div id="login-wall" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full space-y-4 border border-slate-100">
+      <div class="text-center space-y-1">
+        <span class="text-4xl">🌱</span>
+        <h2 class="text-base font-black text-slate-800">GC 環保集點管理網頁後台</h2>
+        <p class="text-xs text-slate-400">請輸入內部授權帳密解鎖。</p>
+      </div>
+      <div class="space-y-3">
+        <div><label class="block text-xs font-bold text-slate-500 mb-1">營運帳號</label><input type="text" id="wall-username" class="w-full border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"></div>
+        <div><label class="block text-xs font-bold text-slate-500 mb-1">管理密碼</label><input type="password" id="wall-password" class="w-full border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" onkeypress="if(event.keyCode==13) verifyLogin()"></div>
+        <p id="login-error-msg" class="text-xs text-rose-500 font-semibold hidden">❌ 帳號或密碼錯誤。</p>
+        <button onclick="verifyLogin()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 rounded-lg text-xs transition-all mt-2 shadow-sm">確認登入解鎖</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white shadow-md px-6 py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div>
+        <h1 class="text-lg font-bold">🌱 環保集點雙軌自動化工作台</h1>
+        <p class="text-xs text-emerald-100 mt-0.5">GitHub Pages 前端介面 ╳ Apps Script 遠端自動化對帳引擎</p>
+      </div>
+      <button onclick="triggerGasReconciliation()" id="action-btn" class="bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-all">🚀 啟動自動化物流核對</button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6 space-y-6">
+    <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
+      <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">當月對帳快照狀態</h2>
+      <p id="status-text" class="text-slate-500 text-xs mt-2">請將原始 Excel 報表上傳至 Google Drive 指定資料夾，並點擊右上方「啟動自動化物流核對」按鈕。</p>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-5 rounded-xl border border-emerald-100 shadow-2xs">
+        <h3 class="font-bold text-sm text-slate-800">👑 超級 VIP 組 (動態累加且精準去重)</h3>
+        <textarea id="output-vip" readonly class="w-full mt-2 border border-slate-200 rounded-lg p-2 font-mono text-xs bg-slate-50 h-24 tracking-wider focus:outline-none" placeholder="等待對帳完成..."></textarea>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-blue-100 shadow-2xs">
+        <h3 class="font-bold text-sm text-slate-800">🌱 初次兌換新客組</h3>
+        <textarea id="output-new" readonly class="w-full mt-2 border border-slate-200 rounded-lg p-2 font-mono text-xs bg-slate-50 h-24 tracking-wider focus:outline-none" placeholder="等待對帳完成..."></textarea>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // 🔥 請在此處填入您 Google Apps Script「新增部署」後產生的 Web App 網址！
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzeQxPsa6TaHWnNXhkorYpbF6buL7oGChdCn-WOyj2uZ4qdEOgW2btLcG3AK59d9SDB/exec"; 
+
+    function verifyLogin() {
+      const u = document.getElementById('wall-username').value;
+      const p = document.getElementById('wall-password').value;
+      if (u === 'gc_admin' && p === 'gc2026') { document.getElementById('login-wall').classList.add('hidden'); } 
+      else { document.getElementById('login-error-msg').classList.remove('hidden'); }
     }
-  }
 
-  // 4. 第二階段：掃描 GC 平台資料，利用唯一鍵鎖定，平帳者進行「記憶體內累加」
-  for (var i = 1; i < gcValues.length; i++) {
-    var userId = String(gcValues[i][0]).trim();          // A 欄：user_id
-    var gcKey = String(gcValues[i][2]).trim();           // C 欄：trade_no 唯一鍵
-    var gcPoints = parseInt(String(gcValues[i][3]), 10); // D 欄：green_point_amount
-    var gcAmount = parseFloat(String(gcValues[i][4]));   // E 欄：radish_amount
+    function triggerGasReconciliation() {
+      const btn = document.getElementById('action-btn');
+      const status = document.getElementById('status-text');
+      btn.innerText = "⌛ 正在進行物流級精密平帳..."; btn.disabled = true;
+      status.innerText = "⌛ 遠端引擎正在讀取 Google Drive 資料夾原始 Excel，執行交易序號唯一鍵核對與陳昶安多筆交易動態聚合加總中...";
 
-    if (!userId || !gcKey) continue;
-
-    // 財務核心審計雙防線：交易序號存在 ╳ 點數一致 ╳ 1:100 匯率合規
-    var isRateValid = (gcPoints / 100) === gcAmount;
-    var hasOfficialRecord = officialMap.has(gcKey) && officialMap.get(gcKey) === gcPoints;
-
-    if (isRateValid && hasOfficialRecord) {
-      // 🎉 平帳成功！陳昶安(108252)的 3 筆獨立兌換在此會被連續加總累計，絕不漏計
-      var currentTotal = userAccumulatedPoints.get(userId) || 0;
-      userAccumulatedPoints.set(userId, currentTotal + gcPoints);
+      // 透過跨域 Fetch API 遠端發動 Google Apps Script 算力進行核對
+      fetch(GAS_WEB_APP_URL)
+        .then(res => res.json())
+        .then(data => {
+          btn.innerText = "🚀 啟動自動化物流核對"; btn.disabled = false;
+          status.className = "text-emerald-600 text-xs font-bold mt-2";
+          status.innerText = "✅ 平帳成功！陳昶安等大戶的多次兌換已在背景自動加總累計，並刷新 Google 試算表大盤。";
+          document.getElementById('output-vip').value = data.vip;
+          document.getElementById('output-new').value = data.newCustomer;
+        })
+        .catch(err => {
+          btn.innerText = "🚀 啟動自動化物流核對"; btn.disabled = false;
+          status.innerText = "❌ 連線失敗，請檢查 Apps Script 的網路應用程式部署權限是否開啟為『任何人』。";
+        });
     }
-  }
-
-  // 5. 第三階段：依據「加總後的當月總額」進行行銷受眾精準去重分類
-  userAccumulatedPoints.forEach(function(totalPoints, userId) {
-    if (totalPoints >= 30000) {
-      if (vipIds.indexOf(userId) === -1) { vipIds.push(userId); } // 👑 核心去重
-    } else {
-      if (!historyUserSet.has(userId) && newCustomerIds.indexOf(userId) === -1) {
-        newCustomerIds.push(userId);
-      }
-    }
-  });
-
-  // 6. 數據全自動無感回填大盤控制台
-  dashSheet.getRange("G6").setValue(vipIds.join(","));
-  dashSheet.getRange("G8").setValue(newCustomerIds.join(","));
-  dashSheet.getRange("G10").setValue(dormantIds.join(","));
-
-  // 財務 ### 防護與可用性優化
-  dashSheet.autoResizeColumns(1, 8);
-  dashSheet.getRange("G6:G10").setWrap(true); 
-  ss.toast("🎉 物流級全自動對帳完成！陳昶安等大戶多筆交易已完成累加與去重刷新。");
-}
+  </script>
+</body>
+</html>
