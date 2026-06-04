@@ -14,7 +14,7 @@
       <div class="text-center space-y-2">
         <span class="text-4xl">🌱</span>
         <h2 class="text-xl font-black text-slate-800">GC 環保集點管理後台</h2>
-        <p class="text-xs text-slate-400">本工作台涉及會員個資與財務帳目，請輸入內部授權帳密解鎖。</p>
+        <p class="text-xs text-slate-400">請輸入內部授權帳密解鎖。</p>
       </div>
       <div class="space-y-3">
         <div>
@@ -49,13 +49,12 @@
     
     <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div id="drop-gc" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-white p-6 rounded-xl text-center cursor-pointer transition-all">
-        <p class="text-sm font-bold text-slate-700">1. 請拖入或點擊上傳【當月 GC 平台兌換檔】</p>
-        <p class="text-xs text-slate-400 mt-1" id="status-gc">未選擇任何檔案 (.xlsx)</p>
-        <div class="mt-2 text-[11px] text-amber-600 font-semibold">※ 系統將自動執行「點數 ÷ 100 = 新台幣」精準校驗</div>
+        <p class="text-sm font-bold text-slate-700">1. 請點擊或拖入【當月 GC 平台兌換檔】</p>
+        <p class="text-xs text-slate-500 font-semibold mt-1 bg-slate-100 py-1 rounded inline-block px-3" id="status-gc">未選擇檔案 (.xlsx)</p>
       </div>
       <div id="drop-official" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-white p-6 rounded-xl text-center cursor-pointer transition-all">
-        <p class="text-sm font-bold text-slate-700">2. 請拖入或點擊上傳【當月 環保署官方明細檔】</p>
-        <p class="text-xs text-slate-400 mt-1" id="status-official">未選擇任何檔案 (.xls / .xlsx)</p>
+        <p class="text-sm font-bold text-slate-700">2. 請點擊或拖入【當月 環保署官方明細檔】</p>
+        <p class="text-xs text-slate-500 font-semibold mt-1 bg-slate-100 py-1 rounded inline-block px-3" id="status-official">未選擇檔案 (.xls / .xlsx)</p>
       </div>
     </section>
 
@@ -74,7 +73,6 @@
           <p class="text-xl font-black text-rose-600 mt-1" id="kpi-error">0 筆</p>
         </div>
       </div>
-
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 text-sm">
         <div class="bg-slate-50 p-3 rounded-lg flex justify-between"><span>當月總交易筆數:</span><span class="font-mono font-bold text-slate-800" id="macro-total-tx">0 筆</span></div>
         <div class="bg-slate-50 p-3 rounded-lg flex justify-between"><span>當月活躍會員數:</span><span class="font-mono font-bold text-slate-800" id="macro-active-users">0 人</span></div>
@@ -84,8 +82,7 @@
 
     <section class="bg-white shadow-sm rounded-xl border border-slate-200 p-6 space-y-4">
       <div class="border-b border-slate-100 pb-2">
-        <h2 class="text-base font-bold text-slate-900">📊 財務歷年/歷月營運水位追蹤大盤 (所有人高度同步)</h2>
-        <p class="text-xs text-slate-400 mt-0.5">此區塊內嵌於網頁原始碼矩陣，方便全員隨時追蹤歷史流速趨勢。</p>
+        <h2 class="text-base font-bold text-slate-900">📊 財務歷年/歷月營運水位追蹤大盤</h2>
       </div>
       <div class="space-y-4" id="history-chart-container"></div>
     </section>
@@ -135,33 +132,29 @@
     </section>
   </main>
 
+  <input type="file" id="file-gc" class="hidden" accept=".xlsx,.xls,.csv">
+  <input type="file" id="file-official" class="hidden" accept=".xlsx,.xls,.csv">
+
   <script>
-    // ========================================================
-    // ⚙️ 營運資料庫矩陣：未來每個月只要依格式在下方補上一行即可！
-    // ========================================================
     const staticHistoryDB = {
       "2026-01": { month: "2026-01", totalPoints: 850000, totalAmount: 8500, txCount: 4 },
       "2026-02": { month: "2026-02", totalPoints: 920000, totalAmount: 9200, txCount: 4 },
       "2026-03": { month: "2026-03", totalPoints: 1050000, totalAmount: 10500, txCount: 5 },
       "2026-04": { month: "2026-04", totalPoints: 780000, totalAmount: 7800, txCount: 3 },
-      "2026-05": { month: "2026-05", totalPoints: 1169900, totalAmount: 11699, txCount: 5 } // 5月最新動態自動內嵌
+      "2026-05": { month: "2026-05", totalPoints: 1169900, totalAmount: 11699, txCount: 5 }
     };
 
-    // 🔒 帳密防護牆驗證邏輯
     function verifyLogin() {
       const u = document.getElementById('wall-username').value;
       const p = document.getElementById('wall-password').value;
-
-      // 自訂內部共用帳密：帳號 gc_admin / 密碼 gc2026
       if (u === 'gc_admin' && p === 'gc2026') {
-        document.getElementById('login-wall').classList.add('hidden'); // 關閉登入牆，渲染主介面
-        renderHistoryChart(); // 初始化渲染歷年圖表
+        document.getElementById('login-wall').classList.add('hidden');
+        renderHistoryChart();
       } else {
         document.getElementById('login-error-msg').classList.remove('hidden');
       }
     }
 
-    // (核心對帳與解析邏輯維持最穩定之 Option A 純前端架構)
     let gcRaw = null, officialRaw = null;
     setupUploadZone('drop-gc', 'file-gc', 'status-gc', (data) => { gcRaw = data; checkAndProcess(); });
     setupUploadZone('drop-official', 'file-official', 'status-official', (data) => { officialRaw = data; checkAndProcess(); });
@@ -174,27 +167,57 @@
       document.getElementById(fileId).addEventListener('change', (e) => { if (e.target.files.length > 0) handleExcelParsing(e.target.files[0], statusId, callback); });
     }
 
+    // 🔥 工程防線升級：加入強健的 try-catch 欄位校正機制
     function handleExcelParsing(file, statusId, callback) {
-      document.getElementById(statusId).innerText = `⌛ 正在解析檔案...`;
+      const indicator = document.getElementById(statusId);
+      indicator.className = "text-xs text-amber-600 font-semibold mt-1 bg-amber-50 py-1 px-3 rounded inline-block";
+      indicator.innerText = `⌛ 正在解析檔案...`;
+      
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
-          const workbook = XLSX.read(e.target.result, { type: 'binary' });
-          const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-          document.getElementById(statusId).innerText = `✅ 已成功載入：${file.name}`;
+          const workbook = XLSX.read(e.target.result, { type: 'binary', cellDates: true });
+          const sheetName = workbook.SheetNames[0];
+          const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+          
+          if(json.length === 0) {
+            throw new Error("檔案內沒有任何有效的數據列。");
+          }
+
+          indicator.className = "text-xs text-emerald-600 font-semibold mt-1 bg-emerald-50 py-1 px-3 rounded inline-block";
+          indicator.innerText = `✅ 成功載入：${file.name.substring(0,15)}...`;
           callback(json);
-        } catch (err) { document.getElementById(statusId).innerText = `❌ 解析失敗。`; }
+        } catch (err) {
+          indicator.className = "text-xs text-rose-600 font-semibold mt-1 bg-rose-50 py-1 px-3 rounded inline-block";
+          indicator.innerText = `❌ 解析失敗：請確保檔案未損壞且非空。`;
+          alert(`⚠️ Excel 讀取失敗！錯誤原因：${err.message}\n請檢查該 Excel 內的第一個分頁(Sheet)是否有資料。`);
+        }
+      };
+      reader.onerror = () => {
+        indicator.innerText = `❌ 瀏覽器拒絕讀取本地檔案。`;
       };
       reader.readAsBinaryString(file);
     }
 
     function checkAndProcess() {
       if (!gcRaw || !officialRaw) return;
+      
+      // 檢查欄位是否存在 (動態相容性校正)
+      const testGc = gcRaw[0];
+      const hasGcRequired = ('user_id' in testGc) && ('green_point_amount' in testGc);
+      
+      if (!hasGcRequired) {
+        alert("❌ 錯誤：【平台兌換檔】中找不到 'user_id' 或 'green_point_amount' 欄位標題，系統無法核對！\n請檢查 Excel 第一列名稱。");
+        document.getElementById('status-gc').innerText = "❌ 欄位不對";
+        return;
+      }
+
       document.getElementById('reco-dashboard').classList.remove('hidden');
 
       let totalOfficialPoints = 0;
       officialRaw.forEach(row => {
-        const rawPoints = row['消點點數'] || row['points'] || 0;
+        // 相容官方繁體或簡體欄位
+        const rawPoints = row['消點點數'] || row['points'] || row['點數'] || 0;
         totalOfficialPoints += parseInt(String(rawPoints).replace(/,/g, ''), 10);
       });
 
@@ -203,7 +226,7 @@
       gcRaw.forEach(gc => {
         const userId = String(gc['user_id'] || '').trim();
         const points = parseInt(gc['green_point_amount'] || 0, 10);
-        totalGcAmount += (points / 100); // 點數 / 100 換算台幣
+        totalGcAmount += (points / 100);
         userMap[userId] = (userMap[userId] || 0) + points;
       });
 
@@ -211,7 +234,7 @@
       document.getElementById('kpi-total').innerText = `${totalOfficialPoints.toLocaleString()} 點 / NT$ ${totalGcAmount.toLocaleString()}`;
       document.getElementById('macro-total-tx').innerText = `${txCount} 筆`;
       document.getElementById('macro-active-users').innerText = `${Object.keys(userMap).length} 人`;
-      document.getElementById('macro-avg-points').innerText = `${avgPoints.toLocaleString()} 點`; // 修正筆均點數
+      document.getElementById('macro-avg-points').innerText = `${avgPoints.toLocaleString()} 點`;
 
       activateTrackUI('ids-vip', 'btn-vip', 'badge-vip', 'list-vip', ["108252", "89311"], [{name:"陳昶安 (aatoyz)",info:"$6,000"},{name:"賴玟陵 (芯清曦)",info:"$4,400"}], 'emerald');
       activateTrackUI('ids-dormant', 'btn-dormant', 'badge-dormant', 'list-dormant', ["209441", "145502"], [{name:"林建國 (ken88)",info:"歷史$3,200"},{name:"許美玲 (maymay)",info:"歷史$1,850"}], 'indigo');
@@ -229,7 +252,6 @@
       const container = document.getElementById('history-chart-container');
       const months = Object.keys(staticHistoryDB).sort();
       const maxAmount = Math.max(...months.map(m => staticHistoryDB[m].totalAmount), 1);
-      
       container.innerHTML = months.map(m => {
         const data = staticHistoryDB[m];
         return `
