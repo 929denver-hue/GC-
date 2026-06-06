@@ -1,89 +1,280 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GC 贈物網 - 環保集點雲端中心化對帳大盤</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>綠點兌換儀表板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen font-sans relative">
+<body class="bg-gray-50 font-sans border-t-4 border-green-600 min-h-screen">
 
-  <div id="login-wall" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
-    <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full space-y-4 border border-slate-100">
-      <div class="text-center space-y-1">
-        <span class="text-4xl">🌱</span>
-        <h2 class="text-base font-black text-slate-800">GC 環保集點管理網頁後台</h2>
-        <p class="text-xs text-slate-400">請輸入內部授權帳密解鎖。</p>
-      </div>
-      <div class="space-y-3">
-        <div><label class="block text-xs font-bold text-slate-500 mb-1">營運帳號</label><input type="text" id="wall-username" class="w-full border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"></div>
-        <div><label class="block text-xs font-bold text-slate-500 mb-1">管理密碼</label><input type="password" id="wall-password" class="w-full border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" onkeypress="if(event.keyCode==13) verifyLogin()"></div>
-        <p id="login-error-msg" class="text-xs text-rose-500 font-semibold hidden">❌ 帳號或密碼錯誤。</p>
-        <button onclick="verifyLogin()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 rounded-lg text-xs transition-all mt-2 shadow-sm">確認登入解鎖</button>
-      </div>
+    <div id="loading-screen" class="min-h-screen flex flex-col items-center justify-center space-y-4">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        <p class="text-green-700 font-medium animate-pulse">正在從 Google Sheets 同步最新資料與圖表...</p>
     </div>
-  </div>
 
-  <header class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white shadow-md px-6 py-4">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <div>
-        <h1 class="text-lg font-bold">🌱 環保集點雙軌自動化工作台</h1>
-        <p class="text-xs text-emerald-100 mt-0.5">GitHub Pages 前端介面 ╳ Apps Script 遠端自動化對帳引擎</p>
-      </div>
-      <button onclick="triggerGasReconciliation()" id="action-btn" class="bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-all">🚀 啟動自動化物流核對</button>
+    <div id="error-screen" class="hidden min-h-screen flex justify-center items-start pt-10">
+        <div class="bg-red-50 text-red-700 p-6 rounded-lg border border-red-200 max-w-lg w-full">
+            <h3 class="text-lg font-bold flex items-center gap-2"> 資料連線異常</h3>
+            <p id="error-message" class="mt-2 text-sm font-mono break-all"></p>
+        </div>
     </div>
-  </header>
 
-  <main class="max-w-7xl mx-auto p-6 space-y-6">
-    <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
-      <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">當月對帳快照狀態</h2>
-      <p id="status-text" class="text-slate-500 text-xs mt-2">請將原始 Excel 報表上傳至 Google Drive 指定資料夾，並點擊右上方「啟動自動化物流核對」按鈕。</p>
-    </section>
+    <div id="dashboard" class="hidden max-w-6xl mx-auto p-6 md:p-10">
+        <header class="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
+            <div>
+                <h1 class="text-2xl font-extrabold text-green-950">綠點兌換儀表板</h1>
+                <p id="current-period" class="text-gray-500 mt-1">目前數據期間：載入中...</p>
+            </div>
+            <div class="text-sm text-green-700 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+                最後同步：<span id="last-sync"></span>
+            </div>
+        </header>
 
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white p-5 rounded-xl border border-emerald-100 shadow-2xs">
-        <h3 class="font-bold text-sm text-slate-800">👑 超級 VIP 組 (動態累加且精準去重)</h3>
-        <textarea id="output-vip" readonly class="w-full mt-2 border border-slate-200 rounded-lg p-2 font-mono text-xs bg-slate-50 h-24 tracking-wider focus:outline-none" placeholder="等待對帳完成..."></textarea>
-      </div>
-      <div class="bg-white p-5 rounded-xl border border-blue-100 shadow-2xs">
-        <h3 class="font-bold text-sm text-slate-800">🌱 初次兌換新客組</h3>
-        <textarea id="output-new" readonly class="w-full mt-2 border border-slate-200 rounded-lg p-2 font-mono text-xs bg-slate-50 h-24 tracking-wider focus:outline-none" placeholder="等待對帳完成..."></textarea>
-      </div>
-    </section>
-  </main>
+        <div id="ai-insights-container" class="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 p-6 rounded-xl shadow-sm">
+            <h3 class="text-sm font-bold text-green-800 uppercase tracking-wider flex items-center gap-2">
+                🎯 本月 AI 行銷亮點與決策建議
+            </h3>
+            <ul id="ai-insights-list" class="mt-3 space-y-2 text-sm text-green-950 font-medium">
+                </ul>
+        </div>
 
-  <script>
-    // 🔥 已成功為您同步替換為您最新發佈的 GAS 網頁應用程式 URL
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwhYVzc9f9vkY3Zau6qntOt3-0qdCxgnKP45Ny1dvIs1gbNCOl8ehIso87k_k4-omNi/exec"; 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container"></div>
 
-    function verifyLogin() {
-      const u = document.getElementById('wall-username').value;
-      const p = document.getElementById('wall-password').value;
-      if (u === 'gc_admin' && p === 'gc2026') { document.getElementById('login-wall').classList.add('hidden'); } 
-      else { document.getElementById('login-error-msg').classList.remove('hidden'); }
-    }
+        <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h3 class="font-bold text-green-700">歷月兌換數據比較</h3>
+                <select id="metric-selector" class="border border-gray-200 rounded-lg px-4 py-2 text-sm text-green-800 bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer font-medium">
+                    <option value="totalAmount">總兌換金額 (NT$)</option>
+                    <option value="txCount">總兌換筆數 (筆)</option>
+                    <option value="dailyAvgAmount">每日平均金額 (NT$/日)</option>
+                    <option value="dailyAvgTx">每日平均筆數 (筆/日)</option>
+                </select>
+            </div>
+            <div class="relative h-72 w-full">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
 
-    function triggerGasReconciliation() {
-      const btn = document.getElementById('action-btn');
-      const status = document.getElementById('status-text');
-      btn.innerText = "⌛ 正在進行物流級精密平帳..."; btn.disabled = true;
-      status.innerText = "⌛ 遠端引擎正在讀取 Google Drive 資料夾原始 Excel，執行交易序號唯一鍵核對與陳昶安多筆交易動態聚合加總中...";
+        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 bg-green-50">
+                <h3 class="font-bold text-green-700">近期資料明細</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-green-700 uppercase bg-white border-b">
+                        <tr>
+                            <th class="px-6 py-3">期別 (月份)</th>
+                            <th class="px-6 py-3 text-right">總金額</th>
+                            <th class="px-6 py-3 text-right">總筆數</th>
+                            <th class="px-6 py-3 text-right">單筆平均</th>
+                            <th class="px-6 py-3 text-right">日均金額</th>
+                            <th class="px-6 py-3 text-right">日均筆數</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-      // 透過跨域 Fetch API 遠端發動 Google Apps Script 算力進行核對
-      fetch(GAS_WEB_APP_URL)
-        .then(res => res.json())
-        .then(data => {
-          btn.innerText = "🚀 啟動自動化物流核對"; btn.disabled = false;
-          status.className = "text-emerald-600 text-xs font-bold mt-2";
-          status.innerText = "✅ 平帳成功！陳昶安等大戶的多次兌換已在背景自動加總累計，並刷新 Google 試算表大盤。";
-          document.getElementById('output-vip').value = data.vip;
-          document.getElementById('output-new').value = data.newCustomer;
-        })
-        .catch(err => {
-          btn.innerText = "🚀 啟動自動化物流核對"; btn.disabled = false;
-          status.innerText = "❌ 連線失敗，請檢查 Apps Script 的網路應用程式部署權限是否開啟為『任何人』。";
-        });
-    }
-  </script>
+    <script>
+        const SPREADSHEET_ID = '1UfbFi9gS0mpYokTvGgdgmi4ujmSQwz14HG1_i_IcDbU';
+        const SHEET_NAME = '兌換紀錄';
+        const FAST_API_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
+        const formatNumber = (num) => {
+            return Number(num).toLocaleString('en-US', { maximumFractionDigits: 2 });
+        };
+
+        const roundToTwo = (num) => Math.round(num * 100) / 100;
+
+        let myChart = null;
+        let globalData = [];
+
+        function generateKpiCardHTML(title, unit, current, previous) {
+            const hasPrevious = previous !== undefined && previous !== null;
+            let growthRate = 0;
+            if (hasPrevious) {
+                growthRate = previous === 0 ? 100 : ((current - previous) / previous) * 100;
+            }
+            const isPositive = growthRate > 0;
+            const isNegative = growthRate < 0;
+            const trendColor = isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500';
+            const trendIcon = isPositive ? '↑' : isNegative ? '↓' : '−';
+
+            return `
+                <div class="p-5 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col transition-all hover:shadow-md">
+                    <span class="text-green-700 text-sm font-medium">${title}</span>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span class="text-3xl font-bold text-green-950">
+                            ${formatNumber(current)} <span class="text-sm font-normal text-gray-500">${unit}</span>
+                        </span>
+                    </div>
+                    ${hasPrevious ? `<div class="mt-3 text-sm font-semibold flex items-center gap-1 bg-gray-50 w-fit px-2 py-1 rounded ${trendColor}">
+                        <span>${trendIcon} ${Math.abs(growthRate).toFixed(1)}%</span>
+                        <span class="text-gray-400 font-normal text-xs ml-1">vs 上期 (${formatNumber(previous)})</span>
+                    </div>` : `<div class="mt-3 text-xs text-gray-400 bg-gray-50 w-fit px-2 py-1 rounded">無上期資料</div>`}
+                </div>
+            `;
+        }
+
+        // ✨ 新增：自動演算行銷亮點的核心大腦 (Insight Rules)
+        function generateMarketingInsights(current, previous) {
+            const insightsList = document.getElementById('ai-insights-list');
+            let html = "";
+
+            if (!current) return;
+
+            // 規則 1：單筆平均金額（客單價）分析
+            if (previous) {
+                const avgChange = ((current.avgTxAmount - previous.avgTxAmount) / previous.avgTxAmount) * 100;
+                if (avgChange > 10) {
+                    html += `<li>🔥 **【兌換客單價暴增】** 本月單筆平均兌換額成長了 **${avgChange.toFixed(1)}%**！顯示用戶傾向於累積大額點數後一次性兌換高價值商品，行銷推廣可向「高單價聯名品」傾斜。</li>`;
+                } else if (avgChange < -10) {
+                    html += `<li>⚠️ **【小額兌換潮現蹤】** 本月單筆平均兌換額下滑 **${Math.abs(avgChange).toFixed(1)}%**，用戶呈現隨手小額消耗點數的趨勢，建議加強超商零食、飲料等即時性通路促銷。</li>`;
+                }
+            }
+
+            // 規則 2：日均筆數（活躍頻次）分析
+            if (previous) {
+                const txChange = ((current.dailyAvgTx - previous.dailyAvgTx) / previous.dailyAvgTx) * 100;
+                if (txChange > 15) {
+                    html += `<li>📈 **【用戶黏著度飆升】** 每日平均兌換筆數較上月強勢成長 **${txChange.toFixed(1)}%**！這代表綠色生活集點已成功融入大眾日常習慣，行銷大獲成功。</li>`;
+                }
+            }
+
+            // 規則 3：總量絕對值突破
+            if (current.totalAmount > 500000) { // 門檻值可依實際狀況調整
+                html += `<li>🌿 **【綠色經濟里程碑】** 本月總兌換金額成功突破 **NT$ ${formatNumber(current.totalAmount)}**，創下近期新高點，非常適合包裝為「感謝祭」或公關新聞稿議題。</li>`;
+            }
+
+            if (html === "") {
+                html = `<li>📊 本月各項兌換指標（日均金額、單筆平均）表現平穩，未出現異常波動。建議行銷人員維持現有推廣節奏，並持續觀測下季動能。</li>`;
+            }
+
+            insightsList.innerHTML = html;
+        }
+
+        function renderInteractiveChart(metricKey) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            const metricConfigs = {
+                'totalAmount': { label: '總兌換金額 (NT$)', color: '#16a34a' },
+                'txCount': { label: '總兌換筆數 (筆)', color: '#16a34a' },
+                'dailyAvgAmount': { label: '每日平均金額 (NT$/日)', color: '#16a34a' },
+                'dailyAvgTx': { label: '每日平均筆數 (筆/日)', color: '#16a34a' }
+            };
+            const config = metricConfigs[metricKey];
+            const labels = globalData.map(item => item.period);
+            const chartData = globalData.map(item => item[metricKey]);
+
+            if (myChart) myChart.destroy();
+            Chart.register(ChartDataLabels);
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: config.label,
+                        data: chartData,
+                        backgroundColor: config.color + 'CC',
+                        borderColor: config.color,
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { top: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            formatter: (value) => formatNumber(value),
+                            color: config.color,
+                            font: { weight: 'bold', size: 11 }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: (v) => formatNumber(v) } }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('metric-selector').addEventListener('change', (e) => renderInteractiveChart(e.target.value));
+
+        async function initDashboard() {
+            try {
+                const response = await fetch(FAST_API_URL);
+                const text = await response.text();
+                const jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+                const rawResult = JSON.parse(jsonString);
+                const rows = rawResult.table.rows;
+
+                globalData = rows.map(row => {
+                    const getVal = (cell) => cell ? cell.v : null;
+                    const periodLabel = String(getVal(row.c[0]) || "");
+                    const totalAmount = Number(String(getVal(row.c[1]) || "0").replace(/[^0-9.-]+/g,"")) || 0;
+                    const txCount = Number(getVal(row.c[2])) || 0;
+                    const days = Number(getVal(row.c[3])) || 30;
+
+                    const safeDiv = (num, den) => den === 0 ? 0 : num / den;
+                    
+                    return {
+                        period: periodLabel,
+                        totalAmount: totalAmount,
+                        txCount: txCount,
+                        avgTxAmount: roundToTwo(safeDiv(totalAmount, txCount)),
+                        dailyAvgAmount: roundToTwo(safeDiv(totalAmount, days)),
+                        dailyAvgTx: roundToTwo(safeDiv(txCount, days))
+                    };
+                }).filter(item => item.totalAmount > 0);
+
+                const currentData = globalData[globalData.length - 1];
+                const previousData = globalData.length > 1 ? globalData[globalData.length - 2] : null;
+
+                document.getElementById('current-period').innerText = `目前數據期間：${currentData.period}`;
+                document.getElementById('last-sync').innerText = new Date().toLocaleString('zh-TW');
+
+                // ✨ 觸發 AI 亮點引擎計算
+                generateMarketingInsights(currentData, previousData);
+
+                const kpiContainer = document.getElementById('kpi-container');
+                kpiContainer.innerHTML = `
+                    ${generateKpiCardHTML('總兌換金額', 'NT$', currentData.totalAmount, previousData?.totalAmount)}
+                    ${generateKpiCardHTML('總兌換筆數', '筆', currentData.txCount, previousData?.txCount)}
+                    ${generateKpiCardHTML('每日平均金額 ', 'NT$/日', currentData.dailyAvgAmount, previousData?.dailyAvgAmount)}
+                    ${generateKpiCardHTML('每日平均筆數 ', '筆/日', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
+                `;
+
+                document.getElementById('table-body').innerHTML = globalData.map(row => `
+                    <tr class="border-b last:border-0 hover:bg-green-50">
+                        <td class="px-6 py-4 font-medium text-gray-900">${row.period}</td>
+                        <td class="px-6 py-4 text-right font-semibold text-green-700">NT$ ${formatNumber(row.totalAmount)}</td>
+                        <td class="px-6 py-4 text-right">${formatNumber(row.txCount)} 筆</td>
+                        <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.avgTxAmount)}</td>
+                        <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.dailyAvgAmount)}</td>
+                        <td class="px-6 py-4 text-right text-green-600">${formatNumber(row.dailyAvgTx)} 筆</td>
+                    </tr>
+                `).join('');
+
+                renderInteractiveChart('totalAmount');
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+
+            } catch (error) {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('error-screen').classList.remove('hidden');
+                document.getElementById('error-message').innerText = error.message;
+            }
+        }
+        window.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
 </body>
 </html>
