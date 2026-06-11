@@ -3,78 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>綠點兌換儀表板</title>
+    <title>綠點兌換進階決策儀表板</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @keyframes pulse-fast { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+        .animate-pulse-fast { animation: pulse-fast 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans border-t-4 border-green-600 min-h-screen">
+<body class="bg-[#f8fafc] border-t-4 border-emerald-600 min-h-screen text-slate-800 antialiased">
 
-    <div id="loading-screen" class="min-h-screen flex flex-col items-center justify-center space-y-4">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-        <p class="text-green-700 font-medium animate-pulse">正在從 Google Sheets 同步最新資料與圖表...</p>
+    <div id="loading-screen" class="max-w-6xl mx-auto p-6 md:p-10 space-y-8">
+        <div class="flex justify-between items-end">
+            <div class="space-y-2"><div class="h-9 w-48 bg-slate-200 rounded-lg animate-pulse-fast"></div><div class="h-4 w-32 bg-slate-200 rounded animate-pulse-fast"></div></div>
+            <div class="h-9 w-40 bg-slate-200 rounded-full animate-pulse-fast"></div>
+        </div>
+        <div class="h-28 bg-slate-200 rounded-2xl animate-pulse-fast"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="h-32 bg-slate-200 rounded-2xl animate-pulse-fast"></div>
+            <div class="h-32 bg-slate-200 rounded-2xl animate-pulse-fast"></div>
+            <div class="h-32 bg-slate-200 rounded-2xl animate-pulse-fast"></div>
+            <div class="h-32 bg-slate-200 rounded-2xl animate-pulse-fast"></div>
+        </div>
+        <div class="h-96 bg-slate-200 rounded-2xl animate-pulse-fast"></div>
     </div>
 
-    <div id="error-screen" class="hidden min-h-screen flex justify-center items-start pt-10">
-        <div class="bg-red-50 text-red-700 p-6 rounded-lg border border-red-200 max-w-lg w-full">
-            <h3 class="text-lg font-bold flex items-center gap-2"> 資料連線異常</h3>
-            <p id="error-message" class="mt-2 text-sm font-mono break-all"></p>
+    <div id="error-screen" class="hidden min-h-screen flex justify-center items-start pt-20 px-4">
+        <div class="bg-rose-50 text-rose-800 p-6 rounded-2xl border border-rose-100 max-w-lg w-full shadow-xl shadow-rose-100/40">
+            <h3 class="text-lg font-bold flex items-center gap-2 text-rose-700">⚠️ 儀表板核心連線異常</h3>
+            <p id="error-message" class="mt-3 text-xs font-mono bg-white/80 p-3 rounded-lg border border-rose-200 break-all leading-relaxed"></p>
+            <button onclick="window.location.reload()" class="mt-4 w-full bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium py-2 rounded-xl transition-all shadow-sm">重新整理嘗試連線</button>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden max-w-6xl mx-auto p-6 md:p-10">
-        <header class="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
+    <div id="dashboard" class="hidden max-w-6xl mx-auto p-6 md:p-10 opacity-0 transition-opacity duration-500">
+        <header class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-8 gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-green-950">綠點兌換儀表板</h1>
-                <p id="current-period" class="text-gray-500 mt-1">目前數據期間：載入中...</p>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight">綠點兌換營運儀表板</h1>
+                <p id="current-period" class="text-slate-500 mt-2 font-medium flex items-center gap-1.5 text-sm">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    營運數據期間：載入中...
+                </p>
             </div>
-            <div class="text-sm text-green-700 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
-                最後同步：<span id="last-sync"></span>
+            <div class="text-xs font-mono text-slate-500 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm flex items-center gap-2 self-start sm:self-auto">
+                LAST_SYNC: <span id="last-sync" class="font-bold text-slate-700"></span>
             </div>
         </header>
 
-        <div id="ai-insights-container" class="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 p-6 rounded-xl shadow-sm">
-            <h3 class="text-sm font-bold text-green-800 uppercase tracking-wider flex items-center gap-2">
-                🎯 本月 AI 行銷亮點與決策建議
+        <div id="ai-insights-container" class="mb-8 bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 p-6 rounded-2xl shadow-lg shadow-emerald-950/10 border border-slate-800">
+            <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2 font-mono">
+                ✨ AI_DRIVEN_INSIGHTS // 營運決策建議
             </h3>
-            <ul id="ai-insights-list" class="mt-3 space-y-2 text-sm text-green-950 font-medium">
-                </ul>
+            <ul id="ai-insights-list" class="mt-4 space-y-3.5 text-sm text-slate-200 leading-relaxed"></ul>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container"></div>
 
-        <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/60">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h3 class="font-bold text-green-700">歷月兌換數據比較</h3>
-                <select id="metric-selector" class="border border-gray-200 rounded-lg px-4 py-2 text-sm text-green-800 bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer font-medium">
+                <div>
+                    <h3 class="font-bold text-slate-800 text-lg">歷月趨勢動態分析</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">點擊下拉選單可切換觀測不同的核心維度</p>
+                </div>
+                <select id="metric-selector" class="border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 bg-slate-50 font-bold shadow-sm transition-all hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white cursor-pointer">
                     <option value="totalAmount">總兌換金額 (NT$)</option>
                     <option value="txCount">總兌換筆數 (筆)</option>
                     <option value="dailyAvgAmount">每日平均金額 (NT$/日)</option>
                     <option value="dailyAvgTx">每日平均筆數 (筆/日)</option>
                 </select>
             </div>
-            <div class="relative h-72 w-full">
+            <div class="relative h-80 w-full">
                 <canvas id="trendChart"></canvas>
             </div>
         </div>
 
-        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 bg-green-50">
-                <h3 class="font-bold text-green-700">近期資料明細</h3>
+        <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
+            <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 text-lg">歷史營運數據明細</h3>
+                <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">精準按月天數計算</span>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-green-700 uppercase bg-white border-b">
+                <table class="w-full text-sm text-left whitespace-nowrap">
+                    <thead class="text-xs text-slate-400 uppercase bg-slate-50/70 border-b border-slate-100">
                         <tr>
-                            <th class="px-6 py-3">期別 (月份)</th>
-                            <th class="px-6 py-3 text-right">總金額</th>
-                            <th class="px-6 py-3 text-right">總筆數</th>
-                            <th class="px-6 py-3 text-right">單筆平均</th>
-                            <th class="px-6 py-3 text-right">日均金額</th>
-                            <th class="px-6 py-3 text-right">日均筆數</th>
+                            <th class="px-6 py-4 font-bold tracking-wider">期別</th>
+                            <th class="px-6 py-4 text-right font-bold tracking-wider">總金額 (NT$)</th>
+                            <th class="px-6 py-4 text-right font-bold tracking-wider">總兌換筆數</th>
+                            <th class="px-6 py-4 text-right font-bold tracking-wider">客單價 (單筆平均)</th>
+                            <th class="px-6 py-4 text-right font-bold tracking-wider bg-slate-50/50">日均兌換額</th>
+                            <th class="px-6 py-4 text-right font-bold tracking-wider bg-slate-50/50">日均筆數</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body"></tbody>
+                    <tbody id="table-body" class="divide-y divide-slate-100"></tbody>
                 </table>
             </div>
         </div>
@@ -85,93 +113,131 @@
         const SHEET_NAME = '兌換紀錄';
         const FAST_API_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
-        const formatNumber = (num) => {
-            return Number(num).toLocaleString('en-US', { maximumFractionDigits: 2 });
+        // 核心設定：不同指標對應的主題色系
+        const METRIC_CONFIGS = {
+            'totalAmount': { label: '總兌換金額 (NT$)', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.12)' },
+            'txCount': { label: '總兌換筆數 (筆)', color: '#0ea5e9', bgColor: 'rgba(14, 165, 233, 0.12)' },
+            'dailyAvgAmount': { label: '每日平均金額 (NT$/日)', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.12)' },
+            'dailyAvgTx': { label: '每日平均筆數 (筆/日)', color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.12)' }
         };
 
+        const formatNumber = (num) => Number(num).toLocaleString('en-US', { maximumFractionDigits: 2 });
         const roundToTwo = (num) => Math.round(num * 100) / 100;
+
+        // 🧠 強健型動態月份天數解析引擎
+        function parseDaysInMonth(periodStr, allPeriods = [], currentIndex = -1) {
+            const str = String(periodStr).trim();
+            
+            // 1. 標準格式：YYYY-MM, YYYY/MM, YYYY年MM月
+            const fullDateMatch = str.match(/(\d{4})[-/年](\d{1,2})/);
+            if (fullDateMatch) {
+                return new Date(parseInt(fullDateMatch[1], 10), parseInt(fullDateMatch[2], 10), 0).getDate();
+            }
+
+            // 2. 只有月份格式：MM月 (如 "10月") -> 往前/後找有完整年分參考的期別
+            const monthMatch = str.match(/(\d{1,2})月/);
+            if (monthMatch) {
+                const month = parseInt(monthMatch[1], 10);
+                let referenceYear = new Date().getFullYear(); // 預設今年
+                
+                // 掃描前後鄰近的資料，看有沒有人帶有完整年份
+                for (let item of allPeriods) {
+                    const match = String(item).match(/(\d{4})[-/年]/);
+                    if (match) { referenceYear = parseInt(match[1], 10); break; }
+                }
+                return new Date(referenceYear, month, 0).getDate();
+            }
+
+            return 30; // 萬用防呆預設值
+        }
 
         let myChart = null;
         let globalData = [];
 
-        function generateKpiCardHTML(title, unit, current, previous) {
+        // 🛠️ 數字漸進增長動畫工具 (提升奢華感)
+        function animateValue(obj, start, end, duration, isCurrency = false, unit = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                // 緩動函數 Easing: easeOutQuad
+                const progressEased = progress * (2 - progress);
+                const currentVal = start + progressEased * (end - start);
+                obj.innerHTML = (isCurrency ? 'NT$ ' : '') + formatNumber(currentVal) + ` <span class="text-xs font-normal text-slate-400 ml-0.5">${unit}</span>`;
+                if (progress < 1) { window.requestAnimationFrame(step); }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function generateKpiCardHTML(id, title, current, previous) {
             const hasPrevious = previous !== undefined && previous !== null;
-            let growthRate = 0;
-            if (hasPrevious) {
-                growthRate = previous === 0 ? 100 : ((current - previous) / previous) * 100;
-            }
+            const growthRate = hasPrevious ? (previous === 0 ? 100 : ((current - previous) / previous) * 100) : 0;
+            
             const isPositive = growthRate > 0;
             const isNegative = growthRate < 0;
-            const trendColor = isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500';
-            const trendIcon = isPositive ? '↑' : isNegative ? '↓' : '−';
+            const trendBg = isPositive ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : isNegative ? 'bg-rose-50 text-rose-700 border-rose-100' : 'bg-slate-50 text-slate-600 border-slate-100';
+            const trendIcon = isPositive ? '↗' : isNegative ? '↘' : '→';
 
             return `
-                <div class="p-5 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col transition-all hover:shadow-md">
-                    <span class="text-green-700 text-sm font-medium">${title}</span>
-                    <div class="mt-2 flex items-baseline gap-2">
-                        <span class="text-3xl font-bold text-green-950">
-                            ${formatNumber(current)} <span class="text-sm font-normal text-gray-500">${unit}</span>
+                <div class="p-6 bg-white rounded-2xl shadow-sm border border-slate-200/60 flex flex-col transition-all duration-300 hover:shadow-md hover:border-slate-300 group">
+                    <span class="text-slate-400 text-xs font-bold tracking-wider uppercase font-mono">${title}</span>
+                    <div class="mt-3 flex items-baseline">
+                        <span id="${id}" class="text-2xl font-black text-slate-800 tracking-tight transition-colors group-hover:text-slate-900">
+                            ${formatNumber(current)}
                         </span>
                     </div>
-                    ${hasPrevious ? `<div class="mt-3 text-sm font-semibold flex items-center gap-1 bg-gray-50 w-fit px-2 py-1 rounded ${trendColor}">
-                        <span>${trendIcon} ${Math.abs(growthRate).toFixed(1)}%</span>
-                        <span class="text-gray-400 font-normal text-xs ml-1">vs 上期 (${formatNumber(previous)})</span>
-                    </div>` : `<div class="mt-3 text-xs text-gray-400 bg-gray-50 w-fit px-2 py-1 rounded">無上期資料</div>`}
+                    ${hasPrevious ? `
+                    <div class="mt-4 flex items-center gap-2 border-t border-slate-50 pt-3">
+                        <div class="text-xs font-bold flex items-center gap-0.5 px-2 py-0.5 rounded-md border ${trendBg}">
+                            <span>${trendIcon} ${Math.abs(growthRate).toFixed(1)}%</span>
+                        </div>
+                        <span class="text-slate-400 font-medium text-[11px]">vs 上月 (${formatNumber(previous)})</span>
+                    </div>` : `
+                    <div class="mt-4 text-[11px] font-medium text-slate-400 bg-slate-50 w-fit px-2 py-0.5 rounded border border-slate-100 pt-3 border-t border-transparent">首期無對比資料</div>`}
                 </div>
             `;
         }
 
-        // ✨ 新增：自動演算行銷亮點的核心大腦 (Insight Rules)
         function generateMarketingInsights(current, previous) {
             const insightsList = document.getElementById('ai-insights-list');
             let html = "";
-
             if (!current) return;
 
-            // 規則 1：單筆平均金額（客單價）分析
             if (previous) {
                 const avgChange = ((current.avgTxAmount - previous.avgTxAmount) / previous.avgTxAmount) * 100;
-                if (avgChange > 10) {
-                    html += `<li>🔥 **【兌換客單價暴增】** 本月單筆平均兌換額成長了 **${avgChange.toFixed(1)}%**！顯示用戶傾向於累積大額點數後一次性兌換高價值商品，行銷推廣可向「高單價聯名品」傾斜。</li>`;
-                } else if (avgChange < -10) {
-                    html += `<li>⚠️ **【小額兌換潮現蹤】** 本月單筆平均兌換額下滑 **${Math.abs(avgChange).toFixed(1)}%**，用戶呈現隨手小額消耗點數的趨勢，建議加強超商零食、飲料等即時性通路促銷。</li>`;
+                if (avgChange > 8) {
+                    html += `<li class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/5"><span class="text-emerald-400 font-bold">💡 [策略建議]</span> <div>本月<strong>兌換客單價強勢增長 ${avgChange.toFixed(1)}%</strong>。顯示會員傾向累積高額度再一次性大筆兌換。行銷端應立即啟動「高階經銷聯名品」或「限量奢華環保禮品」促銷案以迎合此大額去化趨勢。</div></li>`;
+                } else if (avgChange < -8) {
+                    html += `<li class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/5"><span class="text-amber-400 font-bold">⚠️ [通路提示]</span> <div>本月單筆平均兌換金額下滑 <strong>${Math.abs(avgChange).toFixed(1)}%</strong>。用戶呈現高頻、小額的零星去化行為，行銷資源應向「超商小點」、「即時飲品」等日常輕通路傾斜，提升便利通路曝光。</div></li>`;
                 }
-            }
 
-            // 規則 2：日均筆數（活躍頻次）分析
-            if (previous) {
                 const txChange = ((current.dailyAvgTx - previous.dailyAvgTx) / previous.dailyAvgTx) * 100;
-                if (txChange > 15) {
-                    html += `<li>📈 **【用戶黏著度飆升】** 每日平均兌換筆數較上月強勢成長 **${txChange.toFixed(1)}%**！這代表綠色生活集點已成功融入大眾日常習慣，行銷大獲成功。</li>`;
+                if (txChange > 12) {
+                    html += `<li class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/5"><span class="text-sky-400 font-bold">📈 [活躍指標]</span> <div>每日平均兌換筆數較上月強勢成長 <strong>${txChange.toFixed(1)}%</strong>！代表集點行為已成功深化融入大眾每日生活場景，黏著度極高，建議趁勢推出「連續打卡加碼活動」鎖定活躍流量。</div></li>`;
                 }
             }
 
-            // 規則 3：總量絕對值突破
-            if (current.totalAmount > 500000) { // 門檻值可依實際狀況調整
-                html += `<li>🌿 **【綠色經濟里程碑】** 本月總兌換金額成功突破 **NT$ ${formatNumber(current.totalAmount)}**，創下近期新高點，非常適合包裝為「感謝祭」或公關新聞稿議題。</li>`;
+            if (current.totalAmount > 500000) {
+                html += `<li class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/5"><span class="text-teal-400 font-bold">🌿 [里程碑]</span> <div>本月總營運兌換金額突破 <strong>NT$ ${formatNumber(current.totalAmount)}</strong>，動能顯著。適合包裝為年度企業 ESG 綠色經濟成果，作為公關新聞稿或社群感恩祭之核心議題。</div></li>`;
             }
 
             if (html === "") {
-                html = `<li>📊 本月各項兌換指標（日均金額、單筆平均）表現平穩，未出現異常波動。建議行銷人員維持現有推廣節奏，並持續觀測下季動能。</li>`;
+                html = `<li class="flex items-start gap-3 text-slate-400"><span class="font-bold">📊 [現狀評估]</span> <div>本月各項營運指標（包含日均額、客單價、動態日均頻次）均處於常態標準差內，表現平穩。建議維持既有行銷推廣步調，並持續觀測下一季度動能變化。</div></li>`;
             }
-
             insightsList.innerHTML = html;
         }
 
         function renderInteractiveChart(metricKey) {
             const ctx = document.getElementById('trendChart').getContext('2d');
-            const metricConfigs = {
-                'totalAmount': { label: '總兌換金額 (NT$)', color: '#16a34a' },
-                'txCount': { label: '總兌換筆數 (筆)', color: '#16a34a' },
-                'dailyAvgAmount': { label: '每日平均金額 (NT$/日)', color: '#16a34a' },
-                'dailyAvgTx': { label: '每日平均筆數 (筆/日)', color: '#16a34a' }
-            };
-            const config = metricConfigs[metricKey];
+            const config = METRIC_CONFIGS[metricKey];
             const labels = globalData.map(item => item.period);
             const chartData = globalData.map(item => item[metricKey]);
 
             if (myChart) myChart.destroy();
             Chart.register(ChartDataLabels);
+
+            // 調整解析度，防止視網膜螢幕模糊
+            ctx.canvas.width = ctx.canvas.parentElement.clientWidth * window.devicePixelRatio;
 
             myChart = new Chart(ctx, {
                 type: 'bar',
@@ -180,28 +246,48 @@
                     datasets: [{
                         label: config.label,
                         data: chartData,
-                        backgroundColor: config.color + 'CC',
+                        backgroundColor: config.bgColor,
                         borderColor: config.color,
-                        borderWidth: 1,
-                        borderRadius: 4
+                        borderWidth: 2,
+                        borderRadius: 6,
+                        hoverBackgroundColor: config.color,
+                        borderSkipped: false
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    layout: { padding: { top: 30 } },
+                    devicePixelRatio: window.devicePixelRatio,
+                    layout: { padding: { top: 35, bottom: 5, left: 5, right: 5 } },
                     plugins: {
                         legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleFont: { size: 13, weight: 'bold' },
+                            bodyFont: { size: 13, font-mono: true },
+                            padding: 12,
+                            cornerRadius: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: (context) => ` ${config.label.split(' ')[0]}: ${formatNumber(context.parsed.y)}`
+                            }
+                        },
                         datalabels: {
                             anchor: 'end',
                             align: 'top',
                             formatter: (value) => formatNumber(value),
-                            color: config.color,
-                            font: { weight: 'bold', size: 11 }
+                            color: '#64748b',
+                            font: { weight: 'bold', size: 11, family: 'monospace' }
                         }
                     },
                     scales: {
-                        y: { beginAtZero: true, ticks: { callback: (v) => formatNumber(v) } }
+                        x: { grid: { display: false }, ticks: { font: { weight: '600', size: 11 }, color: '#64748b' } },
+                        y: { 
+                            beginAtZero: true, 
+                            border: { dash: [5, 5] },
+                            grid: { color: '#f1f5f9' },
+                            ticks: { color: '#94a3b8', font: { size: 11 }, callback: (v) => formatNumber(v) } 
+                        }
                     }
                 }
             });
@@ -212,18 +298,23 @@
         async function initDashboard() {
             try {
                 const response = await fetch(FAST_API_URL);
+                if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
                 const text = await response.text();
                 const jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
                 const rawResult = JSON.parse(jsonString);
                 const rows = rawResult.table.rows;
 
-                globalData = rows.map(row => {
+                // 提取所有期別標籤，供精準天數引擎交叉參考
+                const allRawPeriods = rows.map(r => r.c[0] ? String(r.c[0].v) : "");
+
+                globalData = rows.map((row, index) => {
                     const getVal = (cell) => cell ? cell.v : null;
                     const periodLabel = String(getVal(row.c[0]) || "");
                     const totalAmount = Number(String(getVal(row.c[1]) || "0").replace(/[^0-9.-]+/g,"")) || 0;
                     const txCount = Number(getVal(row.c[2])) || 0;
-                    const days = Number(getVal(row.c[3])) || 30;
-
+                    
+                    // 🚀 執行精準動態天數解析
+                    const days = parseDaysInMonth(periodLabel, allRawPeriods, index);
                     const safeDiv = (num, den) => den === 0 ? 0 : num / den;
                     
                     return {
@@ -236,44 +327,61 @@
                     };
                 }).filter(item => item.totalAmount > 0);
 
+                if(globalData.length === 0) throw new Error("Google 試算表連線成功，但未偵測到有效營運數據。");
+
                 const currentData = globalData[globalData.length - 1];
                 const previousData = globalData.length > 1 ? globalData[globalData.length - 2] : null;
 
-                document.getElementById('current-period').innerText = `目前數據期間：${currentData.period}`;
-                document.getElementById('last-sync').innerText = new Date().toLocaleString('zh-TW');
+                // 更新頁首資訊
+                document.getElementById('current-period').innerHTML = `<span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 營運數據期間：<span class="font-bold text-slate-800">${currentData.period}</span>`;
+                document.getElementById('last-sync').innerText = new Date().toLocaleString('zh-TW', { hour12: false });
 
-                // ✨ 觸發 AI 亮點引擎計算
+                // 觸發決策大腦
                 generateMarketingInsights(currentData, previousData);
 
+                // 渲染 KPI 卡片框架
                 const kpiContainer = document.getElementById('kpi-container');
                 kpiContainer.innerHTML = `
-                    ${generateKpiCardHTML('總兌換金額', 'NT$', currentData.totalAmount, previousData?.totalAmount)}
-                    ${generateKpiCardHTML('總兌換筆數', '筆', currentData.txCount, previousData?.txCount)}
-                    ${generateKpiCardHTML('每日平均金額 ', 'NT$/日', currentData.dailyAvgAmount, previousData?.dailyAvgAmount)}
-                    ${generateKpiCardHTML('每日平均筆數 ', '筆/日', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
+                    ${generateKpiCardHTML('kpi-amount', 'TOTAL_AMOUNT // 總兌換金額', currentData.totalAmount, previousData?.totalAmount)}
+                    ${generateKpiCardHTML('kpi-tx', 'TX_COUNT // 總兌換筆數', currentData.txCount, previousData?.txCount)}
+                    ${generateKpiCardHTML('kpi-day-amount', 'DAILY_AVG_AMOUNT // 日均兌換額', currentData.dailyAvgAmount, previousData?.dailyAvgAmount)}
+                    ${generateKpiCardHTML('kpi-day-tx', 'DAILY_AVG_TX // 日均筆數', currentData.dailyAvgTx, previousData?.dailyAvgTx)}
                 `;
 
+                // ⚡ 啟動奢華滾動數字動畫
+                animateValue(document.getElementById('kpi-amount'), 0, currentData.totalAmount, 1000, true);
+                animateValue(document.getElementById('kpi-tx'), 0, currentData.txCount, 1000, false, '筆');
+                animateValue(document.getElementById('kpi-day-amount'), 0, currentData.dailyAvgAmount, 1000, true, '/日');
+                animateValue(document.getElementById('kpi-day-tx'), 0, currentData.dailyAvgTx, 1000, false, '筆/日');
+
+                // 渲染細明表格
                 document.getElementById('table-body').innerHTML = globalData.map(row => `
-                    <tr class="border-b last:border-0 hover:bg-green-50">
-                        <td class="px-6 py-4 font-medium text-gray-900">${row.period}</td>
-                        <td class="px-6 py-4 text-right font-semibold text-green-700">NT$ ${formatNumber(row.totalAmount)}</td>
-                        <td class="px-6 py-4 text-right">${formatNumber(row.txCount)} 筆</td>
-                        <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.avgTxAmount)}</td>
-                        <td class="px-6 py-4 text-right">NT$ ${formatNumber(row.dailyAvgAmount)}</td>
-                        <td class="px-6 py-4 text-right text-green-600">${formatNumber(row.dailyAvgTx)} 筆</td>
+                    <tr class="hover:bg-slate-50/80 transition-colors group">
+                        <td class="px-6 py-4 font-bold text-slate-700 font-mono">${row.period}</td>
+                        <td class="px-6 py-4 text-right font-bold text-slate-900">NT$ ${formatNumber(row.totalAmount)}</td>
+                        <td class="px-6 py-4 text-right text-slate-500 font-mono">${formatNumber(row.txCount)} 筆</td>
+                        <td class="px-6 py-4 text-right text-slate-500">NT$ ${formatNumber(row.avgTxAmount)}</td>
+                        <td class="px-6 py-4 text-right text-emerald-600 font-bold bg-emerald-50/20 group-hover:bg-emerald-50/50 transition-colors">NT$ ${formatNumber(row.dailyAvgAmount)}</td>
+                        <td class="px-6 py-4 text-right text-emerald-600 font-bold bg-emerald-50/20 group-hover:bg-emerald-50/50 transition-colors font-mono">${formatNumber(row.dailyAvgTx)} 筆</td>
                     </tr>
                 `).join('');
 
+                // 初始畫圖並切換顯隱狀態
                 renderInteractiveChart('totalAmount');
                 document.getElementById('loading-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
+                
+                const dbEl = document.getElementById('dashboard');
+                dbEl.classList.remove('hidden');
+                setTimeout(() => dbEl.classList.remove('opacity-0'), 50);
 
             } catch (error) {
+                console.error("Dashboard Engine Error:", error);
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('error-screen').classList.remove('hidden');
-                document.getElementById('error-message').innerText = error.message;
+                document.getElementById('error-message').innerText = error.message + "\n\n[提示] 請檢查試算表 ID 是否正確，且工作表名稱確為「兌換紀錄」，並確認該試算表已開啟「知道連結的所有人均可檢視」共用權限。";
             }
         }
+        
         window.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
