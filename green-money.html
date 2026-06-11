@@ -335,10 +335,10 @@
             const isNegative = growthRate !== null && growthRate < 0;
 
             const trendColor = isPositive
-                ? 'text-emerald-700 bg-emerald-50'
-                : isNegative
-                    ? 'text-red-700 bg-red-50'
-                    : 'text-slate-600 bg-slate-50';
+    ? 'text-red-700 bg-red-50'
+    : isNegative
+        ? 'text-emerald-700 bg-emerald-50'
+        : 'text-slate-600 bg-slate-50';
 
             const trendIcon = isPositive ? '↑' : isNegative ? '↓' : '−';
 
