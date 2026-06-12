@@ -255,9 +255,9 @@
     <input type="date" id="follow_date">
 
     <label>通知信箱（可逗號分隔多人；留空用預設）</label>
-    <input type="email" id="notify_email" placeholder="shin@give-circle.com">
-
+<input type="text" id="notify_email" value="janice@give-circle.com,929denver@gmail.com" placeholder="janice@give-circle.com,929denver@gmail.com">
     <label>最終結果</label>
+    
     <select id="final_result">
       <option value="">（未選）</option>
       <option value="已確認可以退點">已確認可以退點</option>
@@ -306,22 +306,24 @@
   }, 5500);
 }
 
-    // 通報者表單送出
+  // 通報者表單送出
     document.getElementById('reportForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = {
-        waybill:   document.getElementById('waybill').value.trim(),
-        item_name: document.getElementById('item_name').value.trim(),
-        item_url:  document.getElementById('item_url').value.trim(),
-        ship_date: document.getElementById('ship_date').value,
-        ship_method: document.getElementById('ship_method').value,
-        sender_cabinet: document.getElementById('sender_cabinet').value.trim(), // ✅ 新增的欄位
-        recv_name: document.getElementById('recv_name').value.trim(),
-        recv_phone: document.getElementById('recv_phone').value.trim(),
-        recv_addr:  document.getElementById('recv_addr').value.trim(),
-        issue_type: document.getElementById('issue_type').value,
-        brief:      document.getElementById('brief').value.trim(),
-        report_date: document.getElementById('report_date').value
+        waybill:      document.getElementById('waybill').value.trim(),
+        item_name:    document.getElementById('item_name').value.trim(),
+        item_url:     document.getElementById('item_url').value.trim(),
+        ship_date:    document.getElementById('ship_date').value,
+        ship_method:  document.getElementById('ship_method').value,
+        sender_cabinet: document.getElementById('sender_cabinet').value.trim(),
+        recv_name:    document.getElementById('recv_name').value.trim(),
+        recv_phone:   document.getElementById('recv_phone').value.trim(),
+        recv_addr:    document.getElementById('recv_addr').value.trim(),
+        issue_type:   document.getElementById('issue_type').value,
+        brief:        document.getElementById('brief').value.trim(),
+        report_date:  document.getElementById('report_date').value,
+        // ✨ 新增：讓通報者新增時也能傳遞通知信箱，確保後端觸發 Email
+        notify_email: document.getElementById('notify_email').value.trim() 
       };
 
       if (!data.waybill) {
@@ -340,7 +342,7 @@
 
         const result = await res.json();
         if (result.ok) {
-          showStatus('✅ 已成功寫入試算表！（通報者資料）', 'success');
+          showStatus('✅ 已成功寫入試算表！（通報者資料與通知已發送）', 'success');
           // 重新載入一次，更新上方摘要
           loadByWaybill(data.waybill);
         } else {
