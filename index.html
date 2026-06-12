@@ -1,14 +1,291 @@
-<script>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GC贈物網｜包裹異常通報</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f8f9fa; padding:20px; }
+    h1 { color:#2c7a7b; text-align:center; }
+
+    form {
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      max-width:800px;
+      margin:16px auto;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    label { display:block; margin-top:12px; font-weight:bold; }
+
+    input, select, textarea {
+      width:100%;
+      padding:8px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      margin-top:4px;
+      box-sizing:border-box;
+    }
+
+    input[type="checkbox"] {
+      width:auto;
+      margin:0;
+    }
+
+    .checkbox-group {
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      margin-top:8px;
+    }
+
+    .checkbox-group label {
+      font-weight:normal;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      white-space:nowrap;
+    }
+
+    .inline-checkbox {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:8px;
+    }
+
+    button {
+      margin-top:20px;
+      padding:10px 20px;
+      background:#2c7a7b;
+      color:white;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    button:hover {
+      background:#285e61;
+    }
+
+    /* 頂部狀態列 */
+    #status {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      max-width: 90vw;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .status-success { background:#e6fffa; color:#047857; border:1px solid #99f6e4; }
+    .status-error   { background:#fee2e2; color:#991b1b; border:1px solid #fecaca; }
+    .status-warning { background:#fef9c3; color:#854d0e; border:1px solid #fde047; }
+    .status-info    { background:#dbeafe; color:#1e3a8a; border:1px solid #bfdbfe; }
+
+    /* 案件摘要卡片樣式 */
+    .card {
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:16px;
+      max-width:800px;
+      margin:16px auto;
+      box-shadow:0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .card h2 { margin:0 0 8px; font-size:18px; color:#1f2937; }
+
+    .meta {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:8px;
+      font-size:14px;
+      color:#374151;
+    }
+
+    @media (min-width: 720px) {
+      .meta { grid-template-columns:1fr 1fr; }
+    }
+
+    .meta div {
+      background:#f9fafb;
+      border:1px solid #eef2f7;
+      border-radius:8px;
+      padding:8px 10px;
+    }
+
+    .meta b {
+      display:block;
+      font-weight:600;
+      color:#111827;
+      margin-bottom:2px;
+    }
+
+    .chips {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .chip {
+      background:#e6f4ff;
+      border:1px solid #bfdbfe;
+      color:#0f172a;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:12px;
+    }
+
+    .badge {
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .badge.ok    { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+    .badge.warn  { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }
+    .badge.close { background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; }
+  </style>
+</head>
+<body>
+
+  <h1>GC贈物網｜包裹異常通報表單</h1>
+
+  <div id="status"></div>
+
+  <section id="overviewCard" class="card" aria-live="polite">
+    <h2>案件摘要</h2>
+    <div id="overviewStatus"><span class="badge warn">尚未載入單號</span></div>
+    <div class="meta" id="overviewMeta" style="display:none"></div>
+  </section>
+
+  <form id="reportForm">
+    <label>託運單號</label>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <input type="text" id="waybill" required style="flex:1;">
+      <button type="button" id="load_report_waybill" style="white-space:nowrap;">載入此單號資料</button>
+    </div>
+
+    <label>贈物名稱</label>
+    <input type="text" id="item_name">
+
+    <label>贈物連結</label>
+    <input type="url" id="item_url">
+
+    <label>交寄日期</label>
+    <input type="date" id="ship_date">
+
+    <label>寄件方式</label>
+    <select id="ship_method">
+      <option value="i郵箱">i郵箱</option>
+      <option value="萊爾富">萊爾富</option>
+      <option value="7-11">7-11</option>
+      <option value="全家">全家</option>
+    </select>
+
+    <label>寄件櫃機</label>
+    <input type="text" id="sender_cabinet">
+
+    <label>收件人姓名</label>
+    <input type="text" id="recv_name">
+
+    <label>收件人電話</label>
+    <input type="text" id="recv_phone">
+
+    <label>收件地址或據點名稱</label>
+    <textarea id="recv_addr"></textarea>
+
+    <label>問題類型</label>
+    <select id="issue_type">
+      <option value="包裹停滯未更新">包裹停滯未更新</option>
+      <option value="操作有誤，包裹未投入">操作有誤，包裹未投入</option>
+      <option value="收件人未收到">收件人未收到</option>
+      <option value="其他">其他</option>
+    </select>
+
+    <label>異常簡述</label>
+    <textarea id="brief"></textarea>
+
+    <label>反應時間</label>
+    <input type="date" id="report_date">
+
+    <button type="submit">儲存／更新到試算表（通報者）</button>
+  </form>
+
+  <h1 style="margin-top:32px; text-align:center; color:#2c7a7b;">查詢者更新區</h1>
+
+  <form id="queryForm">
+    <label>託運單號（與上方相同）</label>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <input type="text" id="q_waybill" required style="flex:1;">
+      <button type="button" id="load_query_waybill" style="white-space:nowrap;">載入此單號資料</button>
+    </div>
+
+    <label>查詢日期（GC窗口詢問→郵局）</label>
+    <input type="date" id="query_date">
+
+    <label>查詢結果（可複選）</label>
+    <div class="checkbox-group">
+      <label><input type="checkbox" class="q_query_result" value="通知郵局窗口"> 通知郵局窗口</label>
+      <label><input type="checkbox" class="q_query_result" value="提供查單"> 提供查單</label>
+      <label><input type="checkbox" class="q_query_result" value="郵局致電確認"> 郵局致電確認</label>
+    </div>
+
+    <label>狀態更新日期（更新後，mail主動通知 info）</label>
+    <input type="date" id="status_date">
+
+    <div class="inline-checkbox">
+      <input type="checkbox" id="need_follow">
+      <label for="need_follow">需持續追蹤（mail 提醒 09:00）</label>
+    </div>
+
+    <label>提醒日期（follow_date）</label>
+    <input type="date" id="follow_date">
+
+    <label>通知信箱（可逗號分隔多人；留空用預設）</label>
+    <input type="text" id="notify_email" value="janice@give-circle.com,929denver@gmail.com" placeholder="janice@give-circle.com,929denver@gmail.com">
+    
+    <label>最終結果</label>
+    <select id="final_result">
+      <option value="">（未選）</option>
+      <option value="已確認可以退點">已確認可以退點</option>
+      <option value="已成功送達">已成功送達</option>
+      <option value="遺失理賠">遺失理賠</option>
+      <option value="其他">其他</option>
+    </select>
+
+    <label>補償或後續處理說明</label>
+    <textarea id="after_note"></textarea>
+
+    <label>結案日期（填入後將不再寄出未來提醒）</label>
+    <input type="date" id="close_date">
+
+    <button type="submit">儲存／更新（查詢者）</button>
+  </form>
+
+  <script>
+    // 🔗 你的 GAS API 網址
     const API_BASE = "https://script.google.com/macros/s/AKfycbwF9pUYmmHFoGEiWFKU8ekzGAWiCQHOREvPm2npUC3Tv8wWuS66VZzCgcGvAEFY98C6/exec";
 
-    // 共用：頂部狀態列顯示工具
+    // 頂部狀態列工具
     function showStatus(msg, type = 'info') {
       const el = document.getElementById('status');
       if (!el) return;
 
       el.className = '';
       el.style.opacity = '1';
-
       el.classList.add(`status-${type}`);
       el.textContent = msg;
       el.style.display = 'block';
@@ -29,20 +306,20 @@
     document.getElementById('reportForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = {
-        waybill:      document.getElementById('waybill').value.trim(),
-        role:         'report', // ✨ 強制指定為通報者身分，防止後端誤判
-        item_name:    document.getElementById('item_name').value.trim(),
-        item_url:     document.getElementById('item_url').value.trim(),
-        ship_date:    document.getElementById('ship_date').value,
-        ship_method:  document.getElementById('ship_method').value,
+        waybill:        document.getElementById('waybill').value.trim(),
+        role:           'report', // 🎯 強制指定身份，避免後端誤判
+        item_name:      document.getElementById('item_name').value.trim(),
+        item_url:       document.getElementById('item_url').value.trim(),
+        ship_date:      document.getElementById('ship_date').value,
+        ship_method:    document.getElementById('ship_method').value,
         sender_cabinet: document.getElementById('sender_cabinet').value.trim(),
-        recv_name:    document.getElementById('recv_name').value.trim(),
-        recv_phone:   document.getElementById('recv_phone').value.trim(),
-        recv_addr:    document.getElementById('recv_addr').value.trim(),
-        issue_type:   document.getElementById('issue_type').value,
-        brief:        document.getElementById('brief').value.trim(),
-        report_date:  document.getElementById('report_date').value,
-        notify_email: document.getElementById('notify_email').value.trim() 
+        recv_name:      document.getElementById('recv_name').value.trim(),
+        recv_phone:     document.getElementById('recv_phone').value.trim(),
+        recv_addr:      document.getElementById('recv_addr').value.trim(),
+        issue_type:     document.getElementById('issue_type').value,
+        brief:          document.getElementById('brief').value.trim(),
+        report_date:    document.getElementById('report_date').value,
+        notify_email:   document.getElementById('notify_email').value.trim() 
       };
 
       if (!data.waybill) {
@@ -81,7 +358,7 @@
       e.preventDefault();
       const payload = {
         waybill:      document.getElementById('q_waybill').value.trim(),
-        role:         'query', // ✨ 強制指定為查詢者身分
+        role:         'query', // 🎯 強制指定身份
         query_date:   document.getElementById('query_date').value,
         query_result: collectCheckedValues('q_query_result'),
         status_date:  document.getElementById('status_date').value,
@@ -119,7 +396,7 @@
       }
     });
 
-    // --- 只讀展示區：渲染摘要 ---
+    // 渲染摘要
     function renderOverview(d){
       const statusBox = document.getElementById('overviewStatus');
       const metaBox = document.getElementById('overviewMeta');
@@ -169,7 +446,7 @@
 
     function clearOverview(){ renderOverview(null); }
 
-    // --- 載入：依託運單號查詢並帶入表單欄位 ---
+    // 依單號載入資料
     async function loadByWaybill(wb){
       const waybill = (wb || '').trim();
       if(!waybill){
@@ -257,3 +534,5 @@
       loadByWaybill(wb);
     });
   </script>
+</body>
+</html>
