@@ -95,6 +95,7 @@
                         statusMsg.className = "mt-4 text-center text-sm text-red-600 font-bold";
                         statusMsg.innerText = "❌ 傳送失敗，請確認 Google Apps Script 是否已啟用。";
                     } finally {
+                        // 🌟 修正處：將原本打錯的 finaly 改回正確的 finally
                         submitBtn.disabled = false;
                     }
                 };
