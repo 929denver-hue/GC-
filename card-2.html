@@ -69,7 +69,7 @@
                 // 1. 🌟 網頁前端直接調用 AI 引擎提取手寫字 (支援繁體中文 + 英文)
                 const ocrResult = await Tesseract.recognize(
                     file,
-                    'chi_tra+eng', 
+                    'chi_tra', 
                     { logger: m => { if(m.status === 'recognizing') { statusMsg.innerText = `⏳ AI 辨識中... (${Math.round(m.progress * 100)}%)`; } } }
                 );
                 
