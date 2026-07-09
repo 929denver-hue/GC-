@@ -43,6 +43,14 @@
             }
         });
 
+        // 🌟 小工具：把檔案轉成 Base64 的非同步包裝，確保執行順序不亂跳
+        const fileToInputs = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = (error) => reject(error);
+        });
+
         // 獨立點擊觸發函式
         async function startOCR() {
             const file = wishImage.files[0];
@@ -51,69 +59,61 @@
                 return;
             }
 
-            // 調整狀態
+            // 調整按鈕狀態
             submitBtn.disabled = true;
             statusMsg.classList.remove('hidden');
             statusMsg.className = "mt-4 text-center text-sm text-amber-600 animate-pulse";
             statusMsg.innerText = "⏳ AI 正在大腦極速讀取照片中的手寫文字...";
 
             try {
-                // 🌟 步驟 A：直接在前端調用 Tesseract AI 辨識繁體中文與英文
+                // 1. 🌟 直接在前端調用 Tesseract AI 辨識
                 const ocrResult = await Tesseract.recognize(
                     file,
-                    'chi_tra+eng', // 支援繁體中文 + 英文
-                    { logger: m => { console.log(m); if(m.status === 'recognizing') { statusMsg.innerText = `⏳ AI 辨識中... (${Math.round(m.progress * 100)}%)`; } } }
+                    'chi_tra+eng', 
+                    { logger: m => { if(m.status === 'recognizing') { statusMsg.innerText = `⏳ AI 辨識中... (${Math.round(m.progress * 100)}%)`; } } }
                 );
                 
                 const detectedText = ocrResult.data.text.trim() || "未能識別出文字";
-                statusMsg.innerText = "⏳ 文字辨識成功！正在安全上傳至 Excel...";
+                statusMsg.innerText = "⏳ 文字辨識成功！正在轉檔照片並準備上傳...";
 
-                // 🌟 步驟 B：將照片轉成 Base64，連同辨識好的文字一起打包
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = async () => {
-                    const base64String = reader.result.split(',')[1];
+                // 2. 🌟 確保轉檔完成才往下走
+                const base64String = await fileToInputs(file);
+                statusMsg.innerText = "⏳ 正在安全傳送至 Excel...";
 
-                    const payload = {
-                        image: base64String,
-                        contentType: file.type,
-                        fileName: file.name,
-                        text: detectedText // 傳送已經辨識好的文字！
-                    };
-
-                    // 👈 記得在這裡填入你剛剛從 Excel 部署拿到的最新網址！
-                    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxsg5NDe7B9v9CLiEFFSqtbh8ayMxsQgfgb-GPtywk_YeqSwBuhVsSDfQNQozNwUz-Oag/exec'; 
-
-                    try {
-                        const response = await fetch(GAS_WEB_APP_URL, {
-                            method: 'POST',
-                            body: JSON.stringify(payload)
-                        });
-                        
-                        const result = await response.json();
-                        
-                        if (result.result === 'success') {
-                            statusMsg.className = "mt-4 text-center text-sm text-green-600 font-bold";
-                            statusMsg.innerHTML = `🎉 建檔成功！<br><span class="text-xs text-gray-600 font-normal">AI 辨識結果："${result.text}"</span>`;
-                            
-                            // 清空欄位
-                            wishImage.value = "";
-                            imagePreview.classList.add('hidden');
-                        } else {
-                            throw new Error(result.error);
-                        }
-                    } catch (netError) {
-                        alert("❌ 寫入 Excel 失敗：\n" + netError.message);
-                        statusMsg.className = "mt-4 text-center text-sm text-red-600 font-bold";
-                        statusMsg.innerText = "❌ 資料庫傳送失敗。";
-                    } finally {
-                        submitBtn.disabled = false;
-                    }
+                const payload = {
+                    image: base64String,
+                    contentType: file.type,
+                    fileName: file.name,
+                    text: detectedText
                 };
-            } catch (aiError) {
-                alert("❌ AI 引擎初始化失敗：\n" + aiError.message);
+
+                // 🌟 3. 唯一的 Google Apps Script 連線點（已換上你的最新網址，絕無重複）
+                const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxsg5NDe7B9v9CLiEFFSqtbh8ayMxsQgfgb-GPtywk_YeqSwBuhVsSDfQNQozNwUz-Oag/exec'; 
+
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (result.result === 'success') {
+                    statusMsg.className = "mt-4 text-center text-sm text-green-600 font-bold";
+                    statusMsg.innerHTML = `🎉 建檔成功！<br><span class="text-xs text-gray-600 font-normal">AI 辨識結果："${result.text}"</span>`;
+                    
+                    // 清空欄位
+                    wishImage.value = "";
+                    imagePreview.classList.add('hidden');
+                } else {
+                    throw new Error(result.error);
+                }
+
+            } catch (error) {
+                alert("❌ 執行失敗：\n" + error.message);
+                statusMsg.className = "mt-4 text-center text-sm text-red-600 font-bold";
+                statusMsg.innerText = "❌ 資料庫傳送失敗。";
+            } finally {
                 submitBtn.disabled = false;
-                statusMsg.classList.add('hidden');
             }
         }
     </script>
