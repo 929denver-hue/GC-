@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ 智慧心願照片建檔系統</title>
+    <title>智慧心願照片建檔系統</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
@@ -44,59 +44,64 @@
 
         // 獨立點擊觸發函式
         async function startOCR() {
-            const file = wishImage.files[0];
+            try {
+                const file = wishImage.files[0];
 
-            if (!file) {
-                alert("請先選擇一張照片！");
-                return;
-            }
-
-            // 調整按鈕狀態，避免重複點擊
-            submitBtn.disabled = true;
-            statusMsg.classList.remove('hidden');
-            statusMsg.className = "mt-4 text-center text-sm text-amber-600 animate-pulse";
-            statusMsg.innerText = "⏳ AI 正在極速讀取照片中的文字...";
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64String = reader.result.split(',')[1];
-
-                const payload = {
-                    image: base64String,
-                    contentType: file.type,
-                    fileName: file.name
-                };
-
-                // 🌟 修正處：這裡補齊了結尾的單引號 ''，並確保網址完整
-                const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvf2MuHX43oj5nn8KG2yXAyZkUPMPCV8mhaUJbidSIVDi7cdtlumPti8m2zKtOMXoYwQ/exec'; 
-
-                try {
-                    const response = await fetch(GAS_WEB_APP_URL, {
-                        method: 'POST',
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.result === 'success') {
-                        statusMsg.className = "mt-4 text-center text-sm text-green-600 font-bold";
-                        statusMsg.innerHTML = `🎉 建檔成功！<br><span class="text-xs text-gray-600 font-normal">AI 辨識結果："${result.text}"</span>`;
-                        
-                        // 清空輸入欄位與預覽
-                        wishImage.value = "";
-                        imagePreview.classList.add('hidden');
-                    } else {
-                        throw new Error(result.error);
-                    }
-                } catch (error) {
-                    statusMsg.className = "mt-4 text-center text-sm text-red-600 font-bold";
-                    statusMsg.innerText = "❌ 辨識或傳送失敗，請稍後再試。";
-                    console.error(error);
-                } finaly {
-                    submitBtn.disabled = false;
+                if (!file) {
+                    alert("❌ 偵測失敗：您尚未選擇任何照片，請點擊上傳按鈕選取照片！");
+                    return;
                 }
-            };
+
+                // 調整按鈕狀態
+                submitBtn.disabled = true;
+                statusMsg.classList.remove('hidden');
+                statusMsg.className = "mt-4 text-center text-sm text-amber-600 animate-pulse";
+                statusMsg.innerText = "⏳ AI 正在極速讀取照片中的文字...";
+
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = async () => {
+                    try {
+                        const base64String = reader.result.split(',')[1];
+
+                        const payload = {
+                            image: base64String,
+                            contentType: file.type,
+                            fileName: file.name
+                        };
+
+                        // 你的 Google Apps Script 網址
+                        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvf2MuHX43oj5nn8KG2yXAyZkUPMPCV8mhaUJbidSIVDi7cdtlumPti8m2zKtOMXoYwQ/exec'; 
+
+                        const response = await fetch(GAS_WEB_APP_URL, {
+                            method: 'POST',
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.result === 'success') {
+                            statusMsg.className = "mt-4 text-center text-sm text-green-600 font-bold";
+                            statusMsg.innerHTML = `🎉 建檔成功！<br><span class="text-xs text-gray-600 font-normal">AI 辨識結果："${result.text}"</span>`;
+                            
+                            // 清空輸入欄位與預覽
+                            wishImage.value = "";
+                            imagePreview.classList.add('hidden');
+                        } else {
+                            throw new Error(result.error || 'Google 沒回傳成功訊號');
+                        }
+                    } catch (innerError) {
+                        alert("❌ 連線至 Google 時發生錯誤：\n" + innerError.message);
+                        statusMsg.className = "mt-4 text-center text-sm text-red-600 font-bold";
+                        statusMsg.innerText = "❌ 傳送失敗，請確認 Google Apps Script 是否已啟用。";
+                    } finally {
+                        submitBtn.disabled = false;
+                    }
+                };
+            } catch (outerError) {
+                alert("❌ 瀏覽器執行錯誤：\n" + outerError.message);
+                submitBtn.disabled = false;
+            }
         }
     </script>
 </body>
