@@ -158,7 +158,7 @@
         <i class="fa-regular fa-circle-question ml-2 text-sm"></i>
     </a>
 
-    <a href="YOUR_PDF_LINK"
+    <a href="https://drive.google.com/file/d/1YztceSbNVQxH0loP6kf-KzNLya-bpc1R/view?usp=sharing"
    target="_blank"
    rel="noopener noreferrer"
    aria-label="開啟致公益夥伴 PDF"
@@ -168,29 +168,6 @@
 </a>
 </div>
 
-            <!-- Visualization: Flow concept -->
-            <div class="mt-12 sm:mt-16 max-w-xl mx-auto relative flex justify-center items-center">
-                <div class="w-full h-44 sm:h-56 bg-white/80 rounded-3xl border border-brand-borderWarm p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-around shadow-sm">
-                    <div class="flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-brand-orange text-2xl mb-2 shadow-inner">
-                            <i class="fa-solid fa-hand-holding-heart"></i>
-                        </div>
-                        <span class="text-xs sm:text-sm font-semibold text-slate-600">贈送者：心意分享</span>
-                    </div>
-                    <div class="flex items-center justify-center px-4 w-12 sm:w-20">
-                        <div class="relative w-full flex justify-center items-center">
-                            <div class="h-0.5 bg-dashed border-t-2 border-dashed border-brand-orange/40 w-full"></div>
-                            <i class="fa-solid fa-truck text-brand-orange/70 absolute -top-3 text-sm animate-bounce"></i>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-2xl mb-2 shadow-inner">
-                            <i class="fa-solid fa-box-open"></i>
-                        </div>
-                        <span class="text-xs sm:text-sm font-semibold text-slate-600">獲贈者：準時取件</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -241,7 +218,7 @@
                     <div class="space-y-3 text-xs sm:text-sm text-slate-600">
                         <p class="leading-relaxed">無論是會員、公益團體、企業，只要是「收到物品」的一方即負擔運費。這能降低分享者的負擔，帶動更多元的物資與互動。</p>
                         <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400">
-                            * 7/19前刊登的舊需求或贈物皆維持原規則運作。
+                            <strong class="text-brand-orangeDark font-bold">* 7/19前刊登的舊需求或贈物皆維持原規則運作。</strong>
                         </div>
                     </div>
                 </div>
@@ -498,6 +475,15 @@
             const isHidden = mobileMenu.classList.contains('hidden');
             mobileMenu.classList.toggle('hidden');
             menuIcon.className = isHidden ? 'fa-solid fa-xmark text-xl' : 'fa-solid fa-bars text-xl';
+        });
+
+        // Close mobile menu after selecting a link
+        mobileMenu.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.className = 'fa-solid fa-bars text-xl';
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
         });
 
         // FAQ Toggle
