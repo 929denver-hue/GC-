@@ -63,7 +63,7 @@
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased overflow-x-hidden">
+<body id="top" class="text-slate-800 antialiased overflow-x-hidden">
 
     <!-- Header & Navigation -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-borderWarm shadow-sm transition-all duration-300">
@@ -510,5 +510,12 @@
             icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
         }
     </script>
+
+    <a href="#top"
+       aria-label="回到頁面頂端"
+       class="fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-orange text-white shadow-lg transition duration-150 hover:-translate-y-1 hover:bg-brand-orangeDark hover:shadow-xl">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
 </body>
 </html>
