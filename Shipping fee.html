@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC贈物網 ——物流服務與運費調整說明</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#f37021',
+                            orangeLight: '#fff5ed',
+                            orangeDark: '#d95d14',
+                            green: '#2e7d32',
+                            greenLight: '#f1f8e9',
+                            greenDark: '#1b5e20',
+                            slateDark: '#1e293b',
+                            slateLight: '#f8fafc',
+                            cream: '#fdfbf7',
+                            borderWarm: '#f3ebd9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #fdfbf7;
+        }
+        /* Custom scrollbar for beautiful UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdfbf7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
+        }
+        .bg-dashed {
+            background-image: linear-gradient(to right, #f37021 50%, rgba(255, 255, 255, 0) 0%);
+            background-position: bottom;
+            background-size: 12px 1px;
+            background-repeat: repeat-x;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased overflow-x-hidden">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-borderWarm shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <!-- Brand Logo (Top Navigation) -->
+                <div class="flex items-center space-x-3">
+                    <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-07-16-13-49-22-U9KDfo8GKx2u1CFjjvJ2hUPUaLptjxvgOQoGMxF0.jpeg" alt="GC 贈物網 Logo" class="w-10 h-10 rounded-xl object-cover shadow-sm">
+                    
+                    </span>
+                  
+                </div>
+
+                <!-- Desktop Nav Menu -->
+                <nav class="hidden lg:flex space-x-1">
+                    <a href="#adjustments" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-orange transition duration-150">調整重點</a>
+                    <a href="#partner-impact" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-orange transition duration-150">對公益夥伴的影響</a>
+                    <a href="#seven-guide" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-orange transition duration-150">7-ELEVEN 教學</a>
+                    <a href="#compare-table" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-orange transition duration-150">對照表</a>
+                    <a href="#faq" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-orange transition duration-150">常見問題</a>
+                    <a href="#contact" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-orange transition duration-150">聯絡我們</a>
+                </nav>
+
+                <!-- Desktop CTA -->
+                <div class="hidden lg:block">
+                    <a href="https://www.give-circle.com" target="_blank" class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold text-white bg-brand-orange hover:bg-brand-orangeDark rounded-xl shadow-sm transition duration-150 transform hover:-translate-y-0.5 active:translate-y-0">
+                        回到 GC 贈物網 <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden">
+                    <button id="mobile-menu-btn" type="button" class="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-orange" aria-controls="mobile-menu" aria-expanded="false">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div class="hidden lg:hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-4 space-y-1 bg-white border-t border-slate-100 shadow-inner">
+                <a href="#adjustments" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-brand-orangeLight transition">調整重點</a>
+                <a href="#partner-impact" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-brand-orangeLight transition">對公益夥伴的影響</a>
+                <a href="#seven-guide" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-brand-orangeLight transition">7-ELEVEN 使用方式</a>
+                <a href="#compare-table" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-brand-orangeLight transition">調整前後比較</a>
+                <a href="#faq" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-brand-orangeLight transition">常見問題 FAQ</a>
+                <div class="pt-4 pb-2 px-4">
+                    <a href="https://www.give-circle.com" target="_blank" class="w-full flex items-center justify-center px-4 py-3 text-base font-semibold text-white bg-brand-orange hover:bg-brand-orangeDark rounded-xl shadow-md">
+                        回到官方平台 <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 第一區｜首屏主視覺 (Hero Section) -->
+    <section class="relative bg-gradient-to-b from-amber-50/70 via-white to-brand-cream py-12 sm:py-20 lg:py-24 overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none opacity-40">
+            <div class="absolute top-1/4 left-10 w-24 h-24 rounded-full bg-brand-orangeLight border border-brand-orange/10 blur-xl"></div>
+            <div class="absolute bottom-1/4 right-10 w-40 h-40 rounded-full bg-emerald-50 border border-emerald-100 blur-2xl"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-brand-orangeLight border border-orange-200 text-brand-orangeDark text-xs sm:text-sm font-semibold mb-6">
+                <i class="fa-solid fa-truck-fast"></i>
+                <span>物流服務升級 ＆ 取件保障機制上線</span>
+            </div>
+            
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-brand-slateDark leading-tight sm:leading-none">
+                讓分享更簡單，<br class="sm:hidden">讓需要與資源更順利相遇
+            </h1>
+            
+            <p class="mt-4 sm:mt-6 text-lg sm:text-xl font-medium text-brand-orangeDark">
+                GC 贈物網物流服務與運費機制調整說明
+            </p>
+            
+            <p class="mt-6 text-sm sm:text-base text-slate-600 leading-relaxed max-w-3xl mx-auto">
+                為了讓分享物資更直覺，GC 將自 <strong class="text-brand-orangeDark font-bold">2026 年 7 月 19 日</strong>起調整物流機制，統一由 <strong class="text-brand-orangeDark font-bold">獲贈者負擔運費</strong>，<br>並新增 <strong class="text-brand-orangeDark font-bold">7-ELEVEN</strong> 寄取服務。我們期待與您共同建立更健康、長遠的溫暖循環。
+            </p>
+
+            <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+    <a href="#adjustments"
+       class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold text-white bg-brand-orange hover:bg-brand-orangeDark rounded-xl shadow-lg hover:shadow-xl transition duration-150 transform hover:-translate-y-0.5">
+        快速了解三項調整
+        <i class="fa-solid fa-angles-down ml-2 text-sm"></i>
+    </a>
+
+    <a href="#faq"
+       class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-xl shadow-md hover:shadow-lg border border-slate-200 transition duration-150 transform hover:-translate-y-0.5">
+        查看常見問題
+        <i class="fa-regular fa-circle-question ml-2 text-sm"></i>
+    </a>
+
+    <a href="YOUR_PDF_LINK"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="開啟致公益夥伴 PDF"
+   class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-xl shadow-md hover:shadow-lg border border-slate-200 transition duration-150 transform hover:-translate-y-0.5">
+    致公益夥伴
+    <i class="fa-regular fa-envelope ml-2 text-sm"></i>
+</a>
+</div>
+
+            <!-- Visualization: Flow concept -->
+            <div class="mt-12 sm:mt-16 max-w-xl mx-auto relative flex justify-center items-center">
+                <div class="w-full h-44 sm:h-56 bg-white/80 rounded-3xl border border-brand-borderWarm p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-around shadow-sm">
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-brand-orange text-2xl mb-2 shadow-inner">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        </div>
+                        <span class="text-xs sm:text-sm font-semibold text-slate-600">贈送者：心意分享</span>
+                    </div>
+                    <div class="flex items-center justify-center px-4 w-12 sm:w-20">
+                        <div class="relative w-full flex justify-center items-center">
+                            <div class="h-0.5 bg-dashed border-t-2 border-dashed border-brand-orange/40 w-full"></div>
+                            <i class="fa-solid fa-truck text-brand-orange/70 absolute -top-3 text-sm animate-bounce"></i>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-2xl mb-2 shadow-inner">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <span class="text-xs sm:text-sm font-semibold text-slate-600">獲贈者：準時取件</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第二區｜先對公益夥伴說 (NPO Focus) -->
+    <section id="partner-impact" class="py-12 sm:py-16 bg-white border-t border-b border-brand-borderWarm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brand-cream rounded-3xl p-6 sm:p-10 border border-brand-borderWarm shadow-sm relative">
+                <div class="absolute -top-5 left-8 sm:left-12 w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-heart text-sm"></i>
+                </div>
+                
+                <h2 class="text-xl sm:text-2xl font-bold text-brand-slateDark mt-2 mb-6">
+                    親愛的公益夥伴：我們知道制度改變需要時間
+                </h2>
+
+                <blockquote class="border-l-4 border-brand-orange pl-4 italic text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                    「每一件物資的完成，都來自許多人的共同付出。這份善意循環，從來不是任何一方單獨完成的。」
+                </blockquote>
+
+                <div class="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p>
+                        謝謝您長期接住社會各地的愛心。我們了解每一次索取物資的背後，都是社工與夥伴們評估後為服務對象所做的安排，也明白制度調整可能會影響部分單位的預算。
+                    </p>
+                    <p>
+                        透過標準化的物流規則，我們希望能降低初次參與者的門檻，讓更多民眾與企業願意分享物資。面對調整初期，<strong class="text-brand-orangeDark">GC 會持續蒐集第一線聲音</strong>，與大家一同建立更穩健的交流機制。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第三區｜三項重要調整 (The 3 Changes) -->
+    <section id="adjustments" class="py-12 sm:py-20 bg-brand-cream/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-brand-slateDark">調整內容</h2>
+                <p class="mt-3 text-sm text-slate-500">生效日期：2026 年 7 月 19 日</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Change 1 -->
+                <div class="bg-white rounded-2xl border border-brand-borderWarm shadow-sm hover:shadow-md transition-all p-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-brand-orange"></div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-orangeLight flex items-center justify-center text-brand-orange font-bold text-lg">1</div>
+                        <h3 class="text-lg font-bold text-brand-slateDark">運費統一由獲贈者支付</h3>
+                    </div>
+                    <div class="space-y-3 text-xs sm:text-sm text-slate-600">
+                        <p class="leading-relaxed">無論是會員、公益團體、企業，只要是「收到物品」的一方即負擔運費。這能降低分享者的負擔，帶動更多元的物資與互動。</p>
+                        <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400">
+                            * 7/19前刊登的舊需求或贈物皆維持原規則運作。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change 2 -->
+                <div class="bg-white rounded-2xl border border-brand-borderWarm shadow-sm hover:shadow-md transition-all p-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-brand-orange"></div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-orangeLight flex items-center justify-center text-brand-orange font-bold text-lg">2</div>
+                        <h3 class="text-lg font-bold text-brand-slateDark">新增 7-ELEVEN 寄取件</h3>
+                    </div>
+                    <div class="space-y-2 text-xs sm:text-sm text-slate-600">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-500">單筆物流運費</span>
+                            <span class="font-bold text-brand-slateDark">60 點蘿蔔點數</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-500">材積限制</span>
+                            <span class="font-medium">長+寬+高 &le; 105cm</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-500">取件期限</span>
+                            <span class="font-bold text-brand-orange">到店 7 天內</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change 3 -->
+                <div class="bg-white rounded-2xl border border-brand-borderWarm shadow-sm hover:shadow-md transition-all p-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-emerald-600"></div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-lg">3</div>
+                        <h3 class="text-lg font-bold text-brand-slateDark">新增取件保障(押金)</h3>
+                    </div>
+                    <div class="space-y-3 text-xs sm:text-sm text-slate-600">
+                        <p class="leading-relaxed">使用7-11、萊爾富或i郵箱時，獲贈確認將扣除 <strong class="text-brand-slateDark">80點</strong> (含60點運費 + 20點押金)。</p>
+                        <ul class="space-y-1 pt-2 border-t border-slate-100 text-[11px]">
+                            <li class="flex items-center"><i class="fa-solid fa-circle-check text-emerald-600 mr-2"></i><span>成功取件：24小時後退還押金</span></li>
+                            <li class="flex items-center"><i class="fa-solid fa-circle-exclamation text-brand-orange mr-2"></i><span>累計 3 次逾期：帳號將永久停權</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第四區｜對公益夥伴的價值 (Impact) -->
+    <section class="py-12 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-brand-slateDark">這次調整為公益夥伴帶來的改變</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Benefit cards -->
+                <div class="p-6 bg-brand-cream/60 rounded-2xl border border-brand-borderWarm">
+                    <i class="fa-solid fa-map-location-dot text-brand-orange text-xl mb-4"></i>
+                    <h4 class="font-bold mb-2">物流選擇更多元</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">新增 7-ELEVEN 選項，可依單位所在地點選擇最便利的取件點。</p>
+                </div>
+                <div class="p-6 bg-brand-cream/60 rounded-2xl border border-brand-borderWarm">
+                    <i class="fa-regular fa-clock text-brand-orange text-xl mb-4"></i>
+                    <h4 class="font-bold mb-2">取件時間更彈性</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">可配合單位排班彈性領取包裹。</p>
+                </div>
+                <div class="p-6 bg-brand-cream/60 rounded-2xl border border-brand-borderWarm">
+                    <i class="fa-solid fa-magnifying-glass-dollar text-brand-orange text-xl mb-4"></i>
+                    <h4 class="font-bold mb-2">費用透明易評估</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">索取前可清楚看見各項物流費用，方便單位預算控制。</p>
+                </div>
+                <div class="p-6 bg-brand-cream/60 rounded-2xl border border-brand-borderWarm">
+                    <i class="fa-solid fa-list-check text-brand-orange text-xl mb-4"></i>
+                    <h4 class="font-bold mb-2">規則一致好交接</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">標準化付款流程，降低新手社工或志工的學習與交接成本。</p>
+                </div>
+                <div class="p-6 bg-brand-cream/60 rounded-2xl border border-brand-borderWarm">
+                    <i class="fa-solid fa-arrows-spin text-brand-orange text-xl mb-4"></i>
+                    <h4 class="font-bold mb-2">資源獲取更豐富</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">降低大眾贈送門檻後，資源將更豐沛，增加接觸優質物資機會。</p>
+                </div>
+                <div class="p-6 bg-brand-cream/60 rounded-2xl border border-brand-borderWarm">
+                    <i class="fa-solid fa-shield-heart text-brand-orange text-xl mb-4"></i>
+                    <h4 class="font-bold mb-2">善意更有保障</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">取件押金機制可減少退件浪費，保障分享者整理包裝的心意。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第五區｜7-ELEVEN 教學 (Guide) -->
+    <section id="seven-guide" class="py-12 sm:py-20 bg-brand-cream/40 border-t border-brand-borderWarm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-center mb-12">如何使用 7-ELEVEN 物流？</h2>
+            
+            <div class="relative pl-8 border-l-2 border-brand-orange/30 space-y-10 max-w-2xl mx-auto">
+                <div class="relative">
+                    <div class="absolute -left-[41px] top-0 w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold text-xs">1</div>
+                    <h4 class="font-bold text-slate-800">瀏覽並確認需求物資</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">尋找合適物資，確認是否符合當前需求。</p>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-[41px] top-0 w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold text-xs">2</div>
+                    <h4 class="font-bold text-slate-800">確認支援 7-ELEVEN 配送</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">於索取頁面確認有「7-ELEVEN」物流選項。</p>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-[41px] top-0 w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold text-xs">3</div>
+                    <h4 class="font-bold text-slate-800">選擇最方便的門市</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">填寫收件資訊並挑選指定門市（此時不扣點）。</p>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-[41px] top-0 w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold text-xs">4</div>
+                    <h4 class="font-bold text-slate-800">獲贈成立後自動扣點</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">獲贈確立時扣除 80 點（運費 60 + 押金 20）。</p>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-[41px] top-0 w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold text-xs">5</div>
+                    <h4 class="font-bold text-slate-800">到店系統通知與期限取件</h4>
+                    <p class="text-xs sm:text-sm text-slate-500">7 天內領取包裹，取件成功 24 小時後退還押金。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第六區｜比較表 (Comparison) -->
+    <section id="compare-table" class="py-12 sm:py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-center mb-10">調整前後快速對照表</h2>
+            
+            <div class="overflow-x-auto rounded-2xl border border-brand-borderWarm shadow-sm">
+                <table class="w-full text-left border-collapse bg-white min-w-[700px]">
+                    <thead class="bg-brand-orangeLight border-b border-brand-borderWarm">
+                        <tr class="text-brand-slateDark">
+                            <th class="p-4 font-bold text-sm">比較項目</th>
+                            <th class="p-4 font-bold text-sm">調整前 (2026/7/19前)</th>
+                            <th class="p-4 font-bold text-sm">調整後 (2026/7/19起)</th>
+                            <th class="p-4 font-bold text-sm text-brand-orangeDark">公益夥伴注意事項</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-xs sm:text-sm text-slate-600">
+                        <tr>
+                            <td class="p-4 font-semibold text-slate-800">運費負擔方式</td>
+                            <td class="p-4">自由勾選由贈送者或索取者付。</td>
+                            <td class="p-4 font-bold text-brand-orangeDark">統一由「獲贈者(索取者)」支付。</td>
+                            <td class="p-4">索取前請評估物資價值與運費預算。</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold text-slate-800">物流配送</td>
+                            <td class="p-4">i郵箱、萊爾富、新竹物流等。</td>
+                            <td class="p-4 font-bold text-emerald-700">新增 7-ELEVEN 寄取件。</td>
+                            <td class="p-4">可依人力地點彈性選擇取件管道。</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold text-slate-800">取件保障機制</td>
+                            <td class="p-4">無預收押金。</td>
+                            <td class="p-4 font-bold text-emerald-700">確認獲贈預收 20 點押金。</td>
+                            <td class="p-4">完成取件 24 小時後自動退還。</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold text-slate-800">逾期未取處理</td>
+                            <td class="p-4">依原規範處理。</td>
+                            <td class="p-4 font-bold text-red-500">沒收押金。累計 3 次永久停權。</td>
+                            <td class="p-4 text-red-500">請務必準時取件，維護帳號權益。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第七區｜FAQ (Accordion) -->
+    <section id="faq" class="py-12 sm:py-20 bg-brand-cream/40 border-t border-brand-borderWarm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-center mb-10">常見問題 FAQ</h2>
+            <div class="space-y-4">
+                <!-- FAQ Items -->
+                <div class="bg-white rounded-xl border border-brand-borderWarm overflow-hidden">
+                    <button class="w-full text-left p-4 flex justify-between items-center focus:outline-none" onclick="toggleFaq(1)">
+                        <span class="font-bold text-sm sm:text-base text-slate-800">為什麼要調整運費負擔方式？</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200" id="faq-icon-1"></i>
+                    </button>
+                    <div class="hidden p-4 text-xs sm:text-sm text-slate-600 border-t border-amber-50" id="faq-ans-1">
+                        統一由獲贈者支付可大幅降低「分享物資」的心理與金錢門檻，鼓勵更多大眾與企業願意釋出資源，讓分享流程更單純，進而讓公益單位有更多元且充足的物資選擇。
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-brand-borderWarm overflow-hidden">
+                    <button class="w-full text-left p-4 flex justify-between items-center focus:outline-none" onclick="toggleFaq(2)">
+                        <span class="font-bold text-sm sm:text-base text-slate-800">7-ELEVEN 有哪些尺寸限制？</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200" id="faq-icon-2"></i>
+                    </button>
+                    <div class="hidden p-4 text-xs sm:text-sm text-slate-600 border-t border-amber-50" id="faq-ans-2">
+                        包裹三邊總和需 &le; 105 公分，單邊最長需 &le; 45 公分（其餘兩邊需 &le; 30 公分），重量則需在 5 公斤以內。若物資過大，建議改選面交或宅配。
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-brand-borderWarm overflow-hidden">
+                    <button class="w-full text-left p-4 flex justify-between items-center focus:outline-none" onclick="toggleFaq(3)">
+                        <span class="font-bold text-sm sm:text-base text-slate-800">忘記取件會扣押金嗎？</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200" id="faq-icon-3"></i>
+                    </button>
+                    <div class="hidden p-4 text-xs sm:text-sm text-slate-600 border-t border-amber-50" id="faq-ans-3">
+                        是的。若包裹到店 7 天內未領取而遭退件，系統將沒收 20 點押金支付物流處理成本。若累計未取件達 3 次，該帳號將會被系統永久停權，請務必珍惜索取資源。
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-brand-borderWarm overflow-hidden">
+                    <button class="w-full text-left p-4 flex justify-between items-center focus:outline-none" onclick="toggleFaq(4)">
+                        <span class="font-bold text-sm sm:text-base text-slate-800">7/19 前上架的物資適用新制嗎？</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200" id="faq-icon-4"></i>
+                    </button>
+                    <div class="hidden p-4 text-xs sm:text-sm text-slate-600 border-t border-amber-50" id="faq-ans-4">
+                        只要是在 2026 年 7 月 19 日前刊登的既有物資，皆維持原機制。直到該物件被「重新上架」或刊登新物件時，才會正式改採新制。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第八區｜聯絡我們 (Contact) -->
+    <section id="contact" class="py-16 sm:py-24 bg-white text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-6">我們持續蒐集第一線的聲音</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mb-10 max-w-2xl mx-auto">
+                制度調整初期，如果您在操作或預算安排上遇到困難，歡迎與我們聯繫。<br>
+                您的回饋是我們優化平台、未來規劃公益活動方案的核心依據。
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="mailto:shin@give-circle.com" class="px-8 py-3 bg-brand-orange text-white rounded-xl font-bold hover:bg-brand-orangeDark transition">聯繫 GC 公益部</a>
+                <a href="https://www.give-circle.com" class="px-8 py-3 bg-slate-50 text-slate-600 border border-slate-200 rounded-xl font-bold hover:bg-slate-100 transition">回到贈物網官網</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-slateDark text-slate-400 py-10 px-4">
+        <div class="max-w-6xl mx-auto text-center text-[10px] sm:text-xs space-y-4">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://m.give-circle.com/story/22511?VNK=4a4c78b6" class="hover:text-brand-orange">7-ELEVEN 物流公告</a>
+                <a href="https://m.give-circle.com/story/22512?VNK=4a4c78b6" class="hover:text-brand-orange">平台機制公告</a>
+            </div>
+          
+            <p>&copy; 2026 GC贈物網•公益部</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden');
+            menuIcon.className = isHidden ? 'fa-solid fa-xmark text-xl' : 'fa-solid fa-bars text-xl';
+        });
+
+        // FAQ Toggle
+        function toggleFaq(id) {
+            const ans = document.getElementById(`faq-ans-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            const isHidden = ans.classList.contains('hidden');
+            
+            ans.classList.toggle('hidden');
+            icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+    </script>
+</body>
+</html>
