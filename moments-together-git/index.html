@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f1e7" />
+  <title>Moments Together — Home</title>
+  <meta name="description" content="一起笑、一起發現、一起留下會被想起的家庭時刻。" />
+  <style>
+    :root{
+      --ink:#28221d;--muted:#776d63;--cream:#f7f1e7;--paper:#fffdf8;
+      --orange:#e97848;--orange-dark:#bd4e29;--sage:#9eaa88;--line:#e6ddcf;
+      --shadow:0 18px 50px rgba(75,48,25,.12);--radius:28px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--cream);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;min-height:100vh}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .shell{min-height:100vh;position:relative;overflow:hidden}
+    .shell:before,.shell:after{content:"";position:fixed;border-radius:999px;filter:blur(2px);opacity:.55;z-index:-1}
+    .shell:before{width:280px;height:280px;background:#efc89d;top:-110px;right:-110px}
+    .shell:after{width:230px;height:230px;background:#cbd3b7;bottom:-100px;left:-90px}
+    .topbar{height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:auto}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.02em}
+    .brandmark{width:38px;height:38px;border:1px solid #d9cbb9;border-radius:50%;display:grid;place-items:center;background:#fff9ef;position:relative}
+    .brandmark:before,.brandmark:after{content:"";width:13px;height:18px;border-radius:50% 50% 45% 45%;background:var(--orange);position:absolute;transform:rotate(-28deg);left:8px}
+    .brandmark:after{background:var(--sage);transform:rotate(28deg);left:auto;right:8px}
+    .brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.13em;text-transform:uppercase;margin-top:1px}
+    .nav-actions{display:flex;gap:8px}
+    .icon-btn{border:1px solid var(--line);background:rgba(255,253,248,.78);width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--ink);position:relative}
+    .badge{position:absolute;right:-3px;top:-5px;background:var(--orange);color:white;border-radius:99px;font-size:10px;min-width:19px;height:19px;display:grid;place-items:center;border:2px solid var(--cream)}
+    main{max-width:1100px;margin:auto;padding:12px 20px 110px}
+    .screen{display:none;animation:rise .45s ease both}
+    .screen.active{display:block}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--orange-dark);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+    .eyebrow:before{content:"";width:26px;height:1px;background:currentColor}
+    .hero{padding:36px 0 20px;display:grid;gap:36px}
+    h1{font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(48px,12vw,92px);line-height:.96;margin:20px 0 24px;letter-spacing:-.055em;font-weight:500}
+    h1 em{display:block;color:var(--orange);font-weight:500}
+    .hero-copy{font-size:17px;line-height:1.8;color:#5f554c;max-width:540px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+    .btn{border:0;border-radius:999px;padding:15px 22px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:52px;transition:.2s ease}
+    .btn:hover{transform:translateY(-2px)}
+    .btn.primary{background:var(--ink);color:white;box-shadow:0 10px 24px rgba(40,34,29,.18)}
+    .btn.secondary{background:rgba(255,253,248,.75);border:1px solid var(--line);color:var(--ink)}
+    .btn.orange{background:var(--orange);color:white;box-shadow:0 10px 25px rgba(233,120,72,.25)}
+    .btn.full{width:100%}
+    .moment-stack{height:360px;position:relative;max-width:470px;margin:auto;width:100%}
+    .hero-card{position:absolute;border-radius:30px;padding:24px;box-shadow:var(--shadow);width:78%;height:260px;left:11%;top:30px;display:flex;flex-direction:column;justify-content:space-between}
+    .hero-card:nth-child(1){background:#d8dfca;transform:rotate(-10deg) translate(-12px,15px)}
+    .hero-card:nth-child(2){background:#f0c79c;transform:rotate(9deg) translate(16px,7px)}
+    .hero-card:nth-child(3){background:var(--paper);transform:rotate(-1deg);border:1px solid #eee5d9}
+    .card-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:800;color:var(--muted)}
+    .hero-card strong{font-family:Georgia,"Noto Serif TC",serif;font-size:28px;line-height:1.35;font-weight:500}
+    .card-foot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted)}
+    .scribble{font-family:"Segoe Print",cursive;color:var(--orange);transform:rotate(-5deg);font-size:16px}
+    .promise{margin-top:44px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .promise-item{text-align:center;padding:8px}
+    .promise-item b{display:block;font-family:Georgia,serif;font-size:26px;color:var(--orange);margin-bottom:5px}
+    .promise-item span{font-size:12px;color:var(--muted)}
+    .section-head{padding:28px 0 16px}
+    .section-head h2{font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(34px,8vw,58px);line-height:1.08;margin:12px 0;font-weight:500;letter-spacing:-.04em}
+    .section-head p{color:var(--muted);line-height:1.7;margin:0;max-width:610px}
+    .setup-card{background:rgba(255,253,248,.85);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:22px;margin-top:18px}
+    .relation-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;background:#eee6da;padding:6px;border-radius:18px;margin:12px 0 22px}
+    .relation-tabs button{border:0;background:transparent;color:var(--muted);border-radius:13px;padding:11px 6px;font-size:13px;font-weight:800}
+    .relation-tabs button.active{background:var(--paper);color:var(--ink);box-shadow:0 4px 14px rgba(71,48,29,.09)}
+    .field-label{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+    .members{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+    .member-chip{display:flex;align-items:center;gap:8px;border:1px solid #dfd5c8;background:white;border-radius:99px;padding:8px 12px 8px 8px}
+    .avatar{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;color:#5b4a3b;background:#f1cfae}
+    .member-chip:nth-child(3n+2) .avatar{background:#d4dcc7}
+    .member-chip:nth-child(3n+3) .avatar{background:#ead5c9}
+    .member-chip button{border:0;background:none;color:#aa9e90;padding:0}
+    .member-form{display:flex;gap:10px}
+    .member-form input{flex:1;min-width:0;border:1px solid var(--line);border-radius:16px;padding:14px 15px;background:#fff}
+    .member-form button{border:0;background:var(--ink);color:white;width:50px;border-radius:16px;font-size:22px}
+    .mode-grid,.category-grid{display:grid;gap:12px;margin-top:18px}
+    .mode-card,.category-card{border:1px solid var(--line);background:rgba(255,253,248,.88);border-radius:22px;padding:18px;text-align:left;color:var(--ink);transition:.2s ease}
+    .mode-card:hover,.category-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(66,43,24,.1)}
+    .mode-card.active{border-color:var(--orange);box-shadow:inset 0 0 0 1px var(--orange)}
+    .mode-card b,.category-card b{font-size:18px;display:block;margin-bottom:4px}
+    .mode-card span,.category-card span{font-size:12px;color:var(--muted);line-height:1.5}
+    .category-card{min-height:132px;display:flex;flex-direction:column;justify-content:space-between}
+    .category-card .cat-icon{font-size:26px;margin-bottom:20px}
+    .category-card .count{float:right;font-size:11px;color:var(--muted);font-weight:500}
+    .game-wrap{max-width:640px;margin:auto}
+    .game-status{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 18px}
+    .progress{height:6px;background:#e6ded2;border-radius:99px;overflow:hidden;flex:1;margin:0 15px}
+    .progress i{display:block;height:100%;background:var(--orange);width:10%;border-radius:inherit;transition:.35s}
+    .game-status span{font-size:12px;color:var(--muted);font-weight:700}
+    .play-card{border-radius:32px;background:var(--paper);box-shadow:0 24px 60px rgba(72,48,28,.16);border:1px solid #eadfd1;overflow:hidden;min-height:520px;display:flex;flex-direction:column;position:relative}
+    .card-cover{position:absolute;inset:0;z-index:5;border:0;background:linear-gradient(145deg,#df7750,#c85d38);color:white;padding:30px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;transition:transform .55s cubic-bezier(.22,.7,.18,1),opacity .4s;transform-origin:left center;text-align:center}
+    .card-cover.revealed{transform:perspective(900px) rotateY(-92deg);opacity:0;pointer-events:none}
+    .cover-brand{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;opacity:.8}
+    .cover-symbol{width:118px;height:118px;border:1px solid rgba(255,255,255,.48);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-size:62px;box-shadow:inset 0 0 0 10px rgba(255,255,255,.08)}
+    .cover-turn small{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:8px}
+    .cover-turn strong{font-family:Georgia,"Noto Serif TC",serif;font-size:35px;font-weight:500}
+    .cover-hint{font-size:13px;font-weight:800;display:flex;align-items:center;gap:8px}
+    .play-card-top{padding:25px 25px 18px;display:flex;align-items:center;justify-content:space-between}
+    .category-pill{border-radius:99px;padding:8px 11px;font-size:11px;font-weight:800;background:#f4e9dd;color:var(--orange-dark)}
+    .turn{font-size:12px;color:var(--muted)}
+    .play-card-body{padding:18px 25px 28px;display:flex;flex-direction:column;flex:1}
+    .prompt-no{font-family:Georgia,serif;color:#d9c8b6;font-size:16px;margin-bottom:16px}
+    .play-title{font-family:Georgia,"Noto Serif TC",serif;font-size:34px;line-height:1.25;font-weight:500;letter-spacing:-.035em;margin:0 0 12px}
+    .play-hook{font-size:15px;color:var(--muted);margin-bottom:22px}
+    .question{font-size:21px;line-height:1.55;font-weight:800;margin:0 0 20px}
+    .play-steps{background:#f6f0e7;border-radius:20px;padding:16px 18px;line-height:1.7;font-size:14px;margin-bottom:16px}
+    .play-steps b{color:var(--orange-dark)}
+    .guide-note{border-top:1px solid var(--line);padding:15px 2px 16px;display:flex;gap:11px;align-items:flex-start}
+    .guide-note i{font-style:normal;color:var(--orange);font-size:17px}
+    .guide-note span{font-family:Georgia,"Noto Serif TC",serif;font-size:14px;line-height:1.7;color:#665a50}
+    .memory-note{margin-top:auto;display:flex;gap:10px;align-items:flex-start;background:#edf0e6;border-radius:17px;padding:13px 14px;font-size:13px;line-height:1.55;color:#5f6653}
+    .game-actions{display:grid;grid-template-columns:1fr 1.45fr;gap:10px;margin-top:16px}
+    .text-btn{background:none;border:0;color:var(--muted);font-weight:700;padding:12px}
+    .collection-list{display:grid;gap:12px;margin-top:18px}
+    .saved-card{background:var(--paper);border:1px solid var(--line);border-radius:21px;padding:17px;display:flex;gap:14px;align-items:center}
+    .saved-card .mini{width:46px;height:46px;border-radius:15px;background:#f2d4bc;display:grid;place-items:center;font-size:21px}
+    .saved-card b{display:block;margin-bottom:3px}.saved-card span{font-size:12px;color:var(--muted)}
+    .empty{text-align:center;padding:70px 20px;color:var(--muted)}.empty .big{font-size:48px;display:block;margin-bottom:15px}
+    .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);background:#28221d;color:white;padding:12px 17px;border-radius:99px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:20;white-space:nowrap}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+    .modal{position:fixed;inset:0;background:rgba(37,29,22,.38);display:none;align-items:flex-end;z-index:30;backdrop-filter:blur(6px)}
+    .modal.open{display:flex}
+    .sheet{background:var(--paper);border-radius:30px 30px 0 0;padding:26px 22px calc(26px + env(safe-area-inset-bottom));width:100%;max-height:86vh;overflow:auto}
+    .sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet-head h3{font-family:Georgia,serif;font-size:28px;margin:0}.sheet-head button{border:0;background:#eee7dd;width:38px;height:38px;border-radius:50%}
+    .complete-hero{text-align:center;padding:25px 10px}.complete-hero .seal{width:88px;height:88px;border-radius:50%;background:#dce3cd;display:grid;place-items:center;margin:auto;font-size:38px}.complete-hero h3{font-family:Georgia,"Noto Serif TC",serif;font-size:36px;margin:20px 0 8px}.complete-hero p{color:var(--muted);line-height:1.7}
+    @media(min-width:760px){
+      .topbar{height:86px;padding:0 36px}main{padding:20px 36px 120px}
+      .hero{grid-template-columns:1.05fr .95fr;align-items:center;min-height:630px}
+      .mode-grid{grid-template-columns:repeat(3,1fr)}.category-grid{grid-template-columns:repeat(3,1fr)}
+      .setup-card{padding:28px}.sheet{max-width:560px;border-radius:30px;margin:auto auto 28px}.modal{align-items:center}
+    }
+    @media(max-width:430px){
+      .brand-name{font-size:14px}.hero{padding-top:20px}.moment-stack{height:315px}.hero-card{height:230px}
+      .promise{gap:0}.promise-item{padding:8px 2px}.promise-item b{font-size:22px}.promise-item span{font-size:10px}
+      .play-title{font-size:29px}.question{font-size:19px}.play-card{min-height:500px}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <button class="brand" onclick="go('home')" aria-label="回到首頁" style="border:0;background:none;color:inherit;padding:0">
+      <span class="brandmark" aria-hidden="true"></span>
+      <span class="brand-name">Moments Together<small>Home & friends</small></span>
+    </button>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="go('collection')" aria-label="查看收藏">♡<span class="badge" id="savedCount">0</span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen active" id="home">
+      <div class="hero">
+        <div>
+          <span class="eyebrow">Home & Friends · 體驗版</span>
+          <h1>翻一張，<em>靠近一點。</em></h1>
+          <p class="hero-copy">一個人翻牌，回答一個問題或完成一個小任務。其他人自然加入，簡單地笑、分享，也多了解彼此一點。</p>
+          <div class="hero-actions">
+            <button class="btn primary" onclick="go('setup')">開始今晚的旅程 <span>→</span></button>
+            <button class="btn secondary" onclick="go('categories')">看看有哪些卡</button>
+          </div>
+          <div class="promise">
+            <div class="promise-item"><b>15–30</b><span>分鐘剛剛好</span></div>
+            <div class="promise-item"><b>2–8</b><span>位重要的人</span></div>
+            <div class="promise-item"><b>0</b><span>沒有標準答案</span></div>
+          </div>
+        </div>
+        <div class="moment-stack" aria-label="Moments Together 卡片預覽">
+          <div class="hero-card"><span class="card-kicker">Future together</span><strong>五年後，<br>我們在哪裡？</strong><span class="card-foot">未來約定 <i>06</i></span></div>
+          <div class="hero-card"><span class="card-kicker">Laugh together</span><strong>替彼此頒一個<br>只有我們懂的獎</strong><span class="card-foot">一起笑 <i>01</i></span></div>
+          <div class="hero-card"><span class="card-kicker">Tonight's moment</span><strong>你最想收藏<br>今晚哪一刻？</strong><span class="card-foot"><span class="scribble">Create it together!</span><i>♡</i></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="setup">
+      <div class="section-head">
+        <span class="eyebrow">Before we begin</span>
+        <h2>今晚，誰在一起？</h2>
+        <p>先選擇你們的關係，再加入 2 位以上成員。每一題會輪流指定一位主角，讓每個人都被看見。</p>
+      </div>
+      <div class="setup-card">
+        <div class="field-label">今天的關係</div>
+        <div class="relation-tabs">
+          <button class="active" data-relation="family" onclick="setRelation(this)">家人</button>
+          <button data-relation="friends" onclick="setRelation(this)">朋友</button>
+          <button data-relation="mixed" onclick="setRelation(this)">混合</button>
+        </div>
+        <div class="field-label">參與成員 <span id="memberTotal">2</span> 人</div>
+        <div class="members" id="members"></div>
+        <form class="member-form" onsubmit="addMember(event)">
+          <input id="memberInput" maxlength="8" placeholder="輸入名字或稱呼，例如：媽媽" aria-label="家庭成員名稱">
+          <button aria-label="新增成員">＋</button>
+        </form>
+      </div>
+      <div class="section-head" style="padding-bottom:0">
+        <h2 style="font-size:32px">選一段今晚的旅程</h2>
+      </div>
+      <div class="mode-grid">
+        <button class="mode-card active" data-mode="mix" onclick="pickMode(this)"><b>✦ 驚喜混合</b><span>六種互動交錯，最適合第一次玩</span></button>
+        <button class="mode-card" data-mode="light" onclick="pickMode(this)"><b>☀ 輕鬆歡笑</b><span>笑點與默契挑戰比較多</span></button>
+        <button class="mode-card" data-mode="warm" onclick="pickMode(this)"><b>♥ 溫暖靠近</b><span>發現、欣賞與回憶比較多</span></button>
+      </div>
+      <button class="btn orange full" style="margin-top:22px" onclick="startGame()">開始第一個 Moment →</button>
+    </section>
+
+    <section class="screen" id="categories">
+      <div class="section-head">
+        <span class="eyebrow">Six ways to connect</span>
+        <h2>六種，一起靠近的方式。</h2>
+        <p>沒有艱深說明，也沒有標準答案。每張卡都用一句溫暖的引導，幫助大家自然回應、一起完成並留下記憶。</p>
+      </div>
+      <div class="category-grid" id="categoryGrid"></div>
+      <button class="btn primary full" style="margin-top:22px" onclick="go('setup')">設定家人並開始</button>
+    </section>
+
+    <section class="screen" id="game">
+      <div class="game-wrap">
+        <div class="game-status">
+          <span id="roundLabel">01 / 10</span><div class="progress"><i id="progressBar"></i></div><span id="timeLabel">約 3 分鐘</span>
+        </div>
+        <article class="play-card">
+          <button class="card-cover" id="cardCover" onclick="revealCard()" aria-label="翻開這張卡">
+            <span class="cover-brand">Moments Together</span>
+            <span class="cover-symbol">M</span>
+            <span class="cover-turn"><small>這張牌屬於</small><strong id="coverPlayer"></strong></span>
+            <span class="cover-hint">點一下翻牌 <b>→</b></span>
+          </button>
+          <div class="play-card-top"><span class="category-pill" id="cardCategory"></span><span class="turn" id="turnLabel"></span></div>
+          <div class="play-card-body">
+            <span class="prompt-no" id="cardNo">Moment 01</span>
+            <h2 class="play-title" id="cardTitle"></h2>
+            <p class="play-hook" id="cardHook"></p>
+            <p class="question" id="cardQuestion"></p>
+            <div class="play-steps" id="cardPlay"></div>
+            <div class="guide-note"><i>♡</i><span id="cardGuide"></span></div>
+            <div class="memory-note"><span>✦</span><span><b>玩完留下：</b><span id="cardMemory"></span></span></div>
+          </div>
+        </article>
+        <div class="game-actions" id="gameActions">
+          <button class="btn secondary" id="saveBtn" onclick="toggleSave()">♡ 收藏</button>
+          <button class="btn orange" onclick="nextCard()">完成，下一題 →</button>
+        </div>
+        <button class="text-btn full" onclick="skipCard()">這題先跳過</button>
+      </div>
+    </section>
+
+    <section class="screen" id="collection">
+      <div class="section-head">
+        <span class="eyebrow">Your favorites</span>
+        <h2>想再一起玩的 Moments。</h2>
+        <p>收藏會保留在這個裝置上，下一次相聚時可以直接找回來。</p>
+      </div>
+      <div class="collection-list" id="collectionList"></div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="completeModal" role="dialog" aria-modal="true" aria-label="完成今晚的旅程">
+  <div class="sheet">
+    <div class="complete-hero">
+      <div class="seal">⌂</div>
+      <h3>今晚，已經成為回憶。</h3>
+      <p id="completeText">你們一起完成了 10 個 Moments。最後，別忘了拍一張全家都喜歡的照片。</p>
+      <button class="btn orange full" onclick="restartGame()">再創造一次</button>
+      <button class="text-btn full" onclick="closeComplete();go('home')">回到首頁</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const categories = {
+  laugh:{name:"一起笑",icon:"☺",desc:"用幽默與遊戲感降低防備，創造只有你們懂的共同梗。",color:"#f3c6a5"},
+  discover:{name:"發現彼此",icon:"✦",desc:"看見熟悉外表下，還沒被彼此知道的那一面。",color:"#d6ddc8"},
+  sync:{name:"默契挑戰",icon:"≈",desc:"猜、選、一起揭曉，建立共享的理解與節奏。",color:"#edd7a3"},
+  appreciate:{name:"欣賞彼此",icon:"♡",desc:"把平常放在心裡的看見，具體地說出來。",color:"#e8c7c3"},
+  memory:{name:"留下記憶",icon:"⌂",desc:"把家裡的名場面變成照片、文字與只有你們懂的故事。",color:"#cbd9d5"},
+  future:{name:"未來約定",icon:"→",desc:"讓今晚不是結束，而是下一段共同經歷的開始。",color:"#d8cfdf"}
+};
+const cards = [
+{id:"F001",cat:"laugh",title:"家庭限定頒獎典禮",hook:"有些優點，適合用不正經的方式認真說。",question:"今晚，誰最值得得到一座「只有我們家才懂」的獎？",play:"每人替一位家人取一個獎名，必須又好笑又善意。輪流頒獎，得獎者要發表 <b>20 秒感言</b>。",psych:"正向情緒能擴大互動意願；具體、帶情境的欣賞，也比泛泛稱讚更容易被記住。",memory:"全家專屬獎項＋一張頒獎合照。",mins:4},
+{id:"F002",cat:"laugh",title:"如果我們家是一部電影",hook:"每個家庭，都有自己的片名。",question:"如果要把我們家拍成一部電影，它會叫什麼名字？",play:"每人想一個片名，再補一句宣傳標語。大家票選最像本家的版本，最後一起擺出 <b>電影海報姿勢</b>。",psych:"共同創作與幽默能建立群體認同；把日常轉成故事，也會讓熟悉的生活重新變得新鮮。",memory:"一個家庭電影片名＋一張海報照。",mins:4},
+{id:"F003",cat:"laugh",title:"三秒模仿秀",hook:"只有最熟的人，才懂那些小動作。",question:"抽一位家人，善意模仿他最經典的一個動作或口頭禪。",play:"不能說名字，其他人有三次機會猜。被模仿者最後公布：<b>像不像？最像哪裡？</b>",psych:"同步模仿與共享笑聲能增加親近感；設下「善意、不羞辱」的界線可保留心理安全。",memory:"一個全家都懂的新梗。",mins:3},
+{id:"F004",cat:"discover",title:"你不知道的我",hook:"住在一起，也可能還有很多第一次聽見。",question:"說一件家人可能不知道、但你其實很喜歡或很會做的事。",play:"主角先給三個提示，其他人猜答案。揭曉後，每人只能追問一個 <b>「我想多知道一點」</b> 的問題。",psych:"漸進式自我揭露比直接深問更安全，也更容易增加理解與信任。",memory:"今天第一次知道的家人新面貌。",mins:4},
+{id:"F005",cat:"discover",title:"小時候的超能力",hook:"每個大人，都曾經是個很會想像的小孩。",question:"你小時候最得意的一件事，現在還有人記得嗎？",play:"先由大家猜主角小時候最擅長什麼，再由主角說一段真實故事。其他人回應：<b>「原來你以前是這樣！」</b>",psych:"自傳式記憶與敘事認同能幫助家人看見彼此角色之外的完整人生。",memory:"一段差點被忘記的童年故事。",mins:5},
+{id:"F006",cat:"discover",title:"交換一天",hook:"換個位置，才看得見彼此的日常。",question:"如果能和一位家人交換一天，你最想體驗誰的生活？",play:"說出你想交換的原因；被選的人補充一件 <b>外表看不出來的辛苦或快樂</b>。",psych:"觀點取替有助同理；以想像遊戲作為入口，比直接要求理解更自然。",memory:"對一位家人日常的新理解。",mins:4},
+{id:"F007",cat:"sync",title:"全家同時指",hook:"不要討論，三、二、一，直接指！",question:"誰最可能在旅行前一天才開始收行李？",play:"所有人閉眼想答案，數到三同時指人。被指最多的人可以為自己辯護 20 秒。再由他出下一題：<b>誰最可能……？</b>",psych:"共享現實來自「我們對彼此有共同理解」；同步揭曉會放大驚喜與參與感。",memory:"一個意外一致、或完全翻車的答案。",mins:3},
+{id:"F008",cat:"sync",title:"我們家的標準答案",hook:"同一個家，會不會想到同一件事？",question:"如果今晚全家突然多出三小時，我們最可能一起做什麼？",play:"每人先各自寫下答案，再一起翻開。相同得 2 分、意思接近得 1 分。最後挑一個 <b>真的能做到的答案</b>。",psych:"協調與共同選擇能提升「我們感」；把答案轉成可行動選項，能避免遊戲停在想像。",memory:"一個全家共同選出的三小時計畫。",mins:4},
+{id:"F009",cat:"sync",title:"無聲排隊挑戰",hook:"不說話，我們還懂不懂彼此？",question:"全家依照「今天起床的時間」從早到晚排成一列。",play:"全程不能說話，只能用表情與手勢。排好後逐一公布答案；成功就設計一個 <b>家庭勝利手勢</b>。",psych:"非語言協調與共同任務可創造投入感；小幅難度能讓完成瞬間成為體驗高峰。",memory:"一個家庭勝利手勢。",mins:3},
+{id:"F010",cat:"appreciate",title:"我有注意到",hook:"愛常常藏在那些沒被特別說出的細節裡。",question:"最近，有哪位家人做了一件小事，你其實有注意到？",play:"用這個句型直接告訴他：<b>「我有注意到你＿＿＿，那讓我覺得＿＿＿。」</b> 對方只需要說「謝謝你有看到」。",psych:"具體感謝比抽象讚美更可信；被看見的感受能提升連結與正向回應。",memory:"一句終於被說出口的具體感謝。",mins:4},
+{id:"F011",cat:"appreciate",title:"你的隱藏技能",hook:"你習以為常的，可能正是家人眼中的厲害。",question:"在場每個人，都幫右邊的家人命名一項「隱藏技能」。",play:"技能不能只寫「很好、很棒」，要配一個真實例子。被形容的人選出最意外的一項，說：<b>「原來你是這樣看我。」</b>",psych:"優勢辨識與具體回饋可支持正向自我概念；接受回饋而不急著否認，也能讓善意完整落地。",memory:"每位家人的一項隱藏技能。",mins:5},
+{id:"F012",cat:"appreciate",title:"家裡有你真好",hook:"不是因為你做得完美，而是因為你在這裡。",question:"完成這句話：「家裡有你真好，因為……」",play:"每人選一位家人說出完整句子，理由要包含一個具體畫面。對方可以把手放在心上，收下這句話。",psych:"歸屬感來自被接納與被重視；以具體情境表達，能讓肯定更真實、更可回想。",memory:"一句有畫面的「有你真好」。",mins:4},
+{id:"F013",cat:"memory",title:"我們家的名場面",hook:"最值得收藏的，常常不是完美的照片。",question:"全家共同選出一個「一提就會笑」的家庭名場面。",play:"每人提名一件事，用 30 秒說明。投票選出冠軍後，大家一起 <b>重演當時的一個畫面</b>。",psych:"共同回憶能強化家庭敘事與群體身份；重演增加情緒與動作線索，使記憶更鮮明。",memory:"名場面名稱＋一張重演照。",mins:5},
+{id:"F014",cat:"memory",title:"一張沒有拍過的照片",hook:"今晚，補拍一張屬於現在的我們。",question:"如果這張照片要代表「現在的我們」，大家要怎麼站？",play:"先決定一個主題：溫暖、荒唐、經典或電影感。設 10 秒倒數，全家一起完成。每人再替照片寫一個 <b>四字標題</b>。",psych:"主動選擇與共同創作會增加投入；照片提供日後喚起回憶的強力線索。",memory:"一張全家共同設計的照片。",mins:4},
+{id:"F015",cat:"memory",title:"今晚的一句話",hook:"一整晚，也可以濃縮成一句以後會記得的話。",question:"今天到現在，哪一句話最值得被留下？",play:"每人說一句自己想收藏的話，可以是別人剛說的，也可以是此刻想送給全家的。一起選一句成為 <b>今晚的標題</b>。",psych:"峰終定律指出，體驗的高峰與結尾會強烈影響回憶；共同命名能為經驗建立清楚索引。",memory:"今晚的標題與代表句。",mins:3},
+{id:"F016",cat:"future",title:"下次，就做這件事",hook:"「改天」很模糊；一個小約定才會讓故事繼續。",question:"一個月內，全家最想一起完成哪件小事？",play:"每人提一個 2 小時內能完成的選項。投票後立刻決定 <b>日期、地點、誰提醒</b>。",psych:"具體的執行意圖（何時、何地、如何）比模糊願望更容易轉成行動。",memory:"一個有日期的下一次相聚。",mins:5},
+{id:"F017",cat:"future",title:"五年後的家庭新聞",hook:"來自未來的頭條，現在搶先曝光。",question:"五年後，我們家最希望登上什麼樣的新聞頭條？",play:"兩人一組寫一則又好笑又真心的未來頭條，輪流播報。最後全家選一則最想實現的版本。",psych:"希望理論強調清楚目標與可能路徑；遊戲化想像能降低談未來時的壓力。",memory:"一則來自五年後的家庭頭條。",mins:5},
+{id:"F018",cat:"future",title:"給未來的我們",hook:"讓今天的聲音，在很久以後再出現一次。",question:"如果一年後全家再聽見現在的你，你最想說什麼？",play:"每人錄一段 15 秒語音：一句祝福、一個願望或一個提醒。最後一起說：<b>「明年見。」</b>",psych:"未來自我連結能提升承諾感；聲音保留語氣與情緒，是高度個人化的記憶線索。",memory:"一段一年後值得重新播放的家庭錄音。",mins:4}
+];
+const guides = {
+  F001:"每個人都有值得被看見的地方；幽默，能讓欣賞更自然地被說出口。",
+  F002:"不需要最完美的故事，只要是屬於你們的，就值得成為主角。",
+  F003:"笑彼此熟悉的小習慣，也別忘了讓對方感受到：我們是在一起笑，不是在笑他。",
+  F004:"願意多分享一點，也願意多聽一點，熟悉的人仍然可以重新認識。",
+  F005:"每一個現在的我們，都帶著一段曾經努力長大的故事。",
+  F006:"理解不一定從同意開始，有時只需要先站到對方的位置看一看。",
+  F007:"答案不同沒有關係；每一個意外，都是重新認識彼此的機會。",
+  F008:"默契不是答案完全相同，而是願意一起找到大家都想走的方向。",
+  F009:"不用說話也能互相理解，是因為我們願意留意彼此的訊號。",
+  F010:"一句具體的看見，可能正是對方今天最需要收到的力量。",
+  F011:"你習以為常的能力，也許一直是別人眼中很珍貴的光。",
+  F012:"歸屬感不是因為每個人都完美，而是我們知道彼此在這裡很重要。",
+  F013:"值得記住的常常不是最完美的一刻，而是大家一想起就會微笑的那一幕。",
+  F014:"照片留下的不只是樣子，也留下了此刻我們願意靠近彼此的心情。",
+  F015:"為今晚選一句話，就像替這段共同經歷放進一枚溫暖的書籤。",
+  F016:"關係會在一次次真的見面、真的做到的小約定裡，慢慢變得更深。",
+  F017:"一起想像未來，不是要求它一定發生，而是告訴彼此：未來仍想有你們。",
+  F018:"有些話今天說出來，會在未來的某一天，成為重新出發的力量。"
+};
+const turnCards = [
+  {id:"T001",cat:"laugh",title:"我的招牌動作",hook:"先別解釋，用動作讓大家認識你。",question:"做一個你最常出現的動作或表情。",play:"其他人一起模仿。完成後，由翻牌者選出 <b>最像自己的一位</b>。",guide:"被記住的小習慣，常常也是你帶給大家的獨特印象。",memory:"一個從今天開始只有你們懂的招牌動作。",mins:2},
+  {id:"T002",cat:"laugh",title:"只有他配得上的獎",hook:"用不正經的方式，認真看見一個人。",question:"選一位現場的人，頒給他一個好笑但善意的獎。",play:"說出獎名和一個真實理由。得獎者要發表 <b>十秒感言</b>。",guide:"幽默讓欣賞更容易說出口；好笑，也可以很溫暖。",memory:"一個只有這群人才懂的專屬獎項。",mins:2},
+  {id:"T003",cat:"discover",title:"多出來的半天",hook:"一個簡單選擇，會透露你真正想要的生活。",question:"如果明天突然多出半天空閒，你最想怎麼度過？",play:"先回答，再指定一個人說：<b>「我原本以為你會……」</b>",guide:"熟悉的人，仍然可能有我們還沒看見的生活想像。",memory:"對翻牌者理想生活的一個新認識。",mins:2},
+  {id:"T004",cat:"discover",title:"最近的小期待",hook:"不必是大夢想，只說最近真的在期待的事。",question:"最近，有哪一件小事讓你想到就有點開心？",play:"分享後，選一位現場的人送你一句 <b>簡短的祝福</b>。",guide:"被別人記得的小期待，也會多一點發生的力量。",memory:"一件值得替對方記住的近期期待。",mins:2},
+  {id:"T005",cat:"sync",title:"猜我的選擇",hook:"先別說答案，看看大家懂不懂你。",question:"現在你會選：吃東西、出去走走，還是留在這裡聊天？",play:"把答案放在心裡。數到三，其他人同時說出猜測，再由你揭曉。",guide:"猜錯不是不懂，而是多了一次重新認識你的機會。",memory:"一次意外猜中，或完全猜錯的有趣瞬間。",mins:2},
+  {id:"T006",cat:"sync",title:"誰最懂我",hook:"有些需要，不說出來很難被知道。",question:"你心情不好時，最希望別人怎麼陪你？",play:"先讓大家口頭猜，再公布答案。最後只要補一句：<b>「這樣會讓我覺得……」</b>",guide:"每個人需要的陪伴不同；願意先了解，就是一種溫柔。",memory:"一種下次可以更好陪伴你的方式。",mins:3},
+  {id:"T007",cat:"appreciate",title:"我有注意到",hook:"把一件放在心裡的小事，現在說出來。",question:"選一位現場的人，說出他最近做過、而你有注意到的一件小事。",play:"使用這句話：<b>「我有注意到你……，那讓我覺得……」</b>",guide:"一句具體的看見，可能正是對方今天最需要收到的力量。",memory:"一句真實、具體而且被好好接住的感謝。",mins:2},
+  {id:"T008",cat:"appreciate",title:"你的隱藏技能",hook:"你習以為常的，也許正是別人眼中的厲害。",question:"選一位現場的人，替他命名一項「隱藏技能」。",play:"必須說一個真實例子。對方只要回答：<b>「原來你是這樣看我的。」</b>",guide:"我們有時需要透過別人的眼睛，才看得見自己的光。",memory:"一項值得被本人記住的隱藏技能。",mins:2},
+  {id:"T009",cat:"memory",title:"重現那一刻",hook:"把一段共同回憶，再演一次。",question:"想一個你和現場某人共同經歷過的好笑畫面。",play:"邀請那個人，用十秒一起重現當時的一個動作或一句話。",guide:"值得留下的，往往不是完美的一刻，而是一想起就會微笑的畫面。",memory:"一段被重新演活的共同故事。",mins:2},
+  {id:"T010",cat:"memory",title:"現在的我們",hook:"不用完美，只留下現在真正的樣子。",question:"替大家決定一個表情：開心、疲累、荒唐或自由發揮。",play:"數到三，所有人一起做出表情。想留下時，再拍一張照片。",guide:"照片珍貴的不是姿勢，而是當時真的一起笑過。",memory:"一張代表此刻關係與心情的照片。",mins:2},
+  {id:"T011",cat:"future",title:"下次一起",hook:"讓「改天」變成一件真的可能發生的小事。",question:"選一位現場的人，你下次最想和他一起做什麼？",play:"直接向他發出邀請。事情要簡單到 <b>一個月內可以完成</b>。",guide:"關係會在一次次真的見面、真的做到的小約定裡慢慢變深。",memory:"一個簡單、具體而且有人回應的邀請。",mins:2},
+  {id:"T012",cat:"future",title:"給下一次的話",hook:"用一句話，替今天留下溫暖的結尾。",question:"下一次再見面時，你希望大家還記得今天的哪一刻？",play:"說完後，指定下一位接著分享。最後一位替今晚取一個名字。",guide:"當我們替一段經歷命名，它就更容易在未來被重新想起。",memory:"今晚的名字，以及大家共同選擇記住的一刻。",mins:3}
+];
+
+let members = JSON.parse(localStorage.getItem("mt-members")||'["爸爸","媽媽"]');
+let saved = new Set(JSON.parse(localStorage.getItem("mt-saved")||"[]").filter(id=>turnCards.some(c=>c.id===id)));
+let mode = "mix", relation = localStorage.getItem("mt-relation")||"family", deck = [], index = 0, turn = 0;
+
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if(id==="setup") renderMembers();
+  if(id==="collection") renderCollection();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function initials(name){return name.slice(0,1)}
+function renderMembers(){
+  document.getElementById("members").innerHTML=members.map((m,i)=>`<div class="member-chip"><span class="avatar">${initials(m)}</span><span>${m}</span>${members.length>2?`<button onclick="removeMember(${i})" aria-label="移除${m}">×</button>`:""}</div>`).join("");
+  document.getElementById("memberTotal").textContent=members.length;
+}
+function addMember(e){
+  e.preventDefault(); const input=document.getElementById("memberInput"), name=input.value.trim();
+  if(!name)return; if(members.length>=8){toast("最多 8 位家人");return}
+  members.push(name); input.value=""; saveMembers(); renderMembers();
+}
+function removeMember(i){if(members.length<=2)return;members.splice(i,1);saveMembers();renderMembers()}
+function saveMembers(){localStorage.setItem("mt-members",JSON.stringify(members))}
+function setRelation(el){
+  document.querySelectorAll(".relation-tabs button").forEach(x=>x.classList.remove("active"));
+  el.classList.add("active"); relation=el.dataset.relation;
+  localStorage.setItem("mt-relation",relation);
+  const untouched=members.join(",")==="爸爸,媽媽"||members.join(",")==="你,好友"||members.join(",")==="你,家人,朋友";
+  if(untouched){
+    members=relation==="family"?["爸爸","媽媽"]:relation==="friends"?["你","好友"]:["你","家人","朋友"];
+    saveMembers();renderMembers();
+  }
+  toast(relation==="family"?"已切換為家人模式":relation==="friends"?"已切換為朋友模式":"已切換為家人＋朋友模式");
+}
+function adapt(text){
+  if(relation==="family") return text;
+  return text
+    .replaceAll("全家","大家")
+    .replaceAll("我們家","我們這群人")
+    .replaceAll("家庭","彼此")
+    .replaceAll("家裡","這群人裡")
+    .replaceAll("家人","成員");
+}
+function pickMode(el){document.querySelectorAll(".mode-card").forEach(x=>x.classList.remove("active"));el.classList.add("active");mode=el.dataset.mode}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function startGame(){
+  if(members.length<2){toast("請至少加入 2 位成員");return}
+  let pool=turnCards;
+  if(mode==="light") pool=turnCards.filter(c=>["laugh","sync","memory"].includes(c.cat));
+  if(mode==="warm") pool=turnCards.filter(c=>["discover","appreciate","memory","future"].includes(c.cat));
+  deck=shuffle(pool).slice(0,10);index=0;turn=0;renderCard();go("game");
+}
+function renderCard(){
+  const c=deck[index], cat=categories[c.cat], who=members[turn%members.length];
+  document.getElementById("roundLabel").textContent=`${String(index+1).padStart(2,"0")} / ${String(deck.length).padStart(2,"0")}`;
+  document.getElementById("progressBar").style.width=`${((index+1)/deck.length)*100}%`;
+  document.getElementById("timeLabel").textContent=`約 ${c.mins} 分鐘`;
+  document.getElementById("cardCategory").textContent=`${cat.icon} ${cat.name}`;
+  document.getElementById("cardCategory").style.background=cat.color;
+  document.getElementById("turnLabel").textContent=`這題由 ${who} 開始`;
+  document.getElementById("coverPlayer").textContent=who;
+  document.getElementById("cardNo").textContent=`${c.id} · Moment ${String(index+1).padStart(2,"0")}`;
+  document.getElementById("cardTitle").textContent=adapt(c.title);
+  document.getElementById("cardHook").textContent=adapt(c.hook);
+  document.getElementById("cardQuestion").textContent=adapt(c.question);
+  document.getElementById("cardPlay").innerHTML=`<b>一起這樣玩</b><br>${adapt(c.play)}`;
+  document.getElementById("cardGuide").textContent=adapt(c.guide||guides[c.id]);
+  document.getElementById("cardMemory").textContent=adapt(c.memory);
+  document.getElementById("cardCover").classList.remove("revealed");
+  document.getElementById("gameActions").style.visibility="hidden";
+  updateSaveBtn();
+}
+function revealCard(){
+  document.getElementById("cardCover").classList.add("revealed");
+  document.getElementById("gameActions").style.visibility="visible";
+}
+function nextCard(){
+  if(index>=deck.length-1){document.getElementById("completeText").textContent=`${members.join("、")} 一起完成了 ${deck.length} 個 Moments。最後，選一張你們都喜歡的照片留下來。`;document.getElementById("completeModal").classList.add("open");return}
+  index++;turn++;renderCard();window.scrollTo({top:0,behavior:"smooth"});
+}
+function skipCard(){deck[index]=shuffle(turnCards.filter(c=>!deck.some(d=>d.id===c.id)))[0]||deck[index];renderCard();toast("已換一張更適合的卡")}
+function toggleSave(){
+  const id=deck[index].id;if(saved.has(id)){saved.delete(id);toast("已取消收藏")}else{saved.add(id);toast("已收藏，下一次還能再玩")}
+  localStorage.setItem("mt-saved",JSON.stringify([...saved]));updateCounts();updateSaveBtn();
+}
+function updateSaveBtn(){const b=document.getElementById("saveBtn"),on=saved.has(deck[index]?.id);b.textContent=on?"♥ 已收藏":"♡ 收藏";b.style.color=on?"var(--orange-dark)":""}
+function updateCounts(){document.getElementById("savedCount").textContent=saved.size}
+function renderCategories(){
+  document.getElementById("categoryGrid").innerHTML=Object.entries(categories).map(([key,c])=>`<button class="category-card" onclick="startCategory('${key}')"><span class="cat-icon">${c.icon}</span><span><b>${c.name}<span class="count">${turnCards.filter(x=>x.cat===key).length} 張</span></b><span>${c.desc}</span></span></button>`).join("");
+}
+function startCategory(key){deck=shuffle(turnCards.filter(c=>c.cat===key));index=0;turn=0;renderCard();go("game")}
+function renderCollection(){
+  const list=turnCards.filter(c=>saved.has(c.id)), el=document.getElementById("collectionList");
+  if(!list.length){el.innerHTML=`<div class="empty"><span class="big">♡</span>還沒有收藏。<br>遊戲中遇到喜歡的 Moment，就把它留在這裡。</div>`;return}
+  el.innerHTML=list.map(c=>`<div class="saved-card"><span class="mini" style="background:${categories[c.cat].color}">${categories[c.cat].icon}</span><div><b>${c.title}</b><span>${categories[c.cat].name} · ${c.mins} 分鐘</span></div></div>`).join("");
+}
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1900)}
+function closeComplete(){document.getElementById("completeModal").classList.remove("open")}
+function restartGame(){closeComplete();startGame()}
+document.querySelectorAll(".relation-tabs button").forEach(btn=>btn.classList.toggle("active",btn.dataset.relation===relation));
+renderMembers();renderCategories();updateCounts();
+</script>
+</body>
+</html>
