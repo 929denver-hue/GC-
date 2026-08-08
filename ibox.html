@@ -50,6 +50,8 @@
 
     .flex { display:flex; gap:22px; flex-wrap:wrap; }
     .chart-box { flex:1; min-width:350px; height:260px; }
+    /* 🌟 新增：讓複合圖有比較好的高度 */
+    .mixed-chart-box { width: 100%; height: 400px; } 
 
     /* MoM / YoY 顏色：成長紅、減少綠、持平灰 */
     .growth { color: #d91e18; font-weight:600; }
@@ -71,44 +73,33 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbx9eVJpOxflNXwrMmTFFQsR74f74Vr9RYlOXi5NU7DKDVQE_05VDTraZ6TRtl-t8A6nXg/exec";
 
 let globalRows = [];
-let totalChart, momChart, pieChart;
+let totalChart, momChart, pieChart, yoyMixedChart; // 🌟 新增 yoyMixedChart 變數
 
-/* 解析「月份」為 'YYYY-MM'，先交給 Date 處理，防止 2025-00 這種情況 */
 function parseMonth(raw) {
   if (raw == null) return "";
   const s = String(raw).trim();
-
-  // 1) 優先用 Date 解析（處理 Fri Nov 01 2024 00:00:00 GMT+0800 這種）
   const d = new Date(s);
   if (!isNaN(d.getTime())) {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, "0");
     return `${y}-${m}`;
   }
-
-  // 2) 已經是 YYYY-MM / YYYY/M / YYYY年MM月
   let m = s.match(/^(\d{4})[-/](\d{1,2})$/);
   if (m) return `${m[1]}-${m[2].padStart(2,"0")}`;
-
   m = s.match(/(20\d{2})\D+(\d{1,2})\D*月?/);
   if (m) return `${m[1]}-${m[2].padStart(2,"0")}`;
-
-  // 3) 最後保險：抓第一個年份與一個數字
   m = s.match(/(20\d{2}).*?(\d{1,2})/);
   if (m) return `${m[1]}-${m[2].padStart(2,"0")}`;
-
   return s;
 }
 
-/* 成長/減少 顏色 class：成長=紅，減少=綠 */
 function diffClass(value) {
   if (value === null || value === 0) return "neutral";
-  if (value > 0) return "growth";   // 成長：紅
-  if (value < 0) return "decline";  // 減少：綠
+  if (value > 0) return "growth";   
+  if (value < 0) return "decline";  
   return "neutral";
 }
 
-/* 讀取資料 */
 async function loadData() {
   try {
     const res  = await fetch(API_URL);
@@ -120,13 +111,16 @@ async function loadData() {
 
     drawCharts();
     drawPie();
-    updateMonthlyReport();   // ⬅️ 當月報告
+    updateMonthlyReport();
+
+    // 🌟 新增：初始化並畫出歷年同期複合圖
+    initYoYFilter();
+    drawYoYMixedChart();
   } catch (e) {
     console.error(e);
   }
 }
 
-/* ========== 表格區：篩選 ========== */
 function buildTableFilter() {
   const sel = document.getElementById("tableFilter");
   sel.innerHTML = `
@@ -144,7 +138,6 @@ function buildTableFilter() {
 function applyFilterToTable() {
   const mode = document.getElementById("tableFilter").value;
   let rows = [...globalRows];
-
   if (mode === "last12") {
     rows = rows.slice(-12);
   } else if (mode !== "all") {
@@ -153,23 +146,17 @@ function applyFilterToTable() {
   renderTable(rows);
 }
 
-/* ========== 表格：含 MoM / YoY ========== */
 function renderTable(rows) {
   const tbody = document.getElementById("dataBody");
   tbody.innerHTML = "";
-
   rows.forEach((r, idx) => {
-    const monthKey = parseMonth(r.month);            // '2025-03'
-    const displayMonth = `${monthKey.slice(0,4)} / ${monthKey.slice(5,7)}`; // '2025 / 03'
+    const monthKey = parseMonth(r.month);            
+    const displayMonth = `${monthKey.slice(0,4)} / ${monthKey.slice(5,7)}`; 
     const total = Number(r.totalCount || 0);
 
-    // MoM：與上一列比較（同篩選範圍內）
     let mom = null;
-    if (idx > 0) {
-      mom = total - Number(rows[idx - 1].totalCount || 0);
-    }
+    if (idx > 0) mom = total - Number(rows[idx - 1].totalCount || 0);
 
-    // YoY：從「所有歷史 globalRows」中找去年同月
     let yoy = null;
     const year  = parseInt(monthKey.slice(0,4), 10);
     const month = monthKey.slice(5,7);
@@ -186,19 +173,13 @@ function renderTable(rows) {
         <td>${r.flashCount ?? ""}</td>
         <td>${r.giftCount ?? ""}</td>
         <td>${r.demandCount ?? ""}</td>
-
-        <td class="${diffClass(mom)}">
-          ${mom === null ? "-" : (mom > 0 ? "+" : "") + mom.toLocaleString()}
-        </td>
-        <td class="${diffClass(yoy)}">
-          ${yoy === null ? "-" : (yoy > 0 ? "+" : "") + yoy.toLocaleString()}
-        </td>
+        <td class="${diffClass(mom)}">${mom === null ? "-" : (mom > 0 ? "+" : "") + mom.toLocaleString()}</td>
+        <td class="${diffClass(yoy)}">${yoy === null ? "-" : (yoy > 0 ? "+" : "") + yoy.toLocaleString()}</td>
       </tr>
     `;
   });
 }
 
-/* ========== 圖表區 ========== */
 function drawCharts() {
   const labels = globalRows.map(r => {
     const m = parseMonth(r.month);
@@ -207,7 +188,6 @@ function drawCharts() {
   const totals = globalRows.map(r => Number(r.totalCount || 0));
   const diff   = totals.map((v,i) => i===0 ? 0 : v - totals[i-1]);
 
-  // 折線：寄件趨勢
   if (totalChart) totalChart.destroy();
   totalChart = new Chart(document.getElementById("totalChart"), {
     type: "line",
@@ -220,23 +200,12 @@ function drawCharts() {
         backgroundColor: "rgba(45,181,125,.2)",
         fill: true,
         tension: .35,
-        pointRadius: 4,
-        pointHoverRadius: 6
+        pointRadius: 4
       }]
     },
-    options: {
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => `${ctx.parsed.y.toLocaleString()} 件`
-          }
-        }
-      }
-    }
+    options: { plugins: { legend: { display: false } } }
   });
 
-  // 月增減：成長紅、減少綠
   if (momChart) momChart.destroy();
   momChart = new Chart(document.getElementById("momChart"), {
     type: "bar",
@@ -247,24 +216,13 @@ function drawCharts() {
         data: diff,
         backgroundColor: diff.map(v => v >= 0 ? "#d91e18" : "#0f8b4b")
       }]
-    },
-    options: {
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: ctx => `${ctx.parsed.y > 0 ? "+" : ""}${ctx.parsed.y.toLocaleString()} 件`
-          }
-        }
-      }
     }
   });
 }
 
-/* 最新月份：來源分布圓餅 */
 function drawPie() {
   const r = globalRows.at(-1);
   if (!r) return;
-
   if (pieChart) pieChart.destroy();
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "pie",
@@ -278,39 +236,26 @@ function drawPie() {
   });
 }
 
-/* ========== 當月報告 ========== */
 function updateMonthlyReport() {
   const box = document.getElementById("monthlyReportText");
   if (!box) return;
-
-  if (!globalRows.length) {
-    box.textContent = "目前尚未有任何月份資料。";
-    return;
-  }
+  if (!globalRows.length) return box.textContent = "目前尚未有任何資料。";
 
   const latest = globalRows[globalRows.length - 1];
   const latestKey = parseMonth(latest.month);
   const monthLabel = `${latestKey.slice(0,4)} / ${latestKey.slice(5,7)}`;
   const total = Number(latest.totalCount || 0);
 
-  // MoM
   let momSentence = "尚無上個月資料可比較。";
   if (globalRows.length >= 2) {
-    const prev = globalRows[globalRows.length - 2];
-    const prevTotal = Number(prev.totalCount || 0);
+    const prevTotal = Number(globalRows[globalRows.length - 2].totalCount || 0);
     const diff = total - prevTotal;
     const rate = prevTotal > 0 ? (diff / prevTotal) * 100 : 0;
     const word = diff > 0 ? "成長" : (diff < 0 ? "減少" : "持平");
-    if (diff === 0 || prevTotal === 0) {
-      momSentence = `相較上月，寄件量${word}，皆為 ${total.toLocaleString()} 件。`;
-    } else {
-      momSentence =
-        `相較上月，寄件量${word} ${Math.abs(diff).toLocaleString()} 件（約 ${rate.toFixed(1)}%）。`;
-    }
+    momSentence = diff===0 ? `相較上月，寄件量${word}，皆為 ${total.toLocaleString()} 件。` : `相較上月，寄件量${word} ${Math.abs(diff).toLocaleString()} 件（約 ${rate.toFixed(1)}%）。`;
   }
 
-  // YoY
-  let yoySentence = "";
+  let yoySentence = "目前尚無去年同期資料可供比較。";
   const year = parseInt(latestKey.slice(0,4), 10);
   const month = latestKey.slice(5,7);
   const lastYearRow = globalRows.find(r => parseMonth(r.month) === `${year-1}-${month}`);
@@ -319,48 +264,147 @@ function updateMonthlyReport() {
     const diff = total - lastYearTotal;
     const rate = lastYearTotal > 0 ? (diff / lastYearTotal) * 100 : 0;
     const word = diff > 0 ? "成長" : (diff < 0 ? "減少" : "持平");
-    if (diff === 0 || lastYearTotal === 0) {
-      yoySentence =
-        `與去年同期相比，寄件量${word}，皆為 ${total.toLocaleString()} 件。`;
-    } else {
-      yoySentence =
-        `與去年同期相比，寄件量${word} ${Math.abs(diff).toLocaleString()} 件（約 ${rate.toFixed(1)}%）。`;
-    }
-  } else {
-    yoySentence = "目前尚無去年同期資料可供比較。";
+    yoySentence = diff===0 ? `與去年同期相比，寄件量${word}，皆為 ${total.toLocaleString()} 件。` : `與去年同期相比，寄件量${word} ${Math.abs(diff).toLocaleString()} 件（約 ${rate.toFixed(1)}%）。`;
   }
 
-  // 通路占比
-  const share = Number(latest.shareCount || 0);
-  const flash = Number(latest.flashCount || 0);
-  const gift  = Number(latest.giftCount  || 0);
-  const dem   = Number(latest.demandCount|| 0);
-  const channelTotal = share + flash + gift + dem;
-
-  let channelSentence = "本月尚未有分享通 / 閃送區 / 禮物池 / 需求池的細項資料。";
+  const channelTotal = Number(latest.shareCount||0) + Number(latest.flashCount||0) + Number(latest.giftCount||0) + Number(latest.demandCount||0);
+  let channelSentence = "本月尚未有各通路細項資料。";
   if (channelTotal > 0) {
     const pct = v => (v / channelTotal * 100).toFixed(1) + "%";
     const parts = [];
-    if (share > 0) parts.push(`分享通約 ${pct(share)}`);
-    if (flash > 0) parts.push(`閃送區約 ${pct(flash)}`);
-    if (gift  > 0) parts.push(`禮物池約 ${pct(gift)}`);
-    if (dem   > 0) parts.push(`需求池約 ${pct(dem)}`);
+    if (latest.shareCount > 0) parts.push(`分享通約 ${pct(latest.shareCount)}`);
+    if (latest.flashCount > 0) parts.push(`閃送區約 ${pct(latest.flashCount)}`);
+    if (latest.giftCount > 0) parts.push(`禮物池約 ${pct(latest.giftCount)}`);
+    if (latest.demandCount > 0) parts.push(`需求池約 ${pct(latest.demandCount)}`);
     channelSentence = "各通路占比約為：" + parts.join("、") + "。";
   }
 
-  // ⭐ 這裡只保留三行說明：本月量 / MoM / YoY / 通路占比
-  box.innerHTML =
-    `📦 <b>${monthLabel} GC贈物網 IBOX當月報告</b><br>` +
-    `本月寄件量：<b>${total.toLocaleString()} 件</b>。<br>` +
-    `・${momSentence}<br>` +
-    `・${yoySentence}<br>` +
-    `・${channelSentence}`;
+  box.innerHTML = `📦 <b>${monthLabel} GC贈物網 IBOX當月報告</b><br>本月寄件量：<b>${total.toLocaleString()} 件</b>。<br>・${momSentence}<br>・${yoySentence}<br>・${channelSentence}`;
 }
 
+// ================== 🌟 新增：歷年同期比較複合圖邏輯 ==================
+
+// 準備月份篩選器，預設抓最新一筆資料的月份
+function initYoYFilter() {
+  const latest = globalRows[globalRows.length - 1];
+  let defaultMonth = "01";
+  if(latest) {
+    defaultMonth = parseMonth(latest.month).slice(5,7);
+  }
+  
+  const sel = document.getElementById("yoyMonthFilter");
+  sel.innerHTML = "";
+  for(let i=1; i<=12; i++) {
+    let m = i.toString().padStart(2, '0');
+    let selected = (m === defaultMonth) ? "selected" : "";
+    sel.innerHTML += `<option value="${m}" ${selected}>${m}月</option>`;
+  }
+  // 當使用者改變月份時，重新畫圖
+  sel.onchange = drawYoYMixedChart;
+}
+
+// 繪製雙軸複合圖
+function drawYoYMixedChart() {
+  const selectedMonth = document.getElementById("yoyMonthFilter").value;
+  
+  // 篩選出所有年份中，等於所選月份的資料 (例如所有的 "-07")
+  const filtered = globalRows.filter(r => parseMonth(r.month).endsWith(`-${selectedMonth}`));
+
+  const labels = [];       // X軸：年月 (例如 2021/7)
+  const volumes = [];      // Y軸1 (長條圖)：寄件量
+  const growthRates = [];  // Y軸2 (折線圖)：成長率(%)
+  const growthLabels = []; // 紀錄完整資訊，供游標懸停顯示
+
+  filtered.forEach((r, idx) => {
+    const mKey = parseMonth(r.month);
+    labels.push(`${mKey.slice(0,4)}/${Number(selectedMonth)}`); 
+    
+    const vol = Number(r.totalCount || 0);
+    volumes.push(vol);
+
+    if (idx === 0) {
+      growthRates.push(null);
+      growthLabels.push("-");
+    } else {
+      const prevVol = Number(filtered[idx-1].totalCount || 0);
+      const diff = vol - prevVol;
+      const rate = prevVol > 0 ? (diff / prevVol) * 100 : 0;
+      
+      growthRates.push(rate.toFixed(2));
+      growthLabels.push(`${rate.toFixed(2)}% (${diff > 0 ? '+' : ''}${diff}件)`);
+    }
+  });
+
+  if(yoyMixedChart) yoyMixedChart.destroy();
+  
+  yoyMixedChart = new Chart(document.getElementById("yoyMixedChart"), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          type: 'line', // 這是折線圖
+          label: '成長幅度 (%)',
+          data: growthRates,
+          borderColor: '#cc0000',      // 紅色線條 (參考你的圖片)
+          backgroundColor: '#cc0000',
+          yAxisID: 'y1',               // 綁定右側的 Y軸
+          borderWidth: 2,
+          pointRadius: 6,
+          pointStyle: 'rectRot',       // 菱形點狀，還原圖片風格
+          tension: 0.1
+        },
+        {
+          type: 'bar',  // 這是長條圖
+          label: '寄件量',
+          data: volumes,
+          backgroundColor: '#7faadc',  // 淺藍色長條 (參考你的圖片)
+          yAxisID: 'y',                // 綁定左側的 Y軸
+          barPercentage: 0.6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              if (context.datasetIndex === 0) { // 折線圖
+                return ` 成長幅度: ${growthLabels[context.dataIndex]}`;
+              } else { // 長條圖
+                return ` 寄件量: ${context.parsed.y} 件`;
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          title: { display: true, text: '寄件量 (件)' },
+          grid: { drawOnChartArea: true }
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          title: { display: true, text: '成長幅度 (%)' },
+          grid: { drawOnChartArea: false }, // 不畫兩次網格線，避免混亂
+          ticks: { callback: value => value + "%" }
+        }
+      }
+    }
+  });
+}
 
 window.onload = loadData;
 </script>
-
 
 <!-- ====================== UI ====================== -->
 
@@ -370,22 +414,26 @@ window.onload = loadData;
     顯示方式：
     <select id="tableFilter"></select>
   </div>
-
   <table>
     <thead>
       <tr>
-        <th>月份</th>
-        <th>寄件總量</th>
-        <th>分享通</th>
-        <th>閃送區</th>
-        <th>禮物池</th>
-        <th>需求池</th>
-        <th>與上月比較</th>
-        <th>與去年同期比較</th>
+        <th>月份</th><th>寄件總量</th><th>分享通</th><th>閃送區</th><th>禮物池</th><th>需求池</th><th>與上月比較</th><th>與去年同期比較</th>
       </tr>
     </thead>
     <tbody id="dataBody"></tbody>
   </table>
+</div>
+
+<!-- 🌟 新增：歷年同期複合圖面板 -->
+<div class="panel">
+  <h3>📊 IBOX 歷年同期寄件量與去年同期成長幅度複合圖</h3>
+  <div style="margin-bottom:15px; font-size:14px;">
+    選擇比較月份：
+    <select id="yoyMonthFilter" style="padding: 4px; font-size: 14px; border-radius: 4px;"></select>
+  </div>
+  <div class="mixed-chart-box">
+    <canvas id="yoyMixedChart"></canvas>
+  </div>
 </div>
 
 <div class="flex">
@@ -399,18 +447,15 @@ window.onload = loadData;
   </div>
 </div>
 
-<!-- 📝 當月報告：放在圖表下面 -->
 <div class="panel" id="monthlyReportPanel">
   <h3>📝 當月報告</h3>
   <div id="monthlyReportText" style="line-height:1.7; font-size:14px;"></div>
 </div>
 
-<div class="panel chart-box">
+<div class="panel chart-box" style="width: 50%;">
   <h3>🥧 最新月份來源分布</h3>
   <canvas id="pieChart"></canvas>
 </div>
 
 </body>
 </html>
-
-
