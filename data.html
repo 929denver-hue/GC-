@@ -2,17 +2,16 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>GC贈物網 | 物流數據動態看板</title>
+    <title>GC圈 | 物流數據看板</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
-        /* 更新了各物流商的 CSS 顏色變數，讓整體視覺統一 */
         :root { 
-            --ibox: #00773B;   /* 郵局深綠 */
-            --hilife: #E60012; /* 萊爾富紅 */
-            --fami: #0089C9;   /* 全家藍 */
-            --hct: #003366;    /* 新竹物流深藍 */
-            --seven: #00A261;  /* 7-11綠 */
+            --ibox: #00773B;
+            --hilife: #E60012;
+            --fami: #0089C9;
+            --hct: #003366;
+            --seven: #00A261;
             --bg: #f4f7f9; 
         }
         body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
@@ -25,7 +24,11 @@
         .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
         .kpi-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
         .kpi-value { font-size: 2rem; font-weight: bold; margin: 5px 0; }
-        .up { color: #27ae60; } .down { color: #e74c3c; }
+        
+        /* [重點修改區]：將上升改為紅色，下降改為綠色 */
+        .up { color: #e74c3c; } 
+        .down { color: #27ae60; }
+        
         .chart-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 20px; }
         .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .chart-container { position: relative; height: 320px; width: 100%; }
@@ -118,14 +121,12 @@
         const provs = Array.from(document.querySelectorAll('.prov-check:checked')).map(c => c.value);
         const selectedDates = Array.from(document.querySelectorAll('.date-check:checked')).map(c => c.value);
         
-        // 篩選數據
         const filtered = allRawData.filter(d => provs.includes(d.Provider.toLowerCase().trim()) && selectedDates.includes(formatDate(d.Month || d.Date)));
 
         let totalVol = 0;
         const providerSum = { ibox: 0, hilife: 0, fami: 0, hct: 0, "7-11": 0 };
         const monthlySum = {}; 
         
-        // 先算目前篩選範圍內的總數
         filtered.forEach(d => {
             const p = d.Provider.toLowerCase().trim();
             const vol = parseInt(d.Volume) || 0;
@@ -137,7 +138,6 @@
 
         document.getElementById('kpi-total-vol').innerText = totalVol.toLocaleString();
 
-        // --- MoM & YoY 邏輯 ---
         const globalMonthlySum = {};
         allRawData.filter(d => provs.includes(d.Provider.toLowerCase().trim())).forEach(d => {
             const dKey = formatDate(d.Month || d.Date);
@@ -148,20 +148,17 @@
         if (latestMonth) {
             const curVal = globalMonthlySum[latestMonth] || 0;
             
-            // MoM (上個月)
             const dMoM = new Date(latestMonth);
             dMoM.setMonth(dMoM.getMonth() - 1);
             const prevMonthKey = formatDate(dMoM);
             updateKPI('mom', curVal, globalMonthlySum[prevMonthKey]);
 
-            // YoY (去年同月)
             const dYoY = new Date(latestMonth);
             dYoY.setFullYear(dYoY.getFullYear() - 1);
             const lastYearKey = formatDate(dYoY);
             updateKPI('yoy', curVal, globalMonthlySum[lastYearKey]);
         }
 
-        // 明細表格
         const tbody = document.querySelector('#data-table tbody');
         tbody.innerHTML = '';
         filtered.sort((a,b) => formatDate(b.Month || b.Date).localeCompare(formatDate(a.Month || a.Date))).forEach(d => {
@@ -181,18 +178,20 @@
         const diff = cur - pre;
         const pct = ((diff / pre) * 100).toFixed(1);
         pctEl.innerText = (diff >= 0 ? '+' : '') + pct + '%';
+        
+        // 這裡的邏輯不變，只要數字 >= 0 就加上 'up' 的類別，由 CSS 決定顯示成紅色
         pctEl.className = 'kpi-value ' + (diff >= 0 ? 'up' : 'down');
+        
         numEl.innerText = (diff >= 0 ? '增加 ' : '減少 ') + Math.abs(diff).toLocaleString() + ' 件';
     }
 
     function updateCharts(labels, provs, data, pSum) {
-        // [重點調整區]：設定長條圖與圓餅圖渲染時的代表色
         const colors = { 
-            'ibox': '#00773B',   // 郵局 (深綠)
-            'hilife': '#E60012', // 萊爾富 (紅)
-            'fami': '#0089C9',   // 全家 (藍)
-            'hct': '#003366',    // 新竹物流 (深藍)
-            '7-11': '#00A261'    // 7-11 (統一鮮綠)
+            'ibox': '#00773B',
+            'hilife': '#E60012',
+            'fami': '#0089C9',
+            'hct': '#003366',
+            '7-11': '#00A261'
         };
         
         const ctxV = document.getElementById('volChart').getContext('2d');
