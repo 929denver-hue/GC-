@@ -2,12 +2,19 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>GC圈 | 物流數據動態看板</title>
+    <title>GC贈物網 | 物流數據動態看板</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
-        /* 新增了 --seven 的顏色變數 */
-        :root { --ibox: #90ee90; --hilife: #e74c3c; --fami: #add8e6; --hct: #f39c12; --seven: #2ecc71; --bg: #f4f7f9; }
+        /* 更新了各物流商的 CSS 顏色變數，讓整體視覺統一 */
+        :root { 
+            --ibox: #00773B;   /* 郵局深綠 */
+            --hilife: #E60012; /* 萊爾富紅 */
+            --fami: #0089C9;   /* 全家藍 */
+            --hct: #003366;    /* 新竹物流深藍 */
+            --seven: #00A261;  /* 7-11綠 */
+            --bg: #f4f7f9; 
+        }
         body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
         .container { max-width: 1200px; margin: auto; }
         .layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
@@ -43,7 +50,6 @@
                 <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="hilife" checked> 萊爾富</label>
                 <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="fami" checked> 全家</label>
                 <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="hct" checked> 新竹物流</label>
-                <!-- 在這裡新增了 7-11 的選項，value 設為 "7-11" -->
                 <label style="display:block; margin-bottom:8px;"><input type="checkbox" class="prov-check" value="7-11" checked> 7-11</label>
             </div>
             <div class="filter-group">
@@ -116,9 +122,9 @@
         const filtered = allRawData.filter(d => provs.includes(d.Provider.toLowerCase().trim()) && selectedDates.includes(formatDate(d.Month || d.Date)));
 
         let totalVol = 0;
-        // 在物件中加入 "7-11": 0
         const providerSum = { ibox: 0, hilife: 0, fami: 0, hct: 0, "7-11": 0 };
-        const monthlySum = {}; //
+        const monthlySum = {}; 
+        
         // 先算目前篩選範圍內的總數
         filtered.forEach(d => {
             const p = d.Provider.toLowerCase().trim();
@@ -132,14 +138,13 @@
         document.getElementById('kpi-total-vol').innerText = totalVol.toLocaleString();
 
         // --- MoM & YoY 邏輯 ---
-        // 取得所有資料的月份總結 (用於對照)
         const globalMonthlySum = {};
         allRawData.filter(d => provs.includes(d.Provider.toLowerCase().trim())).forEach(d => {
             const dKey = formatDate(d.Month || d.Date);
             globalMonthlySum[dKey] = (globalMonthlySum[dKey] || 0) + (parseInt(d.Volume) || 0);
         });
 
-        const latestMonth = selectedDates[0]; // 勾選清單中的最新月
+        const latestMonth = selectedDates[0]; 
         if (latestMonth) {
             const curVal = globalMonthlySum[latestMonth] || 0;
             
@@ -181,8 +186,15 @@
     }
 
     function updateCharts(labels, provs, data, pSum) {
-        // 在顏色設定中加入 7-11 的顏色
-        const colors = { ibox: '#90ee90', hilife: '#e74c3c', fami: '#add8e6', hct: '#003366', "7-11": '#2ecc71' };
+        // [重點調整區]：設定長條圖與圓餅圖渲染時的代表色
+        const colors = { 
+            'ibox': '#00773B',   // 郵局 (深綠)
+            'hilife': '#E60012', // 萊爾富 (紅)
+            'fami': '#0089C9',   // 全家 (藍)
+            'hct': '#003366',    // 新竹物流 (深藍)
+            '7-11': '#00A261'    // 7-11 (統一鮮綠)
+        };
+        
         const ctxV = document.getElementById('volChart').getContext('2d');
         if (volChart) volChart.destroy();
         volChart = new Chart(ctxV, {
