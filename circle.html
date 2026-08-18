@@ -35,14 +35,12 @@
   </div>
   <header class="sticky top-0 z-50 border-b border-white/10 bg-[#103b36]/95 backdrop-blur">
    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4" aria-label="主要導覽">
-    <!-- 加入 LOGO 與名稱 -->
     <a href="#home" data-template-id="brand-name" class="canva-text focus-ring display text-xl font-extrabold tracking-tight text-white flex items-center" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">
-     <!-- LOGO 圖片佔位符，請將 src 替換為你的真實 Logo 圖片網址 -->
-     <img src="https://placehold.co/80x80/c9ef63/103b36?text=GC" alt="GC圈 Logo" class="h-8 w-8 mr-3 rounded-full object-cover border border-[#c9ef63]">
+     <!-- 請在這裡替換成你的 LOGO 圖片檔案路徑 -->
+     <img src="請替換成頂端LOGO檔案.png" alt="GC圈 Logo" class="h-8 w-auto mr-3 object-contain">
      GC圈   GiveCircle
     </a>
     
-    <!-- 選單字體放大至 18px (text-[18px]) -->
     <div class="desktop-nav flex items-center gap-6 text-[18px] font-bold text-white/80">
      <a class="nav-link focus-ring" href="#about">認識GC圈</a> 
      <a class="nav-link focus-ring" href="#pain">企業痛點</a> 
@@ -51,10 +49,10 @@
      <a class="nav-link focus-ring" href="#impact">成效案例</a>
     </div>
 
-    <!-- 右側按鈕區塊，新增「進入GC圈」按鈕 -->
     <div class="flex items-center gap-3 desktop-nav">
       <a href="#consult" data-template-id="nav-consult" class="canva-button focus-ring rounded-full px-5 py-2 text-sm font-bold transition hover:brightness-95" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">免費諮詢</a> 
-      <a href="#" class="canva-button focus-ring rounded-full px-5 py-2 text-sm font-bold transition hover:brightness-95 shadow-md" style="background: var(--coral); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">進入GC圈</a>
+      <!-- 進入GC圈連結更新 -->
+      <a href="https://www.give-circle.com" target="_blank" class="canva-button focus-ring rounded-full px-5 py-2 text-sm font-bold transition hover:brightness-95 shadow-md" style="background: var(--coral); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">進入GC圈</a>
     </div>
 
     <button id="menu-button" type="button" class="mobile-toggle focus-ring rounded-full p-2 text-white" aria-label="開啟選單" aria-expanded="false"> 
@@ -64,7 +62,8 @@
    <div id="mobile-nav" class="mobile-nav hidden border-t border-white/10 bg-[#103b36] px-6 py-5">
     <div class="grid gap-4 text-sm font-bold text-white">
      <a href="#about">認識GC圈</a><a href="#pain">企業痛點</a><a href="#plans">合作方案</a><a href="#process">合作流程</a><a href="#impact">成效案例</a>
-     <a href="#" class="text-[#ff715b]">進入GC圈</a>
+     <!-- 手機版進入GC圈連結也同步更新 -->
+     <a href="https://www.give-circle.com" target="_blank" class="text-[#ff715b]">進入GC圈</a>
     </div>
    </div>
   </header>
@@ -74,10 +73,7 @@
     <div class="relative z-10 mx-auto flex min-h-[calc(78*min(var(--vh,1vh),1vh))] max-w-7xl items-center px-5 py-20">
      <div class="max-w-3xl">
       <p data-template-id="hero-eyebrow" class="canva-text mb-5 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">GC圈 台灣最大的免費物資共享社群平台 企業服務</p>
-      
-      <!-- 主視覺標題換行 -->
       <h1 data-template-id="hero-title" class="canva-text display max-w-3xl text-white font-extrabold leading-[1.08] tracking-tight" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 52px; line-height: 1.1;">您的品牌永續顧問<br>一站式企業閒置資產轉化專家</h1>
-      
       <p data-template-id="hero-description" class="canva-text mt-7 max-w-2xl text-lg leading-8 text-white/85" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 19px; line-height: 1.7;">打造循環經濟與 ESG 的雙贏競爭力，讓每一件閒置物開啟品牌新故事。</p>
       <div class="mt-10 flex flex-wrap gap-4">
        <a href="#consult" data-template-id="hero-consult" class="canva-button focus-ring rounded-full px-7 py-4 font-bold shadow-lg transition hover:-translate-y-1" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">免費諮詢</a> <a href="#plans" data-template-id="hero-plan" class="canva-button focus-ring rounded-full border border-white/50 px-7 py-4 font-bold text-white transition hover:bg-white/10" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">瀏覽合作方案</a>
@@ -87,7 +83,6 @@
    </section>
    
    <section class="grain bg-[#e8eadc] py-12">
-    <!-- 數據區塊字體放大 4px (數字40px，說明18px) -->
     <div class="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-y divide-[#103b36]/15 px-5 md:grid-cols-4 md:divide-y-0">
      <div class="p-5">
       <strong data-template-id="stat-1-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">14萬＋</strong>
@@ -114,8 +109,6 @@
       <p data-template-id="about-kicker" class="canva-text section-kicker" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">ABOUT GC圈</p>
       <h2 data-template-id="about-title" class="canva-text display mt-4 font-extrabold leading-tight" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px; line-height: 1.2;">不只是平台工具，<br>更是企業的品牌永續顧問。</h2>
       <p data-template-id="about-description" class="canva-text mt-6 max-w-xl leading-8 text-[#39605a]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 17px; line-height: 1.8;">從物資循環、ESG執行到內容產出，GC圈協助企業把看似分散的永續行動，整合成可參與、可追蹤、可被看見的品牌影響力。</p>
-      
-      <!-- 已移除前方圖示 -->
       <div class="mt-9 grid gap-4 sm:grid-cols-3">
        <article data-template-id="value-1" class="canva-card rounded-2xl bg-white p-5 shadow-sm" style="background: rgb(255, 255, 255);">
         <h3 data-template-id="value-1-title" class="canva-text font-bold" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 19px;">循環物資</h3>
@@ -140,7 +133,6 @@
     </div>
    </section>
 
-   <!-- 其餘內容皆未修改，保持原樣 -->
    <section id="pain" class="bg-[#103b36] py-24 text-white">
     <div class="mx-auto max-w-7xl px-5">
      <div class="max-w-2xl reveal">
@@ -171,7 +163,7 @@
        <p data-template-id="pain-4-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-4-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">行銷斷層 → 品牌溢價</h3>
        <p data-template-id="pain-4-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">ESG公益行動無法轉化為品牌信任或實際銷量。透明的永續績效頁面讓客戶一起參與循環。</p>
-       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-4-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：以永續口碑推動銷售增長。</strong></div>
+       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-4-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：以永續口碑推推銷售增長。</strong></div>
       </article>
       <article data-template-id="pain-card-5" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition md:col-span-2 lg:col-span-2" style="background: rgb(255, 255, 255);">
        <p data-template-id="pain-5-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
@@ -289,12 +281,25 @@
      </div>
     </div>
    </section>
+
    <section id="impact" class="mx-auto max-w-7xl px-5 py-24">
     <p data-template-id="impact-kicker" class="canva-text section-kicker" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">TRUSTED BY PARTNERS</p>
     <h2 data-template-id="impact-title" class="canva-text display mt-4 font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">跨產業一起，把永續做成日常</h2>
-    <div data-template-id="partner-list" class="canva-list mt-8 flex flex-wrap gap-3" style="background: rgb(232, 234, 220); color: rgb(16, 59, 54);">
-     <span>環境部環保集點</span><span>台北實物銀行</span><span>新竹環保局</span><span>麗翔飯店</span><span>克麗緹娜</span><span>凱基銀行</span><span>覺醒家居</span><span>聯發科</span><span>聚陽實業</span>
+    
+    <!-- 替換為圖片排列的合作夥伴區塊 -->
+    <div data-template-id="partner-list" class="mt-8 flex flex-wrap gap-5 items-center bg-[#e8eadc] p-6 rounded-2xl">
+     <!-- 請在這裡替換成你各個企業 LOGO 的圖片檔案路徑 -->
+     <img src="合作夥伴LOGO-1.png" alt="環境部環保集點" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-2.png" alt="台北實物銀行" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-3.png" alt="新竹環保局" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-4.png" alt="麗翔飯店" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-5.png" alt="克麗緹娜" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-6.png" alt="凱基銀行" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-7.png" alt="覺醒家居" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-8.png" alt="聯發科" class="h-10 object-contain mix-blend-multiply">
+     <img src="合作夥伴LOGO-9.png" alt="聚陽實業" class="h-10 object-contain mix-blend-multiply">
     </div>
+
     <div class="mt-20 grid gap-10 lg:grid-cols-2">
      <div>
       <p data-template-id="media-kicker" class="canva-text section-kicker" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">IN THE NEWS</p>
@@ -326,6 +331,7 @@
      </div>
     </div>
    </section>
+
    <section id="consult" class="bg-[#246b57] py-24">
     <div class="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-2">
      <div>
@@ -333,9 +339,39 @@
       <h2 data-template-id="consult-title" class="canva-text display mt-4 font-extrabold text-white" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 42px; line-height: 1.2;">讓每一件閒置物，<br>成為品牌的新故事。</h2>
       <p data-template-id="consult-description" class="canva-text mt-6 max-w-xl leading-8 text-white/80" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 17px;">告訴我們您的需求。GC圈團隊將協助您找到適合的循環經濟與 ESG 行動方案。</p>
      </div>
+     
+     <!-- 更新表單：新增必填欄位與連動區塊 -->
      <form id="consult-form" class="rounded-[2rem] bg-white p-7 shadow-xl" novalidate="">
-      <label data-template-id="name-label" class="canva-text mb-2 block text-sm font-bold" for="name" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">姓名 *</label> <input id="name" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="text" required=""> <label data-template-id="email-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="email" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">Email *</label> <input id="email" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="email" required=""> <label data-template-id="message-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="message" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">需求簡述（可補充問題）</label> <textarea id="message" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" rows="4"></textarea>
-      <p id="form-status" class="mt-4 min-h-6 text-sm font-semibold" aria-live="polite"></p><button id="submit-button" data-template-id="submit-button" type="submit" class="canva-button focus-ring mt-3 w-full rounded-full px-6 py-4 font-bold transition hover:brightness-95" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">送出免費諮詢</button>
+      <label data-template-id="name-label" class="canva-text mb-2 block text-sm font-bold" for="name" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">姓名 *</label> 
+      <input id="name" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="text" required=""> 
+      
+      <label data-template-id="email-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="email" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">Email *</label> 
+      <input id="email" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="email" required=""> 
+      
+      <!-- 新增：希望收到的回覆方式 -->
+      <label class="canva-text mb-2 mt-5 block text-sm font-bold" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">希望收到的回覆方式 *</label>
+      <div class="flex gap-6 mb-4">
+        <label class="flex items-center gap-2 cursor-pointer font-semibold text-[#103b36]">
+          <input type="radio" name="contact" value="email" checked class="w-4 h-4 text-[#246b57]"> 信箱
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer font-semibold text-[#103b36]">
+          <input type="radio" name="contact" value="line" class="w-4 h-4 text-[#246b57]"> LINE
+        </label>
+      </div>
+
+      <!-- 新增：LINE ID 輸入框 (預設隱藏) -->
+      <div id="line-input-group" class="hidden mb-4 rounded-xl bg-gray-50 p-4 border border-[#103b36]/10">
+        <label class="canva-text mb-2 block text-sm font-bold" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">LINE ID *</label>
+        <input id="line_id" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="text" placeholder="請輸入您的 LINE ID">
+        <p class="text-xs font-bold text-[#ff715b] mt-2">＊請確認已開放「允許利用 ID 加入好友」功能</p>
+      </div>
+
+      <!-- 需求簡述也改為必填 -->
+      <label data-template-id="message-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="message" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">需求簡述（可補充問題） *</label> 
+      <textarea id="message" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" rows="4" required=""></textarea>
+      
+      <p id="form-status" class="mt-4 min-h-6 text-sm font-semibold" aria-live="polite"></p>
+      <button id="submit-button" data-template-id="submit-button" type="submit" class="canva-button focus-ring mt-3 w-full rounded-full px-6 py-4 font-bold transition hover:brightness-95" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">送出免費諮詢</button>
      </form>
     </div>
    </section>
@@ -351,15 +387,15 @@
      <p data-template-id="footer-app-title" class="canva-text font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">下載 GC APP，立即體驗</p>
      <p data-template-id="footer-app-text" class="canva-text mt-2 text-sm text-white/70" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">破萬件免費禮物，等你加入循環。</p>
      
-     <!-- 頁尾社群圖示 -->
+     <!-- 頁尾社群圖示連結更新 -->
      <div class="mt-6 flex gap-5">
-      <a href="#" class="text-white hover:text-[#c9ef63] transition" aria-label="Facebook">
+      <a href="https://www.facebook.com/GiveCircle/" target="_blank" class="text-white hover:text-[#c9ef63] transition" aria-label="Facebook">
         <i data-lucide="facebook" width="24" height="24"></i>
       </a>
-      <a href="#" class="text-white hover:text-[#c9ef63] transition" aria-label="Instagram">
+      <a href="https://www.instagram.com/give_circle/" target="_blank" class="text-white hover:text-[#c9ef63] transition" aria-label="Instagram">
         <i data-lucide="instagram" width="24" height="24"></i>
       </a>
-      <a href="#" class="text-white hover:text-[#c9ef63] transition" aria-label="YouTube">
+      <a href="https://www.youtube.com/@givecircle/playlists" target="_blank" class="text-white hover:text-[#c9ef63] transition" aria-label="YouTube">
         <i data-lucide="youtube" width="24" height="24"></i>
       </a>
      </div>
@@ -367,7 +403,6 @@
    </div>
   </footer>
 
-  <!-- 回到最上方 (TOP) 按鈕 -->
   <button id="backToTop" class="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff715b] text-white shadow-lg opacity-0 pointer-events-none transition-all duration-300 hover:bg-[#e05e49] focus-ring" aria-label="回到最上方">
     <i data-lucide="arrow-up"></i>
   </button>
@@ -390,7 +425,6 @@
       }), { threshold:.12 });
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-      // 加上「回到最上方 (TOP)」邏輯
       const backToTopBtn = document.getElementById('backToTop');
       window.addEventListener('scroll', () => {
         if (window.scrollY > 300) {
@@ -403,6 +437,22 @@
       });
       backToTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 綁定 LINE 選項的連動邏輯
+      const contactRadios = document.querySelectorAll('input[name="contact"]');
+      const lineInputGroup = document.getElementById('line-input-group');
+      const lineIdInput = document.getElementById('line_id');
+
+      contactRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          if (e.target.value === 'line') {
+            lineInputGroup.classList.remove('hidden');
+          } else {
+            lineInputGroup.classList.add('hidden');
+            lineIdInput.value = ''; // 切回信箱時清空 LINE ID
+          }
+        });
       });
     });
 
@@ -422,28 +472,56 @@
 
     document.getElementById('consult-form').addEventListener('submit', async (event) => {
       event.preventDefault();
+      
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-      if (!name || !email || !/^\S+@\S+\.\S+$/.test(email)) {
-        status.textContent = '請填寫姓名與有效的 Email。';
+      const rawMessage = document.getElementById('message').value.trim();
+      
+      // 取得回覆方式與 LINE ID
+      const contactMethod = document.querySelector('input[name="contact"]:checked').value;
+      const lineId = document.getElementById('line_id').value.trim();
+
+      // 檢查必填欄位：姓名、Email、需求簡述 以及 (若選LINE則 LINE ID必填)
+      if (!name || !email || !/^\S+@\S+\.\S+$/.test(email) || !rawMessage) {
+        status.textContent = '請填寫所有必填欄位，並確保 Email 格式正確。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
         return;
       }
+      
+      if (contactMethod === 'line' && !lineId) {
+        status.textContent = '您選擇了以 LINE 回覆，請填寫您的 LINE ID。';
+        status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
+        return;
+      }
+
       if (totalRows >= 999) {
         status.textContent = '目前諮詢資料已達上限，請稍後再試。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
         return;
       }
+
+      // 將回覆方式與原訊息整併，方便後台檢視
+      const contactLabel = contactMethod === 'line' ? `LINE (ID: ${lineId})` : '信箱';
+      const finalMessage = `[希望的回覆方式：${contactLabel}]\n\n${rawMessage}`;
+
       submitButton.disabled = true;
       submitButton.style.opacity = '.65';
       status.textContent = '正在送出您的諮詢…';
       status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#246b57]';
-      const result = await window.dataSdk.create({ name, email, message, submitted_at: new Date().toISOString() });
+      
+      const result = await window.dataSdk.create({ 
+        name, 
+        email, 
+        message: finalMessage, 
+        submitted_at: new Date().toISOString() 
+      });
+      
       submitButton.disabled = false;
       submitButton.style.opacity = '1';
+      
       if (result.isOk) {
         event.target.reset();
+        document.getElementById('line-input-group').classList.add('hidden'); // 送出後隱藏 LINE 區塊
         status.textContent = '已收到您的需求，GC圈團隊將盡快與您聯繫。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#246b57]';
       } else {
