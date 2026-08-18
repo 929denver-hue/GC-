@@ -14,7 +14,8 @@
     .display { font-family:"Raleway","Noto Sans TC",sans-serif; }
     .grain { background-image:radial-gradient(rgba(16,59,54,.12) .8px,transparent .8px); background-size:12px 12px; }
     .nav-link { position:relative; white-space:nowrap; }
-    .nav-link:after { content:"absolute"; height:2px; width:0; bottom:-5px; left:0; background:var(--lime); transition:width .2s; }
+    /* 已刪除 content 中的 absolute，並補上 position:absolute */
+    .nav-link:after { content:""; position:absolute; height:2px; width:0; bottom:-5px; left:0; background:var(--lime); transition:width .2s; }
     .nav-link:hover:after,.nav-link:focus:after { width:100%; }
     .hero-photo:after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(9,39,35,.94) 0%,rgba(9,39,35,.68) 45%,rgba(9,39,35,.08) 100%); }
     .hero-photo img { filter:saturate(.72) contrast(1.08); }
@@ -36,7 +37,6 @@
   <header class="sticky top-0 z-50 border-b border-white/10 bg-[#103b36]/95 backdrop-blur">
    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4" aria-label="主要導覽">
     <a href="#home" data-template-id="brand-name" class="canva-text focus-ring display text-xl font-extrabold tracking-tight text-white flex items-center" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">
-     <!-- 更新：首頁 GC LOGO -->
      <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-39-18-044LtOL4RJuIQWOuQVN7Yncno26F2F4eAwu9c96p.png" alt="GC圈 Logo" class="h-8 w-auto mr-3 object-contain">
      GC圈   GiveCircle
     </a>
@@ -81,22 +81,23 @@
    </section>
    
    <section class="grain bg-[#e8eadc] py-12">
+    <!-- 數據字體皆調小 0.5px (變更為 39.5px 與 17.5px) -->
     <div class="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-y divide-[#103b36]/15 px-5 md:grid-cols-4 md:divide-y-0">
      <div class="p-5">
-      <strong data-template-id="stat-1-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">14萬＋</strong>
-      <span data-template-id="stat-1-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">活躍會員</span>
+      <strong data-template-id="stat-1-number" class="canva-text display block text-[39.5px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 39.5px;">14萬＋</strong>
+      <span data-template-id="stat-1-label" class="canva-text mt-2 block text-[17.5px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 17.5px;">活躍會員</span>
      </div>
      <div class="p-5">
-      <strong data-template-id="stat-2-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">600＋</strong>
-      <span data-template-id="stat-2-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">合作社福與偏鄉學校</span>
+      <strong data-template-id="stat-2-number" class="canva-text display block text-[39.5px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 39.5px;">600＋</strong>
+      <span data-template-id="stat-2-label" class="canva-text mt-2 block text-[17.5px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 17.5px;">合作社福與偏鄉學校</span>
      </div>
      <div class="p-5">
-      <strong data-template-id="stat-3-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">33億＋</strong>
-      <span data-template-id="stat-3-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">創造循環物資總價值</span>
+      <strong data-template-id="stat-3-number" class="canva-text display block text-[39.5px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 39.5px;">33億＋</strong>
+      <span data-template-id="stat-3-label" class="canva-text mt-2 block text-[17.5px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 17.5px;">創造循環物資總價值</span>
      </div>
      <div class="p-5">
-      <strong data-template-id="stat-4-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">平均96秒</strong>
-      <span data-template-id="stat-4-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">達成一次高效媒合</span>
+      <strong data-template-id="stat-4-number" class="canva-text display block text-[39.5px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 39.5px;">平均96秒</strong>
+      <span data-template-id="stat-4-label" class="canva-text mt-2 block text-[17.5px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 17.5px;">達成一次高效媒合</span>
      </div>
     </div>
    </section>
@@ -139,32 +140,28 @@
       <p data-template-id="pain-description" class="canva-text mt-5 leading-8 text-white/70" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 17px;">將難以處理的閒置資產與永續壓力，轉化為可衡量的品牌成果。</p>
      </div>
      <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <!-- 已移除所有 PAIN POINT 標籤文字 -->
       <article data-template-id="pain-card-1" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
-       <p data-template-id="pain-1-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-1-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">資產黑洞 → 資產活化</h3>
        <p data-template-id="pain-1-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">長期閒置庫存占用空間、報廢又需付出高額清運成本。GC圈將庫存轉為品牌引流的循環資源。</p>
        <div class="mt-5 border-t pt-4"><strong data-template-id="pain-1-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：降低倉儲與報廢成本，獲取潛在客戶流量。</strong></div>
       </article>
       <article data-template-id="pain-card-2" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
-       <p data-template-id="pain-2-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-2-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">ESG虛化 → 全員參與</h3>
        <p data-template-id="pain-2-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">員工對永續無感、參與度低。以遊戲化循環機制，讓永續行為自然融入日常。</p>
        <div class="mt-5 border-t pt-4"><strong data-template-id="pain-2-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：建立品牌永續文化與員工認同感。</strong></div>
       </article>
       <article data-template-id="pain-card-3" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
-       <p data-template-id="pain-3-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-3-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">數據焦慮 → 數位導航</h3>
        <p data-template-id="pain-3-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">ESG成效難以量化、缺乏可信憑據。GC圈提供品牌專屬儀表板，追蹤物資流向與減碳數據。</p>
        <div class="mt-5 border-t pt-4"><strong data-template-id="pain-3-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：產出具備公信力的永續內容。</strong></div>
       </article>
       <article data-template-id="pain-card-4" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
-       <p data-template-id="pain-4-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-4-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">行銷斷層 → 品牌溢價</h3>
        <p data-template-id="pain-4-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">ESG公益行動無法轉化為品牌信任或實際銷量。透明的永續績效頁面讓客戶一起參與循環。</p>
        <div class="mt-5 border-t pt-4"><strong data-template-id="pain-4-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：以永續口碑推動銷售增長。</strong></div>
       </article>
       <article data-template-id="pain-card-5" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition md:col-span-2 lg:col-span-2" style="background: rgb(255, 255, 255);">
-       <p data-template-id="pain-5-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-5-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">成本高昂 → 雲端行動</h3>
        <p data-template-id="pain-5-body" class="canva-text mt-3 max-w-2xl text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">線下志工活動受時間與空間限制，難以擴大參與。GC圈提供全天候 24/7 線上物資循環系統與教育訓練整合。</p>
        <div class="mt-5 border-t pt-4"><strong data-template-id="pain-5-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：降低 80% 以上執行成本，擴大 10 倍以上參與廣度。</strong></div>
@@ -286,42 +283,36 @@
     
     <div data-template-id="partner-list" class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center bg-[#e8eadc] p-8 rounded-2xl">
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：保留原有的 Google Drive 連結（未提供新連結） -->
-       <img src="https://drive.google.com/uc?export=view&id=1oEhZ0aZuLMYv8TEeA7T5_z_kaNxgOPtC" alt="環境部環保集點" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新環保署(環境部環保集點) LOGO -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-31-22-otnKtW6HyMlPuYXM7A2paVvA93MGVVynnHKLqDka.png" alt="環境部環保集點" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">環境部環保集點</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：AWS S3 連結 -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-30-37-bb4tADqwVcIS92LhTASYZ886jq6S9Ox2Rq5flv7w.png" alt="台北實物銀行" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">台北實物銀行</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：AWS S3 連結 -->
-       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-31-22-otnKtW6HyMlPuYXM7A2paVvA93MGVVynnHKLqDka.png" alt="新竹環保局" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新新竹市環保局 LOGO -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-15-39-34-dv87updHib7wkpyVwAjn9i1wPG47RrvlxbG3artY.png" alt="新竹環保局" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">新竹環保局</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：AWS S3 連結 -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-48-jCUC7l4DC1o3Y8JFRy1EvALHoAcRWDtckKxJlv7S.png" alt="麗翔飯店" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">麗翔飯店</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：AWS S3 連結 -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-34-59-ybRcGczsj8xFRzC2xffzk8bkL0wzMarAvu8wkKrf.png" alt="凱基銀行" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">凱基銀行</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：AWS S3 連結 -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-43-0JxiJEswWkrRoOOfxXvQHM0Iptu14ujw1anSzQrP.png" alt="覺醒家居" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">覺醒家居</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：AWS S3 連結 -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-53-yLFgzfwrXXU9NOvSGASlDK5U2zMsQ693l0VbaJFt.jpeg" alt="聯發科" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">聯發科</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新：AWS S3 連結 -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-30-53-VND88b5ux9mtmYc5dLIG61Ki1QAstgqyZ6CA37QM.png" alt="聚陽實業" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">聚陽實業</span>
      </div>
@@ -425,15 +416,26 @@
    </section>
   </main>
 
+  <!-- 新增：確認表單用的隱藏彈出對話框 (Modal) -->
+  <div id="confirm-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 px-5 backdrop-blur-sm transition-opacity">
+    <div class="w-full max-w-lg rounded-[2rem] bg-white p-8 shadow-2xl">
+      <h3 class="text-2xl font-extrabold text-[#103b36]">請確認您的諮詢內容</h3>
+      <div id="confirm-content" class="mt-4 space-y-3 text-sm text-[#58736e] bg-[#f7f6ef] p-5 rounded-xl border border-[#103b36]/10"></div>
+      <div class="mt-8 flex gap-4">
+        <button type="button" id="btn-edit" class="focus-ring w-1/2 rounded-full border-2 border-[#103b36] py-3 font-bold text-[#103b36] transition hover:bg-gray-50">返回修改</button>
+        <button type="button" id="btn-final-submit" class="focus-ring w-1/2 rounded-full bg-[#246b57] py-3 font-bold text-white transition hover:brightness-110">確認送出</button>
+      </div>
+    </div>
+  </div>
+
   <footer id="app" data-template-id="footer-section" class="canva-footer bg-[#103b36] px-5 py-12 text-white" style="background: rgb(16, 59, 54);">
    <div class="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
     <div>
-     <!-- 更新：最下方 GC圈 改為帶有另開網頁功能的超連結 -->
      <a href="https://www.give-circle.com" target="_blank" data-template-id="footer-brand" class="canva-text display text-2xl font-extrabold hover:text-[#c9ef63] transition block" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 16px;">GC圈</a>
      <p data-template-id="footer-text" class="canva-text mt-3 max-w-md text-sm leading-7 text-white/65" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">把資源放回對的位置，讓循環創造更長遠的品牌價值。</p>
     </div>
     <div>
-     <p data-template-id="footer-app-title" class="canva-text font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">下載 GC圈 APP，立即體驗</p>
+     <p data-template-id="footer-app-title" class="canva-text font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">下載 GC APP，立即體驗</p>
      <p data-template-id="footer-app-text" class="canva-text mt-2 text-sm text-white/70" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">破萬件免費禮物，等你加入循環。</p>
      
      <div class="mt-6 flex gap-5">
@@ -496,7 +498,7 @@
           lineInputGroup.classList.remove('hidden');
         } else {
           lineInputGroup.classList.add('hidden');
-          lineIdInput.value = ''; // 取消勾選時清空 LINE ID
+          lineIdInput.value = ''; 
         }
       });
     });
@@ -515,7 +517,16 @@
     }
     startData();
 
-    document.getElementById('consult-form').addEventListener('submit', async (event) => {
+    // 處理確認彈窗的 JavaScript
+    const consultForm = document.getElementById('consult-form');
+    const confirmModal = document.getElementById('confirm-modal');
+    const confirmContent = document.getElementById('confirm-content');
+    const btnEdit = document.getElementById('btn-edit');
+    const btnFinalSubmit = document.getElementById('btn-final-submit');
+    
+    let pendingFormData = null;
+
+    consultForm.addEventListener('submit', (event) => {
       event.preventDefault();
       
       const name = document.getElementById('name').value.trim();
@@ -555,15 +566,43 @@
       if (contactLineChecked) contactMethods.push(`LINE (ID: ${lineId})`);
       const finalMessage = `[希望的回覆方式：${contactMethods.join(' / ')}]\n\n${rawMessage}`;
 
+      // 儲存待送出的資料
+      pendingFormData = { name, email, message: finalMessage };
+
+      // 將資料印出到確認畫面上
+      confirmContent.innerHTML = `
+        <p><strong>姓名：</strong>${name}</p>
+        <p><strong>Email：</strong>${email}</p>
+        <p><strong>回覆方式：</strong>${contactMethods.join(' / ')}</p>
+        <p><strong>需求簡述：</strong><br>${rawMessage.replace(/\n/g, '<br>')}</p>
+      `;
+
+      // 顯示確認彈窗
+      confirmModal.classList.remove('hidden');
+      confirmModal.classList.add('flex');
+    });
+
+    // 「返回修改」按鈕功能
+    btnEdit.addEventListener('click', () => {
+      confirmModal.classList.add('hidden');
+      confirmModal.classList.remove('flex');
+    });
+
+    // 「確認送出」按鈕功能
+    btnFinalSubmit.addEventListener('click', async () => {
+      // 關閉彈窗
+      confirmModal.classList.add('hidden');
+      confirmModal.classList.remove('flex');
+
       submitButton.disabled = true;
       submitButton.style.opacity = '.65';
       status.textContent = '正在送出您的諮詢…';
       status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#246b57]';
       
       const result = await window.dataSdk.create({ 
-        name, 
-        email, 
-        message: finalMessage, 
+        name: pendingFormData.name, 
+        email: pendingFormData.email, 
+        message: pendingFormData.message, 
         submitted_at: new Date().toISOString() 
       });
       
@@ -571,10 +610,12 @@
       submitButton.style.opacity = '1';
       
       if (result.isOk) {
-        event.target.reset();
+        consultForm.reset();
         document.getElementById('line-input-group').classList.add('hidden'); 
-        status.textContent = '已收到您的需求，GC圈團隊將盡快與您聯繫。';
-        status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#246b57]';
+        
+        // 更新為多行成功的文字回饋
+        status.innerHTML = '<strong>企業諮詢已成功送出</strong><br>感謝您的來信，我們已收到您的企業合作諮詢。<br>Give-Circle 團隊將確認您的需求，並由專人與您聯繫。<br>請留意您填寫的聯絡方式。謝謝～';
+        status.className = 'mt-4 text-sm font-semibold text-[#246b57] leading-relaxed';
       } else {
         status.textContent = '送出未成功，請稍後再試。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
