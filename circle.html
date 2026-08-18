@@ -14,7 +14,6 @@
     .display { font-family:"Raleway","Noto Sans TC",sans-serif; }
     .grain { background-image:radial-gradient(rgba(16,59,54,.12) .8px,transparent .8px); background-size:12px 12px; }
     .nav-link { position:relative; white-space:nowrap; }
-    /* 已刪除 content 中的 absolute，並補上 position:absolute */
     .nav-link:after { content:""; position:absolute; height:2px; width:0; bottom:-5px; left:0; background:var(--lime); transition:width .2s; }
     .nav-link:hover:after,.nav-link:focus:after { width:100%; }
     .hero-photo:after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(9,39,35,.94) 0%,rgba(9,39,35,.68) 45%,rgba(9,39,35,.08) 100%); }
@@ -81,7 +80,6 @@
    </section>
    
    <section class="grain bg-[#e8eadc] py-12">
-    <!-- 數據字體皆調小 0.5px (變更為 39.5px 與 17.5px) -->
     <div class="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-y divide-[#103b36]/15 px-5 md:grid-cols-4 md:divide-y-0">
      <div class="p-5">
       <strong data-template-id="stat-1-number" class="canva-text display block text-[39.5px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 39.5px;">14萬＋</strong>
@@ -140,7 +138,6 @@
       <p data-template-id="pain-description" class="canva-text mt-5 leading-8 text-white/70" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 17px;">將難以處理的閒置資產與永續壓力，轉化為可衡量的品牌成果。</p>
      </div>
      <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-      <!-- 已移除所有 PAIN POINT 標籤文字 -->
       <article data-template-id="pain-card-1" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
        <h3 data-template-id="pain-1-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">資產黑洞 → 資產活化</h3>
        <p data-template-id="pain-1-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">長期閒置庫存占用空間、報廢又需付出高額清運成本。GC圈將庫存轉為品牌引流的循環資源。</p>
@@ -178,49 +175,67 @@
       <p data-template-id="plan-description" class="canva-text mx-auto mt-5 max-w-2xl leading-8 text-[#58736e]" style="color: rgb(88, 115, 110); font-weight: 400; font-style: normal; font-size: 17px;">從企業專屬循環專案，到團隊永續文化導入，GC圈陪伴每一步。</p>
      </div>
      <div class="mt-12 grid gap-5 lg:grid-cols-3">
+      
+      <!-- 更新：GC免費版 卡片 -->
       <article class="rounded-3xl border border-[#103b36]/15 bg-white p-7 shadow-sm">
        <div class="flex items-start justify-between">
         <div>
-         <h3 class="display text-2xl font-extrabold text-[#103b36]">免費版</h3>
-         <p class="mt-2 text-sm text-[#58736e]">入門循環共享，立即開始</p>
+         <h3 class="display text-2xl font-extrabold text-[#103b36]">GC免費版</h3>
+         <p class="mt-2 text-sm text-[#58736e]">開始你的循環生活</p>
         </div><span class="rounded-full bg-[#e8eadc] px-3 py-1 text-xs font-bold text-[#246b57]">FREE</span>
        </div>
-       <p class="mt-7 text-3xl font-extrabold text-[#103b36]">免費</p><a href="#consult" class="focus-ring mt-6 block rounded-full border-2 border-[#246b57] px-5 py-3 text-center font-bold text-[#246b57] transition hover:bg-[#e8eadc]">立即註冊</a>
-       <ul class="mt-7 space-y-3 text-sm text-[#39605a]">
-        <li>✓ 一般贈送、快速贈送</li>
-        <li>✓ 物品募集與贈物管理</li>
-        <li>✓ 自行註冊開通</li>
+       <a href="#consult" class="focus-ring mt-6 block rounded-full border-2 border-[#246b57] px-5 py-3 text-center font-bold text-[#246b57] transition hover:bg-[#e8eadc]">註冊/登入</a>
+       <p class="mt-7 text-sm font-bold text-[#103b36]">適合個人體驗GC平台：</p>
+       <ul class="mt-3 space-y-3 text-sm text-[#39605a]">
+        <li>✓ 分享與索取物資</li>
+        <li>✓ 快速刊登與贈物管理</li>
+        <li>✓ 建立個人循環紀錄</li>
+        <li>✓ 參與物資循環互動交流</li>
        </ul>
       </article>
+
+      <!-- 更新：GC PRO 卡片 -->
       <article class="relative rounded-3xl border-2 border-[#246b57] bg-white p-7 shadow-xl lg:-translate-y-3">
        <span class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-[#c9ef63] px-5 py-2 text-xs font-extrabold text-[#103b36]">最受歡迎</span>
        <div class="flex items-start justify-between">
         <div>
-         <h3 class="display text-2xl font-extrabold text-[#103b36]">Pro</h3>
-         <p class="mt-2 text-sm text-[#58736e]">用數據打造品牌永續</p>
+         <h3 class="display text-2xl font-extrabold text-[#103b36]">GC PRO</h3>
+         <p class="mt-2 text-sm text-[#58736e]">經營專屬官方帳戶，讓分享發揮價值</p>
         </div><span class="rounded-full bg-[#dce8f8] px-3 py-1 text-xs font-bold text-[#246b57]">PRO</span>
        </div>
-       <p class="mt-7 text-3xl font-extrabold text-[#103b36]">22,800 <span class="text-base font-bold">/年</span></p><a href="#consult" class="focus-ring mt-6 block rounded-full bg-[#246b57] px-5 py-3 text-center font-bold text-white transition hover:brightness-110">開始使用 Pro</a>
-       <ul class="mt-7 space-y-3 text-sm text-[#39605a]">
-        <li>✓ 免費版全部功能</li>
-        <li>✓ ESG/SDGs 減碳數據與報表</li>
-        <li>✓ 專屬顧問規劃導入</li>
+       <a href="#consult" class="focus-ring mt-6 block rounded-full bg-[#246b57] px-5 py-3 text-center font-bold text-white transition hover:brightness-110">開始免費試用</a>
+       <p class="mt-7 text-sm font-bold text-[#103b36]">適合企業/品牌經營官方帳戶：</p>
+       <ul class="mt-3 space-y-3 text-sm text-[#39605a]">
+        <li>✓ 企業/品牌專屬帳戶</li>
+        <li>✓ 專屬頁面展示與識別</li>
+        <li>✓ 品牌好物專區（提高品牌能見度）</li>
+        <li>✓ 提升刊登效益（刊登數量、延長刊登期限）</li>
+        <li>✓ 循環成果數據展示</li>
+        <li>✓ 自訂日期區間匯出成果報表</li>
        </ul>
       </article>
+
+      <!-- 更新：GC GROUP 卡片 -->
       <article class="rounded-3xl border border-[#103b36]/15 bg-[#fffdf1] p-7 shadow-sm">
        <div class="flex items-start justify-between">
         <div>
-         <h3 class="display text-2xl font-extrabold text-[#103b36]">Group</h3>
-         <p class="mt-2 text-sm text-[#58736e]">企業團隊共創影響力</p>
+         <h3 class="display text-2xl font-extrabold text-[#103b36]">GC GROUP</h3>
+         <p class="mt-2 text-sm text-[#58736e]">組建自己的團隊，擴大永續影響力</p>
         </div><span class="rounded-full bg-[#f8e9b8] px-3 py-1 text-xs font-bold text-[#103b36]">GROUP</span>
        </div>
-       <p class="mt-7 text-3xl font-extrabold text-[#103b36]">專案報價</p><a href="#consult" class="focus-ring mt-6 block rounded-full bg-[#103b36] px-5 py-3 text-center font-bold text-white transition hover:bg-[#246b57]">聯繫專人</a>
-       <ul class="mt-7 space-y-3 text-sm text-[#39605a]">
-        <li>✓ Pro 全部功能</li>
-        <li>✓ 團隊管理、共創數據與講座</li>
-        <li>✓ 專屬客戶經理協助導入</li>
+       <a href="#consult" class="focus-ring mt-6 block rounded-full bg-[#103b36] px-5 py-3 text-center font-bold text-white transition hover:bg-[#246b57]">聯絡專員規劃</a>
+       <p class="mt-7 text-sm font-bold text-[#103b36]">適合推動ESG永續專案、HR員工活動：</p>
+       <ul class="mt-3 space-y-3 text-sm text-[#39605a]">
+        <li>✓ 線上ESG教育課程</li>
+        <li>✓ 多人共同參與，累積數據成果</li>
+        <li>✓ 團隊成果頁（即時展示團隊循環總成果）</li>
+        <li>✓ 團隊管理者權限</li>
+        <li>✓ 成員個人數據分析及憑證下載</li>
+        <li>✓ 專人提供數據報表及年度影響力報告</li>
+        <li>✓ 多團隊連動與永續挑戰行動（依方案規劃）</li>
        </ul>
       </article>
+
      </div>
      <div class="mt-10 overflow-hidden rounded-3xl border border-[#103b36]/15 bg-white shadow-sm">
       <div class="overflow-x-auto">
@@ -283,7 +298,6 @@
     
     <div data-template-id="partner-list" class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center bg-[#e8eadc] p-8 rounded-2xl">
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新環保署(環境部環保集點) LOGO -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-31-22-otnKtW6HyMlPuYXM7A2paVvA93MGVVynnHKLqDka.png" alt="環境部環保集點" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">環境部環保集點</span>
      </div>
@@ -292,7 +306,6 @@
        <span class="text-sm font-bold text-[#103b36]">台北實物銀行</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <!-- 更新新竹市環保局 LOGO -->
        <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-15-39-34-dv87updHib7wkpyVwAjn9i1wPG47RrvlxbG3artY.png" alt="新竹環保局" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">新竹環保局</span>
      </div>
@@ -416,7 +429,6 @@
    </section>
   </main>
 
-  <!-- 新增：確認表單用的隱藏彈出對話框 (Modal) -->
   <div id="confirm-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 px-5 backdrop-blur-sm transition-opacity">
     <div class="w-full max-w-lg rounded-[2rem] bg-white p-8 shadow-2xl">
       <h3 class="text-2xl font-extrabold text-[#103b36]">請確認您的諮詢內容</h3>
@@ -517,7 +529,6 @@
     }
     startData();
 
-    // 處理確認彈窗的 JavaScript
     const consultForm = document.getElementById('consult-form');
     const confirmModal = document.getElementById('confirm-modal');
     const confirmContent = document.getElementById('confirm-content');
@@ -566,10 +577,8 @@
       if (contactLineChecked) contactMethods.push(`LINE (ID: ${lineId})`);
       const finalMessage = `[希望的回覆方式：${contactMethods.join(' / ')}]\n\n${rawMessage}`;
 
-      // 儲存待送出的資料
       pendingFormData = { name, email, message: finalMessage };
 
-      // 將資料印出到確認畫面上
       confirmContent.innerHTML = `
         <p><strong>姓名：</strong>${name}</p>
         <p><strong>Email：</strong>${email}</p>
@@ -577,20 +586,16 @@
         <p><strong>需求簡述：</strong><br>${rawMessage.replace(/\n/g, '<br>')}</p>
       `;
 
-      // 顯示確認彈窗
       confirmModal.classList.remove('hidden');
       confirmModal.classList.add('flex');
     });
 
-    // 「返回修改」按鈕功能
     btnEdit.addEventListener('click', () => {
       confirmModal.classList.add('hidden');
       confirmModal.classList.remove('flex');
     });
 
-    // 「確認送出」按鈕功能
     btnFinalSubmit.addEventListener('click', async () => {
-      // 關閉彈窗
       confirmModal.classList.add('hidden');
       confirmModal.classList.remove('flex');
 
@@ -613,7 +618,6 @@
         consultForm.reset();
         document.getElementById('line-input-group').classList.add('hidden'); 
         
-        // 更新為多行成功的文字回饋
         status.innerHTML = '<strong>企業諮詢已成功送出</strong><br>感謝您的來信，我們已收到您的企業合作諮詢。<br>Give-Circle 團隊將確認您的需求，並由專人與您聯繫。<br>請留意您填寫的聯絡方式。謝謝～';
         status.className = 'mt-4 text-sm font-semibold text-[#246b57] leading-relaxed';
       } else {
