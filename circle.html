@@ -6,7 +6,7 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="/_sdk/0e8d3a91e1c6f495.data_sdk.js" integrity="sha512-c00oDoGjsMgluCLLEyVl3suwEkgjOGGplVFbsilUoBg4aMKNmsL3mwsc9r0dPn95qiSZyjBousQXgROkAW7p/w=="></script>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&amp;family=Noto+Sans+TC:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { --ink:#103b36; --moss:#246b57; --lime:#c9ef63; --cream:#f7f6ef; --sand:#e8eadc; --coral:#ff715b; }
     html { scroll-behavior:smooth; }
@@ -35,25 +35,49 @@
   </div>
   <header class="sticky top-0 z-50 border-b border-white/10 bg-[#103b36]/95 backdrop-blur">
    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4" aria-label="主要導覽">
-    <a href="#home" data-template-id="brand-name" class="canva-text focus-ring display text-xl font-extrabold tracking-tight text-white" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">GC圈</a>
-    <div class="desktop-nav flex items-center gap-6 text-sm font-bold text-white/80">
-     <a class="nav-link focus-ring" href="#about">認識GC圈</a> <a class="nav-link focus-ring" href="#pain">企業痛點</a> <a class="nav-link focus-ring" href="#plans">合作方案</a> <a class="nav-link focus-ring" href="#process">合作流程</a> <a class="nav-link focus-ring" href="#impact">成效案例</a>
-    </div><a href="#consult" data-template-id="nav-consult" class="canva-button focus-ring rounded-full px-5 py-2 text-sm font-bold transition hover:brightness-95" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">免費諮詢</a> <button id="menu-button" type="button" class="mobile-toggle focus-ring rounded-full p-2 text-white" aria-label="開啟選單" aria-expanded="false"> <i data-lucide="menu" width="22" height="22"></i> </button>
+    <!-- 加入 LOGO 與名稱 -->
+    <a href="#home" data-template-id="brand-name" class="canva-text focus-ring display text-xl font-extrabold tracking-tight text-white flex items-center" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">
+     <!-- LOGO 圖片佔位符，請將 src 替換為你的真實 Logo 圖片網址 -->
+     <img src="https://placehold.co/80x80/c9ef63/103b36?text=GC" alt="GC圈 Logo" class="h-8 w-8 mr-3 rounded-full object-cover border border-[#c9ef63]">
+     GC圈   GiveCircle
+    </a>
+    
+    <!-- 選單字體放大至 18px (text-[18px]) -->
+    <div class="desktop-nav flex items-center gap-6 text-[18px] font-bold text-white/80">
+     <a class="nav-link focus-ring" href="#about">認識GC圈</a> 
+     <a class="nav-link focus-ring" href="#pain">企業痛點</a> 
+     <a class="nav-link focus-ring" href="#plans">合作方案</a> 
+     <a class="nav-link focus-ring" href="#process">合作流程</a> 
+     <a class="nav-link focus-ring" href="#impact">成效案例</a>
+    </div>
+
+    <!-- 右側按鈕區塊，新增「進入GC圈」按鈕 -->
+    <div class="flex items-center gap-3 desktop-nav">
+      <a href="#consult" data-template-id="nav-consult" class="canva-button focus-ring rounded-full px-5 py-2 text-sm font-bold transition hover:brightness-95" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">免費諮詢</a> 
+      <a href="#" class="canva-button focus-ring rounded-full px-5 py-2 text-sm font-bold transition hover:brightness-95 shadow-md" style="background: var(--coral); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">進入GC圈</a>
+    </div>
+
+    <button id="menu-button" type="button" class="mobile-toggle focus-ring rounded-full p-2 text-white" aria-label="開啟選單" aria-expanded="false"> 
+      <i data-lucide="menu" width="22" height="22"></i> 
+    </button>
    </nav>
    <div id="mobile-nav" class="mobile-nav hidden border-t border-white/10 bg-[#103b36] px-6 py-5">
     <div class="grid gap-4 text-sm font-bold text-white">
      <a href="#about">認識GC圈</a><a href="#pain">企業痛點</a><a href="#plans">合作方案</a><a href="#process">合作流程</a><a href="#impact">成效案例</a>
+     <a href="#" class="text-[#ff715b]">進入GC圈</a>
     </div>
    </div>
   </header>
   <main>
    <section id="home" class="hero-photo relative overflow-hidden">
-    <img data-template-id="hero-image" loading="lazy" class="canva-image absolute inset-0 h-full w-full object-cover" src="https://images.pexels.com/photos/33795298/pexels-photo-33795298.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1920" alt="Ariel view of a business team working outdoors in a lush green park setting.">
+    <img data-template-id="hero-image" loading="lazy" class="canva-image absolute inset-0 h-full w-full object-cover" src="https://images.pexels.com/photos/33795298/pexels-photo-33795298.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Ariel view of a business team working outdoors in a lush green park setting.">
     <div class="relative z-10 mx-auto flex min-h-[calc(78*min(var(--vh,1vh),1vh))] max-w-7xl items-center px-5 py-20">
      <div class="max-w-3xl">
-      <p data-template-id="hero-eyebrow" class="canva-text mb-5 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">GC圈 企業服務</p>
-      <h1 data-template-id="hero-title" class="canva-text display max-w-3xl text-white font-extrabold leading-[1.08] tracking-tight" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 52px; line-height: 1.1;">您的品牌永續顧問
-一站式企業閒置資產轉化專家</h1>
+      <p data-template-id="hero-eyebrow" class="canva-text mb-5 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">GC圈 台灣最大的免費物資共享社群平台 企業服務</p>
+      
+      <!-- 主視覺標題換行 -->
+      <h1 data-template-id="hero-title" class="canva-text display max-w-3xl text-white font-extrabold leading-[1.08] tracking-tight" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 52px; line-height: 1.1;">您的品牌永續顧問<br>一站式企業閒置資產轉化專家</h1>
+      
       <p data-template-id="hero-description" class="canva-text mt-7 max-w-2xl text-lg leading-8 text-white/85" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 19px; line-height: 1.7;">打造循環經濟與 ESG 的雙贏競爭力，讓每一件閒置物開啟品牌新故事。</p>
       <div class="mt-10 flex flex-wrap gap-4">
        <a href="#consult" data-template-id="hero-consult" class="canva-button focus-ring rounded-full px-7 py-4 font-bold shadow-lg transition hover:-translate-y-1" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">免費諮詢</a> <a href="#plans" data-template-id="hero-plan" class="canva-button focus-ring rounded-full border border-white/50 px-7 py-4 font-bold text-white transition hover:bg-white/10" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">瀏覽合作方案</a>
@@ -61,48 +85,62 @@
      </div>
     </div>
    </section>
+   
    <section class="grain bg-[#e8eadc] py-12">
+    <!-- 數據區塊字體放大 4px (數字40px，說明18px) -->
     <div class="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-y divide-[#103b36]/15 px-5 md:grid-cols-4 md:divide-y-0">
-     <div class="p-5"><strong data-template-id="stat-1-number" class="canva-text display block text-4xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 16px;">14萬＋</strong><span data-template-id="stat-1-label" class="canva-text mt-2 block text-sm" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 16px;">活躍會員</span>
+     <div class="p-5">
+      <strong data-template-id="stat-1-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">14萬＋</strong>
+      <span data-template-id="stat-1-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">活躍會員</span>
      </div>
-     <div class="p-5"><strong data-template-id="stat-2-number" class="canva-text display block text-4xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 16px;">600＋</strong><span data-template-id="stat-2-label" class="canva-text mt-2 block text-sm" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 16px;">合作社福與偏鄉學校</span>
+     <div class="p-5">
+      <strong data-template-id="stat-2-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">600＋</strong>
+      <span data-template-id="stat-2-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">合作社福與偏鄉學校</span>
      </div>
-     <div class="p-5"><strong data-template-id="stat-3-number" class="canva-text display block text-4xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 16px;">33億＋</strong><span data-template-id="stat-3-label" class="canva-text mt-2 block text-sm" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 16px;">創造循環物資總價值</span>
+     <div class="p-5">
+      <strong data-template-id="stat-3-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">33億＋</strong>
+      <span data-template-id="stat-3-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">創造循環物資總價值</span>
      </div>
-     <div class="p-5"><strong data-template-id="stat-4-number" class="canva-text display block text-4xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 16px;">平均96秒</strong><span data-template-id="stat-4-label" class="canva-text mt-2 block text-sm" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 16px;">達成一次高效媒合</span>
+     <div class="p-5">
+      <strong data-template-id="stat-4-number" class="canva-text display block text-[40px] font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px;">平均96秒</strong>
+      <span data-template-id="stat-4-label" class="canva-text mt-2 block text-[18px]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 18px;">達成一次高效媒合</span>
      </div>
     </div>
    </section>
+
    <section id="about" class="mx-auto max-w-7xl px-5 py-24">
     <div class="grid items-center gap-12 lg:grid-cols-2">
      <div class="reveal">
       <p data-template-id="about-kicker" class="canva-text section-kicker" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">ABOUT GC圈</p>
-      <h2 data-template-id="about-title" class="canva-text display mt-4 font-extrabold leading-tight" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px; line-height: 1.2;">不只是平台工具，
-更是企業的品牌永續顧問。</h2>
+      <h2 data-template-id="about-title" class="canva-text display mt-4 font-extrabold leading-tight" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 40px; line-height: 1.2;">不只是平台工具，<br>更是企業的品牌永續顧問。</h2>
       <p data-template-id="about-description" class="canva-text mt-6 max-w-xl leading-8 text-[#39605a]" style="color: rgb(57, 96, 90); font-weight: 400; font-style: normal; font-size: 17px; line-height: 1.8;">從物資循環、ESG執行到內容產出，GC圈協助企業把看似分散的永續行動，整合成可參與、可追蹤、可被看見的品牌影響力。</p>
+      
+      <!-- 已移除前方圖示 -->
       <div class="mt-9 grid gap-4 sm:grid-cols-3">
-       <article data-template-id="value-1" class="canva-card rounded-2xl bg-white p-5 shadow-sm" style="background: rgb(255, 255, 255);"><i data-lucide="repeat-2" class="mb-4 text-[#246b57]"></i>
+       <article data-template-id="value-1" class="canva-card rounded-2xl bg-white p-5 shadow-sm" style="background: rgb(255, 255, 255);">
         <h3 data-template-id="value-1-title" class="canva-text font-bold" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 19px;">循環物資</h3>
         <p data-template-id="value-1-text" class="canva-text mt-2 text-sm leading-6 text-[#58736e]" style="color: rgb(88, 115, 110); font-weight: 400; font-style: normal; font-size: 16px;">精準對接需求，讓閒置資產重新流動。</p>
        </article>
-       <article data-template-id="value-2" class="canva-card rounded-2xl bg-white p-5 shadow-sm" style="background: rgb(255, 255, 255);"><i data-lucide="chart-no-axes-combined" class="mb-4 text-[#246b57]"></i>
+       <article data-template-id="value-2" class="canva-card rounded-2xl bg-white p-5 shadow-sm" style="background: rgb(255, 255, 255);">
         <h3 data-template-id="value-2-title" class="canva-text font-bold" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 19px;">ESG內容產出</h3>
         <p data-template-id="value-2-text" class="canva-text mt-2 text-sm leading-6 text-[#58736e]" style="color: rgb(88, 115, 110); font-weight: 400; font-style: normal; font-size: 16px;">以可查證的數據，累積永續證據。</p>
        </article>
-       <article data-template-id="value-3" class="canva-card rounded-2xl bg-white p-5 shadow-sm" style="background: rgb(255, 255, 255);"><i data-lucide="users-round" class="mb-4 text-[#246b57]"></i>
+       <article data-template-id="value-3" class="canva-card rounded-2xl bg-white p-5 shadow-sm" style="background: rgb(255, 255, 255);">
         <h3 data-template-id="value-3-title" class="canva-text font-bold" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 19px;">永續文化</h3>
         <p data-template-id="value-3-text" class="canva-text mt-2 text-sm leading-6 text-[#58736e]" style="color: rgb(88, 115, 110); font-weight: 400; font-style: normal; font-size: 16px;">讓員工與客戶日常參與循環行動。</p>
        </article>
       </div>
      </div>
      <div class="reveal relative">
-      <div class="absolute -left-5 -top-5 h-32 w-32 rounded-full bg-[#c9ef63]"></div><img data-template-id="about-image" loading="lazy" class="canva-image relative h-[430px] w-full rounded-[2rem] object-cover shadow-xl" src="https://images.pexels.com/photos/2967770/pexels-photo-2967770.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1280" alt="Large bales of recycled cardboard stacked outdoors, ready for processing.">
+      <div class="absolute -left-5 -top-5 h-32 w-32 rounded-full bg-[#c9ef63]"></div><img data-template-id="about-image" loading="lazy" class="canva-image relative h-[430px] w-full rounded-[2rem] object-cover shadow-xl" src="https://images.pexels.com/photos/2967770/pexels-photo-2967770.jpeg?auto=compress&cs=tinysrgb&w=1280" alt="Large bales of recycled cardboard stacked outdoors, ready for processing.">
       <div data-template-id="about-badge" class="canva-card absolute -bottom-6 -left-4 max-w-xs rounded-2xl p-5 shadow-xl" style="background: rgb(201, 239, 99);">
        <p data-template-id="about-badge-text" class="canva-text text-sm font-bold leading-6" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">符合至少 16 項永續指標與 6 項 SDGs。</p>
       </div>
      </div>
     </div>
    </section>
+
+   <!-- 其餘內容皆未修改，保持原樣 -->
    <section id="pain" class="bg-[#103b36] py-24 text-white">
     <div class="mx-auto max-w-7xl px-5">
      <div class="max-w-2xl reveal">
@@ -115,40 +153,36 @@
        <p data-template-id="pain-1-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-1-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">資產黑洞 → 資產活化</h3>
        <p data-template-id="pain-1-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">長期閒置庫存占用空間、報廢又需付出高額清運成本。GC圈將庫存轉為品牌引流的循環資源。</p>
-       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-1-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：降低倉儲與報廢成本，獲取潛在客戶流量。</strong>
-       </div>
+       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-1-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：降低倉儲與報廢成本，獲取潛在客戶流量。</strong></div>
       </article>
       <article data-template-id="pain-card-2" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
        <p data-template-id="pain-2-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-2-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">ESG虛化 → 全員參與</h3>
        <p data-template-id="pain-2-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">員工對永續無感、參與度低。以遊戲化循環機制，讓永續行為自然融入日常。</p>
-       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-2-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：建立品牌永續文化與員工認同感。</strong>
-       </div>
+       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-2-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：建立品牌永續文化與員工認同感。</strong></div>
       </article>
       <article data-template-id="pain-card-3" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
        <p data-template-id="pain-3-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-3-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">數據焦慮 → 數位導航</h3>
        <p data-template-id="pain-3-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">ESG成效難以量化、缺乏可信憑據。GC圈提供品牌專屬儀表板，追蹤物資流向與減碳數據。</p>
-       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-3-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：產出具備公信力的永續內容。</strong>
-       </div>
+       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-3-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：產出具備公信力的永續內容。</strong></div>
       </article>
       <article data-template-id="pain-card-4" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition" style="background: rgb(255, 255, 255);">
        <p data-template-id="pain-4-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-4-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">行銷斷層 → 品牌溢價</h3>
        <p data-template-id="pain-4-body" class="canva-text mt-3 text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">ESG公益行動無法轉化為品牌信任或實際銷量。透明的永續績效頁面讓客戶一起參與循環。</p>
-       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-4-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：以永續口碑推動銷售增長。</strong>
-       </div>
+       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-4-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：以永續口碑推動銷售增長。</strong></div>
       </article>
       <article data-template-id="pain-card-5" class="canva-card solution-card rounded-2xl bg-white p-7 text-[#103b36] transition md:col-span-2 lg:col-span-2" style="background: rgb(255, 255, 255);">
        <p data-template-id="pain-5-label" class="canva-text text-xs font-extrabold tracking-widest text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 800; font-style: normal; font-size: 16px;">PAIN POINT</p>
        <h3 data-template-id="pain-5-title" class="canva-text mt-3 text-xl font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 19px;">成本高昂 → 雲端行動</h3>
        <p data-template-id="pain-5-body" class="canva-text mt-3 max-w-2xl text-sm leading-7 text-[#55706b]" style="color: rgb(85, 112, 107); font-weight: 400; font-style: normal; font-size: 16px;">線下志工活動受時間與空間限制，難以擴大參與。GC圈提供全天候 24/7 線上物資循環系統與教育訓練整合。</p>
-       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-5-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：降低 80% 以上執行成本，擴大 10 倍以上參與廣度。</strong>
-       </div>
+       <div class="mt-5 border-t pt-4"><strong data-template-id="pain-5-result" class="canva-text text-sm" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">成果：降低 80% 以上執行成本，擴大 10 倍以上參與廣度。</strong></div>
       </article>
      </div>
     </div>
    </section>
+   
    <section id="plans" class="bg-[#f0f3e9] py-24">
     <div class="mx-auto max-w-7xl px-5">
      <div class="reveal text-center">
@@ -251,7 +285,7 @@
          </div>
         </div>
        </div>
-      </div><img data-template-id="collaboration-image" loading="lazy" class="canva-image h-full min-h-[450px] w-full rounded-[2rem] object-cover shadow-xl" src="https://images.pexels.com/photos/33175650/pexels-photo-33175650.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1280" alt="Close-up of two businessmen shaking hands, symbolizing agreement and partnership.">
+      </div><img data-template-id="collaboration-image" loading="lazy" class="canva-image h-full min-h-[450px] w-full rounded-[2rem] object-cover shadow-xl" src="https://images.pexels.com/photos/33175650/pexels-photo-33175650.jpeg?auto=compress&cs=tinysrgb&w=1280" alt="Close-up of two businessmen shaking hands, symbolizing agreement and partnership.">
      </div>
     </div>
    </section>
@@ -296,8 +330,7 @@
     <div class="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-2">
      <div>
       <p data-template-id="consult-kicker" class="canva-text section-kicker text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 800; font-style: normal; font-size: 16px;">START A CONVERSATION</p>
-      <h2 data-template-id="consult-title" class="canva-text display mt-4 font-extrabold text-white" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 42px; line-height: 1.2;">讓每一件閒置物，
-成為品牌的新故事。</h2>
+      <h2 data-template-id="consult-title" class="canva-text display mt-4 font-extrabold text-white" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 42px; line-height: 1.2;">讓每一件閒置物，<br>成為品牌的新故事。</h2>
       <p data-template-id="consult-description" class="canva-text mt-6 max-w-xl leading-8 text-white/80" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 17px;">告訴我們您的需求。GC圈團隊將協助您找到適合的循環經濟與 ESG 行動方案。</p>
      </div>
      <form id="consult-form" class="rounded-[2rem] bg-white p-7 shadow-xl" novalidate="">
@@ -307,6 +340,7 @@
     </div>
    </section>
   </main>
+
   <footer id="app" data-template-id="footer-section" class="canva-footer bg-[#103b36] px-5 py-12 text-white" style="background: rgb(16, 59, 54);">
    <div class="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
     <div>
@@ -316,9 +350,28 @@
     <div>
      <p data-template-id="footer-app-title" class="canva-text font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">下載 GC APP，立即體驗</p>
      <p data-template-id="footer-app-text" class="canva-text mt-2 text-sm text-white/70" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">破萬件免費禮物，等你加入循環。</p>
+     
+     <!-- 頁尾社群圖示 -->
+     <div class="mt-6 flex gap-5">
+      <a href="#" class="text-white hover:text-[#c9ef63] transition" aria-label="Facebook">
+        <i data-lucide="facebook" width="24" height="24"></i>
+      </a>
+      <a href="#" class="text-white hover:text-[#c9ef63] transition" aria-label="Instagram">
+        <i data-lucide="instagram" width="24" height="24"></i>
+      </a>
+      <a href="#" class="text-white hover:text-[#c9ef63] transition" aria-label="YouTube">
+        <i data-lucide="youtube" width="24" height="24"></i>
+      </a>
+     </div>
     </div>
    </div>
   </footer>
+
+  <!-- 回到最上方 (TOP) 按鈕 -->
+  <button id="backToTop" class="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff715b] text-white shadow-lg opacity-0 pointer-events-none transition-all duration-300 hover:bg-[#e05e49] focus-ring" aria-label="回到最上方">
+    <i data-lucide="arrow-up"></i>
+  </button>
+
   <script src="/_sdk/fef09cb5f5b2424b.editing_sdk.js" integrity="sha512-PbmCvZWt+xecnQll4ofK5HTtTS+pGwwY1xn9+p49qHgEHml+uvyc0o1f2Eltkd4t324iwgnf7acUjfnKHkik1w=="></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -336,6 +389,21 @@
         if (entry.isIntersecting) entry.target.classList.add('visible');
       }), { threshold:.12 });
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+      // 加上「回到最上方 (TOP)」邏輯
+      const backToTopBtn = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+          backToTopBtn.classList.add('opacity-100');
+        } else {
+          backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+          backToTopBtn.classList.remove('opacity-100');
+        }
+      });
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     });
 
     let totalRows = 0;
@@ -384,5 +452,4 @@
       }
     });
   </script>
- 
 </body></html>
