@@ -14,7 +14,7 @@
     .display { font-family:"Raleway","Noto Sans TC",sans-serif; }
     .grain { background-image:radial-gradient(rgba(16,59,54,.12) .8px,transparent .8px); background-size:12px 12px; }
     .nav-link { position:relative; white-space:nowrap; }
-    .nav-link:after { content:""; position:absolute; height:2px; width:0; bottom:-5px; left:0; background:var(--lime); transition:width .2s; }
+    .nav-link:after { content:"absolute"; height:2px; width:0; bottom:-5px; left:0; background:var(--lime); transition:width .2s; }
     .nav-link:hover:after,.nav-link:focus:after { width:100%; }
     .hero-photo:after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(9,39,35,.94) 0%,rgba(9,39,35,.68) 45%,rgba(9,39,35,.08) 100%); }
     .hero-photo img { filter:saturate(.72) contrast(1.08); }
@@ -36,8 +36,8 @@
   <header class="sticky top-0 z-50 border-b border-white/10 bg-[#103b36]/95 backdrop-blur">
    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4" aria-label="主要導覽">
     <a href="#home" data-template-id="brand-name" class="canva-text focus-ring display text-xl font-extrabold tracking-tight text-white flex items-center" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">
-     <!-- 如果 Google Drive 連結無法顯示，建議將檔案上傳至穩定圖床後替換此 src -->
-     <img src="https://drive.google.com/uc?export=view&id=10qJ2s9kpCKNF61BmIsHbHqN6ClWIWsXn" alt="GC圈 Logo" class="h-8 w-auto mr-3 object-contain">
+     <!-- 更新：首頁 GC LOGO -->
+     <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-39-18-044LtOL4RJuIQWOuQVN7Yncno26F2F4eAwu9c96p.png" alt="GC圈 Logo" class="h-8 w-auto mr-3 object-contain">
      GC圈   GiveCircle
     </a>
     
@@ -286,35 +286,43 @@
     
     <div data-template-id="partner-list" class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center bg-[#e8eadc] p-8 rounded-2xl">
      <div class="flex flex-col items-center gap-3 text-center">
+       <!-- 更新：保留原有的 Google Drive 連結（未提供新連結） -->
        <img src="https://drive.google.com/uc?export=view&id=1oEhZ0aZuLMYv8TEeA7T5_z_kaNxgOPtC" alt="環境部環保集點" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">環境部環保集點</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <img src="https://drive.google.com/uc?export=view&id=19pHw8_AV_68rk9N_yiU2T8iWl-8C4CPN" alt="台北實物銀行" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新：AWS S3 連結 -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-30-37-bb4tADqwVcIS92LhTASYZ886jq6S9Ox2Rq5flv7w.png" alt="台北實物銀行" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">台北實物銀行</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <img src="https://drive.google.com/uc?export=view&id=1A2-CSYMz1gSANduh-Jn9DMBoBePbx55d" alt="新竹環保局" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新：AWS S3 連結 -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-31-22-otnKtW6HyMlPuYXM7A2paVvA93MGVVynnHKLqDka.png" alt="新竹環保局" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">新竹環保局</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <img src="https://drive.google.com/uc?export=view&id=15rt0G8NlyD_Zh6opF3zkaEVhTaFt6zL_" alt="麗翔飯店" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新：AWS S3 連結 -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-48-jCUC7l4DC1o3Y8JFRy1EvALHoAcRWDtckKxJlv7S.png" alt="麗翔飯店" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">麗翔飯店</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <img src="https://drive.google.com/uc?export=view&id=1Qegbe2pKf6M8ifW8XLwVcJxNNKrGILjM" alt="凱基銀行" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新：AWS S3 連結 -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-34-59-ybRcGczsj8xFRzC2xffzk8bkL0wzMarAvu8wkKrf.png" alt="凱基銀行" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">凱基銀行</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <img src="https://drive.google.com/uc?export=view&id=11Cy5KYXsuY0e746ydFrcPZ8QA6WreZD5" alt="覺醒家居" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新：AWS S3 連結 -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-43-0JxiJEswWkrRoOOfxXvQHM0Iptu14ujw1anSzQrP.png" alt="覺醒家居" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">覺醒家居</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <img src="https://drive.google.com/uc?export=view&id=1F1oNTKEAu3d2dwEMHeQYAgUKFubc5mhE" alt="聯發科" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新：AWS S3 連結 -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-53-yLFgzfwrXXU9NOvSGASlDK5U2zMsQ693l0VbaJFt.jpeg" alt="聯發科" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">聯發科</span>
      </div>
      <div class="flex flex-col items-center gap-3 text-center">
-       <img src="https://drive.google.com/uc?export=view&id=1S01AX7J71AFytn2d_YHwWUJ120rwyO22" alt="聚陽實業" class="h-12 w-auto object-contain mix-blend-multiply">
+       <!-- 更新：AWS S3 連結 -->
+       <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-30-53-VND88b5ux9mtmYc5dLIG61Ki1QAstgqyZ6CA37QM.png" alt="聚陽實業" class="h-12 w-auto object-contain mix-blend-multiply">
        <span class="text-sm font-bold text-[#103b36]">聚陽實業</span>
      </div>
     </div>
@@ -325,7 +333,6 @@
       <h2 data-template-id="media-title" class="canva-text display mt-4 font-extrabold" style="color: rgb(16, 59, 54); font-weight: 800; font-style: normal; font-size: 34px;">媒體報導</h2>
       
       <div class="mt-7 grid gap-3">
-       <!-- 更新：加上了 a 連結與 hover 動畫效果 -->
        <article data-template-id="media-1" class="canva-card rounded-xl border border-[#103b36]/10 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg" style="background: rgb(255, 255, 255);">
         <a href="https://www.ctee.com.tw/news/20251222701568-431204" target="_blank" class="block">
          <p data-template-id="media-1-source" class="canva-text text-xs font-bold text-[#246b57]" style="color: rgb(36, 107, 87); font-weight: 700; font-style: normal; font-size: 16px;">工商時報</p>
@@ -348,7 +355,6 @@
        </article>
       </div>
 
-      <!-- 新增查看更多連結 -->
       <div class="mt-6 text-right">
        <a href="https://m.give-circle.com/story?VNK=fb80fbf2" target="_blank" class="inline-flex items-center gap-2 text-sm font-bold text-[#246b57] transition hover:text-[#103b36] focus-ring">
         查看更多：進入「GC傳媒」 <i data-lucide="arrow-right" width="16" height="16"></i>
@@ -361,7 +367,6 @@
       <h2 data-template-id="award-title" class="canva-text display mt-4 font-extrabold" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 34px;">獲獎，是影響力的共同證明</h2>
       <p data-template-id="award-summary" class="canva-text mt-5 leading-8 text-white/75" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">截至 2025 年 7 月，GC圈軟體服務協助 11 間企業獲得 ESG 永續相關獎項，合計 26 座獎項。</p>
       <div class="mt-7 grid gap-3 text-sm">
-       <!-- 更新：加上了獎牌圖示 -->
        <div data-template-id="award-1" class="canva-card rounded-xl border border-white/15 p-4 flex items-start gap-3" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">
         <i data-lucide="award" class="text-[#c9ef63] shrink-0 mt-0.5" width="20" height="20"></i>
         <span>環境部【資源循環績優企業】新創組金獎</span>
@@ -410,7 +415,6 @@
         <p class="text-xs font-bold text-[#ff715b] mt-2">＊請確認已開放「允許利用 ID 加入好友」功能</p>
       </div>
 
-      <!-- 更新：移除了（可補充問題） -->
       <label data-template-id="message-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="message" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">需求簡述 *</label> 
       <textarea id="message" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" rows="4" required=""></textarea>
       
@@ -424,11 +428,12 @@
   <footer id="app" data-template-id="footer-section" class="canva-footer bg-[#103b36] px-5 py-12 text-white" style="background: rgb(16, 59, 54);">
    <div class="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
     <div>
-     <p data-template-id="footer-brand" class="canva-text display text-2xl font-extrabold" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 16px;">GC圈</p>
+     <!-- 更新：最下方 GC圈 改為帶有另開網頁功能的超連結 -->
+     <a href="https://www.give-circle.com" target="_blank" data-template-id="footer-brand" class="canva-text display text-2xl font-extrabold hover:text-[#c9ef63] transition block" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 16px;">GC圈</a>
      <p data-template-id="footer-text" class="canva-text mt-3 max-w-md text-sm leading-7 text-white/65" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">把資源放回對的位置，讓循環創造更長遠的品牌價值。</p>
     </div>
     <div>
-     <p data-template-id="footer-app-title" class="canva-text font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">下載 GC APP，立即體驗</p>
+     <p data-template-id="footer-app-title" class="canva-text font-bold text-[#c9ef63]" style="color: rgb(201, 239, 99); font-weight: 700; font-style: normal; font-size: 16px;">下載 GC圈 APP，立即體驗</p>
      <p data-template-id="footer-app-text" class="canva-text mt-2 text-sm text-white/70" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">破萬件免費禮物，等你加入循環。</p>
      
      <div class="mt-6 flex gap-5">
@@ -482,7 +487,6 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      // 綁定 Checkbox 的連動邏輯
       const contactLineCheckbox = document.getElementById('contact_line');
       const lineInputGroup = document.getElementById('line-input-group');
       const lineIdInput = document.getElementById('line_id');
@@ -522,21 +526,18 @@
       const contactLineChecked = document.getElementById('contact_line').checked;
       const lineId = document.getElementById('line_id').value.trim();
 
-      // 檢查必填欄位
       if (!name || !email || !/^\S+@\S+\.\S+$/.test(email) || !rawMessage) {
         status.textContent = '請填寫所有必填欄位，並確保 Email 格式正確。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
         return;
       }
       
-      // 檢查是否有勾選回覆方式
       if (!contactEmailChecked && !contactLineChecked) {
         status.textContent = '請至少勾選一種希望收到的回覆方式。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
         return;
       }
 
-      // 如果有勾選 LINE，則 LINE ID 為必填
       if (contactLineChecked && !lineId) {
         status.textContent = '您勾選了 LINE 回覆，請填寫您的 LINE ID。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
@@ -549,7 +550,6 @@
         return;
       }
 
-      // 將回覆方式整併至留言中
       let contactMethods = [];
       if (contactEmailChecked) contactMethods.push('信箱');
       if (contactLineChecked) contactMethods.push(`LINE (ID: ${lineId})`);
@@ -572,7 +572,7 @@
       
       if (result.isOk) {
         event.target.reset();
-        document.getElementById('line-input-group').classList.add('hidden'); // 送出後隱藏 LINE 區塊
+        document.getElementById('line-input-group').classList.add('hidden'); 
         status.textContent = '已收到您的需求，GC圈團隊將盡快與您聯繫。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#246b57]';
       } else {
