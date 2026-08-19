@@ -366,6 +366,11 @@
           outcomeTitle: 'Outcome',
           outcome: '物資送到合適需求端，企業取得可整理的循環與永續成果。',
           highlights: ['循環件數', '物資流向紀錄', '需求端回饋', 'ESG 成果資料'],
+          referenceLabel: '匿名合作成果參考',
+          referenceTitle: '科技業展示／庫存物資循環',
+          referenceText: '某科技企業將 XX 件展示／庫存物資透過 GC 圈重新媒合。',
+          referenceMetrics: ['XX 件成功循環', 'XX 個受益單位', '產出 XX 項 ESG 成果資料'],
+          referenceNote: '原本需要處理的閒置物資，轉化為可追蹤、可整理、可用於永續溝通的成果。',
           plan: 'GC PRO',
           planText: '適合有品牌物資、庫存、展示品需要循環與曝光的企業。',
           cta: '評估我的閒置物資',
@@ -382,6 +387,11 @@
           outcomeTitle: 'Outcome',
           outcome: '企業可把行動轉化為更清楚的 ESG 數據、成果頁與年度影響力素材。',
           highlights: ['減碳與循環資料', 'SDGs 對應', '成果報表素材', '年度影響力紀錄'],
+          referenceLabel: '匿名合作成果參考',
+          referenceTitle: '年度 ESG 成果資料整理',
+          referenceText: '某企業將循環行動、參與紀錄與物資流向整理為年度永續成果資料。',
+          referenceMetrics: ['XX 筆循環紀錄', 'XX 項成果資料', '對應 XX 項 SDGs 指標'],
+          referenceNote: '分散的永續行動，轉化為內部報告、外部溝通與年度成果盤點可使用的素材。',
           plan: 'GC GROUP',
           planText: '適合需要推動 ESG 專案、管理參與成果與整理報告素材的企業。',
           cta: '評估我的 ESG 專案',
@@ -398,6 +408,11 @@
           outcomeTitle: 'Outcome',
           outcome: '企業可以看見參與人數、行動次數、團隊成果與永續教育成效。',
           highlights: ['員工參與人數', '團隊行動紀錄', '個人成果憑證', '永續教育成效'],
+          referenceLabel: '匿名合作成果參考',
+          referenceTitle: '企業員工永續參與行動',
+          referenceText: '某企業透過 GC 圈規劃員工參與任務，讓永續行動從單次活動變成可累積的團隊成果。',
+          referenceMetrics: ['XX 位員工參與', 'XX 次循環行動', '產出 XX 份個人成果紀錄'],
+          referenceNote: '員工參與不只停留在活動當天，而是可以持續累積為團隊文化與 ESG 參與資料。',
           plan: 'GC GROUP',
           planText: '適合 HR、福委、ESG Team 推動員工永續活動與團隊參與。',
           cta: '規劃員工永續活動',
@@ -414,6 +429,11 @@
           outcomeTitle: 'Outcome',
           outcome: '企業把閒置物資轉化為品牌好物曝光、會員互動與永續故事素材。',
           highlights: ['品牌好物曝光', '會員參與互動', '循環成果展示', '永續內容素材'],
+          referenceLabel: '匿名合作成果參考',
+          referenceTitle: '品牌物資循環與會員互動',
+          referenceText: '某品牌將 XX 件樣品／活動物資透過 GC 圈釋出，讓會員參與循環並形成永續內容素材。',
+          referenceMetrics: ['XX 件品牌物資循環', 'XX 位會員互動', '累積 XX 筆品牌永續素材'],
+          referenceNote: '原本難以延伸的閒置物資，轉化為品牌好物曝光、會員互動與永續溝通素材。',
           plan: 'GC PRO',
           planText: '適合希望經營官方帳戶、品牌頁與循環行銷內容的企業。',
           cta: '看品牌合作方式',
@@ -444,6 +464,19 @@
                 </div>
                 <div class="mt-7 grid grid-cols-2 gap-3 md:grid-cols-4">
                   ${item.highlights.map(text => `<div class="rounded-xl border border-[#103b36]/10 bg-white p-4 text-center shadow-sm"><i data-lucide="check-circle-2" class="mx-auto text-[#246b57]" width="20" height="20"></i><p class="mt-2 text-sm font-bold text-[#103b36]">${text}</p></div>`).join('')}
+                </div>
+                <div class="mt-7 rounded-2xl border border-[#103b36]/10 bg-[#fffdf1] p-6">
+                  <div class="flex flex-wrap items-center gap-3">
+                    <span class="rounded-full bg-[#103b36] px-4 py-2 text-xs font-extrabold tracking-[.12em] text-[#c9ef63]">${item.referenceLabel}</span>
+                    <p class="text-sm font-bold text-[#246b57]">以下數字可替換為實際可公開成果</p>
+                  </div>
+                  <h4 class="display mt-4 text-2xl font-extrabold text-[#103b36]">${item.referenceTitle}</h4>
+                  <p class="mt-3 leading-7 text-[#58736e]">${item.referenceText}</p>
+                  <div class="mt-5 grid gap-3 md:grid-cols-3">
+                    ${item.referenceMetrics.map(text => `<div class="rounded-xl bg-white p-4 text-center shadow-sm"><p class="text-lg font-extrabold text-[#103b36]">${text}</p></div>`).join('')}
+                  </div>
+                  <p class="mt-4 text-sm font-bold leading-7 text-[#58736e]">${item.referenceNote}</p>
+                  <p class="mt-2 text-xs leading-6 text-[#58736e]">＊如企業名稱或數字不可公開，可維持匿名與區間呈現；實際成果依物資品項、數量、媒合狀況與合作內容而異。</p>
                 </div>
               </div>
               <div class="flex flex-col justify-between bg-[#e8eadc] p-7 md:p-10">
