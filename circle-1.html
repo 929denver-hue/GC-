@@ -465,25 +465,21 @@
                 <div class="mt-7 grid grid-cols-2 gap-3 md:grid-cols-4">
                   ${item.highlights.map(text => `<div class="rounded-xl border border-[#103b36]/10 bg-white p-4 text-center shadow-sm"><i data-lucide="check-circle-2" class="mx-auto text-[#246b57]" width="20" height="20"></i><p class="mt-2 text-sm font-bold text-[#103b36]">${text}</p></div>`).join('')}
                 </div>
-                <div class="mt-7 rounded-2xl border border-[#103b36]/10 bg-[#fffdf1] p-6">
-                  <div class="flex flex-wrap items-center gap-3">
-                    <span class="rounded-full bg-[#103b36] px-4 py-2 text-xs font-extrabold tracking-[.12em] text-[#c9ef63]">${item.referenceLabel}</span>
-                    <p class="text-sm font-bold text-[#246b57]">以下數字可替換為實際可公開成果</p>
-                  </div>
-                  <h4 class="display mt-4 text-2xl font-extrabold text-[#103b36]">${item.referenceTitle}</h4>
-                  <p class="mt-3 leading-7 text-[#58736e]">${item.referenceText}</p>
-                  <div class="mt-5 grid gap-3 md:grid-cols-3">
-                    ${item.referenceMetrics.map(text => `<div class="rounded-xl bg-white p-4 text-center shadow-sm"><p class="text-lg font-extrabold text-[#103b36]">${text}</p></div>`).join('')}
-                  </div>
-                  <p class="mt-4 text-sm font-bold leading-7 text-[#58736e]">${item.referenceNote}</p>
-                  <p class="mt-2 text-xs leading-6 text-[#58736e]">＊如企業名稱或數字不可公開，可維持匿名與區間呈現；實際成果依物資品項、數量、媒合狀況與合作內容而異。</p>
-                </div>
               </div>
               <div class="flex flex-col justify-between bg-[#e8eadc] p-7 md:p-10">
                 <div>
                   <p class="text-sm font-extrabold tracking-[.16em] text-[#246b57]">RECOMMENDED PLAN</p>
                   <h4 class="display mt-3 text-4xl font-extrabold text-[#103b36]">${item.plan}</h4>
                   <p class="mt-4 leading-8 text-[#58736e]">${item.planText}</p>
+                  <div class="mt-8 rounded-2xl border border-[#103b36]/10 bg-white/80 p-5 shadow-sm">
+                    <p class="text-xs font-extrabold tracking-[.16em] text-[#246b57]">${item.referenceLabel}</p>
+                    <h5 class="display mt-3 text-xl font-extrabold leading-tight text-[#103b36]">${item.referenceTitle}</h5>
+                    <p class="mt-3 text-sm leading-7 text-[#58736e]">${item.referenceText}</p>
+                    <div class="mt-4 grid gap-2">
+                      ${item.referenceMetrics.map(text => `<div class="flex items-center gap-2 rounded-xl bg-[#f7f6ef] px-4 py-3"><i data-lucide="check-circle-2" class="shrink-0 text-[#246b57]" width="18" height="18"></i><p class="text-sm font-extrabold text-[#103b36]">${text}</p></div>`).join('')}
+                    </div>
+                    <p class="mt-4 text-xs leading-6 text-[#58736e]">＊企業名稱與數字可依公開範圍調整，實際成果依合作內容而異。</p>
+                  </div>
                 </div>
                 <div class="mt-10 rounded-2xl bg-white p-6 shadow-sm">
                   <p class="text-sm font-bold leading-7 text-[#58736e]">不確定適不適合？先告訴我們你的需求，GC 圈團隊可以協助判斷合適的循環方式與合作方案。</p>
