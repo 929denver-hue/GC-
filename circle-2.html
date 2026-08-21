@@ -158,9 +158,10 @@ body {
   transform:translate(-50%,0);
 }
 
+/* 修正 Tailwind flex 權重覆蓋問題，加上 !important */
 @media(max-width:900px) {
-  .desktop-nav { display:none; }
-  .mobile-toggle { display:inline-flex; }
+  .desktop-nav { display:none !important; }
+  .mobile-toggle { display:inline-flex !important; }
 }
 
 @media(min-width:901px) {
