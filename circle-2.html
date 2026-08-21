@@ -1575,6 +1575,14 @@ aria-label="YouTube"
 
 
 <!-- ===============================
+     聊天視窗背景遮罩
+================================ -->
+<div 
+  id="chat-backdrop" 
+  class="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"
+></div>
+
+<!-- ===============================
      浮動聊天按鈕 (FAB)
 ================================ -->
 <button
@@ -1737,6 +1745,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatCloseBtn = document.getElementById('chat-close-btn');
     const chatHistory = document.getElementById('chat-history');
     const btnOpenChatCta = document.getElementById('btn-open-chat-cta');
+    const chatBackdrop = document.getElementById('chat-backdrop');
     
     if (!chatWidget || !chatHistory) return;
 
@@ -1812,12 +1821,20 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (isChatOpen) {
         chatWidget.classList.add('chat-widget-open');
+        if (chatBackdrop) {
+          chatBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+          chatBackdrop.classList.add('opacity-100', 'pointer-events-auto');
+        }
         if (!isInitialized) {
           renderInit();
           isInitialized = true;
         }
       } else {
         chatWidget.classList.remove('chat-widget-open');
+        if (chatBackdrop) {
+          chatBackdrop.classList.add('opacity-0', 'pointer-events-none');
+          chatBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
+        }
       }
     }
 
@@ -1845,7 +1862,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 更新為帶有頭像的高對比設計
     function createBotBubble(html) {
       const el = document.createElement('div');
       el.className = 'flex items-end gap-2.5 w-full chat-animate';
@@ -1871,7 +1887,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return el;
     }
 
-    // 選項按鈕增強互動回饋
+    // 寬度較窄，選項一律用單欄排列
     function createOptions(buttonsHtml) {
       const el = document.createElement('div');
       el.className = `grid grid-cols-1 gap-3 pl-[42px] w-full chat-animate`;
@@ -1879,6 +1895,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return el;
     }
 
+    // 推薦結果卡片 (適應狹窄空間，垂直堆疊)
     function createResultCard(planType) {
       const res = data.results[planType];
       const bulletsHtml = res.bullets.map(b => `
@@ -1994,6 +2011,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     chatFab.addEventListener('click', () => toggleChat());
     chatCloseBtn.addEventListener('click', () => toggleChat(false));
+    if (chatBackdrop) {
+      chatBackdrop.addEventListener('click', () => toggleChat(false));
+    }
     
     if(btnOpenChatCta) {
       btnOpenChatCta.addEventListener('click', () => toggleChat(true));
