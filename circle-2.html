@@ -251,17 +251,16 @@ GC圈 GiveCircle
     合作方案 <span class="text-[12px] text-white/80 transition-colors group-hover:text-white">▼</span>
   </a>
   <div class="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-    <div class="w-[320px] rounded-[16px] border border-[#1a365d]/10 bg-white p-3 shadow-xl">
-      <a href="#scenario" class="flex items-start gap-4 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
+    <div class="w-[240px] rounded-[16px] border border-[#1a365d]/10 bg-white p-3 shadow-xl">
+      <a href="#scenario" class="flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
         <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d]">
           <i data-lucide="sparkles" width="20" height="20"></i>
         </div>
         <div class="text-left">
           <p class="text-[16px] font-extrabold text-[#1a365d]">幫我找到適合方案</p>
-        
         </div>
       </a>
-      <a href="#plans" class="mt-1 flex items-start gap-4 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
+      <a href="#plans" class="mt-1 flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
         <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e8eadc] text-[#1a365d]">
           <i data-lucide="layout-grid" width="20" height="20"></i>
         </div>
@@ -324,19 +323,17 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
   <button type="button" id="mobile-plans-toggle" class="flex w-full items-center justify-between font-bold text-white focus:outline-none">
     合作方案 <span id="mobile-plans-arrow" class="text-[12px] text-white/80 transition-transform duration-200">▼</span>
   </button>
-  <div id="mobile-plans-menu" class="hidden mt-4 grid gap-4 border-l-2 border-white/20 pl-4">
-    <a href="#scenario" class="block">
+  <div id="mobile-plans-menu" class="hidden mt-4 grid gap-3 border-l-2 border-white/20 pl-4">
+    <a href="#scenario" class="block py-1" data-mobile-menu-close>
       <p class="text-[15px] font-extrabold text-[#f5be13]">幫我找到適合方案</p>
-      <p class="mt-1 text-[13px] font-normal text-white/70">回答 1 個問題，快速推薦</p>
     </a>
-    <a href="#plans" class="block">
+    <a href="#plans" class="block py-1" data-mobile-menu-close>
       <p class="text-[15px] font-extrabold text-white">查看全部方案</p>
-      <p class="mt-1 text-[13px] font-normal text-white/70">比較 Free、Pro、Group</p>
     </a>
   </div>
 </div>
 
-<a href="#media">媒體報導</a>
+<a href="#media" data-mobile-menu-close>媒體報導</a>
 
 <a
 href="https://www.give-circle.com"
@@ -655,7 +652,7 @@ ESG公益行動無法轉化為品牌信任或實際銷量。透明的永續績�
 
 
 <!-- ===============================
-     引導 CTA 區塊 (原為置中需求診斷)
+     引導 CTA 區塊
 ================================ -->
 
 <section
@@ -678,7 +675,7 @@ class="bg-[#f7f6ef] py-24 scroll-mt-24"
     class="focus-ring mt-8 inline-flex items-center gap-2 rounded-full bg-[#1a365d] px-8 py-4 font-extrabold text-white shadow-lg transition hover:bg-[#1a365d]/90 hover:-translate-y-1"
   >
     <i data-lucide="bot" width="20" height="20"></i>
-    開始免費評估
+    幫我找到適合方案
   </button>
 </div>
 
@@ -969,13 +966,13 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 <!-- Row 5 -->
 <div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center p-4 md:text-center text-[15px] bg-white text-[#1a365d] gap-3 md:gap-0">
   <div class="flex flex-col text-left md:text-center md:block w-full">
-    <span class="font-bold text-[16px] md:text-[15px]">啟動方式</span>
-    <span class="text-[14px] mt-1 md:mt-0 md:text-[15px] text-[#4a6b9c] md:text-[#1a365d] block md:inline">自助註冊</span>
+    <span class="font-bold text-[16px] md:text-[15px]">開通流程</span>
+    <span class="text-[14px] mt-1 md:mt-0 md:text-[15px] text-[#4a6b9c] md:text-[#1a365d] block md:inline">線上自助 / 專人</span>
   </div>
   <div class="grid grid-cols-3 text-center md:contents w-full rounded-xl bg-[#f7f8f4] md:bg-transparent p-3 md:p-0">
-    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">免費版</span><span class="font-bold text-[#1a365d]">免費</span></div>
-    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Pro</span><span class="font-bold text-[#1a365d]">自行開通</span></div>
-    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Group</span><span class="font-bold text-[#1a365d]">專案報價</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">免費版</span><span class="font-bold text-[14px] text-[#1a365d]">註冊即可使用</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Pro</span><span class="font-bold text-[14px] text-[#1a365d]">線上自行開通</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Group</span><span class="font-bold text-[14px] text-[#1a365d]">專人諮詢規劃</span></div>
   </div>
 </div>
 
@@ -1613,7 +1610,7 @@ aria-label="YouTube"
   </div>
 
   <!-- Widget Body (Chat History) -->
-  <div id="chat-history" class="chat-scroll p-4 space-y-5 bg-[#fffcf7] flex-1 overflow-y-auto rounded-b-3xl" aria-live="polite">
+  <div id="chat-history" class="chat-scroll p-4 space-y-5 bg-[#f3f5f8] flex-1 overflow-y-auto rounded-b-3xl" aria-live="polite">
     <!-- 訊息動態注入 -->
   </div>
 </div>
@@ -1655,13 +1652,11 @@ document.addEventListener('DOMContentLoaded', () => {
       menuButton.setAttribute('aria-expanded', String(open));
     });
 
-    // 捕捉所有在手機選單裡的 a 標籤，點擊後觸發收合
-    mobileNav.querySelectorAll('a').forEach(link => {
+    mobileNav.querySelectorAll('[data-mobile-menu-close]').forEach(link => {
       link.addEventListener('click', () => {
         mobileNav.classList.add('hidden');
         menuButton.setAttribute('aria-expanded', 'false');
         
-        // 如果此時合作方案的子選單是打開的，也一併重置它，確保下次版面乾淨
         if (mobilePlansMenu && !mobilePlansMenu.classList.contains('hidden')) {
           mobilePlansMenu.classList.add('hidden');
           if (mobilePlansArrow) mobilePlansArrow.classList.remove('rotate-180');
@@ -1850,11 +1845,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // 更新為帶有頭像的高對比設計
     function createBotBubble(html) {
       const el = document.createElement('div');
-      el.className = 'flex flex-col items-start w-full chat-animate';
+      el.className = 'flex items-end gap-2.5 w-full chat-animate';
       el.innerHTML = `
-        <div class="bg-[#ebefe6] text-[#1a365d] rounded-[20px] rounded-tl-sm px-4 py-3 max-w-[90%] shadow-sm text-[15px] leading-6 font-medium">
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d] shadow-sm mb-1">
+          <i data-lucide="bot" width="18" height="18"></i>
+        </div>
+        <div class="bg-white text-[#1a365d] border border-[#1a365d]/5 rounded-[20px] rounded-bl-sm px-4 py-3 max-w-[80%] shadow-sm text-[15px] leading-6 font-medium">
           ${html}
         </div>
       `;
@@ -1863,24 +1862,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createUserBubble(text) {
       const el = document.createElement('div');
-      el.className = 'flex flex-col items-end w-full chat-animate';
+      el.className = 'flex flex-col items-end w-full pl-10 chat-animate';
       el.innerHTML = `
-        <div class="bg-[#1a365d] text-white rounded-[20px] rounded-tr-sm px-4 py-3 max-w-[85%] shadow-sm text-[15px] leading-6 font-medium">
+        <div class="bg-[#1a365d] text-white rounded-[20px] rounded-br-sm px-4 py-3 max-w-[95%] shadow-md text-[15px] leading-6 font-medium">
           ${text}
         </div>
       `;
       return el;
     }
 
-    // 寬度較窄，選項一律用單欄排列
+    // 選項按鈕增強互動回饋
     function createOptions(buttonsHtml) {
       const el = document.createElement('div');
-      el.className = `grid grid-cols-1 gap-3 w-full chat-animate`;
+      el.className = `grid grid-cols-1 gap-3 pl-[42px] w-full chat-animate`;
       el.innerHTML = buttonsHtml;
       return el;
     }
 
-    // 推薦結果卡片 (適應狹窄空間，垂直堆疊)
     function createResultCard(planType) {
       const res = data.results[planType];
       const bulletsHtml = res.bullets.map(b => `
@@ -1895,7 +1893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         : '';
 
       const el = document.createElement('div');
-      el.className = 'mt-2 bg-white border border-[#1a365d]/20 rounded-[20px] p-5 flex flex-col gap-5 w-full chat-animate shadow-md';
+      el.className = 'mt-2 bg-white border border-[#1a365d]/10 rounded-[20px] p-5 flex flex-col gap-5 w-full chat-animate shadow-md ml-[42px] w-[calc(100%-42px)]';
       el.innerHTML = `
         <div>
             <h4 class="text-[22px] font-extrabold text-[#1a365d]">${res.title}</h4>
@@ -1908,7 +1906,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="flex flex-col justify-start gap-3 w-full border-t border-[#1a365d]/10 pt-4">
             <button type="button" data-chat-action="scroll" data-chat-value="${res.primaryAction}" class="focus-ring w-full bg-[#f5be13] text-[#1a365d] font-extrabold py-3 px-4 rounded-xl min-h-[44px] hover:brightness-95 transition text-[15px]">查看 ${res.title}</button>
             ${consultBtnHtml}
-            <button type="button" data-chat-action="reset" class="focus-ring w-full border border-[#1a365d]/20 text-[#4a6b9c] font-bold py-3 px-4 rounded-xl min-h-[44px] hover:bg-gray-50 transition text-[14px]">重新回答</button>
+            <button type="button" data-chat-action="reset" class="focus-ring w-full border border-[#1a365d]/20 text-[#4a6b9c] font-bold py-3 px-4 rounded-xl min-h-[44px] hover:bg-[#f7f8f4] transition text-[14px]">重新回答</button>
         </div>
       `;
       return el;
@@ -1919,13 +1917,16 @@ document.addEventListener('DOMContentLoaded', () => {
       clearHighlight();
       
       chatHistory.appendChild(createBotBubble('嗨，我是 GC 圈企業方案小幫手。<br>我可以用 2 個簡單問題，幫你快速找到適合的合作方式。'));
+      lucide.createIcons(); // 動態插入 icon 後需重新初始化
+      
       setTimeout(() => {
         chatHistory.appendChild(createBotBubble('你目前最想解決哪一件事？'));
+        lucide.createIcons();
         
         const q1Html = Object.keys(data.q1).map(key => {
           const item = data.q1[key];
           return `
-            <button type="button" data-chat-action="answer-q1" data-chat-value="${key}" class="focus-ring text-left bg-white border border-[#1a365d]/15 rounded-xl p-4 hover:border-[#f5be13] hover:-translate-y-[2px] transition-all duration-200 min-h-[48px] shadow-sm">
+            <button type="button" data-chat-action="answer-q1" data-chat-value="${key}" class="focus-ring text-left bg-white border border-[#1a365d]/10 rounded-2xl p-4 hover:border-[#f5be13] hover:bg-[#fdfbf6] hover:-translate-y-[2px] transition-all duration-200 min-h-[48px] shadow-sm">
               <div class="font-extrabold text-[#1a365d] text-[15px]">${item.title}</div>
               <div class="text-[#4a6b9c] text-[13px] mt-1.5 leading-snug">${item.desc}</div>
             </button>
@@ -1950,14 +1951,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         chatHistory.appendChild(createBotBubble(q2Data.botReply));
+        lucide.createIcons();
         smoothScroll();
       }, 400);
 
       setTimeout(() => {
         chatHistory.appendChild(createBotBubble(q2Data.question));
+        lucide.createIcons();
         
         const q2Html = q2Data.options.map((opt, idx) => `
-          <button type="button" data-chat-action="answer-q2" data-chat-value="${opt.id}" data-chat-title="${opt.title}" class="focus-ring text-left bg-white border border-[#1a365d]/15 rounded-xl p-4 hover:border-[#f5be13] hover:-translate-y-[2px] transition-all duration-200 min-h-[48px] shadow-sm">
+          <button type="button" data-chat-action="answer-q2" data-chat-value="${opt.id}" data-chat-title="${opt.title}" class="focus-ring text-left bg-white border border-[#1a365d]/10 rounded-2xl p-4 hover:border-[#f5be13] hover:bg-[#fdfbf6] hover:-translate-y-[2px] transition-all duration-200 min-h-[48px] shadow-sm">
             <div class="font-extrabold text-[#1a365d] text-[14px]">${opt.title}</div>
           </button>
         `).join('');
@@ -1976,6 +1979,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         chatHistory.appendChild(createBotBubble('依照你的需求，我會優先推薦：'));
+        lucide.createIcons();
         smoothScroll();
       }, 400);
 
@@ -1991,15 +1995,13 @@ document.addEventListener('DOMContentLoaded', () => {
     chatFab.addEventListener('click', () => toggleChat());
     chatCloseBtn.addEventListener('click', () => toggleChat(false));
     
-    // 如果點擊了頁面中央的大按鈕
     if(btnOpenChatCta) {
       btnOpenChatCta.addEventListener('click', () => toggleChat(true));
     }
 
-    // 監聽來自導覽列 #scenario 的點擊，直接打開聊天視窗
     document.querySelectorAll('a[href="#scenario"]').forEach(link => {
       link.addEventListener('click', (e) => {
-        e.preventDefault(); // 阻擋預設捲動行為，直接開視窗
+        e.preventDefault(); 
         toggleChat(true);
       });
     });
@@ -2018,10 +2020,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (action === 'scroll') {
         const target = document.querySelector(value);
         if (target) {
-          toggleChat(false); // 點擊跳轉後自動收合面板
+          toggleChat(false); 
           setTimeout(() => {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 150); // 給一點延遲讓收合動畫播放
+          }, 150); 
         }
       } else if (action === 'reset') {
         renderInit();
