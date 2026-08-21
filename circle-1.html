@@ -33,7 +33,6 @@
   <script src="/_sdk/04cc6185e046f597.resizing_sdk.js" type="text/javascript" integrity="sha512-CiE/G92aQF0nxneFg1kdOvXih8sQ1Z2a2QI3+r/WvzJwQqH6+IyB3iL07OkJmpm3ABAaf07+FnqWny98f5sR6w=="></script>
  </head>
  <body data-template-id="__page-root" class="w-full" style="background: rgb(247, 246, 239);">
-  <!-- 已移除 NAVI 上方的黃色 BAR -->
   <header class="sticky top-0 z-50 border-b border-white/10 bg-[#103b36]/95 backdrop-blur">
    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4" aria-label="主要導覽">
     <a href="#home" data-template-id="brand-name" class="canva-text focus-ring display text-xl font-extrabold tracking-tight text-white flex items-center" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">
@@ -51,7 +50,6 @@
 
     <div class="flex items-center gap-3 desktop-nav">
       <a href="#consult" data-template-id="nav-consult" class="canva-button focus-ring rounded-full px-5 py-2 text-sm font-bold transition hover:brightness-95" style="background: rgb(201, 239, 99); color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">免費諮詢</a> 
-      <!-- 更新：將按鈕改為與 Nav 底色一致的透明底，加上白色外框與白色文字 -->
       <a href="https://www.give-circle.com" target="_blank" class="canva-button focus-ring rounded-full border-2 border-white bg-transparent px-5 py-2 text-sm font-bold text-white transition hover:bg-white/10" style="font-weight: 700; font-style: normal; font-size: 16px;">進入GC圈</a>
     </div>
 
@@ -401,7 +399,6 @@
     </div>
    </section>
 
-   <!-- 更新：調整表單欄位順序與必填設定 -->
    <section id="consult" class="bg-[#246b57] py-24">
     <div class="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-2">
      <div>
@@ -412,23 +409,18 @@
      
      <form id="consult-form" class="rounded-[2rem] bg-white p-7 shadow-xl" novalidate="">
       
-      <!-- 1. 公司名稱 -->
       <label class="canva-text mb-2 block text-sm font-bold" for="company" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">公司名稱 *</label> 
       <input id="company" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="text" required=""> 
       
-      <!-- 2. 姓名 -->
       <label data-template-id="name-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="name" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">姓名 *</label> 
       <input id="name" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="text" required=""> 
       
-      <!-- 3. 電話 -->
       <label class="canva-text mb-2 mt-5 block text-sm font-bold" for="phone" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">電話 *</label> 
       <input id="phone" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="tel" required=""> 
       
-      <!-- 4. Email -->
       <label data-template-id="email-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="email" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">Email *</label> 
       <input id="email" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" type="email" required=""> 
       
-      <!-- 5. 希望收到的回覆方式 -->
       <label class="canva-text mb-2 mt-5 block text-sm font-bold" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">希望收到的回覆方式 *</label>
       <div class="flex gap-6 mb-4">
         <label class="flex items-center gap-2 cursor-pointer font-semibold text-[#103b36]">
@@ -436,6 +428,10 @@
         </label>
         <label class="flex items-center gap-2 cursor-pointer font-semibold text-[#103b36]">
           <input type="checkbox" id="contact_line" value="line" class="w-4 h-4 text-[#246b57] rounded focus-ring"> LINE
+        </label>
+        <!-- 新增電話選項 -->
+        <label class="flex items-center gap-2 cursor-pointer font-semibold text-[#103b36]">
+          <input type="checkbox" id="contact_phone" value="phone" class="w-4 h-4 text-[#246b57] rounded focus-ring"> 電話
         </label>
       </div>
 
@@ -445,7 +441,6 @@
         <p class="text-xs font-bold text-[#ff715b] mt-2">＊請確認已開放「允許利用 ID 加入好友」功能</p>
       </div>
 
-      <!-- 6. 諮詢內容 -->
       <label data-template-id="message-label" class="canva-text mb-2 mt-5 block text-sm font-bold" for="message" style="color: rgb(16, 59, 54); font-weight: 700; font-style: normal; font-size: 16px;">諮詢內容 *</label> 
       <textarea id="message" class="focus-ring w-full rounded-xl border border-[#103b36]/20 px-4 py-3" rows="4" required=""></textarea>
       
@@ -575,6 +570,7 @@
       
       const contactEmailChecked = document.getElementById('contact_email').checked;
       const contactLineChecked = document.getElementById('contact_line').checked;
+      const contactPhoneChecked = document.getElementById('contact_phone').checked;
       const lineId = document.getElementById('line_id').value.trim();
 
       if (!company || !name || !phone || !email || !/^\S+@\S+\.\S+$/.test(email) || !rawMessage) {
@@ -583,7 +579,7 @@
         return;
       }
       
-      if (!contactEmailChecked && !contactLineChecked) {
+      if (!contactEmailChecked && !contactLineChecked && !contactPhoneChecked) {
         status.textContent = '請至少勾選一種希望收到的回覆方式。';
         status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
         return;
@@ -604,13 +600,12 @@
       let contactMethods = [];
       if (contactEmailChecked) contactMethods.push('信箱');
       if (contactLineChecked) contactMethods.push(`LINE (ID: ${lineId})`);
+      if (contactPhoneChecked) contactMethods.push('電話');
       
-      // 更新：將新欄位加入最終訊息文字中
       const finalMessage = `[公司名稱：${company}]\n[電話：${phone}]\n[希望的回覆方式：${contactMethods.join(' / ')}]\n\n${rawMessage}`;
 
       pendingFormData = { name, email, message: finalMessage };
 
-      // 更新：彈窗顯示新欄位
       confirmContent.innerHTML = `
         <p><strong>公司名稱：</strong>${company}</p>
         <p><strong>姓名：</strong>${name}</p>
