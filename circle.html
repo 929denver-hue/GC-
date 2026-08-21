@@ -242,7 +242,37 @@ GC圈 GiveCircle
 
 <a class="nav-link focus-ring" href="#about">認識GC圈</a>
 <a class="nav-link focus-ring" href="#pain">企業痛點</a>
-<a class="nav-link focus-ring" href="#plans">合作方案</a>
+
+<!-- 修改目標：合作方案桌機下拉選單 -->
+<div class="group relative flex items-center gap-1 py-4 -my-4 cursor-pointer">
+  <a class="nav-link focus-ring flex items-center gap-1" href="#plans">
+    合作方案 <span class="text-[12px] text-white/80 transition-colors group-hover:text-white">▼</span>
+  </a>
+  <div class="absolute left-1/2 top-full -translate-x-1/2 pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+    <div class="w-[320px] rounded-[16px] bg-white p-3 shadow-xl border border-[#1a365d]/10">
+      <a href="#scenario" class="flex items-start gap-4 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d]">
+          <i data-lucide="sparkles" width="20" height="20"></i>
+        </div>
+        <div class="text-left">
+          <p class="text-[16px] font-extrabold text-[#1a365d]">幫我找到適合方案</p>
+          <p class="mt-0.5 text-sm text-[#4a6b9c]">回答 1 個問題，快速推薦</p>
+        </div>
+      </a>
+      <a href="#plans" class="flex items-start gap-4 rounded-xl p-3 transition hover:bg-[#f7f6ef] mt-1">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e8eadc] text-[#1a365d]">
+          <i data-lucide="layout-grid" width="20" height="20"></i>
+        </div>
+        <div class="text-left">
+          <p class="text-[16px] font-extrabold text-[#1a365d]">查看全部方案</p>
+          <p class="mt-0.5 text-sm text-[#4a6b9c]">比較 Free、Pro、Group</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+<!-- 修改目標結束 -->
+
 <a class="nav-link focus-ring" href="#media">媒體報導</a>
 
 </div>
@@ -288,7 +318,25 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
 
 <a href="#about">認識GC圈</a>
 <a href="#pain">企業痛點</a>
-<a href="#plans">合作方案</a>
+
+<!-- 修改目標：合作方案手機折疊選單 -->
+<div>
+  <button type="button" id="mobile-plans-toggle" class="flex w-full items-center justify-between font-bold text-white focus:outline-none">
+    合作方案 <span id="mobile-plans-arrow" class="transition-transform duration-200 text-[12px] text-white/80">▼</span>
+  </button>
+  <div id="mobile-plans-menu" class="hidden mt-4 grid gap-4 pl-4 border-l-2 border-white/20">
+    <a href="#scenario" class="block">
+      <p class="text-[15px] font-extrabold text-[#f5be13]">幫我找到適合方案</p>
+      <p class="mt-1 text-[13px] font-normal text-white/70">回答 1 個問題，快速推薦</p>
+    </a>
+    <a href="#plans" class="block">
+      <p class="text-[15px] font-extrabold text-white">查看全部方案</p>
+      <p class="mt-1 text-[13px] font-normal text-white/70">比較 Free、Pro、Group</p>
+    </a>
+  </div>
+</div>
+<!-- 修改目標結束 -->
+
 <a href="#media">媒體報導</a>
 
 <a
@@ -613,7 +661,7 @@ ESG公益行動無法轉化為品牌信任或實際銷量。透明的永續績�
 
 <section
 id="scenario"
-class="bg-[#f7f6ef] py-24"
+class="bg-[#f7f6ef] py-24 scroll-mt-24"
 >
 
 <div class="mx-auto max-w-7xl px-5">
@@ -741,7 +789,7 @@ class="scenario-card mt-8 overflow-hidden rounded-[2rem] border border-[#1a365d]
 
 <section
 id="plans"
-class="bg-[#f0f3e9] py-24"
+class="bg-[#f0f3e9] py-24 scroll-mt-24"
 >
 
 <div class="mx-auto max-w-7xl px-5">
@@ -949,8 +997,7 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 
 </div>
 
-<!-- ===== 第 1/2 段結束；第 2/2 段直接接在這一行下面 ===== -->
-  <!-- ===============================
+<!-- ===============================
      功能比較表
 ================================ -->
 
@@ -1641,6 +1688,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileNav =
     document.getElementById('mobile-nav');
 
+  const mobilePlansToggle =
+    document.getElementById('mobile-plans-toggle');
+
+  const mobilePlansMenu =
+    document.getElementById('mobile-plans-menu');
+
+  const mobilePlansArrow =
+    document.getElementById('mobile-plans-arrow');
+
 
   if (menuButton && mobileNav) {
 
@@ -1655,7 +1711,6 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
     });
-
 
     mobileNav
       .querySelectorAll('a')
@@ -1674,6 +1729,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       });
 
+  }
+
+  if (mobilePlansToggle && mobilePlansMenu && mobilePlansArrow) {
+    mobilePlansToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      mobilePlansMenu.classList.toggle('hidden');
+      mobilePlansArrow.classList.toggle('rotate-180');
+    });
   }
 
 
