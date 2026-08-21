@@ -24,9 +24,9 @@
     .solution-card { border-top:4px solid var(--lime); }
     .solution-card:hover { transform:translateY(-5px); box-shadow:0 18px 45px rgba(16,59,54,.12); }
     .focus-ring:focus-visible { outline:3px solid var(--lime); outline-offset:3px; }
-    
+   
     .news-card:hover h3 { color: var(--lime); transition: color 0.3s ease; }
-    
+   
     @media(max-width:900px){ .desktop-nav{display:none}.mobile-toggle{display:inline-flex} }
     @media(min-width:901px){ .mobile-toggle,.mobile-nav{display:none!important} }
   </style>
@@ -36,10 +36,11 @@
   <header class="sticky top-0 z-50 border-b border-white/10 bg-[#103b36]/95 backdrop-blur">
    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4" aria-label="主要導覽">
     <a href="#home" data-template-id="brand-name" class="canva-text focus-ring display text-xl font-extrabold tracking-tight text-white flex items-center" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">
-     <img src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-39-18-044LtOL4RJuIQWOuQVN7Yncno26F2F4eAwu9c96p.png" alt="GC圈 Logo" class="h-8 w-auto mr-3 object-contain">
+     <!-- 這是修改過的主視覺圖片，加入了 mix-blend-screen 效果融合背景 -->
+     <img src="贈物網-APP LOGO-220122-OL-01.jpg" alt="GC圈 主視覺" class="h-10 w-auto mr-3 object-contain mix-blend-screen opacity-90">
      GC圈   GiveCircle
     </a>
-    
+   
     <div class="desktop-nav flex items-center gap-6 text-[18px] font-bold text-white/80">
      <a class="nav-link focus-ring" href="#about">認識GC圈</a> 
      <a class="nav-link focus-ring" href="#pain">企業痛點</a> 
