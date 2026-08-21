@@ -244,12 +244,12 @@ GC圈 GiveCircle
 <a class="nav-link focus-ring" href="#pain">企業痛點</a>
 
 <!-- 合作方案桌機下拉選單 -->
-<div class="group relative flex items-center gap-1 py-4 -my-4 cursor-pointer">
+<div class="group relative flex cursor-pointer items-center gap-1 py-4 -my-4">
   <a class="nav-link focus-ring flex items-center gap-1" href="#plans">
     合作方案 <span class="text-[12px] text-white/80 transition-colors group-hover:text-white">▼</span>
   </a>
-  <div class="absolute left-1/2 top-full -translate-x-1/2 pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-    <div class="w-[320px] rounded-[16px] bg-white p-3 shadow-xl border border-[#1a365d]/10">
+  <div class="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+    <div class="w-[320px] rounded-[16px] border border-[#1a365d]/10 bg-white p-3 shadow-xl">
       <a href="#scenario" class="flex items-start gap-4 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
         <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d]">
           <i data-lucide="sparkles" width="20" height="20"></i>
@@ -259,7 +259,7 @@ GC圈 GiveCircle
           <p class="mt-0.5 text-sm text-[#4a6b9c]">回答 1 個問題，快速推薦</p>
         </div>
       </a>
-      <a href="#plans" class="flex items-start gap-4 rounded-xl p-3 transition hover:bg-[#f7f6ef] mt-1">
+      <a href="#plans" class="mt-1 flex items-start gap-4 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
         <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e8eadc] text-[#1a365d]">
           <i data-lucide="layout-grid" width="20" height="20"></i>
         </div>
@@ -321,9 +321,9 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
 <!-- 合作方案手機折疊選單 -->
 <div>
   <button type="button" id="mobile-plans-toggle" class="flex w-full items-center justify-between font-bold text-white focus:outline-none">
-    合作方案 <span id="mobile-plans-arrow" class="transition-transform duration-200 text-[12px] text-white/80">▼</span>
+    合作方案 <span id="mobile-plans-arrow" class="text-[12px] text-white/80 transition-transform duration-200">▼</span>
   </button>
-  <div id="mobile-plans-menu" class="hidden mt-4 grid gap-4 pl-4 border-l-2 border-white/20">
+  <div id="mobile-plans-menu" class="hidden mt-4 grid gap-4 border-l-2 border-white/20 pl-4">
     <a href="#scenario" class="block">
       <p class="text-[15px] font-extrabold text-[#f5be13]">幫我找到適合方案</p>
       <p class="mt-1 text-[13px] font-normal text-white/70">回答 1 個問題，快速推薦</p>
@@ -378,12 +378,13 @@ alt="企業團隊"
 GC圈 台灣最大的免費物資共享社群平台 企業服務
 </p>
 
-<h1 class="display max-w-3xl text-[52px] font-extrabold leading-[1.08] tracking-tight text-white">
+<!-- 更新：大標題響應式設定 md:text-[52px] -->
+<h1 class="display max-w-3xl text-[36px] md:text-[52px] font-extrabold leading-[1.08] tracking-tight text-white">
 您的品牌永續顧問<br>
 一站式企業閒置資產轉化專家
 </h1>
 
-<p class="mt-7 max-w-2xl text-[19px] leading-8 text-white/85">
+<p class="mt-7 max-w-2xl text-[17px] md:text-[19px] leading-8 text-white/85">
 打造循環經濟與 ESG 的雙贏競爭力，讓每一件閒置物開啟品牌新故事。
 </p>
 
@@ -420,23 +421,24 @@ class="focus-ring rounded-full border border-white/50 px-7 py-4 font-bold text-w
 <div class="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-y divide-[#1a365d]/15 px-5 md:grid-cols-4 md:divide-y-0">
 
 <div class="p-5">
-<strong class="display block text-[39px] font-extrabold">14萬＋</strong>
-<span class="mt-2 block text-[17px]">活躍會員</span>
+<!-- 更新：數字與文字的響應式設定 -->
+<strong class="display block text-[28px] md:text-[39px] font-extrabold">14萬＋</strong>
+<span class="mt-2 block text-[15px] md:text-[17px]">活躍會員</span>
 </div>
 
 <div class="p-5">
-<strong class="display block text-[39px] font-extrabold">600＋</strong>
-<span class="mt-2 block text-[17px]">合作社福與偏鄉學校</span>
+<strong class="display block text-[28px] md:text-[39px] font-extrabold">600＋</strong>
+<span class="mt-2 block text-[15px] md:text-[17px]">合作社福與偏鄉學校</span>
 </div>
 
 <div class="p-5">
-<strong class="display block text-[39px] font-extrabold">33億＋</strong>
-<span class="mt-2 block text-[17px]">創造循環物資總價值</span>
+<strong class="display block text-[28px] md:text-[39px] font-extrabold">33億＋</strong>
+<span class="mt-2 block text-[15px] md:text-[17px]">創造循環物資總價值</span>
 </div>
 
 <div class="p-5">
-<strong class="display block text-[39px] font-extrabold">平均96秒</strong>
-<span class="mt-2 block text-[17px]">達成一次高效媒合</span>
+<strong class="display block text-[28px] md:text-[39px] font-extrabold">平均96秒</strong>
+<span class="mt-2 block text-[15px] md:text-[17px]">達成一次高效媒合</span>
 </div>
 
 </div>
@@ -461,7 +463,8 @@ class="mx-auto max-w-7xl px-5 py-24"
 ABOUT GC圈
 </p>
 
-<h2 class="display mt-4 text-[40px] font-extrabold leading-tight">
+<!-- 更新：段落標題響應式設定 -->
+<h2 class="display mt-4 text-[32px] md:text-[40px] font-extrabold leading-tight">
 不只是平台工具，<br>
 更是企業的品牌永續顧問。
 </h2>
@@ -539,7 +542,7 @@ class="bg-[#1a365d] py-24 text-white"
 CHALLENGES → SOLUTIONS
 </p>
 
-<h2 class="display mt-4 text-[40px] font-extrabold leading-tight">
+<h2 class="display mt-4 text-[32px] md:text-[40px] font-extrabold leading-tight">
 企業痛點，GC圈的循環解方
 </h2>
 
@@ -670,7 +673,7 @@ class="bg-[#f7f6ef] py-24 scroll-mt-24"
 OUTCOME PREVIEW
 </p>
 
-<h2 class="display mt-4 text-[40px] font-extrabold leading-tight">
+<h2 class="display mt-4 text-[32px] md:text-[40px] font-extrabold leading-tight">
 你現在最想解決哪一件事？
 </h2>
 
@@ -798,7 +801,7 @@ class="bg-[#f0f3e9] py-24 scroll-mt-24"
 PARTNERSHIP PLANS
 </p>
 
-<h2 class="display mt-4 text-[40px] font-extrabold">
+<h2 class="display mt-4 text-[32px] md:text-[40px] font-extrabold">
 選擇適合您的永續行動方案
 </h2>
 
@@ -996,16 +999,16 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 </div>
 
 <!-- ===============================
-     功能比較表
+     響應式功能比較表（手機卡片式 / 桌機表格）
 ================================ -->
 
 <div class="mt-10 overflow-hidden rounded-3xl border border-[#1a365d]/15 bg-white shadow-sm">
 
-<div class="overflow-x-auto">
+<!-- 手機版不再需要左右滑動 (移除 overflow-x-auto 和 min-w) -->
+<div class="w-full">
 
-<div class="min-w-[680px]">
-
-<div class="grid grid-cols-[1.2fr_2fr_1fr_1fr_1fr] bg-[#1a365d] p-4 text-center text-[16px] font-bold text-white">
+<!-- 桌機專用表頭 -->
+<div class="hidden md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] bg-[#1a365d] p-4 text-center text-[16px] font-bold text-white">
 <span>模組</span>
 <span>功能說明</span>
 <span>免費版</span>
@@ -1013,47 +1016,71 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 <span>Group</span>
 </div>
 
-<div class="grid grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-center border-b bg-white p-4 text-center text-[15px] text-[#1a365d]">
-<span class="font-bold">循環共享</span>
-<span class="text-left">一般贈送・快速贈送・物品募集・贈物管理</span>
-<span class="font-sans text-[20px]">✓</span>
-<span class="font-sans text-[20px]">✓</span>
-<span class="font-sans text-[20px]">✓</span>
+<!-- Row 1 -->
+<div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-white text-[#1a365d] gap-3 md:gap-0">
+  <div class="flex flex-col text-left md:text-center md:block w-full">
+    <span class="font-bold text-[16px] md:text-[15px]">循環共享</span>
+    <span class="text-[14px] mt-1 md:mt-0 md:text-[15px] text-[#4a6b9c] md:text-[#1a365d] block md:inline">一般贈送・快速贈送・物品募集・贈物管理</span>
+  </div>
+  <div class="grid grid-cols-3 text-center md:contents w-full rounded-xl bg-[#f7f8f4] md:bg-transparent p-3 md:p-0">
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">免費版</span><span class="font-sans text-[20px]">✓</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Pro</span><span class="font-sans text-[20px]">✓</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Group</span><span class="font-sans text-[20px]">✓</span></div>
+  </div>
 </div>
 
-<div class="grid grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-center border-b bg-[#f7f8f4] p-4 text-center text-[15px] text-[#1a365d]">
-<span class="font-bold">ESG/SDGs</span>
-<span class="text-left">主頁減碳數據・永續報表・減碳證書</span>
-<span class="font-sans text-[18px] text-[#b8bfba]">—</span>
-<span class="font-sans text-[20px]">✓</span>
-<span class="font-sans text-[20px]">✓</span>
+<!-- Row 2 -->
+<div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-[#f7f8f4] text-[#1a365d] gap-3 md:gap-0">
+  <div class="flex flex-col text-left md:text-center md:block w-full">
+    <span class="font-bold text-[16px] md:text-[15px]">ESG/SDGs</span>
+    <span class="text-[14px] mt-1 md:mt-0 md:text-[15px] text-[#4a6b9c] md:text-[#1a365d] block md:inline">主頁減碳數據・永續報表・減碳證書</span>
+  </div>
+  <div class="grid grid-cols-3 text-center md:contents w-full rounded-xl bg-white md:bg-transparent p-3 md:p-0">
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">免費版</span><span class="font-sans text-[18px] text-[#b8bfba]">—</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Pro</span><span class="font-sans text-[20px]">✓</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Group</span><span class="font-sans text-[20px]">✓</span></div>
+  </div>
 </div>
 
-<div class="grid grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-center border-b bg-white p-4 text-center text-[15px] text-[#1a365d]">
-<span class="font-bold">品牌曝光</span>
-<span class="text-left">官方認證・品牌頁・品牌好物曝光</span>
-<span class="font-sans text-[18px] text-[#b8bfba]">—</span>
-<span class="font-sans text-[20px]">✓</span>
-<span class="font-sans text-[20px]">✓</span>
+<!-- Row 3 -->
+<div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-white text-[#1a365d] gap-3 md:gap-0">
+  <div class="flex flex-col text-left md:text-center md:block w-full">
+    <span class="font-bold text-[16px] md:text-[15px]">品牌曝光</span>
+    <span class="text-[14px] mt-1 md:mt-0 md:text-[15px] text-[#4a6b9c] md:text-[#1a365d] block md:inline">官方認證・品牌頁・品牌好物曝光</span>
+  </div>
+  <div class="grid grid-cols-3 text-center md:contents w-full rounded-xl bg-[#f7f8f4] md:bg-transparent p-3 md:p-0">
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">免費版</span><span class="font-sans text-[18px] text-[#b8bfba]">—</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Pro</span><span class="font-sans text-[20px]">✓</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Group</span><span class="font-sans text-[20px]">✓</span></div>
+  </div>
 </div>
 
-<div class="grid grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-center border-b bg-[#f7f8f4] p-4 text-center text-[15px] text-[#1a365d]">
-<span class="font-bold">團隊共創</span>
-<span class="text-left">邀請碼・共同累積數據・管理員帳號・企業講座</span>
-<span class="font-sans text-[18px] text-[#b8bfba]">—</span>
-<span class="font-sans text-[18px] text-[#b8bfba]">—</span>
-<span class="font-sans text-[20px]">✓</span>
+<!-- Row 4 -->
+<div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-[#f7f8f4] text-[#1a365d] gap-3 md:gap-0">
+  <div class="flex flex-col text-left md:text-center md:block w-full">
+    <span class="font-bold text-[16px] md:text-[15px]">團隊共創</span>
+    <span class="text-[14px] mt-1 md:mt-0 md:text-[15px] text-[#4a6b9c] md:text-[#1a365d] block md:inline">邀請碼・共同累積數據・管理員帳號・企業講座</span>
+  </div>
+  <div class="grid grid-cols-3 text-center md:contents w-full rounded-xl bg-white md:bg-transparent p-3 md:p-0">
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">免費版</span><span class="font-sans text-[18px] text-[#b8bfba]">—</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Pro</span><span class="font-sans text-[18px] text-[#b8bfba]">—</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Group</span><span class="font-sans text-[20px]">✓</span></div>
+  </div>
 </div>
 
-<div class="grid grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-center bg-white p-4 text-center text-[15px] text-[#1a365d]">
-<span class="font-bold">啟動方式</span>
-<span class="text-left">自助註冊</span>
-<span class="font-bold">免費</span>
-<span class="font-bold">自行開通</span>
-<span class="font-bold">專案報價</span>
+<!-- Row 5 -->
+<div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center p-4 md:text-center text-[15px] bg-white text-[#1a365d] gap-3 md:gap-0">
+  <div class="flex flex-col text-left md:text-center md:block w-full">
+    <span class="font-bold text-[16px] md:text-[15px]">啟動方式</span>
+    <span class="text-[14px] mt-1 md:mt-0 md:text-[15px] text-[#4a6b9c] md:text-[#1a365d] block md:inline">自助註冊</span>
+  </div>
+  <div class="grid grid-cols-3 text-center md:contents w-full rounded-xl bg-[#f7f8f4] md:bg-transparent p-3 md:p-0">
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">免費版</span><span class="font-bold">免費</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Pro</span><span class="font-bold">自行開通</span></div>
+    <div class="flex flex-col md:block items-center justify-center"><span class="md:hidden text-[13px] font-bold mb-1 text-[#4a6b9c]">Group</span><span class="font-bold">專案報價</span></div>
+  </div>
 </div>
 
-</div>
 </div>
 </div>
 
@@ -1065,13 +1092,15 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
      合作夥伴 / 媒體 / 獲獎
 ================================ -->
 
+<div id="media" class="scroll-mt-24">
+
 <section class="mx-auto max-w-7xl px-5 py-24">
 
 <p class="section-kicker text-[16px]">
 TRUSTED BY PARTNERS
 </p>
 
-<h2 class="display mt-4 text-[40px] font-extrabold">
+<h2 class="display mt-4 text-[32px] md:text-[40px] font-extrabold">
 跨產業一起，把永續做成日常
 </h2>
 
@@ -1156,8 +1185,9 @@ class="h-12 w-auto object-contain mix-blend-multiply"
 <div class="mt-20 grid gap-10 lg:grid-cols-2">
 
 
-<!-- 媒體：精準錨點定位 -->
-<div id="media" class="scroll-mt-24">
+<!-- 媒體 -->
+
+<div>
 
 <p class="section-kicker text-[16px]">
 IN THE NEWS
@@ -1328,6 +1358,8 @@ height="20">
 
 </section>
 
+</div>
+
 
 <!-- ===============================
      企業諮詢
@@ -1347,7 +1379,8 @@ class="bg-[#1a365d] py-24"
 START A CONVERSATION
 </p>
 
-<h2 class="display mt-4 text-[42px] font-extrabold leading-tight text-white">
+<!-- 更新：大標題響應式設定 md:text-[42px] -->
+<h2 class="display mt-4 text-[32px] md:text-[42px] font-extrabold leading-tight text-white">
 讓每一件閒置物，<br>
 成為品牌的新故事。
 </h2>
