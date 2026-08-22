@@ -315,7 +315,6 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
 
 <div class="grid gap-4 text-sm font-bold text-white">
 
-<!-- 補上 data-mobile-menu-close 標籤 -->
 <a href="#about" data-mobile-menu-close>認識GC圈</a>
 <a href="#pain" data-mobile-menu-close>企業痛點</a>
 
@@ -564,7 +563,7 @@ CHALLENGES → SOLUTIONS
 
 <div class="mt-5 border-t border-[#1a365d]/20 pt-4">
 <strong class="text-[16px] text-[#1a365d]">
-成果：降低倉儲與報廢成本，獲取潛在客戶流量。
+成果：降低倉儲與報廢成本，獲取潛客戶流量。
 </strong>
 </div>
 
@@ -2137,12 +2136,6 @@ consultForm.addEventListener('submit', event => {
       return;
     }
 
-    if (totalRows >= 999) {
-      status.textContent = '目前諮詢資料已達上限，請稍後再試。';
-      status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
-      return;
-    }
-
     let contactMethods = [];
     if (contactEmailChecked) contactMethods.push('信箱');
     if (contactLineChecked) contactMethods.push(`LINE (ID: ${lineId})`);
@@ -2150,7 +2143,16 @@ consultForm.addEventListener('submit', event => {
 
     const finalMessage = `[公司名稱：${company}]\n[電話：${phone}]\n[希望的回覆方式：${contactMethods.join(' / ')}]\n\n${rawMessage}`;
 
-    pendingFormData = { name, email, message:finalMessage };
+    const mailtoSubject = encodeURIComponent(`【企業合作諮詢】${company} - ${name}`);
+    const mailtoBody = encodeURIComponent(`您好，\n\n這是一封來自 GC 圈企業服務網站的諮詢：\n\n${finalMessage}\n\n---\n本信件由系統表單產生。`);
+
+    pendingFormData = { 
+        name, 
+        email, 
+        message: finalMessage,
+        mailtoSubject,
+        mailtoBody
+    };
 
     confirmContent.innerHTML = `
       <p><strong>公司名稱：</strong> ${escapeHtml(company)}</p>
@@ -2174,7 +2176,7 @@ btnEdit.addEventListener('click', () => {
 });
 
 /* ===============================
-   確認送出
+   確認送出 (整合 mailto 備援寄信至 shin@give-circle.com)
 ================================ */
 btnFinalSubmit.addEventListener('click', async () => {
     if (!pendingFormData) return;
@@ -2185,33 +2187,47 @@ btnFinalSubmit.addEventListener('click', async () => {
     submitButton.disabled = true;
     submitButton.style.opacity = '.65';
 
-    status.textContent = '正在送出您的諮詢…';
+    status.textContent = '正在送出並準備寄發信件…';
     status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#1a365d]';
 
-    const result = await window.dataSdk.create({
-        name: pendingFormData.name,
-        email: pendingFormData.email,
-        message: pendingFormData.message,
-        submitted_at: new Date().toISOString()
-    });
+    try {
+        const result = await window.dataSdk.create({
+            name: pendingFormData.name,
+            email: pendingFormData.email,
+            message: pendingFormData.message,
+            submitted_at: new Date().toISOString()
+        });
 
-    submitButton.disabled = false;
-    submitButton.style.opacity = '1';
-
-    if (result.isOk) {
-      consultForm.reset();
-      document.getElementById('line-input-group').classList.add('hidden');
-      status.innerHTML = `
-        <strong class="text-lg">企業諮詢已成功送出</strong><br>
-        感謝您的來信，我們已收到您的企業合作諮詢。<br>
-        Give-Circle 團隊將確認您的需求，並由專人與您聯繫。<br>
-        請留意您填寫的聯絡方式。謝謝～
-      `;
-      status.className = 'mt-4 text-sm font-semibold text-[#1a365d] leading-relaxed';
-      pendingFormData = null;
-    } else {
-      status.textContent = '送出未成功，請稍後再試。';
-      status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318]';
+        if (result && result.isOk) {
+            // 寫入 SDK 成功後，自動喚起信件軟體發信給指定信箱
+            window.location.href = `mailto:shin@give-circle.com?subject=${pendingFormData.mailtoSubject}&body=${pendingFormData.mailtoBody}`;
+            
+            consultForm.reset();
+            document.getElementById('line-input-group')?.classList.add('hidden');
+            
+            status.innerHTML = `
+                <strong class="text-lg">企業諮詢已成功記錄，並正為您開啟信件軟體</strong><br>
+                系統已記錄您的需求。為確保專人即時受理，請於開啟的信件軟體中直接點擊「傳送」寄出信件。<br>
+                若信箱軟體未自動開啟，請直接來信至：<a href="mailto:shin@give-circle.com" class="underline font-bold text-[#1a365d]">shin@give-circle.com</a>
+            `;
+            status.className = 'mt-4 text-sm font-semibold text-[#1a365d] leading-relaxed';
+            pendingFormData = null;
+        } else {
+            throw new Error('DataSdk write failed');
+        }
+    } catch(err) {
+        // SDK 寫入失敗時的降級備援機制，依然喚起信件軟體
+        window.location.href = `mailto:shin@give-circle.com?subject=${pendingFormData.mailtoSubject}&body=${pendingFormData.mailtoBody}`;
+        
+        status.innerHTML = `
+            系統連線繁忙，但我們已為您準備好信件內容。<br>
+            請直接在自動開啟的信箱軟體中點擊「傳送」寄給我們。<br>
+            若無自動開啟，請將內容寄至：<a href="mailto:shin@give-circle.com" class="underline font-bold text-[#1a365d]">shin@give-circle.com</a>
+        `;
+        status.className = 'mt-4 min-h-6 text-sm font-semibold text-[#b42318] leading-relaxed';
+    } finally {
+        submitButton.disabled = false;
+        submitButton.style.opacity = '1';
     }
 });
 
