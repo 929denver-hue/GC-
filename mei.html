@@ -59,7 +59,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 0 auto; /* 關鍵修正：確保桌機版左右自動留白置中 */
+            margin: 0 auto;
         }
 
         .hidden { display: none !important; }
@@ -167,6 +167,39 @@
         .btn-main { font-family: 'Ma Shan Zheng'; font-size: 1.5rem; letter-spacing: 3px; margin-bottom: 4px; color: var(--gold-glow); }
         .btn-sub { font-size: 0.9rem; font-family: 'Noto Serif TC'; opacity: 0.9; letter-spacing: 1px; color: #eee; }
 
+        /* ================= 新增：影片彈出視窗樣式 ================= */
+        .clickable-title {
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        .clickable-title:active {
+            transform: scale(0.98);
+        }
+        .video-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .video-modal.show {
+            opacity: 1; pointer-events: auto;
+        }
+        .modal-content {
+            position: relative;
+            background: #000;
+            padding: 40px 10px 10px 10px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .close-video-btn {
+            position: absolute; top: 5px; right: 15px;
+            color: #fff; font-size: 28px; cursor: pointer;
+            font-family: sans-serif; line-height: 1;
+        }
+        /* ========================================================= */
+
         @media (min-width: 768px) {
             .result-layout { flex-direction: row; align-items: flex-start; gap: 60px; }
             .nav-back-btn { margin-left: 20px; font-size: 1.2rem; }
@@ -177,8 +210,11 @@
     <div class="navbar"><div class="nav-back-btn" onclick="goBack()"><span>❮</span> 返回</div></div>
 
     <div id="page-home" class="container fade-in">
-        <h1 class="main-title">觀易・知命</h1>
-        <div class="subtitle">邱愛美・易經生命哲學</div>
+        <!-- 修改部分：將標題包入 clickable-title 區塊中 -->
+        <div class="clickable-title" onclick="openVideo()">
+            <h1 class="main-title">觀易・知命</h1>
+            <div class="subtitle">邱愛美・易經生命哲學</div>
+        </div>
         <div class="menu-btn-group">
             <div class="circle-btn" onclick="goToPage('input')">詢</div>
             <div class="circle-btn" onclick="goToPage('turtle')">演</div>
@@ -229,6 +265,16 @@
         </div>
     </div>
 
+    <!-- 新增部分：影片彈出視窗結構 -->
+    <div id="yt-modal" class="video-modal">
+        <div class="modal-content">
+            <span class="close-video-btn" onclick="closeVideo()">✖</span>
+            <!-- YouTube Shorts 寬高通常比例為 315x560 左右 -->
+            <iframe id="yt-iframe" width="315" height="560" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+    </div>
+    <!-- ========================= -->
+
     <script>
         const iChingData = [
             null,
@@ -271,7 +317,7 @@
             { name: "風火家人", structure: "巽上離下", lines: [1,1,0,1,0,1], quote: "風自火出，家人；君子以言有物而行有恆。", keyword: "【 齊家之道 】", philosophy: "回歸基礎，穩固內部關係。檢視言行是否一致，先安內後攘外。家庭與團隊的核心價值是發展的基石，解決了內部的問題，外部的挑戰將迎刃而解。" },
             { name: "火澤睽", structure: "離上兌下", lines: [1,0,1,0,1,1], quote: "上火下澤，睽；君子以同而異。", keyword: "【 求同存異 】", philosophy: "人際疏離，觀點對立。不要強求完全一致，在大的目標上尋求共識，尊重彼此細節上的差異。利用不同的觀點來完善決策，而非製造衝突。" },
             { name: "水山蹇", structure: "坎上艮下", lines: [0,1,0,1,0,0], quote: "山上有水，蹇；君子以反身修德。", keyword: "【 險阻反省 】", philosophy: "進退兩難。與其怨天尤人，不如反求諸己。檢討不足，修養品德，提升能力。外部環境不可控，唯有提升自己的實力，才能在機會來臨時跨越障礙。" },
-            { name: "雷水解", structure: "震上坎下", lines: [0,0,1,0,1,0], quote: "雷雨作，解；君子以赦過宥罪。", keyword: "【 化解困局 】", philosophy: "鬱悶之氣一掃而空，困難解除。採取寬容態度，原諒過去的錯誤，讓一切重新開始。放下包袱，才能輕裝上陣，迎接新的局面。" },
+            { name: "雷水解", structure: "震上坎下", lines: [0,0,1,0,1,0], quote: "雷雨作，解；君子以赦過宥罪。", keyword: "【 化解困局 】", philosophy: "鬱悶之氣一掃而空，困難解除。採取寬容態度， sequence,原諒過去的錯誤，讓一切重新開始。放下包袱，才能輕裝上陣，迎接新的局面。" },
             { name: "山澤損", structure: "艮上兌下", lines: [1,0,0,0,1,1], quote: "山下有澤，損；君子以懲忿窒欲。", keyword: "【 減損欲望 】", philosophy: "減法智慧。減損憤怒與貪欲，犧牲短期利益或不良習慣，換取長遠的平安與德行增長。這是一個關於「投資」與「犧牲」的課題，小捨小得，大捨大得。" },
             { name: "風雷益", structure: "巽上震下", lines: [1,1,0,0,0,1], quote: "風雷，益；君子以見善則遷，有過則改。", keyword: "【 增益精進 】", philosophy: "快速成長的時刻。看到好的立刻學習，發現錯的馬上改正。積極主動，能獲得巨大進步。這是紅利期，請全力以赴，讓自己升級。" },
             { name: "澤天夬", structure: "兌上乾下", lines: [0,1,1,1,1,1], quote: "澤上於天，夬；君子以施祿及下，居德則忌。", keyword: "【 果斷決絕 】", philosophy: "必須做出決定的時刻。清除弊端需展現魄力，但執行時要公正無私，切忌居功自傲。這是一個「攤牌」的時刻，果斷切除不健康的連結。" },
@@ -310,8 +356,9 @@
             }
         }
         window.onpopstate = function(event) { if (event.state && event.state.page) goToPage(event.state.page, false); else goToPage('home', false); };
-        function goBack() { if (history.length > 1) history.back(); else goToPage('home'); }
         window.addEventListener('load', () => { history.replaceState({page: 'home'}, '', '#home'); });
+        
+        function goBack() { if (history.length > 1) history.back(); else goToPage('home'); }
         
         function resetState() {
             document.getElementById('num-input').value = '';
@@ -383,6 +430,24 @@
             // 建置中提示
             alert("【 系統建置中 】\n\n線上預約與支付功能即將上線，\n敬請期待邱老師的專業服務。");
         }
+
+        /* ================= 新增：控制影片彈出視窗的腳本 ================= */
+        function openVideo() {
+            const modal = document.getElementById('yt-modal');
+            const iframe = document.getElementById('yt-iframe');
+            // 注意：YouTube Shorts 需轉換為 embed 格式才能內嵌，並加上 autoplay=1 讓影片自動播放
+            iframe.src = "https://www.youtube.com/embed/4gQsdBlQn6o?autoplay=1";
+            modal.classList.add('show');
+        }
+
+        function closeVideo() {
+            const modal = document.getElementById('yt-modal');
+            const iframe = document.getElementById('yt-iframe');
+            // 清空 src 停止背景播放
+            iframe.src = "";
+            modal.classList.remove('show');
+        }
+        /* =============================================================== */
     </script>
 </body>
 </html>
