@@ -315,8 +315,9 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
 
 <div class="grid gap-4 text-sm font-bold text-white">
 
-<a href="#about">認識GC圈</a>
-<a href="#pain">企業痛點</a>
+<!-- 補上 data-mobile-menu-close 標籤 -->
+<a href="#about" data-mobile-menu-close>認識GC圈</a>
+<a href="#pain" data-mobile-menu-close>企業痛點</a>
 
 <!-- 合作方案手機折疊選單 -->
 <div>
@@ -339,6 +340,7 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
 href="https://www.give-circle.com"
 target="_blank"
 class="text-[#f5be13]"
+data-mobile-menu-close
 >
 進入GC圈
 </a>
@@ -1887,7 +1889,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return el;
     }
 
-    // 寬度較窄，選項一律用單欄排列
     function createOptions(buttonsHtml) {
       const el = document.createElement('div');
       el.className = `grid grid-cols-1 gap-3 pl-[42px] w-full chat-animate`;
@@ -1895,7 +1896,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return el;
     }
 
-    // 推薦結果卡片 (適應狹窄空間，垂直堆疊)
     function createResultCard(planType) {
       const res = data.results[planType];
       const bulletsHtml = res.bullets.map(b => `
@@ -1934,7 +1934,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearHighlight();
       
       chatHistory.appendChild(createBotBubble('嗨，我是 GC 圈企業方案小幫手。<br>我可以用 2 個簡單問題，幫你快速找到適合的合作方式。'));
-      lucide.createIcons(); // 動態插入 icon 後需重新初始化
+      lucide.createIcons(); 
       
       setTimeout(() => {
         chatHistory.appendChild(createBotBubble('你目前最想解決哪一件事？'));
