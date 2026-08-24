@@ -306,6 +306,14 @@ GC圈 GiveCircle
           <p class="text-[16px] font-extrabold text-[#1a365d]">查看全部方案</p>
         </div>
       </a>
+      <a href="#cases" class="mt-1 flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f7f6ef] text-[#1a365d]">
+          <i data-lucide="building-2" width="20" height="20"></i>
+        </div>
+        <div class="text-left">
+          <p class="text-[16px] font-extrabold text-[#1a365d]">看看企業怎麼使用 GC圈</p>
+        </div>
+      </a>
     </div>
   </div>
 </div>
@@ -367,6 +375,9 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
     </a>
     <a href="#plans" class="block py-1" data-mobile-menu-close>
       <p class="text-[15px] font-extrabold text-white">查看全部方案</p>
+    </a>
+    <a href="#cases" class="block py-1" data-mobile-menu-close>
+      <p class="text-[15px] font-extrabold text-white">看看企業怎麼使用 GC圈</p>
     </a>
   </div>
 </div>
@@ -705,7 +716,7 @@ class="bg-[#f7f6ef] py-24 scroll-mt-24"
     你現在最想解決哪一件事？
   </h2>
   <p class="mx-auto mt-5 text-[17px] leading-8 text-[#4a6b9c]">
-    不知道該選哪個方案嗎？讓 GC 圈企業方案小幫手為您快速診斷。<br>只要回答 2 個簡單問題，就能找到最適合的合作方式。
+    不知道該選哪個方案嗎？讓 GC圈 企業方案小幫手為您快速診斷。<br>只要回答 2 個簡單問題，就能找到最適合的合作方式。
   </p>
   
   <button 
@@ -1013,7 +1024,7 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 </section>
 
 
-<section class="mx-auto max-w-7xl px-5">
+<section id="cases" class="mx-auto max-w-7xl px-5 scroll-mt-24">
 
 <!-- ===============================
      企業實踐案例｜GC PRO × GC GROUP
@@ -1022,12 +1033,12 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 <div class="mt-10">
 
   <div class="max-w-3xl">
-    <p class="section-kicker text-[16px] text-[#1a365d]">ENTERPRISE PRACTICE</p>
+    <p class="section-kicker text-[16px] text-[#1a365d]">HOW COMPANIES USE GC</p>
     <h3 class="display mt-3 text-[28px] md:text-[34px] font-extrabold leading-tight text-[#1a365d]">
-      把日常需求，轉成循環成果
+      看看企業怎麼使用 GC圈
     </h3>
     <p class="mt-3 text-[16px] leading-7 text-[#4a6b9c]">
-      從品牌既有物資到員工參與，GC PRO 與 GC GROUP 讓企業依照自己的需求開始循環。
+      不同需求，用不同方式開始。從品牌既有物資的持續循環，到員工參與 ESG，看看企業如何透過 GC PRO 與 GC GROUP 將需求轉成實際成果。
     </p>
   </div>
 
@@ -1092,7 +1103,7 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
               覺醒家居／麗翔飯店公開案例 ↗
             </a>
             <a href="https://m.give-circle.com/user/133409/?VNK=b6471e39" target="_blank" rel="noopener noreferrer" class="text-[#4a6b9c] underline underline-offset-4 transition hover:text-[#f5be13]">
-              克麗緹娜平台實例 ↗
+              克麗緹娜平台實例 ↗ 
             </a>
           </div>
         </div>
@@ -2354,7 +2365,7 @@ consultForm.addEventListener('submit', event => {
     const finalMessage = `[公司名稱：${company}]\n[電話：${phone}]\n[希望的回覆方式：${contactMethods.join(' / ')}]\n\n${rawMessage}`;
 
     const mailtoSubject = encodeURIComponent(`【企業合作諮詢】${company} - ${name}`);
-    const mailtoBody = encodeURIComponent(`您好，\n\n這是一封來自 GC 圈企業服務網站的諮詢：\n\n${finalMessage}\n\n---\n本信件由系統表單產生。`);
+    const mailtoBody = encodeURIComponent(`您好，\n\n這是一封來自 GC圈 企業服務網站的諮詢：\n\n${finalMessage}\n\n---\n本信件由系統表單產生。`);
 
     pendingFormData = { 
         name, 
