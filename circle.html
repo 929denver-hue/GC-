@@ -286,7 +286,6 @@ body {
   background:#f5be13;
 }
 
-/* 修正 Tailwind flex 權重覆蓋問題，加上 !important */
 @media(max-width:900px) {
   .desktop-nav { display:none !important; }
   .mobile-toggle { display:inline-flex !important; }
@@ -377,54 +376,42 @@ GC圈 GiveCircle
 <!-- 合作方案桌機下拉選單 -->
 <div class="group relative flex cursor-pointer items-center gap-1 py-4 -my-4">
 
-  <a class="nav-link focus-ring flex items-center gap-1" href="#plans">
-    合作方案
-    <span class="text-[12px] text-white/80 transition-colors group-hover:text-white">▼</span>
-  </a>
+<a class="nav-link focus-ring flex items-center gap-1" href="#plans">
+合作方案
+<span class="text-[12px] text-white/80 transition-colors group-hover:text-white">▼</span>
+</a>
 
-  <div class="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+<div class="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
 
-    <div class="w-[240px] rounded-[16px] border border-[#1a365d]/10 bg-white p-3 shadow-xl">
+<div class="w-[240px] rounded-[16px] border border-[#1a365d]/10 bg-white p-3 shadow-xl">
 
-      <a href="#scenario" class="flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
+<a href="#scenario" class="flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
 
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d]">
-          <i data-lucide="sparkles" width="20" height="20"></i>
-        </div>
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d]">
+<i data-lucide="sparkles" width="20" height="20"></i>
+</div>
 
-        <div class="text-left">
-          <p class="text-[16px] font-extrabold text-[#1a365d]">幫我找到適合方案</p>
-        </div>
+<div class="text-left">
+<p class="text-[16px] font-extrabold text-[#1a365d]">幫我找到適合方案</p>
+</div>
 
-      </a>
+</a>
 
-      <a href="#plans" class="mt-1 flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
+<a href="#plans" class="mt-1 flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
 
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e8eadc] text-[#1a365d]">
-          <i data-lucide="layout-grid" width="20" height="20"></i>
-        </div>
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e8eadc] text-[#1a365d]">
+<i data-lucide="layout-grid" width="20" height="20"></i>
+</div>
 
-        <div class="text-left">
-          <p class="text-[16px] font-extrabold text-[#1a365d]">查看全部方案</p>
-        </div>
+<div class="text-left">
+<p class="text-[16px] font-extrabold text-[#1a365d]">查看全部方案</p>
+</div>
 
-      </a>
+</a>
 
-      <a href="#cases" class="mt-1 flex items-center gap-3 rounded-xl p-3 transition hover:bg-[#f7f6ef]">
+</div>
 
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f7f6ef] text-[#1a365d]">
-          <i data-lucide="building-2" width="20" height="20"></i>
-        </div>
-
-        <div class="text-left">
-          <p class="text-[16px] font-extrabold text-[#1a365d]">企業實際怎麼用 GC圈</p>
-        </div>
-
-      </a>
-
-    </div>
-
-  </div>
+</div>
 
 </div>
 
@@ -475,32 +462,29 @@ class="mobile-nav hidden border-t border-white/10 bg-[#1a365d] px-6 py-5"
 <a href="#pain" data-mobile-menu-close>企業痛點</a>
 
 <!-- 合作方案手機折疊選單 -->
+
 <div>
 
-  <button
-  type="button"
-  id="mobile-plans-toggle"
-  class="flex w-full items-center justify-between font-bold text-white focus:outline-none"
-  >
-    合作方案
-    <span id="mobile-plans-arrow" class="text-[12px] text-white/80 transition-transform duration-200">▼</span>
-  </button>
+<button
+type="button"
+id="mobile-plans-toggle"
+class="flex w-full items-center justify-between font-bold text-white focus:outline-none"
+>
+合作方案
+<span id="mobile-plans-arrow" class="text-[12px] text-white/80 transition-transform duration-200">▼</span>
+</button>
 
-  <div id="mobile-plans-menu" class="hidden mt-4 grid gap-3 border-l-2 border-white/20 pl-4">
+<div id="mobile-plans-menu" class="hidden mt-4 grid gap-3 border-l-2 border-white/20 pl-4">
 
-    <a href="#scenario" class="block py-1" data-mobile-menu-close>
-      <p class="text-[15px] font-extrabold text-[#f5be13]">幫我找到適合方案</p>
-    </a>
+<a href="#scenario" class="block py-1" data-mobile-menu-close>
+<p class="text-[15px] font-extrabold text-[#f5be13]">幫我找到適合方案</p>
+</a>
 
-    <a href="#plans" class="block py-1" data-mobile-menu-close>
-      <p class="text-[15px] font-extrabold text-white">查看全部方案</p>
-    </a>
+<a href="#plans" class="block py-1" data-mobile-menu-close>
+<p class="text-[15px] font-extrabold text-white">查看全部方案</p>
+</a>
 
-    <a href="#cases" class="block py-1" data-mobile-menu-close>
-      <p class="text-[15px] font-extrabold text-white">企業實際怎麼用 GC圈</p>
-    </a>
-
-  </div>
+</div>
 
 </div>
 
@@ -576,6 +560,7 @@ class="focus-ring rounded-full border border-white/50 px-7 py-4 font-bold text-w
 </div>
 
 </div>
+
 </div>
 
 </section>
@@ -664,6 +649,7 @@ GC圈(原 GC贈物網) 是以物資共享為核心的企業循環行動平台，
 </article>
 
 </div>
+
 </div>
 
 
@@ -676,33 +662,40 @@ GC圈(原 GC贈物網) 是以物資共享為核心的企業循環行動平台，
 <div id="about-slider-track" class="about-slider-track">
 
 <div class="about-slide">
+
 <img
 loading="lazy"
 draggable="false"
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-25-14-03-54-2vSUdpCidespbM7y7RjFbpB9zyM1XoTE6JMqu9bi.jpeg"
 alt="循環物資"
 >
+
 </div>
 
 <div class="about-slide">
+
 <img
 loading="lazy"
 draggable="false"
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-25-14-06-53-jMdKHQTt7Z8Q9jAQJY2LZJ91x1d3Cd6o1SkmGAht.jpeg"
 alt="循環物資"
 >
+
 </div>
 
 <div class="about-slide">
+
 <img
 loading="lazy"
 draggable="false"
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-25-14-09-17-gsOo1Fzwp1GyBaHMNl42ccZny6dWmRepmr1y02g6.jpeg"
 alt="循環物資"
 >
+
 </div>
 
 </div>
+
 
 <button
 type="button"
@@ -713,6 +706,7 @@ aria-label="上一張圖片"
 <i data-lucide="chevron-left" width="22" height="22"></i>
 </button>
 
+
 <button
 type="button"
 id="about-slider-next"
@@ -721,6 +715,7 @@ aria-label="下一張圖片"
 >
 <i data-lucide="chevron-right" width="22" height="22"></i>
 </button>
+
 
 <div class="about-slider-dots">
 
@@ -748,6 +743,7 @@ aria-label="第3張圖片"
 </div>
 
 </div>
+
 
 <div class="absolute -bottom-6 -left-4 max-w-xs rounded-2xl bg-[#f5be13] p-5 shadow-xl">
 
@@ -906,7 +902,9 @@ class="bg-[#f7f6ef] py-24 scroll-mt-24"
 
 <div class="mx-auto max-w-3xl px-5 text-center reveal">
 
-<p class="section-kicker text-[#1a365d]">SMART RECOMMENDATION</p>
+<p class="section-kicker text-[#1a365d]">
+SMART RECOMMENDATION
+</p>
 
 <h2 class="display mt-4 text-[32px] md:text-[40px] font-extrabold leading-tight text-[#1a365d]">
 你現在最想解決哪一件事？
@@ -960,7 +958,6 @@ PARTNERSHIP PLANS
 
 
 <div class="mt-12 grid gap-5 lg:grid-cols-3">
-
 
 <!-- FREE -->
 
@@ -1141,6 +1138,7 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 
 </div>
 
+
 <!-- ===============================
      響應式功能比較表
 ================================ -->
@@ -1161,7 +1159,9 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 <!-- Row 1 -->
 <div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-white text-[#1a365d] gap-3 md:gap-0">
 
-<div class="w-full font-bold text-[16px] md:text-[15px]">循環共享</div>
+<div class="w-full font-bold text-[16px] md:text-[15px]">
+循環共享
+</div>
 
 <div class="w-full text-[14px] md:text-[15px] text-[#4a6b9c] md:text-[#1a365d]">
 一般贈送・快速贈送・物品募集・贈物管理
@@ -1188,10 +1188,13 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 
 </div>
 
+
 <!-- Row 2 -->
 <div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-[#f7f8f4] text-[#1a365d] gap-3 md:gap-0">
 
-<div class="w-full font-bold text-[16px] md:text-[15px]">ESG/SDGs</div>
+<div class="w-full font-bold text-[16px] md:text-[15px]">
+ESG/SDGs
+</div>
 
 <div class="w-full text-[14px] md:text-[15px] text-[#4a6b9c] md:text-[#1a365d]">
 主頁減碳數據・永續報表・減碳證書
@@ -1218,10 +1221,13 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 
 </div>
 
+
 <!-- Row 3 -->
 <div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-white text-[#1a365d] gap-3 md:gap-0">
 
-<div class="w-full font-bold text-[16px] md:text-[15px]">品牌曝光</div>
+<div class="w-full font-bold text-[16px] md:text-[15px]">
+品牌曝光
+</div>
 
 <div class="w-full text-[14px] md:text-[15px] text-[#4a6b9c] md:text-[#1a365d]">
 官方認證・品牌頁・品牌好物曝光
@@ -1248,10 +1254,13 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 
 </div>
 
+
 <!-- Row 4 -->
 <div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center border-b p-4 md:text-center text-[15px] bg-[#f7f8f4] text-[#1a365d] gap-3 md:gap-0">
 
-<div class="w-full font-bold text-[16px] md:text-[15px]">團隊共創</div>
+<div class="w-full font-bold text-[16px] md:text-[15px]">
+團隊共創
+</div>
 
 <div class="w-full text-[14px] md:text-[15px] text-[#4a6b9c] md:text-[#1a365d]">
 邀請碼・共同累積數據・管理員帳號・企業講座
@@ -1278,10 +1287,13 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 
 </div>
 
+
 <!-- Row 5 -->
 <div class="flex flex-col md:grid md:grid-cols-[1.2fr_2fr_1fr_1fr_1fr] items-start md:items-center p-4 md:text-center text-[15px] bg-white text-[#1a365d] gap-3 md:gap-0">
 
-<div class="w-full font-bold text-[16px] md:text-[15px]">開通流程</div>
+<div class="w-full font-bold text-[16px] md:text-[15px]">
+開通流程
+</div>
 
 <div class="w-full text-[14px] md:text-[15px] text-[#4a6b9c] md:text-[#1a365d]">
 線上自助 / 專人
@@ -1318,262 +1330,6 @@ class="focus-ring mt-6 block rounded-full bg-[#1a365d] px-5 py-3 text-center fon
 
 
 <!-- ===============================
-     企業實際案例｜折衷版
-================================ -->
-
-<section
-id="cases"
-class="mx-auto max-w-7xl px-5 py-16 scroll-mt-24"
->
-
-<div class="max-w-3xl">
-
-<p class="section-kicker text-[16px] text-[#1a365d]">
-HOW COMPANIES USE GC
-</p>
-
-<h3 class="display mt-3 text-[28px] md:text-[34px] font-extrabold leading-tight text-[#1a365d]">
-企業實際怎麼用 GC圈
-</h3>
-
-<p class="mt-3 text-[16px] leading-7 text-[#4a6b9c]">
-不同企業，從不同需求開始，把閒置資源與 ESG 行動轉成實際成果。
-</p>
-
-</div>
-
-
-<div class="mt-8 grid gap-5 lg:grid-cols-2">
-
-
-<!-- GC PRO -->
-
-<article class="rounded-[1.75rem] border border-[#1a365d]/10 bg-white p-6 md:p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-
-<div class="flex flex-wrap items-center justify-between gap-3">
-
-<span class="inline-flex rounded-full bg-[#1a365d] px-4 py-2 text-[13px] font-extrabold tracking-wide text-white">
-GC PRO
-</span>
-
-<span class="text-[13px] font-bold text-[#4a6b9c]">
-企業物資循環
-</span>
-
-</div>
-
-<h4 class="mt-5 text-[21px] md:text-[23px] font-extrabold leading-snug text-[#1a365d]">
-讓仍有價值的企業物資，重新進入使用循環
-</h4>
-
-<div class="mt-5 grid gap-3">
-
-
-<div class="rounded-2xl bg-[#f7f6ef] p-4">
-
-<div class="flex items-start gap-3">
-
-<span class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#f5be13]"></span>
-
-<div>
-
-<p class="font-extrabold text-[#1a365d]">
-覺醒家居
-</p>
-
-<p class="mt-1 text-[14px] leading-6 text-[#4a6b9c]">
-展示床墊、試睡退貨良品 → 重新進入使用循環
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="rounded-2xl bg-[#f7f6ef] p-4">
-
-<div class="flex items-start gap-3">
-
-<span class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#f5be13]"></span>
-
-<div>
-
-<p class="font-extrabold text-[#1a365d]">
-麗翔飯店
-</p>
-
-<p class="mt-1 text-[14px] leading-6 text-[#4a6b9c]">
-定期汰換但仍可使用的物資 → 延續使用價值
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="rounded-2xl bg-[#f7f6ef] p-4">
-
-<div class="flex items-start gap-3">
-
-<span class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#f5be13]"></span>
-
-<div>
-
-<p class="font-extrabold text-[#1a365d]">
-克麗緹娜
-</p>
-
-<p class="mt-1 text-[14px] leading-6 text-[#4a6b9c]">
-品牌既有商品 → 透過企業帳戶集中刊登與媒合
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-
-</div>
-
-
-<div class="mt-6 border-t border-[#1a365d]/10 pt-5">
-
-<div class="flex flex-wrap items-center gap-4">
-
-<a
-href="#plan-pro"
-class="focus-ring inline-flex items-center justify-center rounded-full bg-[#f5be13] px-5 py-3 text-[14px] font-extrabold text-[#1a365d] transition hover:brightness-95"
->
-了解 GC PRO →
-</a>
-
-<a
-href="https://vos.tier.org.tw/Viewpoint03More.aspx?DGUID=d5067dcf-3b65-44f5-bfa3-d24a5d8ad816"
-target="_blank"
-rel="noopener noreferrer"
-class="text-[13px] font-bold text-[#4a6b9c] underline underline-offset-4 transition hover:text-[#f5be13]"
->
-查看公開案例 ↗
-</a>
-
-<a
-href="https://m.give-circle.com/user/133409/?VNK=b6471e39"
-target="_blank"
-rel="noopener noreferrer"
-class="text-[13px] font-bold text-[#4a6b9c] underline underline-offset-4 transition hover:text-[#f5be13]"
->
-克麗緹娜平台實例 ↗
-</a>
-
-</div>
-
-</div>
-
-</article>
-
-
-<!-- GC GROUP -->
-
-<article class="rounded-[1.75rem] border border-[#1a365d]/10 bg-[#fffdf1] p-6 md:p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-
-<div class="flex flex-wrap items-center justify-between gap-3">
-
-<span class="inline-flex rounded-full bg-[#f5be13] px-4 py-2 text-[13px] font-extrabold tracking-wide text-[#1a365d]">
-GC GROUP
-</span>
-
-<span class="text-[13px] font-bold text-[#4a6b9c]">
-員工 ESG 參與
-</span>
-
-</div>
-
-<h4 class="mt-5 text-[21px] md:text-[23px] font-extrabold leading-snug text-[#1a365d]">
-讓員工從理解 ESG，走向實際參與
-</h4>
-
-
-<div class="mt-5 rounded-2xl border border-[#1a365d]/10 bg-white p-5">
-
-<p class="text-[13px] font-extrabold tracking-[.08em] text-[#4a6b9c]">
-企業案例
-</p>
-
-<h5 class="mt-2 text-[20px] font-extrabold text-[#1a365d]">
-凱基銀行 × GC圈
-</h5>
-
-
-<div class="mt-5 grid gap-2 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center sm:text-center">
-
-<div class="rounded-xl bg-[#f7f6ef] px-3 py-3 text-[13px] font-bold text-[#1a365d]">
-低碳生活教育
-</div>
-
-<span class="hidden sm:block font-extrabold text-[#f5be13]">
-→
-</span>
-
-<div class="rounded-xl bg-[#f7f6ef] px-3 py-3 text-[13px] font-bold text-[#1a365d]">
-員工物資分享
-</div>
-
-<span class="hidden sm:block font-extrabold text-[#f5be13]">
-→
-</span>
-
-<div class="rounded-xl bg-[#f7f6ef] px-3 py-3 text-[13px] font-bold text-[#1a365d]">
-團隊循環成果
-</div>
-
-</div>
-
-
-<p class="mt-5 text-[14px] leading-6 text-[#4a6b9c]">
-透過低碳生活與物資分享行動，讓員工從理解永續走向實際參與，並共同累積團隊成果。
-</p>
-
-</div>
-
-
-<div class="mt-6 border-t border-[#1a365d]/10 pt-5">
-
-<div class="flex flex-wrap items-center gap-4">
-
-<a
-href="#plan-group"
-class="focus-ring inline-flex items-center justify-center rounded-full bg-[#1a365d] px-5 py-3 text-[14px] font-extrabold text-white transition hover:brightness-110"
->
-了解 GC GROUP →
-</a>
-
-<a
-href="https://startup.sme.gov.tw/sitaiwan/Home/citizensSay/view/3163"
-target="_blank"
-rel="noopener noreferrer"
-class="text-[13px] font-bold text-[#4a6b9c] underline underline-offset-4 transition hover:text-[#f5be13]"
->
-查看公開案例 ↗
-</a>
-
-</div>
-
-</div>
-
-</article>
-
-
-</div>
-
-</section>
-
-
-<!-- ===============================
      合作夥伴 / 媒體 / 獲獎
 ================================ -->
 
@@ -1591,106 +1347,75 @@ TRUSTED BY PARTNERS
 <div class="mt-8 grid grid-cols-2 items-center justify-items-center gap-8 rounded-2xl bg-[#e8eadc] p-8 md:grid-cols-4">
 
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-31-22-otnKtW6HyMlPuYXM7A2paVvA93MGVVynnHKLqDka.png"
 alt="環境部環保集點"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">環境部環保集點</span>
-
 </div>
 
-
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-30-37-bb4tADqwVcIS92LhTASYZ886jq6S9Ox2Rq5flv7w.png"
 alt="台北實物銀行"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">台北實物銀行</span>
-
 </div>
 
-
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-15-39-34-dv87updHib7wkpyVwAjn9i1wPG47RrvlxbG3artY.png"
 alt="新竹環保局"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">新竹環保局</span>
-
 </div>
 
-
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-48-jCUC7l4DC1o3Y8JFRy1EvALHoAcRWDtckKxJlv7S.png"
 alt="麗翔飯店"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">麗翔飯店</span>
-
 </div>
 
-
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-34-59-ybRcGczsj8xFRzC2xffzk8bkL0wzMarAvu8wkKrf.png"
 alt="凱基銀行"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">凱基銀行</span>
-
 </div>
 
-
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-32-43-0JxiJEswWkrRoOOfxXvQHM0Iptu14ujw1anSzQrP.png"
 alt="覺醒家居"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">覺醒家居</span>
-
 </div>
 
-
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-21-17-56-14-7g9KrLJrCgdOX8hfZIR9dbSQv3mDbOQi92PG4WrO.png"
 alt="錼創科技"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">錼創科技</span>
-
 </div>
 
-
 <div class="flex flex-col items-center gap-3 text-center">
-
 <img
 src="https://s3-ap-southeast-1.amazonaws.com/next.give543/gift/2026-08-18-14-30-53-VND88b5ux9mtmYc5dLIG61Ki1QAstgqyZ6CA37QM.png"
 alt="聚陽實業"
 class="h-12 w-auto object-contain mix-blend-multiply"
 >
-
 <span class="text-sm font-bold">聚陽實業</span>
-
 </div>
 
 </div>
@@ -1712,6 +1437,42 @@ IN THE NEWS
 </h2>
 
 <div class="mt-7 grid gap-3">
+
+
+<!-- 新增：企業實證 -->
+
+<article class="news-card rounded-xl border-2 border-[#f5be13]/60 bg-[#fffdf1] p-5 transition hover:-translate-y-1 hover:shadow-lg">
+
+<a
+href="https://startup.sme.gov.tw/sitaiwan/Home/citizensSay/view/3163"
+target="_blank"
+rel="noopener noreferrer"
+class="block"
+>
+
+<div class="mb-3 flex flex-wrap items-center gap-2">
+
+<span class="inline-flex rounded-full bg-[#f5be13] px-3 py-1 text-[12px] font-extrabold text-[#1a365d]">
+企業實證
+</span>
+
+<p class="text-[16px] font-bold text-[#1a365d]">
+台經永續學院
+</p>
+
+</div>
+
+<h3 class="text-[19px] font-bold leading-7 text-[#1a365d]">
+ESG落實個案｜服務業篇：凱基銀行
+</h3>
+
+<p class="mt-3 text-[14px] leading-6 text-[#4a6b9c]">
+從低碳生活教育、員工物資分享，到團隊循環成果，透過 GC圈將 ESG 從理念轉化為員工實際參與。
+</p>
+
+</a>
+
+</article>
 
 
 <article class="news-card rounded-xl border border-[#1a365d]/10 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
@@ -1884,7 +1645,6 @@ class="bg-[#1a365d] py-24"
 
 <div class="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-2">
 
-
 <div>
 
 <p class="section-kicker text-[16px] text-[#f5be13]">
@@ -1908,7 +1668,6 @@ id="consult-form"
 class="rounded-[2rem] bg-white p-7 shadow-xl"
 novalidate
 >
-
 
 <label
 class="mb-2 block text-[16px] font-bold"
@@ -1990,6 +1749,7 @@ class="focus-ring h-4 w-4 rounded text-[#f5be13]"
 
 </label>
 
+
 <label class="flex cursor-pointer items-center gap-2 font-semibold text-[#1a365d]">
 
 <input
@@ -2001,6 +1761,7 @@ class="focus-ring h-4 w-4 rounded text-[#f5be13]"
 LINE
 
 </label>
+
 
 <label class="flex cursor-pointer items-center gap-2 font-semibold text-[#1a365d]">
 
@@ -2218,9 +1979,7 @@ id="chat-fab"
 class="focus-ring fixed bottom-6 right-6 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d] shadow-xl hover:scale-105 transition-transform duration-200"
 aria-label="開啟需求診斷小幫手"
 >
-
 <i data-lucide="bot" width="28" height="28"></i>
-
 </button>
 
 
@@ -2258,6 +2017,7 @@ aria-label="關閉小幫手"
 </button>
 
 </div>
+
 
 <div
 id="chat-history"
@@ -2411,9 +2171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (aboutSliderPrev) {
 
       aboutSliderPrev.addEventListener('click', () => {
-
         updateAboutSlider(currentSlide - 1);
-
       });
 
     }
@@ -2421,9 +2179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (aboutSliderNext) {
 
       aboutSliderNext.addEventListener('click', () => {
-
         updateAboutSlider(currentSlide + 1);
-
       });
 
     }
@@ -2431,9 +2187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     aboutSliderDots.forEach((dot, index) => {
 
       dot.addEventListener('click', () => {
-
         updateAboutSlider(index);
-
       });
 
     });
@@ -2469,6 +2223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isDragging) return;
 
       isDragging = false;
+
       aboutSliderTrack.style.transition = '';
 
       const diff = currentX - startX;
@@ -2476,13 +2231,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Math.abs(diff) > 50) {
 
         if (diff < 0) {
-
           updateAboutSlider(currentSlide + 1);
-
         } else {
-
           updateAboutSlider(currentSlide - 1);
-
         }
 
       } else {
@@ -2647,20 +2398,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
           options: [
 
-            {
-              id: 'PRO',
-              title: '偶爾有一批物資要處理'
-            },
+            { id: 'PRO', title: '偶爾有一批物資要處理' },
 
-            {
-              id: 'PRO',
-              title: '希望建立企業長期分享管道'
-            },
+            { id: 'PRO', title: '希望建立企業長期分享管道' },
 
-            {
-              id: 'GROUP',
-              title: '希望結合員工或專案一起執行'
-            }
+            { id: 'GROUP', title: '希望結合員工或專案一起執行' }
 
           ]
 
@@ -2674,20 +2416,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
           options: [
 
-            {
-              id: 'PRO',
-              title: '需要循環與減碳成果報表'
-            },
+            { id: 'PRO', title: '需要循環與減碳成果報表' },
 
-            {
-              id: 'GROUP',
-              title: '需要多人參與數據'
-            },
+            { id: 'GROUP', title: '需要多人參與數據' },
 
-            {
-              id: 'GROUP',
-              title: '需要年度 ESG / 影響力成果整理'
-            }
+            { id: 'GROUP', title: '需要年度 ESG / 影響力成果整理' }
 
           ]
 
@@ -2701,20 +2434,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
           options: [
 
-            {
-              id: 'GROUP',
-              title: '先辦一次員工活動'
-            },
+            { id: 'GROUP', title: '先辦一次員工活動' },
 
-            {
-              id: 'GROUP',
-              title: '希望長期推動團隊永續行動'
-            },
+            { id: 'GROUP', title: '希望長期推動團隊永續行動' },
 
-            {
-              id: 'GROUP',
-              title: '希望累積員工個人與團隊數據'
-            }
+            { id: 'GROUP', title: '希望累積員工個人與團隊數據' }
 
           ]
 
@@ -2728,20 +2452,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
           options: [
 
-            {
-              id: 'PRO',
-              title: '品牌好物與官方帳戶曝光'
-            },
+            { id: 'PRO', title: '品牌好物與官方帳戶曝光' },
 
-            {
-              id: 'PRO',
-              title: '會員互動與永續內容'
-            },
+            { id: 'PRO', title: '會員互動與永續內容' },
 
-            {
-              id: 'GROUP',
-              title: '結合員工、會員或大型 ESG 專案'
-            }
+            { id: 'GROUP', title: '結合員工、會員或大型 ESG 專案' }
 
           ]
 
@@ -2946,19 +2661,11 @@ document.addEventListener('DOMContentLoaded', () => {
       el.innerHTML = `
 
         <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f5be13] text-[#1a365d] shadow-sm mb-1">
-
-          <i
-            data-lucide="bot"
-            width="18"
-            height="18">
-          </i>
-
+          <i data-lucide="bot" width="18" height="18"></i>
         </div>
 
         <div class="bg-white text-[#1a365d] border border-[#1a365d]/5 rounded-[20px] rounded-bl-sm px-4 py-3 max-w-[80%] shadow-sm text-[15px] leading-6 font-medium">
-
           ${html}
-
         </div>
 
       `;
@@ -2978,9 +2685,7 @@ document.addEventListener('DOMContentLoaded', () => {
       el.innerHTML = `
 
         <div class="bg-[#1a365d] text-white rounded-[20px] rounded-br-sm px-4 py-3 max-w-[95%] shadow-md text-[15px] leading-6 font-medium">
-
           ${text}
-
         </div>
 
       `;
@@ -3007,24 +2712,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function getRecommendedCase(planType, answerTitle = '') {
 
       if (planType === 'GROUP') {
-
         return data.cases.GROUP_DEFAULT;
-
       }
 
       if (answerTitle.includes('長期分享管道')) {
-
         return data.cases.PRO_LONG_TERM;
-
       }
 
       if (
         answerTitle.includes('品牌好物') ||
         answerTitle.includes('會員互動')
       ) {
-
         return data.cases.PRO_BRAND;
-
       }
 
       return data.cases.PRO_DEFAULT;
@@ -3035,7 +2734,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function createResultCard(planType, answerTitle = '') {
 
       const res = data.results[planType];
-
       const recommendedCase =
         getRecommendedCase(planType, answerTitle);
 
@@ -3327,19 +3025,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     chatFab.addEventListener('click', () => toggleChat());
-
     chatCloseBtn.addEventListener('click', () => toggleChat(false));
 
     if (chatBackdrop) {
-
       chatBackdrop.addEventListener('click', () => toggleChat(false));
-
     }
 
     if (btnOpenChatCta) {
-
       btnOpenChatCta.addEventListener('click', () => toggleChat(true));
-
     }
 
     document.querySelectorAll('a[href="#scenario"]').forEach(link => {
@@ -3355,8 +3048,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chatHistory.addEventListener('click', e => {
 
-      const btn =
-        e.target.closest('[data-chat-action]');
+      const btn = e.target.closest('[data-chat-action]');
 
       if (!btn) return;
 
@@ -3472,28 +3164,15 @@ function escapeHtml(value) {
 }
 
 
-/* ===============================
-   第一次送出 → 顯示確認視窗
-================================ */
-
 consultForm.addEventListener('submit', event => {
 
   event.preventDefault();
 
-  const company =
-    document.getElementById('company').value.trim();
-
-  const name =
-    document.getElementById('name').value.trim();
-
-  const phone =
-    document.getElementById('phone').value.trim();
-
-  const email =
-    document.getElementById('email').value.trim();
-
-  const rawMessage =
-    document.getElementById('message').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const rawMessage = document.getElementById('message').value.trim();
 
   const contactEmailChecked =
     document.getElementById('contact_email').checked;
@@ -3563,17 +3242,9 @@ consultForm.addEventListener('submit', event => {
 
   let contactMethods = [];
 
-  if (contactEmailChecked) {
-    contactMethods.push('信箱');
-  }
-
-  if (contactLineChecked) {
-    contactMethods.push(`LINE (ID: ${lineId})`);
-  }
-
-  if (contactPhoneChecked) {
-    contactMethods.push('電話');
-  }
+  if (contactEmailChecked) contactMethods.push('信箱');
+  if (contactLineChecked) contactMethods.push(`LINE (ID: ${lineId})`);
+  if (contactPhoneChecked) contactMethods.push('電話');
 
 
   const finalMessage =
@@ -3655,10 +3326,6 @@ consultForm.addEventListener('submit', event => {
 });
 
 
-/* ===============================
-   返回修改
-================================ */
-
 btnEdit.addEventListener('click', () => {
 
   confirmModal.classList.add('hidden');
@@ -3666,10 +3333,6 @@ btnEdit.addEventListener('click', () => {
 
 });
 
-
-/* ===============================
-   確認送出
-================================ */
 
 btnFinalSubmit.addEventListener('click', async () => {
 
