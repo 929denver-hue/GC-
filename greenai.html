@@ -2,28 +2,22 @@
 <html lang="zh-Hant">
 
 <head>
+  <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+  <title>GC 綠點行銷分析中心</title>
 
-<title>GC 綠點行銷分析中心</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
-
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 </head>
 
 
-<body
-  class="bg-slate-50 text-slate-800 border-t-4 border-emerald-600 min-h-screen"
->
+<body class="bg-slate-50 text-slate-800 border-t-4 border-emerald-600 min-h-screen">
 
 
 <!-- Loading -->
@@ -32,7 +26,6 @@
   id="loading"
   class="min-h-screen flex items-center justify-center"
 >
-
   <div class="text-center">
 
     <div
@@ -44,7 +37,6 @@
     </p>
 
   </div>
-
 </div>
 
 
@@ -103,9 +95,7 @@
 
 <!-- Tabs -->
 
-<div
-  class="flex gap-2 flex-wrap mb-6"
->
+<div class="flex gap-2 flex-wrap mb-6">
 
   <button
     class="tab-btn bg-emerald-700 text-white px-4 py-2 rounded-xl"
@@ -145,15 +135,12 @@
 </div>
 
 
-<!-- ==========================
-     OVERVIEW
-========================== -->
+<!-- OVERVIEW -->
 
 <section
   id="tab-overview"
   class="tab-section"
 >
-
 
 <div
   id="insights"
@@ -178,9 +165,7 @@
   </h3>
 
   <div class="h-80">
-
     <canvas id="dailyChart"></canvas>
-
   </div>
 
 </div>
@@ -188,18 +173,14 @@
 </section>
 
 
-<!-- ==========================
-     MEMBERS
-========================== -->
+<!-- MEMBERS -->
 
 <section
   id="tab-members"
   class="tab-section hidden"
 >
 
-<div
-  class="grid grid-cols-1 lg:grid-cols-2 gap-6"
->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
   <div
     class="bg-white p-6 rounded-2xl shadow-sm"
@@ -210,11 +191,7 @@
     </h3>
 
     <div class="h-72">
-
-      <canvas
-        id="repeatChart"
-      ></canvas>
-
+      <canvas id="repeatChart"></canvas>
     </div>
 
   </div>
@@ -240,18 +217,14 @@
 </section>
 
 
-<!-- ==========================
-     TIME
-========================== -->
+<!-- TIME -->
 
 <section
   id="tab-time"
   class="tab-section hidden"
 >
 
-<div
-  class="grid grid-cols-1 lg:grid-cols-2 gap-6"
->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
   <div
     class="bg-white p-6 rounded-2xl shadow-sm"
@@ -262,9 +235,7 @@
     </h3>
 
     <div class="h-72">
-
       <canvas id="weekdayChart"></canvas>
-
     </div>
 
   </div>
@@ -279,9 +250,7 @@
     </h3>
 
     <div class="h-72">
-
       <canvas id="periodChart"></canvas>
-
     </div>
 
   </div>
@@ -304,9 +273,7 @@
 </section>
 
 
-<!-- ==========================
-     MONTHS
-========================== -->
+<!-- MONTHS -->
 
 <section
   id="tab-months"
@@ -355,9 +322,7 @@
   </div>
 
   <div class="h-80">
-
     <canvas id="monthChart"></canvas>
-
   </div>
 
 </div>
@@ -367,13 +332,9 @@
   class="bg-white rounded-2xl shadow-sm mt-6 overflow-x-auto"
 >
 
-<table
-  class="w-full text-sm"
->
+<table class="w-full text-sm">
 
-<thead
-  class="bg-emerald-50"
->
+<thead class="bg-emerald-50">
 
 <tr>
 
@@ -414,9 +375,7 @@
 </section>
 
 
-<!-- ==========================
-     ACTIVITIES
-========================== -->
+<!-- ACTIVITIES -->
 
 <section
   id="tab-activities"
@@ -487,11 +446,9 @@
 </section>
 
 
-<div
-  class="text-xs text-slate-400 mt-8"
->
-最後同步：
-<span id="syncTime"></span>
+<div class="text-xs text-slate-400 mt-8">
+  最後同步：
+  <span id="syncTime"></span>
 </div>
 
 </div>
@@ -504,8 +461,10 @@
 =================================================== */
 
 const CONFIG = {
+
   API_URL:
     'https://script.google.com/macros/s/AKfycbxBnu4zBqt1JM7VmNHwhYIBcwmHDKCiopyJcH6OraM_ou1NCC-YjolwNZptucSU9b4E/exec'
+
 };
 
 
@@ -591,6 +550,13 @@ function growth(
 }
 
 
+/* ===================================================
+   台灣顏色：
+   上升 = 紅色
+   下降 = 綠色
+   持平 = 灰色
+=================================================== */
+
 function growthHTML(
   current,
   previous
@@ -614,43 +580,12 @@ function growthHTML(
   }
 
 
-  // 台灣慣用顏色：
-  // 上漲 = 紅色
-  // 下跌 = 綠色
   const className =
     value > 0
       ? 'text-red-600'
       : value < 0
         ? 'text-emerald-700'
         : 'text-slate-500';
-
-
-  return `
-    <span class="${className} text-xs font-semibold">
-      ${
-        value > 0
-          ? '↑'
-          : value < 0
-            ? '↓'
-            : '−'
-      }
-      ${Math.abs(value * 100).toFixed(1)}%
-      vs 上月
-    </span>
-  `;
-
-}
-
-  const positive =
-    value > 0;
-
-
- const className =
-  positive
-    ? 'text-red-600'
-    : value < 0
-      ? 'text-emerald-700'
-      : 'text-slate-500';
 
 
   return `
@@ -716,6 +651,17 @@ async function loadDashboard(
     );
 
 
+  if (!response.ok) {
+
+    throw new Error(
+      'API 連線失敗：HTTP '
+      +
+      response.status
+    );
+
+  }
+
+
   const data =
     await response.json();
 
@@ -724,7 +670,8 @@ async function loadDashboard(
 
     throw new Error(
       data.message
-      || '資料載入失敗'
+      ||
+      '資料載入失敗'
     );
 
   }
@@ -871,7 +818,11 @@ function renderKpis() {
             p.repeatRate
           )
           :
-          '無上期比較'
+          `
+          <span class="text-xs text-slate-400">
+            無上期比較
+          </span>
+          `
     },
 
     {
@@ -963,6 +914,18 @@ function renderInsights() {
   insights.push(
     `本月有 <strong>${c.repeatMembers} 位</strong>會員兌換至少 2 次，同月重複兌換率為 <strong>${percent(c.repeatRate)}</strong>。`
   );
+
+
+  if (
+    c.popularPeriods &&
+    c.popularPeriods.length
+  ) {
+
+    insights.push(
+      `熱門兌換時段為 <strong>${c.popularPeriods.join('、')}</strong>。`
+    );
+
+  }
 
 
   if (p) {
@@ -1066,7 +1029,7 @@ function renderDailyChart() {
                 2,
 
               tension:
-                .3
+                0.3
             }
 
           ]
@@ -1080,6 +1043,14 @@ function renderDailyChart() {
 
           maintainAspectRatio:
             false,
+
+          interaction: {
+            intersect:
+              false,
+
+            mode:
+              'index'
+          },
 
           scales: {
 
@@ -1285,7 +1256,16 @@ function renderTime() {
             true,
 
           maintainAspectRatio:
-            false
+            false,
+
+          scales: {
+
+            y: {
+              beginAtZero:
+                true
+            }
+
+          }
 
         }
 
@@ -1332,7 +1312,16 @@ function renderTime() {
             true,
 
           maintainAspectRatio:
-            false
+            false,
+
+          scales: {
+
+            y: {
+              beginAtZero:
+                true
+            }
+
+          }
 
         }
 
@@ -1366,7 +1355,15 @@ function renderHeatmap() {
 
 
   const weekdays =
-    ['日','一','二','三','四','五','六'];
+    [
+      '日',
+      '一',
+      '二',
+      '三',
+      '四',
+      '五',
+      '六'
+    ];
 
 
   const periods =
@@ -1381,7 +1378,7 @@ function renderHeatmap() {
   let html = `
 
     <div
-      class="grid grid-cols-5 gap-2 text-sm"
+      class="grid grid-cols-5 gap-2 text-sm min-w-[650px]"
     >
 
       <div></div>
@@ -1444,7 +1441,8 @@ function renderHeatmap() {
             0.08
             +
             intensity
-            * 0.55;
+            *
+            0.55;
 
 
           html += `
@@ -1478,7 +1476,11 @@ function renderHeatmap() {
 
   $('heatmap')
     .innerHTML =
-      html;
+      `
+      <div class="overflow-x-auto">
+        ${html}
+      </div>
+      `;
 
 }
 
@@ -1532,6 +1534,10 @@ function renderMonthTable() {
 }
 
 
+/* ===================================================
+   Month Chart
+=================================================== */
+
 function renderMonthChart() {
 
   const metric =
@@ -1558,6 +1564,7 @@ function renderMonthChart() {
     repeatRate: {
       label:
         '同月重複兌換率',
+
       percent:
         true
     },
@@ -1608,11 +1615,11 @@ function renderMonthChart() {
                     item =>
                       config.percent
                         ?
-                        item[metric]
-                        * 100
+                        item[metric] * 100
                         :
                         item[metric]
                   )
+
             }
 
           ]
@@ -1625,7 +1632,29 @@ function renderMonthChart() {
             true,
 
           maintainAspectRatio:
-            false
+            false,
+
+          scales: {
+
+            y: {
+              beginAtZero:
+                true,
+
+              ticks: {
+
+                callback:
+                  value =>
+                    config.percent
+                      ?
+                      `${value}%`
+                      :
+                      value
+
+              }
+
+            }
+
+          }
 
         }
 
@@ -1636,7 +1665,7 @@ function renderMonthChart() {
 
 
 /* ===================================================
-   Activity
+   Activities
 =================================================== */
 
 function renderActivities() {
@@ -1695,10 +1724,18 @@ function renderActivities() {
               }${(diff * 100).toFixed(1)}%`;
 
 
+            /*
+             * 台灣顏色
+             * 高於平均 = 紅色
+             * 低於平均 = 綠色
+             */
+
             diffClass =
-              diff >= 0
-                ? 'text-emerald-700'
-                : 'text-red-600';
+              diff > 0
+                ? 'text-red-600'
+                : diff < 0
+                  ? 'text-emerald-700'
+                  : 'text-slate-500';
 
           }
 
@@ -1746,7 +1783,7 @@ function renderActivities() {
 
 
 /* ===================================================
-   Selector
+   Month Selector
 =================================================== */
 
 function renderMonthSelector() {
@@ -1803,7 +1840,8 @@ function setupTabs() {
             )
             .forEach(section => {
 
-              section.classList
+              section
+                .classList
                 .add(
                   'hidden'
                 );
@@ -1817,14 +1855,16 @@ function setupTabs() {
             )
             .forEach(btn => {
 
-              btn.classList
+              btn
+                .classList
                 .remove(
                   'bg-emerald-700',
                   'text-white'
                 );
 
 
-              btn.classList
+              btn
+                .classList
                 .add(
                   'bg-white'
                 );
@@ -1832,25 +1872,35 @@ function setupTabs() {
             });
 
 
-          $(
-            'tab-'
-            +
-            button.dataset.tab
-          )
-          .classList
-          .remove(
-            'hidden'
-          );
+          const target =
+            $(
+              'tab-'
+              +
+              button.dataset.tab
+            );
 
 
-          button.classList
+          if (target) {
+
+            target
+              .classList
+              .remove(
+                'hidden'
+              );
+
+          }
+
+
+          button
+            .classList
             .add(
               'bg-emerald-700',
               'text-white'
             );
 
 
-          button.classList
+          button
+            .classList
             .remove(
               'bg-white'
             );
@@ -1865,7 +1915,7 @@ function setupTabs() {
 
 
 /* ===================================================
-   All
+   Render All
 =================================================== */
 
 function renderAll() {
@@ -1897,7 +1947,7 @@ function renderAll() {
 
 
 /* ===================================================
-   Chart
+   Chart destroy
 =================================================== */
 
 function destroyChart_(key) {
@@ -1960,22 +2010,29 @@ window.addEventListener(
     }
     catch(error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
+
 
       $('loading')
         .innerHTML = `
 
           <div
-            class="text-red-600 text-center p-8"
+            class="text-red-600 text-center p-8 max-w-xl"
           >
 
-            <strong>
+            <strong class="text-lg">
               資料讀取失敗
             </strong>
 
             <br><br>
 
-            ${error.message}
+            <div
+              class="text-sm bg-red-50 border border-red-100 rounded-xl p-4 break-all"
+            >
+              ${error.message}
+            </div>
 
           </div>
 
