@@ -614,16 +614,43 @@ function growthHTML(
   }
 
 
+  // 台灣慣用顏色：
+  // 上漲 = 紅色
+  // 下跌 = 綠色
+  const className =
+    value > 0
+      ? 'text-red-600'
+      : value < 0
+        ? 'text-emerald-700'
+        : 'text-slate-500';
+
+
+  return `
+    <span class="${className} text-xs font-semibold">
+      ${
+        value > 0
+          ? '↑'
+          : value < 0
+            ? '↓'
+            : '−'
+      }
+      ${Math.abs(value * 100).toFixed(1)}%
+      vs 上月
+    </span>
+  `;
+
+}
+
   const positive =
     value > 0;
 
 
-  const className =
-    positive
+ const className =
+  positive
+    ? 'text-red-600'
+    : value < 0
       ? 'text-emerald-700'
-      : value < 0
-        ? 'text-red-600'
-        : 'text-slate-500';
+      : 'text-slate-500';
 
 
   return `
