@@ -66,9 +66,7 @@
       GC 綠點行銷分析中心
     </h1>
 
-    <p
-      class="text-slate-500 mt-2"
-    >
+    <p class="text-slate-500 mt-2">
       會員兌換行為 × 時間分析 × 月份比較 × 活動觀察
     </p>
 
@@ -77,9 +75,7 @@
 
   <div>
 
-    <label
-      class="text-xs text-slate-500"
-    >
+    <label class="text-xs text-slate-500">
       分析月份
     </label>
 
@@ -158,9 +154,7 @@
   class="bg-white rounded-2xl p-6 mt-6 shadow-sm"
 >
 
-  <h3
-    class="font-bold text-emerald-900 mb-5"
-  >
+  <h3 class="font-bold text-emerald-900 mb-5">
     每日兌換趨勢
   </h3>
 
@@ -457,6 +451,58 @@
 <script>
 
 /* ===================================================
+   Chart.js 數字標籤
+=================================================== */
+
+Chart.register(ChartDataLabels);
+
+
+/* 預設所有圖表直接顯示數字 */
+
+Chart.defaults.plugins.datalabels = {
+
+  display: function(context) {
+
+    const value =
+      context.dataset.data[
+        context.dataIndex
+      ];
+
+    return Number(value) !== 0;
+
+  },
+
+  color: '#334155',
+
+  font: {
+    size: 10,
+    weight: '600'
+  },
+
+  anchor: 'end',
+
+  align: 'top',
+
+  offset: 3,
+
+  clamp: true,
+
+  formatter: function(value) {
+
+    return Number(value)
+      .toLocaleString(
+        'zh-TW',
+        {
+          maximumFractionDigits: 1
+        }
+      );
+
+  }
+
+};
+
+
+/* ===================================================
    CONFIG
 =================================================== */
 
@@ -551,10 +597,9 @@ function growth(
 
 
 /* ===================================================
-   台灣顏色：
+   台灣顏色
    上升 = 紅色
    下降 = 綠色
-   持平 = 灰色
 =================================================== */
 
 function growthHTML(
@@ -590,6 +635,7 @@ function growthHTML(
 
   return `
     <span class="${className} text-xs font-semibold">
+
       ${
         value > 0
           ? '↑'
@@ -597,8 +643,10 @@ function growthHTML(
             ? '↓'
             : '−'
       }
+
       ${Math.abs(value * 100).toFixed(1)}%
       vs 上月
+
     </span>
   `;
 
@@ -717,6 +765,7 @@ function renderKpis() {
   const cards = [
 
     {
+
       title:
         '本月兌換筆數',
 
@@ -732,9 +781,11 @@ function renderKpis() {
           c.totalCount,
           p?.totalCount
         )
+
     },
 
     {
+
       title:
         '兌換會員',
 
@@ -750,9 +801,11 @@ function renderKpis() {
           c.uniqueMembers,
           p?.uniqueMembers
         )
+
     },
 
     {
+
       title:
         '蘿蔔兌換量',
 
@@ -766,9 +819,11 @@ function renderKpis() {
           c.totalRadish,
           p?.totalRadish
         )
+
     },
 
     {
+
       title:
         '綠點使用量',
 
@@ -782,9 +837,11 @@ function renderKpis() {
           c.totalGreen,
           p?.totalGreen
         )
+
     },
 
     {
+
       title:
         '平均每筆蘿蔔',
 
@@ -799,9 +856,11 @@ function renderKpis() {
           c.averageRadish,
           p?.averageRadish
         )
+
     },
 
     {
+
       title:
         '同月重複兌換率',
 
@@ -823,9 +882,11 @@ function renderKpis() {
             無上期比較
           </span>
           `
+
     },
 
     {
+
       title:
         '週末兌換占比',
 
@@ -836,11 +897,13 @@ function renderKpis() {
 
       growth:
         ''
+
     },
 
     {
+
       title:
-        '≥50 蘿蔔占比',
+        '高額兌換占比',
 
       value:
         percent(
@@ -848,7 +911,12 @@ function renderKpis() {
         ),
 
       growth:
-        ''
+        `
+        <span class="text-xs text-slate-400">
+          單筆 ≥ 50 蘿蔔
+        </span>
+        `
+
     }
 
   ];
@@ -861,9 +929,7 @@ function renderKpis() {
         class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100"
       >
 
-        <div
-          class="text-sm text-slate-500"
-        >
+        <div class="text-sm text-slate-500">
           ${card.title}
         </div>
 
@@ -983,7 +1049,7 @@ function renderInsights() {
 
 
 /* ===================================================
-   Daily
+   Daily Chart
 =================================================== */
 
 function renderDailyChart() {
@@ -1016,6 +1082,7 @@ function renderDailyChart() {
           datasets: [
 
             {
+
               label:
                 '兌換筆數',
 
@@ -1028,13 +1095,18 @@ function renderDailyChart() {
               borderWidth:
                 2,
 
+              pointRadius:
+                4,
+
               tension:
                 0.3
+
             }
 
           ]
 
         },
+
 
         options: {
 
@@ -1044,19 +1116,83 @@ function renderDailyChart() {
           maintainAspectRatio:
             false,
 
+          layout: {
+
+            padding: {
+              top: 24
+            }
+
+          },
+
           interaction: {
+
             intersect:
               false,
 
             mode:
               'index'
+
+          },
+
+          plugins: {
+
+            datalabels: {
+
+              display: function(context) {
+
+                return Number(
+                  context.dataset.data[
+                    context.dataIndex
+                  ]
+                ) > 0;
+
+              },
+
+              anchor:
+                'end',
+
+              align:
+                'top',
+
+              offset:
+                3,
+
+              color:
+                '#334155',
+
+              font: {
+
+                size:
+                  10,
+
+                weight:
+                  '600'
+
+              },
+
+              formatter: function(value) {
+
+                return Number(value)
+                  .toLocaleString(
+                    'zh-TW'
+                  );
+
+              }
+
+            }
+
           },
 
           scales: {
 
             y: {
+
               beginAtZero:
-                true
+                true,
+
+              grace:
+                '20%'
+
             }
 
           }
@@ -1105,6 +1241,7 @@ function renderMembers() {
           datasets: [
 
             {
+
               data: [
 
                 c.repeatDistribution.once,
@@ -1114,6 +1251,7 @@ function renderMembers() {
                 c.repeatDistribution.threePlus
 
               ]
+
             }
 
           ]
@@ -1126,7 +1264,85 @@ function renderMembers() {
             true,
 
           maintainAspectRatio:
-            false
+            false,
+
+          plugins: {
+
+            datalabels: {
+
+              display:
+                true,
+
+              color:
+                '#ffffff',
+
+              anchor:
+                'center',
+
+              align:
+                'center',
+
+              font: {
+
+                size:
+                  12,
+
+                weight:
+                  'bold'
+
+              },
+
+              formatter: function(
+                value,
+                context
+              ) {
+
+                const data =
+                  context.chart.data
+                    .datasets[0]
+                    .data;
+
+
+                const total =
+                  data.reduce(
+                    (
+                      sum,
+                      item
+                    ) =>
+                      sum
+                      +
+                      Number(item),
+                    0
+                  );
+
+
+                const rate =
+                  total > 0
+                    ?
+                    value
+                    /
+                    total
+                    *
+                    100
+                    :
+                    0;
+
+
+                return (
+                  value
+                  +
+                  '人\n'
+                  +
+                  rate.toFixed(1)
+                  +
+                  '%'
+                );
+
+              }
+
+            }
+
+          }
 
         }
 
@@ -1158,7 +1374,7 @@ function renderMembers() {
       )}
 
       ${summaryRow_(
-        '≥50 蘿蔔交易',
+        '單筆 ≥50 蘿蔔交易',
         `${number(c.highValueCount)} 筆`
       )}
 
@@ -1178,15 +1394,11 @@ function summaryRow_(
       class="flex justify-between border-b pb-3"
     >
 
-      <span
-        class="text-slate-500"
-      >
+      <span class="text-slate-500">
         ${title}
       </span>
 
-      <strong
-        class="text-emerald-800"
-      >
+      <strong class="text-emerald-800">
         ${value}
       </strong>
 
@@ -1236,6 +1448,7 @@ function renderTime() {
           datasets: [
 
             {
+
               label:
                 '兌換筆數',
 
@@ -1244,6 +1457,7 @@ function renderTime() {
                   item =>
                     item.count
                 )
+
             }
 
           ]
@@ -1258,11 +1472,45 @@ function renderTime() {
           maintainAspectRatio:
             false,
 
+          layout: {
+
+            padding: {
+              top: 25
+            }
+
+          },
+
+          plugins: {
+
+            datalabels: {
+
+              anchor:
+                'end',
+
+              align:
+                'top',
+
+              color:
+                '#334155',
+
+              formatter:
+                value =>
+                  number(value)
+
+            }
+
+          },
+
           scales: {
 
             y: {
+
               beginAtZero:
-                true
+                true,
+
+              grace:
+                '15%'
+
             }
 
           }
@@ -1292,6 +1540,7 @@ function renderTime() {
           datasets: [
 
             {
+
               label:
                 '兌換筆數',
 
@@ -1300,6 +1549,7 @@ function renderTime() {
                   item =>
                     item.count
                 )
+
             }
 
           ]
@@ -1314,11 +1564,45 @@ function renderTime() {
           maintainAspectRatio:
             false,
 
+          layout: {
+
+            padding: {
+              top: 25
+            }
+
+          },
+
+          plugins: {
+
+            datalabels: {
+
+              anchor:
+                'end',
+
+              align:
+                'top',
+
+              color:
+                '#334155',
+
+              formatter:
+                value =>
+                  number(value)
+
+            }
+
+          },
+
           scales: {
 
             y: {
+
               beginAtZero:
-                true
+                true,
+
+              grace:
+                '15%'
+
             }
 
           }
@@ -1448,7 +1732,7 @@ function renderHeatmap() {
           html += `
 
             <div
-              class="rounded-lg p-3 text-center"
+              class="rounded-lg p-3 text-center font-semibold"
               style="
                 background:
                 rgba(
@@ -1486,7 +1770,7 @@ function renderHeatmap() {
 
 
 /* ===================================================
-   Months
+   Month Table
 =================================================== */
 
 function renderMonthTable() {
@@ -1499,9 +1783,7 @@ function renderMonthTable() {
     .innerHTML =
       data.map(row => `
 
-        <tr
-          class="border-b"
-        >
+        <tr class="border-b">
 
           <td class="p-4 font-semibold">
             ${row.month}
@@ -1571,7 +1853,10 @@ function renderMonthChart() {
 
     averageRadish: {
       label:
-        '平均每筆蘿蔔'
+        '平均每筆蘿蔔',
+
+      decimal:
+        true
     }
 
   };
@@ -1606,6 +1891,7 @@ function renderMonthChart() {
           datasets: [
 
             {
+
               label:
                 config.label,
 
@@ -1634,11 +1920,81 @@ function renderMonthChart() {
           maintainAspectRatio:
             false,
 
+          layout: {
+
+            padding: {
+              top: 30
+            }
+
+          },
+
+          plugins: {
+
+            datalabels: {
+
+              anchor:
+                'end',
+
+              align:
+                'top',
+
+              color:
+                '#334155',
+
+              font: {
+
+                size:
+                  11,
+
+                weight:
+                  '600'
+
+              },
+
+              formatter: function(value) {
+
+                if (
+                  config.percent
+                ) {
+
+                  return Number(value)
+                    .toFixed(1)
+                    +
+                    '%';
+
+                }
+
+
+                if (
+                  config.decimal
+                ) {
+
+                  return Number(value)
+                    .toFixed(1);
+
+                }
+
+
+                return Number(value)
+                  .toLocaleString(
+                    'zh-TW'
+                  );
+
+              }
+
+            }
+
+          },
+
           scales: {
 
             y: {
+
               beginAtZero:
                 true,
+
+              grace:
+                '15%',
 
               ticks: {
 
@@ -1725,9 +2081,9 @@ function renderActivities() {
 
 
             /*
-             * 台灣顏色
-             * 高於平均 = 紅色
-             * 低於平均 = 綠色
+             * 台灣顏色：
+             * 上升紅色
+             * 下降綠色
              */
 
             diffClass =
@@ -1764,7 +2120,9 @@ function renderActivities() {
                 ${number(activity.monthDailyAverage, 2)}
               </td>
 
-              <td class="p-3 text-right font-semibold ${diffClass}">
+              <td
+                class="p-3 text-right font-semibold ${diffClass}"
+              >
                 ${diffText}
               </td>
 
@@ -1799,6 +2157,7 @@ function renderMonthSelector() {
 
           <option
             value="${month}"
+
             ${
               month ===
               state.data.selectedMonth
@@ -1808,7 +2167,9 @@ function renderMonthSelector() {
                 ''
             }
           >
+
             ${month}
+
           </option>
 
         `
@@ -1947,7 +2308,7 @@ function renderAll() {
 
 
 /* ===================================================
-   Chart destroy
+   Destroy Chart
 =================================================== */
 
 function destroyChart_(key) {
