@@ -1,3899 +1,1964 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GC 綠點兌換｜行銷觀察儀表板</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-<!-- Excel -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<title>GC 綠點行銷分析中心</title>
 
-<!-- Chart -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
-<style>
-* {
-    box-sizing: border-box;
-}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-body {
-    margin: 0;
-    background: #f4f7f5;
-    color: #26352e;
-    font-family:
-        "Noto Sans TC",
-        "Microsoft JhengHei",
-        Arial,
-        sans-serif;
-}
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 
-.container {
-    width: min(1450px, 94%);
-    margin: 35px auto 60px;
-}
-
-.header {
-    margin-bottom: 25px;
-}
-
-.header h1 {
-    margin: 0 0 8px;
-    font-size: 30px;
-}
-
-.header p {
-    margin: 0;
-    color: #718079;
-    line-height: 1.7;
-}
-
-.upload-box {
-    background: #fff;
-    border: 2px dashed #91b3a1;
-    border-radius: 16px;
-    padding: 32px;
-    text-align: center;
-}
-
-.upload-box h2 {
-    margin-top: 0;
-}
-
-.upload-box input {
-    margin: 18px 0 8px;
-}
-
-.note {
-    font-size: 13px;
-    color: #7d8983;
-    line-height: 1.7;
-}
-
-.status {
-    display: none;
-    margin-top: 16px;
-    border-radius: 10px;
-    padding: 13px 16px;
-    line-height: 1.6;
-}
-
-.status.success {
-    display: block;
-    background: #e8f6ed;
-    color: #176b45;
-}
-
-.status.warning {
-    display: block;
-    background: #fff4d9;
-    color: #815e00;
-}
-
-.status.error {
-    display: block;
-    background: #fdeaea;
-    color: #a12525;
-}
-
-.dashboard {
-    display: none;
-}
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-top: 28px;
-    flex-wrap: wrap;
-}
-
-.dashboard-header h2 {
-    margin: 0;
-}
-
-.actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-button {
-    border: 0;
-    border-radius: 9px;
-    background: #176b45;
-    color: #fff;
-    padding: 11px 18px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-button.secondary {
-    background: #edf4f0;
-    color: #176b45;
-}
-
-button.danger {
-    background: #fbecec;
-    color: #9b2828;
-    padding: 7px 11px;
-}
-
-button:hover {
-    opacity: .9;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns:
-        repeat(4, minmax(180px, 1fr));
-    gap: 15px;
-    margin: 22px 0;
-}
-
-.card {
-    background: white;
-    border-radius: 14px;
-    padding: 19px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.045);
-}
-
-.card .label {
-    color: #728078;
-    font-size: 14px;
-}
-
-.card .value {
-    color: #176b45;
-    font-size: 27px;
-    font-weight: 700;
-    margin-top: 8px;
-}
-
-.card .sub {
-    color: #87918c;
-    font-size: 12px;
-    margin-top: 7px;
-}
-
-.section {
-    background: #fff;
-    border-radius: 14px;
-    padding: 23px;
-    margin: 18px 0;
-    box-shadow: 0 3px 12px rgba(0,0,0,.045);
-}
-
-.section h3 {
-    margin-top: 0;
-    margin-bottom: 17px;
-}
-
-.grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
-
-.chart-box {
-    height: 330px;
-}
-
-.table-wrap {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-th {
-    text-align: left;
-    padding: 10px;
-    background: #eef5f1;
-    white-space: nowrap;
-}
-
-td {
-    padding: 10px;
-    border-bottom: 1px solid #edf0ee;
-}
-
-.number {
-    text-align: right;
-}
-
-.insight-list {
-    display: grid;
-    gap: 0;
-}
-
-.insight {
-    padding: 12px 0;
-    border-bottom: 1px solid #edf0ee;
-}
-
-.insight:last-child {
-    border-bottom: 0;
-}
-
-.insight-title {
-    color: #6e7a74;
-    font-size: 13px;
-}
-
-.insight-value {
-    margin-top: 3px;
-    font-weight: 700;
-    color: #176b45;
-}
-
-.activity-form {
-    display: grid;
-    grid-template-columns: 180px 1fr auto;
-    gap: 10px;
-    align-items: end;
-    margin-bottom: 18px;
-}
-
-.form-item label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    color: #64716a;
-}
-
-input[type="date"],
-input[type="text"] {
-    width: 100%;
-    border: 1px solid #d3ddd7;
-    border-radius: 8px;
-    padding: 10px 11px;
-    font-size: 14px;
-}
-
-.data-note {
-    padding: 14px 16px;
-    background: #f7faf8;
-    border-left: 4px solid #8cb5a0;
-    border-radius: 7px;
-    line-height: 1.8;
-    font-size: 14px;
-}
-
-.positive {
-    color: #16744a;
-    font-weight: 700;
-}
-
-.negative {
-    color: #b54747;
-    font-weight: 700;
-}
-
-.neutral {
-    color: #65736c;
-    font-weight: 700;
-}
-
-.badge {
-    display: inline-block;
-    border-radius: 50px;
-    padding: 3px 8px;
-    font-size: 12px;
-    background: #edf5f1;
-    color: #176b45;
-}
-
-.footer-note {
-    color: #77827c;
-    font-size: 13px;
-    line-height: 1.8;
-    margin-top: 20px;
-}
-
-@media(max-width: 950px) {
-
-    .cards {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .grid-2 {
-        grid-template-columns: 1fr;
-    }
-
-    .activity-form {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media(max-width: 560px) {
-
-    .cards {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
 </head>
 
-<body>
 
-<div class="container">
+<body
+  class="bg-slate-50 text-slate-800 border-t-4 border-emerald-600 min-h-screen"
+>
 
-    <div class="header">
 
-        <h1>
-            GC 綠點兌換｜行銷觀察儀表板
-        </h1>
+<!-- Loading -->
 
-        <p>
-            上傳每月「綠點X月兌換」Excel，
-            系統會直接依當月交易資料產生行銷觀察摘要。
-        </p>
+<div
+  id="loading"
+  class="min-h-screen flex items-center justify-center"
+>
+
+  <div class="text-center">
+
+    <div
+      class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"
+    ></div>
+
+    <p class="mt-4 text-emerald-700">
+      正在同步綠點數據…
+    </p>
+
+  </div>
+
+</div>
+
+
+<!-- Dashboard -->
+
+<div
+  id="dashboard"
+  class="hidden max-w-7xl mx-auto p-6 md:p-10"
+>
+
+
+<header
+  class="flex flex-col md:flex-row justify-between gap-5 mb-8"
+>
+
+  <div>
+
+    <div
+      class="inline-block text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full mb-3"
+    >
+      Google 即時同步
+    </div>
+
+    <h1
+      class="text-3xl font-extrabold text-emerald-950"
+    >
+      GC 綠點行銷分析中心
+    </h1>
+
+    <p
+      class="text-slate-500 mt-2"
+    >
+      會員兌換行為 × 時間分析 × 月份比較 × 活動觀察
+    </p>
+
+  </div>
+
+
+  <div>
+
+    <label
+      class="text-xs text-slate-500"
+    >
+      分析月份
+    </label>
+
+    <select
+      id="monthSelector"
+      class="block mt-1 border rounded-xl px-4 py-2 bg-white"
+    ></select>
+
+  </div>
+
+</header>
+
+
+<!-- Tabs -->
+
+<div
+  class="flex gap-2 flex-wrap mb-6"
+>
+
+  <button
+    class="tab-btn bg-emerald-700 text-white px-4 py-2 rounded-xl"
+    data-tab="overview"
+  >
+    總覽
+  </button>
+
+  <button
+    class="tab-btn bg-white px-4 py-2 rounded-xl border"
+    data-tab="members"
+  >
+    會員行為
+  </button>
+
+  <button
+    class="tab-btn bg-white px-4 py-2 rounded-xl border"
+    data-tab="time"
+  >
+    時間分析
+  </button>
+
+  <button
+    class="tab-btn bg-white px-4 py-2 rounded-xl border"
+    data-tab="months"
+  >
+    月份比較
+  </button>
+
+  <button
+    class="tab-btn bg-white px-4 py-2 rounded-xl border"
+    data-tab="activities"
+  >
+    活動觀察
+  </button>
+
+</div>
+
+
+<!-- ==========================
+     OVERVIEW
+========================== -->
+
+<section
+  id="tab-overview"
+  class="tab-section"
+>
+
+
+<div
+  id="insights"
+  class="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 mb-6"
+></div>
+
+
+<div
+  id="kpis"
+  class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"
+></div>
+
+
+<div
+  class="bg-white rounded-2xl p-6 mt-6 shadow-sm"
+>
+
+  <h3
+    class="font-bold text-emerald-900 mb-5"
+  >
+    每日兌換趨勢
+  </h3>
+
+  <div class="h-80">
+
+    <canvas id="dailyChart"></canvas>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<!-- ==========================
+     MEMBERS
+========================== -->
+
+<section
+  id="tab-members"
+  class="tab-section hidden"
+>
+
+<div
+  class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+>
+
+  <div
+    class="bg-white p-6 rounded-2xl shadow-sm"
+  >
+
+    <h3 class="font-bold mb-5">
+      本月會員兌換次數分布
+    </h3>
+
+    <div class="h-72">
+
+      <canvas
+        id="repeatChart"
+      ></canvas>
 
     </div>
 
+  </div>
 
-    <!-- 上傳 -->
 
-    <div class="upload-box">
+  <div
+    class="bg-white p-6 rounded-2xl shadow-sm"
+  >
 
-        <h2>上傳綠點兌換 Excel</h2>
+    <h3 class="font-bold mb-4">
+      會員行為摘要
+    </h3>
 
-        <div class="note">
-            系統會自動尋找「綠點X月兌換」頁籤。<br>
-            Excel 僅在你的瀏覽器中分析，不會上傳到其他伺服器。
-        </div>
+    <div
+      id="memberSummary"
+      class="space-y-4"
+    ></div>
 
-        <input
-            type="file"
-            id="excelFile"
-            accept=".xlsx,.xls"
-        >
+  </div>
+
+</div>
+
+</section>
+
+
+<!-- ==========================
+     TIME
+========================== -->
+
+<section
+  id="tab-time"
+  class="tab-section hidden"
+>
+
+<div
+  class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+>
+
+  <div
+    class="bg-white p-6 rounded-2xl shadow-sm"
+  >
+
+    <h3 class="font-bold mb-5">
+      星期分布
+    </h3>
+
+    <div class="h-72">
+
+      <canvas id="weekdayChart"></canvas>
 
     </div>
 
-    <div id="status" class="status"></div>
+  </div>
 
 
-    <!-- Dashboard -->
+  <div
+    class="bg-white p-6 rounded-2xl shadow-sm"
+  >
 
-    <div id="dashboard" class="dashboard">
+    <h3 class="font-bold mb-5">
+      兌換時段
+    </h3>
 
+    <div class="h-72">
 
-        <div class="dashboard-header">
-
-            <h2 id="dashboardTitle">
-                當月兌換分析
-            </h2>
-
-            <div class="actions">
-
-                <button
-                    id="downloadBtn"
-                >
-                    下載分析後 Excel
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- KPI -->
-
-        <div
-            id="cards"
-            class="cards"
-        ></div>
-
-
-        <!-- 趨勢 -->
-
-        <div class="section">
-
-            <h3>每日兌換趨勢</h3>
-
-            <div class="chart-box">
-
-                <canvas
-                    id="dailyChart"
-                ></canvas>
-
-            </div>
-
-        </div>
-
-
-        <div class="grid-2">
-
-
-            <!-- 行銷觀察 -->
-
-            <div class="section">
-
-                <h3>當月行銷觀察</h3>
-
-                <div
-                    id="insights"
-                    class="insight-list"
-                ></div>
-
-            </div>
-
-
-            <!-- 時段 -->
-
-            <div class="section">
-
-                <h3>會員兌換時段</h3>
-
-                <div class="chart-box">
-
-                    <canvas
-                        id="periodChart"
-                    ></canvas>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- TOP Member -->
-
-        <div class="section">
-
-            <h3>當月兌換會員 TOP 5</h3>
-
-            <div class="note">
-                僅代表本月兌換量較高，
-                不等同於會員終身價值或忠誠度。
-            </div>
-
-            <br>
-
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>會員</th>
-                            <th>兌換筆數</th>
-                            <th>蘿蔔數量</th>
-                            <th>綠點總額</th>
-                        </tr>
-                    </thead>
-
-                    <tbody
-                        id="memberTable"
-                    ></tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-
-        <!-- 活動註記 -->
-
-        <div class="section">
-
-            <h3>行銷活動日期註記</h3>
-
-            <div class="data-note">
-
-                可自行輸入 LINE 推播、社群貼文、
-                EDM、活動開始日等日期。
-
-                <br>
-
-                系統只會比較
-                <strong>「活動當日兌換量」與「本月每日平均」</strong>，
-                不會將數據直接認定為活動造成。
-
-            </div>
-
-            <br>
-
-            <div class="activity-form">
-
-                <div class="form-item">
-
-                    <label>活動日期</label>
-
-                    <input
-                        type="date"
-                        id="activityDate"
-                    >
-
-                </div>
-
-                <div class="form-item">
-
-                    <label>活動名稱／備註</label>
-
-                    <input
-                        type="text"
-                        id="activityName"
-                        placeholder="例如：LINE 推播"
-                    >
-
-                </div>
-
-                <button id="addActivityBtn">
-                    ＋ 加入註記
-                </button>
-
-            </div>
-
-
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-                            <th>日期</th>
-                            <th>活動／備註</th>
-                            <th>當日兌換</th>
-                            <th>每日平均</th>
-                            <th>與平均相比</th>
-                            <th>觀察</th>
-                            <th></th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody
-                        id="activityTable"
-                    ></tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-
-        <!-- 每日明細 -->
-
-        <div class="section">
-
-            <h3>每日兌換分析</h3>
-
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-                            <th>日期</th>
-                            <th>兌換筆數</th>
-                            <th>蘿蔔數量</th>
-                            <th>綠點總額</th>
-                            <th>平均每筆蘿蔔</th>
-                            <th>活躍會員</th>
-                            <th>日別</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody
-                        id="dailyTable"
-                    ></tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-
-        <div class="footer-note">
-
-            ※「同月重複兌換會員率」是指在本月 Excel
-            中出現 2 次以上兌換紀錄的會員，
-            不代表該會員過去是否曾經兌換。
-
-            <br>
-
-            ※ 所有活動比較僅為數據同期觀察，
-            不代表活動與兌換增加存在因果關係。
-
-        </div>
+      <canvas id="periodChart"></canvas>
 
     </div>
+
+  </div>
+
+</div>
+
+
+<div
+  class="bg-white p-6 rounded-2xl shadow-sm mt-6"
+>
+
+  <h3 class="font-bold mb-5">
+    星期 × 時段熱區
+  </h3>
+
+  <div id="heatmap"></div>
+
+</div>
+
+</section>
+
+
+<!-- ==========================
+     MONTHS
+========================== -->
+
+<section
+  id="tab-months"
+  class="tab-section hidden"
+>
+
+<div
+  class="bg-white p-6 rounded-2xl shadow-sm"
+>
+
+  <div
+    class="flex justify-between items-center mb-5"
+  >
+
+    <h3 class="font-bold">
+      歷月趨勢
+    </h3>
+
+    <select
+      id="metricSelector"
+      class="border rounded-lg px-3 py-2"
+    >
+
+      <option value="totalCount">
+        兌換筆數
+      </option>
+
+      <option value="uniqueMembers">
+        兌換會員
+      </option>
+
+      <option value="totalRadish">
+        蘿蔔兌換量
+      </option>
+
+      <option value="repeatRate">
+        同月重複兌換率
+      </option>
+
+      <option value="averageRadish">
+        平均每筆蘿蔔
+      </option>
+
+    </select>
+
+  </div>
+
+  <div class="h-80">
+
+    <canvas id="monthChart"></canvas>
+
+  </div>
+
+</div>
+
+
+<div
+  class="bg-white rounded-2xl shadow-sm mt-6 overflow-x-auto"
+>
+
+<table
+  class="w-full text-sm"
+>
+
+<thead
+  class="bg-emerald-50"
+>
+
+<tr>
+
+<th class="p-4 text-left">
+月份
+</th>
+
+<th class="p-4 text-right">
+筆數
+</th>
+
+<th class="p-4 text-right">
+會員
+</th>
+
+<th class="p-4 text-right">
+蘿蔔
+</th>
+
+<th class="p-4 text-right">
+綠點
+</th>
+
+<th class="p-4 text-right">
+同月重複率
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="monthTable"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<!-- ==========================
+     ACTIVITIES
+========================== -->
+
+<section
+  id="tab-activities"
+  class="tab-section hidden"
+>
+
+<div
+  class="bg-white rounded-2xl p-6 shadow-sm"
+>
+
+<h3 class="font-bold mb-3">
+活動日期觀察
+</h3>
+
+<p class="text-sm text-slate-500 mb-5">
+活動數據僅做同期比較，不代表活動與兌換成長存在直接因果。
+</p>
+
+
+<div class="overflow-x-auto">
+
+<table class="w-full text-sm">
+
+<thead class="bg-emerald-50">
+
+<tr>
+
+<th class="p-3 text-left">
+日期
+</th>
+
+<th class="p-3 text-left">
+活動
+</th>
+
+<th class="p-3 text-left">
+通路
+</th>
+
+<th class="p-3 text-right">
+當日兌換
+</th>
+
+<th class="p-3 text-right">
+月日均
+</th>
+
+<th class="p-3 text-right">
+差異
+</th>
+
+<th class="p-3 text-left">
+觀察
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="activityTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<div
+  class="text-xs text-slate-400 mt-8"
+>
+最後同步：
+<span id="syncTime"></span>
+</div>
 
 </div>
 
 
 <script>
 
-/* =====================================================
-   全域資料
-===================================================== */
+/* ===================================================
+   CONFIG
+=================================================== */
 
-let workbook = null;
-let originalFileName = "";
+const CONFIG = {
 
-let sourceSheetName = "";
-
-let analysis = null;
-
-let activities = [];
-
-let dailyChartInstance = null;
-let periodChartInstance = null;
-
-
-/* =====================================================
-   欄位名稱
-
-   若未來 Excel 欄位名稱略有改變，
-   可直接在這裡增加別名。
-===================================================== */
-
-const FIELD_ALIASES = {
-
-    userId: [
-        "user_id",
-        "userid",
-        "會員id",
-        "會員ID",
-        "會員編號"
-    ],
-
-    nickname: [
-        "nickname",
-        "暱稱",
-        "會員暱稱"
-    ],
-
-    radish: [
-        "radish_amount",
-        "蘿蔔數量",
-        "蘿蔔",
-        "radish"
-    ],
-
-    green: [
-        "green_point_amount",
-        "綠點金額",
-        "綠點數量",
-        "綠點"
-    ],
-
-    chargeAt: [
-        "charge_at",
-        "兌換時間",
-        "交易時間",
-        "兌換日期",
-        "日期"
-    ]
+  API_URL:https://script.google.com/macros/s/AKfycbxBnu4zBqt1JM7VmNHwhYIBcwmHDKCiopyJcH6OraM_ou1NCC-YjolwNZptucSU9b4E/exec
+    '請貼上你的_APPS_SCRIPT_WEB_APP網址'
 
 };
 
 
-/* =====================================================
-   基本工具
-===================================================== */
+/* ===================================================
+   State
+=================================================== */
 
-function normalizeFieldName(value) {
+const state = {
 
-    return String(value || "")
-        .trim()
-        .replace(/\s+/g, "")
-        .toLowerCase();
-}
+  data: null,
 
+  charts: {}
 
-function escapeHtml(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+};
 
 
-function pad(value) {
-
-    return String(value)
-        .padStart(2, "0");
-}
+const $ =
+  id =>
+    document.getElementById(id);
 
 
-function formatNumber(
-    value,
-    decimals = 0
+/* ===================================================
+   Helpers
+=================================================== */
+
+function number(
+  value,
+  decimals = 0
 ) {
 
-    return Number(value || 0)
-        .toLocaleString(
-            "zh-TW",
-            {
-                minimumFractionDigits: decimals,
-                maximumFractionDigits: decimals
-            }
-        );
-}
+  return Number(value || 0)
+    .toLocaleString(
+      'zh-TW',
+      {
+        minimumFractionDigits:
+          decimals,
 
-
-function formatPercent(value) {
-
-    return (
-        Number(value || 0) * 100
-    ).toFixed(2) + "%";
-}
-
-
-function formatDate(date) {
-
-    if (!date) return "";
-
-    return (
-        date.getFullYear()
-        + "/"
-        + (date.getMonth() + 1)
-        + "/"
-        + date.getDate()
+        maximumFractionDigits:
+          decimals
+      }
     );
+
 }
 
 
-function isoDate(date) {
+function percent(value) {
 
-    return (
-        date.getFullYear()
-        + "-"
-        + pad(date.getMonth() + 1)
-        + "-"
-        + pad(date.getDate())
-    );
+  return (
+    Number(value || 0)
+    * 100
+  ).toFixed(1)
+  + '%';
+
 }
 
 
-function showStatus(
-    message,
-    type = "success"
+function growth(
+  current,
+  previous
 ) {
 
-    const element =
-        document.getElementById(
-            "status"
-        );
-
-    element.className =
-        "status " + type;
-
-    element.innerHTML =
-        message;
-}
-
-
-/* =====================================================
-   Excel 日期處理
-===================================================== */
-
-function parseExcelDate(value) {
-
-    if (value instanceof Date) {
-
-        if (!isNaN(value.getTime())) {
-
-            return new Date(
-                value.getFullYear(),
-                value.getMonth(),
-                value.getDate(),
-                value.getHours(),
-                value.getMinutes(),
-                value.getSeconds()
-            );
-        }
-    }
-
-
-    /*
-        Excel Serial Number
-    */
-
-    if (
-        typeof value === "number"
-        && Number.isFinite(value)
-    ) {
-
-        const parsed =
-            XLSX.SSF.parse_date_code(
-                value
-            );
-
-        if (!parsed) {
-            return null;
-        }
-
-        return new Date(
-            parsed.y,
-            parsed.m - 1,
-            parsed.d,
-            parsed.H || 0,
-            parsed.M || 0,
-            Math.floor(parsed.S || 0)
-        );
-    }
-
-
-    /*
-        字串日期
-    */
-
-    if (typeof value === "string") {
-
-        const text =
-            value.trim();
-
-        const match =
-            text.match(
-                /^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/
-            );
-
-        if (match) {
-
-            return new Date(
-                Number(match[1]),
-                Number(match[2]) - 1,
-                Number(match[3]),
-                Number(match[4] || 0),
-                Number(match[5] || 0),
-                Number(match[6] || 0)
-            );
-        }
-
-
-        const date =
-            new Date(text);
-
-        if (!isNaN(date.getTime())) {
-
-            return date;
-        }
-
-    }
-
+  if (
+    previous === null ||
+    previous === undefined ||
+    previous === 0
+  ) {
 
     return null;
+
+  }
+
+
+  return (
+    (
+      current
+      -
+      previous
+    )
+    /
+    previous
+  );
+
 }
 
 
-/* =====================================================
-   找「綠點X月兌換」頁籤
-===================================================== */
+function growthHTML(
+  current,
+  previous
+) {
 
-function findSourceSheet(wb) {
-
-    /*
-        優先精確符合：
-        綠點8月兌換
-        綠點 8 月兌換
-    */
-
-    const exact =
-        wb.SheetNames.find(
-            name =>
-                /^綠點\s*\d{1,2}\s*月\s*兌換$/
-                .test(name)
-        );
-
-    if (exact) {
-        return exact;
-    }
+  const value =
+    growth(
+      current,
+      previous
+    );
 
 
-    /*
-        備援
-    */
+  if (value === null) {
 
-    return wb.SheetNames.find(
-        name =>
-            name.includes("綠點")
-            &&
-            name.includes("兌換")
-            &&
-            !name.includes("摘要")
+    return `
+      <span class="text-xs text-slate-400">
+        無上期比較
+      </span>
+    `;
+
+  }
+
+
+  const positive =
+    value > 0;
+
+
+  const className =
+    positive
+      ? 'text-emerald-700'
+      : value < 0
+        ? 'text-red-600'
+        : 'text-slate-500';
+
+
+  return `
+    <span class="${className} text-xs font-semibold">
+      ${
+        value > 0
+          ? '↑'
+          : value < 0
+            ? '↓'
+            : '−'
+      }
+      ${Math.abs(value * 100).toFixed(1)}%
+      vs 上月
+    </span>
+  `;
+
+}
+
+
+/* ===================================================
+   API
+=================================================== */
+
+async function loadDashboard(
+  month = ''
+) {
+
+  $('loading')
+    .classList
+    .remove(
+      'hidden'
+    );
+
+
+  $('dashboard')
+    .classList
+    .add(
+      'hidden'
+    );
+
+
+  const url =
+    CONFIG.API_URL
+    +
+    '?month='
+    +
+    encodeURIComponent(
+      month
+    )
+    +
+    '&_='
+    +
+    Date.now();
+
+
+  const response =
+    await fetch(
+      url,
+      {
+        cache:
+          'no-store'
+      }
+    );
+
+
+  const data =
+    await response.json();
+
+
+  if (!data.ok) {
+
+    throw new Error(
+      data.message
+      || '資料載入失敗'
+    );
+
+  }
+
+
+  state.data =
+    data;
+
+
+  renderAll();
+
+
+  $('loading')
+    .classList
+    .add(
+      'hidden'
+    );
+
+
+  $('dashboard')
+    .classList
+    .remove(
+      'hidden'
     );
 
 }
 
 
-/* =====================================================
-   取得頁籤月份
-===================================================== */
+/* ===================================================
+   KPI
+=================================================== */
 
-function getMonthFromSheetName(name) {
+function renderKpis() {
 
-    const match =
-        String(name)
-            .match(
-                /(\d{1,2})\s*月/
-            );
+  const c =
+    state.data.current;
 
-    if (!match) {
-        return null;
+
+  const p =
+    state.data.previous;
+
+
+  const cards = [
+
+    {
+      title:
+        '本月兌換筆數',
+
+      value:
+        number(
+          c.totalCount
+        )
+        +
+        ' 筆',
+
+      growth:
+        growthHTML(
+          c.totalCount,
+          p?.totalCount
+        )
+    },
+
+    {
+      title:
+        '兌換會員',
+
+      value:
+        number(
+          c.uniqueMembers
+        )
+        +
+        ' 人',
+
+      growth:
+        growthHTML(
+          c.uniqueMembers,
+          p?.uniqueMembers
+        )
+    },
+
+    {
+      title:
+        '蘿蔔兌換量',
+
+      value:
+        number(
+          c.totalRadish
+        ),
+
+      growth:
+        growthHTML(
+          c.totalRadish,
+          p?.totalRadish
+        )
+    },
+
+    {
+      title:
+        '綠點使用量',
+
+      value:
+        number(
+          c.totalGreen
+        ),
+
+      growth:
+        growthHTML(
+          c.totalGreen,
+          p?.totalGreen
+        )
+    },
+
+    {
+      title:
+        '平均每筆蘿蔔',
+
+      value:
+        number(
+          c.averageRadish,
+          2
+        ),
+
+      growth:
+        growthHTML(
+          c.averageRadish,
+          p?.averageRadish
+        )
+    },
+
+    {
+      title:
+        '同月重複兌換率',
+
+      value:
+        percent(
+          c.repeatRate
+        ),
+
+      growth:
+        p
+          ?
+          growthHTML(
+            c.repeatRate,
+            p.repeatRate
+          )
+          :
+          '無上期比較'
+    },
+
+    {
+      title:
+        '週末兌換占比',
+
+      value:
+        percent(
+          c.weekendRate
+        ),
+
+      growth:
+        ''
+    },
+
+    {
+      title:
+        '≥50 蘿蔔占比',
+
+      value:
+        percent(
+          c.highValueRate
+        ),
+
+      growth:
+        ''
     }
 
-    const month =
-        Number(match[1]);
+  ];
 
-    if (
-        month < 1 ||
-        month > 12
-    ) {
-        return null;
-    }
 
-    return month;
+  $('kpis').innerHTML =
+    cards.map(card => `
+
+      <div
+        class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100"
+      >
+
+        <div
+          class="text-sm text-slate-500"
+        >
+          ${card.title}
+        </div>
+
+        <div
+          class="text-3xl font-extrabold text-emerald-950 mt-2"
+        >
+          ${card.value}
+        </div>
+
+        <div class="mt-3">
+          ${card.growth}
+        </div>
+
+      </div>
+
+    `).join('');
+
 }
 
 
-/* =====================================================
-   欄位對應
-===================================================== */
+/* ===================================================
+   Insights
+=================================================== */
 
-function resolveColumns(rows) {
+function renderInsights() {
 
-    if (!rows.length) {
+  const c =
+    state.data.current;
 
-        throw new Error(
-            "Excel 沒有可分析的資料。"
-        );
+
+  const p =
+    state.data.previous;
+
+
+  const insights = [];
+
+
+  insights.push(
+    `本月共有 <strong>${number(c.totalCount)} 筆</strong>兌換，由 <strong>${number(c.uniqueMembers)} 位</strong>會員完成。`
+  );
+
+
+  insights.push(
+    `最高兌換日為 <strong>${c.peakDate}</strong>，共 <strong>${c.peakCount} 筆</strong>。`
+  );
+
+
+  insights.push(
+    `本月有 <strong>${c.repeatMembers} 位</strong>會員兌換至少 2 次，同月重複兌換率為 <strong>${percent(c.repeatRate)}</strong>。`
+  );
+
+
+  if (p) {
+
+    const change =
+      growth(
+        c.totalCount,
+        p.totalCount
+      );
+
+
+    if (change !== null) {
+
+      insights.push(
+
+        change >= 0
+
+          ? `兌換筆數較上月增加 <strong>${Math.abs(change * 100).toFixed(1)}%</strong>。`
+
+          : `兌換筆數較上月下降 <strong>${Math.abs(change * 100).toFixed(1)}%</strong>，可再搭配活動檔期與曝光節奏觀察。`
+
+      );
+
     }
 
-
-    const headers =
-        Object.keys(rows[0]);
+  }
 
 
-    const normalizedMap =
-        new Map();
+  $('insights').innerHTML = `
+
+    <h3
+      class="font-bold text-emerald-800 mb-3"
+    >
+      📊 自動數據洞察
+    </h3>
+
+    <ul
+      class="space-y-2 text-sm leading-6"
+    >
+
+      ${
+        insights
+          .map(
+            text =>
+              `<li>• ${text}</li>`
+          )
+          .join('')
+      }
+
+    </ul>
+
+  `;
+
+}
 
 
-    headers.forEach(header => {
+/* ===================================================
+   Daily
+=================================================== */
 
-        normalizedMap.set(
-            normalizeFieldName(header),
-            header
-        );
+function renderDailyChart() {
 
-    });
+  destroyChart_(
+    'daily'
+  );
 
 
-    function findField(aliasList) {
+  const c =
+    state.data.current;
 
-        for (
-            const alias
-            of aliasList
-        ) {
 
-            const normalized =
-                normalizeFieldName(alias);
+  state.charts.daily =
+    new Chart(
+      $('dailyChart'),
+      {
 
-            if (
-                normalizedMap.has(
-                    normalized
-                )
-            ) {
+        type:
+          'line',
 
-                return normalizedMap.get(
-                    normalized
-                );
+        data: {
+
+          labels:
+            c.daily.map(
+              item =>
+                item.date.slice(5)
+            ),
+
+          datasets: [
+
+            {
+              label:
+                '兌換筆數',
+
+              data:
+                c.daily.map(
+                  item =>
+                    item.count
+                ),
+
+              borderWidth:
+                2,
+
+              tension:
+                .3
             }
+
+          ]
+
+        },
+
+        options: {
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false,
+
+          scales: {
+
+            y: {
+              beginAtZero:
+                true
+            }
+
+          }
 
         }
 
-        return null;
-    }
-
-
-    const columns = {
-
-        userId:
-            findField(
-                FIELD_ALIASES.userId
-            ),
-
-        nickname:
-            findField(
-                FIELD_ALIASES.nickname
-            ),
-
-        radish:
-            findField(
-                FIELD_ALIASES.radish
-            ),
-
-        green:
-            findField(
-                FIELD_ALIASES.green
-            ),
-
-        chargeAt:
-            findField(
-                FIELD_ALIASES.chargeAt
-            )
-
-    };
-
-
-    const required = [
-        ["會員 ID", columns.userId],
-        ["蘿蔔數量", columns.radish],
-        ["綠點金額", columns.green],
-        ["兌換時間", columns.chargeAt]
-    ];
-
-
-    const missing =
-        required
-            .filter(item => !item[1])
-            .map(item => item[0]);
-
-
-    if (missing.length) {
-
-        throw new Error(
-            "缺少必要欄位："
-            + missing.join("、")
-        );
-    }
-
-
-    return columns;
+      }
+    );
 
 }
 
 
-/* =====================================================
-   分析
-===================================================== */
+/* ===================================================
+   Member
+=================================================== */
 
-function analyseRows(
-    rows,
-    sheetName
+function renderMembers() {
+
+  const c =
+    state.data.current;
+
+
+  destroyChart_(
+    'repeat'
+  );
+
+
+  state.charts.repeat =
+    new Chart(
+      $('repeatChart'),
+      {
+
+        type:
+          'doughnut',
+
+        data: {
+
+          labels: [
+
+            '1 次',
+            '2 次',
+            '3 次以上'
+
+          ],
+
+          datasets: [
+
+            {
+              data: [
+
+                c.repeatDistribution.once,
+
+                c.repeatDistribution.twice,
+
+                c.repeatDistribution.threePlus
+
+              ]
+            }
+
+          ]
+
+        },
+
+        options: {
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false
+
+        }
+
+      }
+    );
+
+
+  $('memberSummary')
+    .innerHTML = `
+
+      ${summaryRow_(
+        '不重複會員',
+        `${number(c.uniqueMembers)} 人`
+      )}
+
+      ${summaryRow_(
+        '本月兌換 2 次以上',
+        `${number(c.repeatMembers)} 人`
+      )}
+
+      ${summaryRow_(
+        '同月重複兌換率',
+        percent(c.repeatRate)
+      )}
+
+      ${summaryRow_(
+        '前 5 大兌換會員綠點占比',
+        percent(c.top5Rate)
+      )}
+
+      ${summaryRow_(
+        '≥50 蘿蔔交易',
+        `${number(c.highValueCount)} 筆`
+      )}
+
+    `;
+
+}
+
+
+function summaryRow_(
+  title,
+  value
 ) {
 
-    const columns =
-        resolveColumns(rows);
+  return `
 
+    <div
+      class="flex justify-between border-b pb-3"
+    >
 
-    let invalidDateCount = 0;
+      <span
+        class="text-slate-500"
+      >
+        ${title}
+      </span>
 
+      <strong
+        class="text-emerald-800"
+      >
+        ${value}
+      </strong>
 
-    /*
-        轉成統一格式
-    */
+    </div>
 
-    const parsedRows =
-        rows
-            .map(row => {
+  `;
 
-                const date =
-                    parseExcelDate(
-                        row[
-                            columns.chargeAt
-                        ]
-                    );
+}
 
 
-                if (!date) {
+/* ===================================================
+   Time
+=================================================== */
 
-                    invalidDateCount++;
-                }
+function renderTime() {
 
+  const c =
+    state.data.current;
 
-                return {
 
-                    raw:
-                        row,
+  destroyChart_(
+    'weekday'
+  );
 
-                    date:
-                        date,
 
-                    userId:
-                        row[
-                            columns.userId
-                        ],
+  destroyChart_(
+    'period'
+  );
 
-                    nickname:
-                        columns.nickname
-                            ?
-                            row[
-                                columns.nickname
-                            ]
-                            :
-                            "",
 
-                    radish:
-                        Number(
-                            row[
-                                columns.radish
-                            ] || 0
-                        ),
+  state.charts.weekday =
+    new Chart(
+      $('weekdayChart'),
+      {
 
-                    green:
-                        Number(
-                            row[
-                                columns.green
-                            ] || 0
-                        )
+        type:
+          'bar',
 
-                };
+        data: {
 
-            })
-            .filter(
-                row => row.date
-            );
+          labels:
+            c.weekday.map(
+              item =>
+                `週${item.name}`
+            ),
 
+          datasets: [
 
-    if (!parsedRows.length) {
+            {
+              label:
+                '兌換筆數',
 
-        throw new Error(
-            "找不到可辨識的兌換日期。"
-        );
-    }
-
-
-    /*
-        頁籤名稱指定月份
-    */
-
-    let targetMonth =
-        getMonthFromSheetName(
-            sheetName
-        );
-
-
-    /*
-        若頁籤名稱沒有月份，
-        找資料最多的年月
-    */
-
-    const yearMonthCounts = {};
-
-
-    parsedRows.forEach(row => {
-
-        const key =
-            row.date.getFullYear()
-            + "-"
-            + pad(
-                row.date.getMonth() + 1
-            );
-
-        yearMonthCounts[key] =
-            (
-                yearMonthCounts[key]
-                || 0
-            ) + 1;
-
-    });
-
-
-    const dominantYearMonth =
-        Object.entries(
-            yearMonthCounts
-        )
-        .sort(
-            (a, b) =>
-                b[1] - a[1]
-        )[0][0];
-
-
-    let [
-        dominantYear,
-        dominantMonth
-    ] =
-        dominantYearMonth
-            .split("-")
-            .map(Number);
-
-
-    if (!targetMonth) {
-
-        targetMonth =
-            dominantMonth;
-
-    }
-
-
-    /*
-        決定年度：
-
-        從指定月份裡找資料量最多的年份
-    */
-
-    const yearCounts = {};
-
-
-    parsedRows
-        .filter(
-            row =>
-                row.date.getMonth() + 1
-                === targetMonth
-        )
-        .forEach(row => {
-
-            const y =
-                row.date.getFullYear();
-
-            yearCounts[y] =
-                (yearCounts[y] || 0)
-                + 1;
-
-        });
-
-
-    let targetYear =
-        Number(
-            Object.entries(
-                yearCounts
-            )
-            .sort(
-                (a, b) =>
-                    b[1] - a[1]
-            )[0]?.[0]
-        );
-
-
-    if (!targetYear) {
-
-        targetYear =
-            dominantYear;
-
-        targetMonth =
-            dominantMonth;
-
-    }
-
-
-    /*
-        僅分析目標年月
-    */
-
-    const data =
-        parsedRows.filter(row => {
-
-            return (
-                row.date.getFullYear()
-                === targetYear
-
-                &&
-
-                row.date.getMonth() + 1
-                === targetMonth
-            );
-
-        });
-
-
-    const ignoredCrossMonth =
-        parsedRows.length
-        - data.length;
-
-
-    if (!data.length) {
-
-        throw new Error(
-            "沒有找到可分析的當月資料。"
-        );
-    }
-
-
-    /* =================================================
-       KPI
-    ================================================= */
-
-
-    const totalCount =
-        data.length;
-
-
-    const totalRadish =
-        data.reduce(
-            (sum, row) =>
-                sum
-                +
-                (
-                    Number.isFinite(
-                        row.radish
-                    )
-                    ?
-                    row.radish
-                    :
-                    0
-                ),
-            0
-        );
-
-
-    const totalGreen =
-        data.reduce(
-            (sum, row) =>
-                sum
-                +
-                (
-                    Number.isFinite(
-                        row.green
-                    )
-                    ?
-                    row.green
-                    :
-                    0
-                ),
-            0
-        );
-
-
-    const averagePerTransaction =
-        totalCount
-            ?
-            totalRadish
-            / totalCount
-            :
-            0;
-
-
-    /* =================================================
-       會員
-    ================================================= */
-
-
-    const members =
-        new Map();
-
-
-    let missingUserIdCount = 0;
-
-
-    data.forEach(row => {
-
-        if (
-            row.userId === null
-            ||
-            row.userId === undefined
-            ||
-            String(row.userId).trim()
-            === ""
-        ) {
-
-            missingUserIdCount++;
-
-            return;
-        }
-
-
-        const id =
-            String(row.userId)
-                .trim();
-
-
-        if (
-            !members.has(id)
-        ) {
-
-            members.set(
-                id,
-                {
-                    userId:
-                        id,
-
-                    nickname:
-                        String(
-                            row.nickname
-                            || ""
-                        ).trim(),
-
-                    count:
-                        0,
-
-                    radish:
-                        0,
-
-                    green:
-                        0
-                }
-            );
-        }
-
-
-        const member =
-            members.get(id);
-
-
-        member.count++;
-
-        member.radish +=
-            row.radish || 0;
-
-        member.green +=
-            row.green || 0;
-
-
-        /*
-            如果前面沒暱稱，
-            後面有的話補上
-        */
-
-        if (
-            !member.nickname
-            &&
-            row.nickname
-        ) {
-
-            member.nickname =
-                String(
-                    row.nickname
-                ).trim();
-
-        }
-
-    });
-
-
-    const uniqueMembers =
-        members.size;
-
-
-    const repeatMembers =
-        Array.from(
-            members.values()
-        )
-        .filter(
-            member =>
-                member.count >= 2
-        )
-        .length;
-
-
-    const repeatRate =
-        uniqueMembers
-            ?
-            repeatMembers
-            /
-            uniqueMembers
-            :
-            0;
-
-
-    const topMembers =
-        Array.from(
-            members.values()
-        )
-        .sort(
-            (a, b) => {
-
-                if (
-                    b.green !==
-                    a.green
-                ) {
-
-                    return (
-                        b.green
-                        -
-                        a.green
-                    );
-                }
-
-
-                if (
-                    b.radish !==
-                    a.radish
-                ) {
-
-                    return (
-                        b.radish
-                        -
-                        a.radish
-                    );
-                }
-
-
-                return (
-                    b.count
-                    -
-                    a.count
-                );
-
+              data:
+                c.weekday.map(
+                  item =>
+                    item.count
+                )
             }
-        )
-        .slice(0, 5);
 
+          ]
 
-    const top5Green =
-        topMembers
-            .reduce(
-                (sum, member) =>
-                    sum
-                    +
-                    member.green,
-                0
-            );
-
-
-    const top5Rate =
-        totalGreen
-            ?
-            top5Green
-            /
-            totalGreen
-            :
-            0;
-
-
-    /* =================================================
-       高額兌換
-    ================================================= */
-
-
-    const highValueCount =
-        data.filter(
-            row =>
-                row.radish >= 50
-        )
-        .length;
-
-
-    const highValueRate =
-        totalCount
-            ?
-            highValueCount
-            /
-            totalCount
-            :
-            0;
-
-
-    /* =================================================
-       週末
-    ================================================= */
-
-
-    const weekendCount =
-        data.filter(row => {
-
-            const day =
-                row.date.getDay();
-
-            return (
-                day === 0
-                ||
-                day === 6
-            );
-
-        }).length;
-
-
-    const weekendRate =
-        totalCount
-            ?
-            weekendCount
-            /
-            totalCount
-            :
-            0;
-
-
-    /* =================================================
-       時段
-    ================================================= */
-
-
-    const periods = [
-
-        {
-            name:
-                "凌晨 00–05",
-            count:
-                0
         },
 
-        {
-            name:
-                "上午 06–11",
-            count:
-                0
-        },
+        options: {
 
-        {
-            name:
-                "下午 12–17",
-            count:
-                0
-        },
+          responsive:
+            true,
 
-        {
-            name:
-                "晚間 18–23",
-            count:
-                0
+          maintainAspectRatio:
+            false
+
         }
 
+      }
+    );
+
+
+  state.charts.period =
+    new Chart(
+      $('periodChart'),
+      {
+
+        type:
+          'bar',
+
+        data: {
+
+          labels:
+            c.periods.map(
+              item =>
+                item.name
+            ),
+
+          datasets: [
+
+            {
+              label:
+                '兌換筆數',
+
+              data:
+                c.periods.map(
+                  item =>
+                    item.count
+                )
+            }
+
+          ]
+
+        },
+
+        options: {
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false
+
+        }
+
+      }
+    );
+
+
+  renderHeatmap();
+
+}
+
+
+/* ===================================================
+   Heatmap
+=================================================== */
+
+function renderHeatmap() {
+
+  const data =
+    state.data.current.heatmap;
+
+
+  const max =
+    Math.max(
+      ...data.map(
+        item =>
+          item.count
+      ),
+      1
+    );
+
+
+  const weekdays =
+    ['日','一','二','三','四','五','六'];
+
+
+  const periods =
+    [
+      '凌晨 00–05',
+      '上午 06–11',
+      '下午 12–17',
+      '晚上 18–23'
     ];
 
 
-    data.forEach(row => {
+  let html = `
 
-        const hour =
-            row.date.getHours();
+    <div
+      class="grid grid-cols-5 gap-2 text-sm"
+    >
 
+      <div></div>
 
-        if (hour <= 5) {
-
-            periods[0].count++;
-
-        }
-        else if (
-            hour <= 11
-        ) {
-
-            periods[1].count++;
-
-        }
-        else if (
-            hour <= 17
-        ) {
-
-            periods[2].count++;
-
-        }
-        else {
-
-            periods[3].count++;
-
-        }
-
-    });
+  `;
 
 
-    periods.forEach(
+  periods.forEach(
+    period => {
+
+      html += `
+
+        <div
+          class="text-center text-xs text-slate-500"
+        >
+          ${period}
+        </div>
+
+      `;
+
+    }
+  );
+
+
+  weekdays.forEach(
+    weekday => {
+
+      html += `
+
+        <div
+          class="font-semibold flex items-center"
+        >
+          週${weekday}
+        </div>
+
+      `;
+
+
+      periods.forEach(
         period => {
 
-            period.rate =
-                totalCount
-                    ?
-                    period.count
-                    /
-                    totalCount
-                    :
-                    0;
+          const item =
+            data.find(
+              row =>
+                row.weekday === weekday
+                &&
+                row.period === period
+            );
+
+
+          const count =
+            item?.count || 0;
+
+
+          const intensity =
+            count / max;
+
+
+          const opacity =
+            0.08
+            +
+            intensity
+            * 0.55;
+
+
+          html += `
+
+            <div
+              class="rounded-lg p-3 text-center"
+              style="
+                background:
+                rgba(
+                  5,
+                  150,
+                  105,
+                  ${opacity}
+                );
+              "
+            >
+              ${count}
+            </div>
+
+          `;
 
         }
-    );
-
-
-    const maxPeriod =
-        Math.max(
-            ...periods.map(
-                period =>
-                    period.count
-            )
-        );
-
-
-    const popularPeriods =
-        periods
-            .filter(
-                period =>
-                    period.count
-                    === maxPeriod
-            )
-            .map(
-                period =>
-                    period.name
-            );
-
-
-    /* =================================================
-       每日
-    ================================================= */
-
-
-    const daysInMonth =
-        new Date(
-            targetYear,
-            targetMonth,
-            0
-        )
-        .getDate();
-
-
-    const dailyMap =
-        new Map();
-
-
-    for (
-        let day = 1;
-        day <= daysInMonth;
-        day++
-    ) {
-
-        const date =
-            new Date(
-                targetYear,
-                targetMonth - 1,
-                day
-            );
-
-
-        dailyMap.set(
-            isoDate(date),
-            {
-                date:
-                    date,
-
-                count:
-                    0,
-
-                radish:
-                    0,
-
-                green:
-                    0,
-
-                users:
-                    new Set()
-            }
-        );
+      );
 
     }
+  );
 
 
-    data.forEach(row => {
-
-        const key =
-            isoDate(row.date);
+  html += '</div>';
 
 
-        const daily =
-            dailyMap.get(key);
+  $('heatmap')
+    .innerHTML =
+      html;
+
+}
 
 
-        if (!daily) {
-            return;
-        }
+/* ===================================================
+   Months
+=================================================== */
+
+function renderMonthTable() {
+
+  const data =
+    state.data.monthlySummary;
 
 
-        daily.count++;
+  $('monthTable')
+    .innerHTML =
+      data.map(row => `
 
-        daily.radish +=
-            row.radish || 0;
+        <tr
+          class="border-b"
+        >
 
-        daily.green +=
-            row.green || 0;
+          <td class="p-4 font-semibold">
+            ${row.month}
+          </td>
 
+          <td class="p-4 text-right">
+            ${number(row.totalCount)}
+          </td>
 
-        if (
-            row.userId !== null
-            &&
-            row.userId !== undefined
-            &&
-            String(
-                row.userId
-            ).trim() !== ""
-        ) {
+          <td class="p-4 text-right">
+            ${number(row.uniqueMembers)}
+          </td>
 
-            daily.users.add(
-                String(
-                    row.userId
-                ).trim()
-            );
+          <td class="p-4 text-right">
+            ${number(row.totalRadish)}
+          </td>
 
-        }
+          <td class="p-4 text-right">
+            ${number(row.totalGreen)}
+          </td>
 
-    });
+          <td class="p-4 text-right">
+            ${percent(row.repeatRate)}
+          </td>
 
+        </tr>
 
-    const daily =
-        Array.from(
-            dailyMap.values()
-        )
-        .map(day => {
+      `).join('');
 
-            const weekday =
-                day.date.getDay();
+}
 
 
-            return {
+function renderMonthChart() {
 
-                date:
-                    day.date,
+  const metric =
+    $('metricSelector').value;
 
-                count:
-                    day.count,
 
-                radish:
-                    day.radish,
+  const configs = {
 
-                green:
-                    day.green,
+    totalCount: {
+      label:
+        '兌換筆數'
+    },
 
-                average:
-                    day.count
+    uniqueMembers: {
+      label:
+        '兌換會員'
+    },
+
+    totalRadish: {
+      label:
+        '蘿蔔兌換量'
+    },
+
+    repeatRate: {
+      label:
+        '同月重複兌換率',
+      percent:
+        true
+    },
+
+    averageRadish: {
+      label:
+        '平均每筆蘿蔔'
+    }
+
+  };
+
+
+  const config =
+    configs[metric];
+
+
+  destroyChart_(
+    'month'
+  );
+
+
+  state.charts.month =
+    new Chart(
+      $('monthChart'),
+      {
+
+        type:
+          'bar',
+
+        data: {
+
+          labels:
+            state.data.monthlySummary
+              .map(
+                item =>
+                  item.month
+              ),
+
+          datasets: [
+
+            {
+              label:
+                config.label,
+
+              data:
+                state.data.monthlySummary
+                  .map(
+                    item =>
+                      config.percent
                         ?
-                        day.radish
-                        /
-                        day.count
+                        item[metric]
+                        * 100
                         :
-                        0,
+                        item[metric]
+                  )
+            }
 
-                activeMembers:
-                    day.users.size,
+          ]
 
-                dayType:
-                    (
-                        weekday === 0
-                        ||
-                        weekday === 6
-                    )
-                    ?
-                    "週末"
-                    :
-                    "平日"
-
-            };
-
-        });
-
-
-    /*
-        高峰日
-    */
-
-
-    const peakDay =
-        [...daily]
-            .sort(
-                (a, b) => {
-
-                    if (
-                        b.count !==
-                        a.count
-                    ) {
-
-                        return (
-                            b.count
-                            -
-                            a.count
-                        );
-                    }
-
-
-                    return (
-                        b.green
-                        -
-                        a.green
-                    );
-
-                }
-            )[0];
-
-
-    /*
-        月曆日平均：
-        包含當月沒有交易的日期
-    */
-
-    const averageDaily =
-        totalCount
-        /
-        daysInMonth;
-
-
-    return {
-
-        year:
-            targetYear,
-
-        month:
-            targetMonth,
-
-        totalCount,
-
-        totalRadish,
-
-        totalGreen,
-
-        averagePerTransaction,
-
-        uniqueMembers,
-
-        repeatMembers,
-
-        repeatRate,
-
-        weekendCount,
-
-        weekendRate,
-
-        highValueCount,
-
-        highValueRate,
-
-        topMembers,
-
-        top5Rate,
-
-        periods,
-
-        popularPeriods,
-
-        daily,
-
-        peakDay,
-
-        averageDaily,
-
-        daysInMonth,
-
-        invalidDateCount,
-
-        missingUserIdCount,
-
-        ignoredCrossMonth,
-
-        columns
-
-    };
-
-}
-
-
-/* =====================================================
-   KPI 顯示
-===================================================== */
-
-function renderCards(a) {
-
-    const cards = [
-
-        {
-            label:
-                "兌換總筆數",
-
-            value:
-                formatNumber(
-                    a.totalCount
-                )
-                + " 筆",
-
-            sub:
-                "本月 Excel 交易筆數"
         },
 
-        {
-            label:
-                "蘿蔔總數量",
+        options: {
 
-            value:
-                formatNumber(
-                    a.totalRadish
-                ),
+          responsive:
+            true,
 
-            sub:
-                "radish_amount 加總"
-        },
+          maintainAspectRatio:
+            false
 
-        {
-            label:
-                "綠點總額",
-
-            value:
-                formatNumber(
-                    a.totalGreen
-                ),
-
-            sub:
-                "green_point_amount 加總"
-        },
-
-        {
-            label:
-                "不重複會員",
-
-            value:
-                formatNumber(
-                    a.uniqueMembers
-                )
-                + " 人",
-
-            sub:
-                "依 user_id 去重"
-        },
-
-        {
-            label:
-                "平均每筆蘿蔔",
-
-            value:
-                formatNumber(
-                    a.averagePerTransaction,
-                    2
-                ),
-
-            sub:
-                "本月平均兌換量"
-        },
-
-        {
-            label:
-                "同月重複兌換率",
-
-            value:
-                formatPercent(
-                    a.repeatRate
-                ),
-
-            sub:
-                a.repeatMembers
-                + " 位會員本月兌換 ≥2 次"
-        },
-
-        {
-            label:
-                "週末兌換占比",
-
-            value:
-                formatPercent(
-                    a.weekendRate
-                ),
-
-            sub:
-                a.weekendCount
-                + " 筆發生於六、日"
-        },
-
-        {
-            label:
-                "高額兌換占比",
-
-            value:
-                formatPercent(
-                    a.highValueRate
-                ),
-
-            sub:
-                "單筆 ≥50 蘿蔔"
         }
 
-    ];
-
-
-    document.getElementById(
-        "cards"
-    ).innerHTML =
-        cards.map(card => `
-
-            <div class="card">
-
-                <div class="label">
-                    ${escapeHtml(card.label)}
-                </div>
-
-                <div class="value">
-                    ${escapeHtml(card.value)}
-                </div>
-
-                <div class="sub">
-                    ${escapeHtml(card.sub)}
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   行銷觀察
-===================================================== */
-
-function renderInsights(a) {
-
-    let popularText =
-        a.popularPeriods
-            .join("、");
-
-
-    if (
-        a.popularPeriods.length > 1
-    ) {
-
-        popularText +=
-            "（並列）";
-
-    }
-
-
-    const observations = [
-
-        {
-            title:
-                "本月最高兌換日",
-
-            value:
-                formatDate(
-                    a.peakDay.date
-                )
-                +
-                "｜"
-                +
-                a.peakDay.count
-                +
-                " 筆"
-        },
-
-        {
-            title:
-                "當月平均每日兌換",
-
-            value:
-                a.averageDaily
-                    .toFixed(2)
-                +
-                " 筆／日"
-        },
-
-        {
-            title:
-                "熱門兌換時段",
-
-            value:
-                popularText
-        },
-
-        {
-            title:
-                "同月重複兌換會員",
-
-            value:
-                a.repeatMembers
-                +
-                " 人｜"
-                +
-                formatPercent(
-                    a.repeatRate
-                )
-        },
-
-        {
-            title:
-                "≥50 蘿蔔高額兌換",
-
-            value:
-                a.highValueCount
-                +
-                " 筆｜"
-                +
-                formatPercent(
-                    a.highValueRate
-                )
-        },
-
-        {
-            title:
-                "TOP 5 會員綠點占比",
-
-            value:
-                formatPercent(
-                    a.top5Rate
-                )
-        }
-
-    ];
-
-
-    document.getElementById(
-        "insights"
-    ).innerHTML =
-        observations.map(item => `
-
-            <div class="insight">
-
-                <div class="insight-title">
-                    ${escapeHtml(item.title)}
-                </div>
-
-                <div class="insight-value">
-                    ${escapeHtml(item.value)}
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   TOP 會員
-===================================================== */
-
-function renderMembers(a) {
-
-    const body =
-        document.getElementById(
-            "memberTable"
-        );
-
-
-    if (
-        !a.topMembers.length
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="4">
-                    無可分析會員資料
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML =
-        a.topMembers.map(
-            member => {
-
-                const displayName =
-                    member.nickname
-                    ||
-                    "會員 "
-                    + member.userId;
-
-
-                return `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHtml(displayName)}
-                        </td>
-
-                        <td class="number">
-                            ${formatNumber(member.count)}
-                        </td>
-
-                        <td class="number">
-                            ${formatNumber(member.radish)}
-                        </td>
-
-                        <td class="number">
-                            ${formatNumber(member.green)}
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        ).join("");
-
-}
-
-
-/* =====================================================
-   每日資料
-===================================================== */
-
-function renderDaily(a) {
-
-    document.getElementById(
-        "dailyTable"
-    ).innerHTML =
-        a.daily.map(day => `
-
-            <tr>
-
-                <td>
-                    ${formatDate(day.date)}
-                </td>
-
-                <td class="number">
-                    ${formatNumber(day.count)}
-                </td>
-
-                <td class="number">
-                    ${formatNumber(day.radish)}
-                </td>
-
-                <td class="number">
-                    ${formatNumber(day.green)}
-                </td>
-
-                <td class="number">
-                    ${formatNumber(day.average, 2)}
-                </td>
-
-                <td class="number">
-                    ${formatNumber(day.activeMembers)}
-                </td>
-
-                <td>
-                    <span class="badge">
-                        ${day.dayType}
-                    </span>
-                </td>
-
-            </tr>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   圖表
-===================================================== */
-
-function renderCharts(a) {
-
-    if (dailyChartInstance) {
-
-        dailyChartInstance.destroy();
-
-    }
-
-
-    if (periodChartInstance) {
-
-        periodChartInstance.destroy();
-
-    }
-
-
-    /*
-        每日趨勢
-    */
-
-    dailyChartInstance =
-        new Chart(
-            document.getElementById(
-                "dailyChart"
-            ),
-            {
-
-                type:
-                    "line",
-
-                data: {
-
-                    labels:
-                        a.daily.map(
-                            day =>
-                                `${a.month}/${day.date.getDate()}`
-                        ),
-
-                    datasets: [
-
-                        {
-                            label:
-                                "兌換筆數",
-
-                            data:
-                                a.daily.map(
-                                    day =>
-                                        day.count
-                                ),
-
-                            borderWidth:
-                                2,
-
-                            tension:
-                                .25,
-
-                            fill:
-                                false
-                        }
-
-                    ]
-
-                },
-
-                options: {
-
-                    responsive:
-                        true,
-
-                    maintainAspectRatio:
-                        false,
-
-                    plugins: {
-
-                        legend: {
-                            display:
-                                true
-                        }
-
-                    },
-
-                    scales: {
-
-                        y: {
-
-                            beginAtZero:
-                                true,
-
-                            ticks: {
-
-                                precision:
-                                    0
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-        );
-
-
-    /*
-        時段
-    */
-
-    periodChartInstance =
-        new Chart(
-            document.getElementById(
-                "periodChart"
-            ),
-            {
-
-                type:
-                    "bar",
-
-                data: {
-
-                    labels:
-                        a.periods.map(
-                            item =>
-                                item.name
-                        ),
-
-                    datasets: [
-
-                        {
-                            label:
-                                "兌換筆數",
-
-                            data:
-                                a.periods.map(
-                                    item =>
-                                        item.count
-                                )
-                        }
-
-                    ]
-
-                },
-
-                options: {
-
-                    responsive:
-                        true,
-
-                    maintainAspectRatio:
-                        false,
-
-                    scales: {
-
-                        y: {
-
-                            beginAtZero:
-                                true,
-
-                            ticks: {
-                                precision:
-                                    0
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-        );
-
-}
-
-
-/* =====================================================
-   活動註記
-===================================================== */
-
-function addActivity() {
-
-    if (!analysis) {
-        return;
-    }
-
-
-    const date =
-        document.getElementById(
-            "activityDate"
-        ).value;
-
-
-    const name =
-        document.getElementById(
-            "activityName"
-        ).value.trim();
-
-
-    if (!date) {
-
-        alert(
-            "請先選擇活動日期。"
-        );
-
-        return;
-    }
-
-
-    if (!name) {
-
-        alert(
-            "請輸入活動名稱或備註。"
-        );
-
-        return;
-    }
-
-
-    const dateObj =
-        new Date(
-            date + "T00:00:00"
-        );
-
-
-    if (
-        dateObj.getFullYear()
-        !== analysis.year
-        ||
-        dateObj.getMonth() + 1
-        !== analysis.month
-    ) {
-
-        alert(
-            `請選擇 ${analysis.year} 年 ${analysis.month} 月的日期。`
-        );
-
-        return;
-    }
-
-
-    activities.push({
-
-        id:
-            Date.now(),
-
-        date,
-        name
-
-    });
-
-
-    activities.sort(
-        (a, b) =>
-            a.date.localeCompare(
-                b.date
-            )
+      }
     );
 
-
-    document.getElementById(
-        "activityName"
-    ).value = "";
-
-
-    renderActivities();
-
 }
 
 
-function removeActivity(id) {
-
-    activities =
-        activities.filter(
-            activity =>
-                activity.id !== id
-        );
-
-
-    renderActivities();
-
-}
-
-
-function getActivityComparison(
-    activity
-) {
-
-    const daily =
-        analysis.daily.find(
-            day =>
-                isoDate(day.date)
-                === activity.date
-        );
-
-
-    const count =
-        daily
-            ?
-            daily.count
-            :
-            0;
-
-
-    const average =
-        analysis.averageDaily;
-
-
-    let diffRate = null;
-
-
-    if (average > 0) {
-
-        diffRate =
-            (
-                count
-                -
-                average
-            )
-            /
-            average;
-
-    }
-
-
-    let observation = "";
-    let className = "neutral";
-
-
-    if (diffRate === null) {
-
-        observation =
-            "無法比較";
-
-    }
-    else if (
-        diffRate >= .2
-    ) {
-
-        observation =
-            "當日明顯高於月平均";
-
-        className =
-            "positive";
-
-    }
-    else if (
-        diffRate <= -.2
-    ) {
-
-        observation =
-            "當日低於月平均";
-
-        className =
-            "negative";
-
-    }
-    else {
-
-        observation =
-            "與月平均接近";
-
-        className =
-            "neutral";
-
-    }
-
-
-    return {
-
-        count,
-        average,
-        diffRate,
-        observation,
-        className
-
-    };
-
-}
-
+/* ===================================================
+   Activity
+=================================================== */
 
 function renderActivities() {
 
-    const table =
-        document.getElementById(
-            "activityTable"
-        );
+  const activities =
+    state.data.activities;
 
 
-    if (!activities.length) {
+  if (!activities.length) {
 
-        table.innerHTML = `
+    $('activityTable')
+      .innerHTML = `
 
-            <tr>
+        <tr>
 
-                <td colspan="7">
-                    尚未加入活動註記
-                </td>
+          <td
+            colspan="7"
+            class="p-8 text-center text-slate-400"
+          >
+            本月尚未設定活動註記
+          </td>
+
+        </tr>
+
+      `;
+
+    return;
+
+  }
+
+
+  $('activityTable')
+    .innerHTML =
+      activities.map(
+        activity => {
+
+          const diff =
+            activity.differenceRate;
+
+
+          let diffText =
+            '-';
+
+
+          let diffClass =
+            'text-slate-500';
+
+
+          if (diff !== null) {
+
+            diffText =
+              `${
+                diff >= 0
+                  ? '+'
+                  : ''
+              }${(diff * 100).toFixed(1)}%`;
+
+
+            diffClass =
+              diff >= 0
+                ? 'text-emerald-700'
+                : 'text-red-600';
+
+          }
+
+
+          return `
+
+            <tr class="border-b">
+
+              <td class="p-3">
+                ${activity.date}
+              </td>
+
+              <td class="p-3 font-semibold">
+                ${activity.name}
+              </td>
+
+              <td class="p-3">
+                ${activity.channel || '-'}
+              </td>
+
+              <td class="p-3 text-right">
+                ${number(activity.transactionCount)}
+              </td>
+
+              <td class="p-3 text-right">
+                ${number(activity.monthDailyAverage, 2)}
+              </td>
+
+              <td class="p-3 text-right font-semibold ${diffClass}">
+                ${diffText}
+              </td>
+
+              <td class="p-3">
+                ${activity.observation}
+              </td>
 
             </tr>
 
-        `;
+          `;
 
-        return;
-    }
-
-
-    table.innerHTML =
-        activities.map(
-            activity => {
-
-                const result =
-                    getActivityComparison(
-                        activity
-                    );
-
-
-                const diffText =
-                    result.diffRate === null
-                        ?
-                        "-"
-                        :
-                        (
-                            result.diffRate >= 0
-                            ?
-                            "+"
-                            :
-                            ""
-                        )
-                        +
-                        (
-                            result.diffRate
-                            * 100
-                        ).toFixed(1)
-                        +
-                        "%";
-
-
-                return `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHtml(activity.date)}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(activity.name)}
-                        </td>
-
-                        <td class="number">
-                            ${formatNumber(result.count)}
-                        </td>
-
-                        <td class="number">
-                            ${result.average.toFixed(2)}
-                        </td>
-
-                        <td class="number ${result.className}">
-                            ${diffText}
-                        </td>
-
-                        <td class="${result.className}">
-                            ${escapeHtml(result.observation)}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="danger"
-                                onclick="removeActivity(${activity.id})"
-                            >
-                                刪除
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        ).join("");
-
-}
-
-
-/* =====================================================
-   Dashboard
-===================================================== */
-
-function renderDashboard(a) {
-
-    document.getElementById(
-        "dashboard"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "dashboardTitle"
-    ).textContent =
-        `${a.year} 年 ${a.month} 月綠點兌換分析`;
-
-
-    /*
-        預設活動日期
-    */
-
-    document.getElementById(
-        "activityDate"
-    ).value =
-        `${a.year}-${pad(a.month)}-01`;
-
-
-    renderCards(a);
-
-    renderInsights(a);
-
-    renderMembers(a);
-
-    renderDaily(a);
-
-    renderCharts(a);
-
-    renderActivities();
-
-}
-
-
-/* =====================================================
-   建立 Excel 摘要
-===================================================== */
-
-function createSummarySheet(a) {
-
-    const rows = [];
-
-
-    function setCell(
-        row,
-        column,
-        value
-    ) {
-
-        if (!rows[row]) {
-            rows[row] = [];
         }
+      ).join('');
+
+}
 
 
-        rows[row][column] =
-            value;
+/* ===================================================
+   Selector
+=================================================== */
 
-    }
+function renderMonthSelector() {
 
-
-    /*
-        標題
-    */
-
-    setCell(
-        0,
-        0,
-        `GC 綠點 ${a.year} 年 ${a.month} 月兌換摘要`
-    );
+  const select =
+    $('monthSelector');
 
 
-    setCell(
-        1,
-        0,
-        `資料來源：${sourceSheetName}｜統計日期欄位：charge_at`
-    );
+  select.innerHTML =
+    state.data.months
+      .map(
+        month => `
+
+          <option
+            value="${month}"
+            ${
+              month ===
+              state.data.selectedMonth
+                ?
+                'selected'
+                :
+                ''
+            }
+          >
+            ${month}
+          </option>
+
+        `
+      )
+      .join('');
+
+}
 
 
-    /*
-        KPI
-    */
+/* ===================================================
+   Tabs
+=================================================== */
 
-    setCell(
-        3,
-        0,
-        "兌換總筆數"
-    );
+function setupTabs() {
 
-    setCell(
-        3,
-        1,
-        a.totalCount
-    );
+  document
+    .querySelectorAll(
+      '.tab-btn'
+    )
+    .forEach(button => {
 
+      button.addEventListener(
+        'click',
+        () => {
 
-    setCell(
-        3,
-        2,
-        "蘿蔔總數量"
-    );
-
-    setCell(
-        3,
-        3,
-        a.totalRadish
-    );
-
-
-    setCell(
-        3,
-        4,
-        "綠點總額"
-    );
-
-    setCell(
-        3,
-        5,
-        a.totalGreen
-    );
-
-
-    setCell(
-        3,
-        6,
-        "不重複會員"
-    );
-
-    setCell(
-        3,
-        7,
-        a.uniqueMembers
-    );
-
-
-    setCell(
-        5,
-        0,
-        "平均每筆蘿蔔"
-    );
-
-    setCell(
-        5,
-        1,
-        a.averagePerTransaction
-    );
-
-
-    setCell(
-        5,
-        2,
-        "同月重複兌換率"
-    );
-
-    setCell(
-        5,
-        3,
-        a.repeatRate
-    );
-
-
-    setCell(
-        5,
-        4,
-        "週末兌換占比"
-    );
-
-    setCell(
-        5,
-        5,
-        a.weekendRate
-    );
-
-
-    setCell(
-        5,
-        6,
-        "≥50蘿蔔兌換占比"
-    );
-
-    setCell(
-        5,
-        7,
-        a.highValueRate
-    );
-
-
-    /*
-        每日資料
-    */
-
-    const dailyHeaders = [
-
-        "日期",
-        "兌換筆數",
-        "蘿蔔數量",
-        "綠點總額",
-        "平均每筆蘿蔔",
-        "活躍會員",
-        "日別"
-
-    ];
-
-
-    dailyHeaders.forEach(
-        (header, index) =>
-            setCell(
-                8,
-                index,
-                header
+          document
+            .querySelectorAll(
+              '.tab-section'
             )
-    );
-
-
-    a.daily.forEach(
-        (day, index) => {
-
-            const row =
-                index + 9;
-
-
-            setCell(
-                row,
-                0,
-                formatDate(
-                    day.date
-                )
-            );
-
-
-            setCell(
-                row,
-                1,
-                day.count
-            );
-
-
-            setCell(
-                row,
-                2,
-                day.radish
-            );
-
-
-            setCell(
-                row,
-                3,
-                day.green
-            );
-
-
-            setCell(
-                row,
-                4,
-                day.average
-            );
-
-
-            setCell(
-                row,
-                5,
-                day.activeMembers
-            );
-
-
-            setCell(
-                row,
-                6,
-                day.dayType
-            );
-
-        }
-    );
-
-
-    /*
-        TOP 5
-    */
-
-    setCell(
-        8,
-        8,
-        "會員"
-    );
-
-    setCell(
-        8,
-        9,
-        "兌換筆數"
-    );
-
-    setCell(
-        8,
-        10,
-        "蘿蔔數量"
-    );
-
-    setCell(
-        8,
-        11,
-        "綠點總額"
-    );
-
-
-    a.topMembers.forEach(
-        (member, index) => {
-
-            const row =
-                9 + index;
-
-
-            setCell(
-                row,
-                8,
-                member.nickname
-                ||
-                member.userId
-            );
-
-
-            setCell(
-                row,
-                9,
-                member.count
-            );
-
-
-            setCell(
-                row,
-                10,
-                member.radish
-            );
-
-
-            setCell(
-                row,
-                11,
-                member.green
-            );
-
-        }
-    );
-
-
-    /*
-        行銷觀察
-    */
-
-    setCell(
-        16,
-        8,
-        "當月行銷觀察"
-    );
-
-
-    setCell(
-        17,
-        8,
-        "最高兌換日"
-    );
-
-    setCell(
-        17,
-        9,
-        formatDate(
-            a.peakDay.date
-        )
-    );
-
-
-    setCell(
-        18,
-        8,
-        "最高單日筆數"
-    );
-
-    setCell(
-        18,
-        9,
-        a.peakDay.count
-    );
-
-
-    setCell(
-        19,
-        8,
-        "平均每日兌換"
-    );
-
-    setCell(
-        19,
-        9,
-        a.averageDaily
-    );
-
-
-    setCell(
-        20,
-        8,
-        "同月重複兌換會員"
-    );
-
-    setCell(
-        20,
-        9,
-        a.repeatMembers
-    );
-
-
-    setCell(
-        21,
-        8,
-        "TOP5會員綠點占比"
-    );
-
-    setCell(
-        21,
-        9,
-        a.top5Rate
-    );
-
-
-    setCell(
-        22,
-        8,
-        "熱門時段"
-    );
-
-    setCell(
-        22,
-        9,
-        a.popularPeriods
-            .join("、")
-    );
-
-
-    /*
-        時段
-    */
-
-    setCell(
-        25,
-        8,
-        "兌換時段"
-    );
-
-    setCell(
-        25,
-        9,
-        "兌換筆數"
-    );
-
-    setCell(
-        25,
-        10,
-        "占比"
-    );
-
-
-    a.periods.forEach(
-        (period, index) => {
-
-            const row =
-                26 + index;
-
-
-            setCell(
-                row,
-                8,
-                period.name
-            );
-
-
-            setCell(
-                row,
-                9,
-                period.count
-            );
-
-
-            setCell(
-                row,
-                10,
-                period.rate
-            );
-
-        }
-    );
-
-
-    /*
-        活動日期
-    */
-
-    if (
-        activities.length
-    ) {
-
-        setCell(
-            32,
-            8,
-            "行銷活動日期觀察"
-        );
-
-
-        const headers = [
-
-            "日期",
-            "活動／備註",
-            "當日兌換",
-            "每日平均",
-            "與平均相比",
-            "觀察"
-
-        ];
-
-
-        headers.forEach(
-            (header, index) => {
-
-                setCell(
-                    33,
-                    8 + index,
-                    header
+            .forEach(section => {
+
+              section.classList
+                .add(
+                  'hidden'
                 );
 
-            }
-        );
+            });
 
 
-        activities.forEach(
-            (activity, index) => {
+          document
+            .querySelectorAll(
+              '.tab-btn'
+            )
+            .forEach(btn => {
 
-                const result =
-                    getActivityComparison(
-                        activity
-                    );
-
-
-                const row =
-                    34 + index;
-
-
-                setCell(
-                    row,
-                    8,
-                    activity.date
+              btn.classList
+                .remove(
+                  'bg-emerald-700',
+                  'text-white'
                 );
 
 
-                setCell(
-                    row,
-                    9,
-                    activity.name
+              btn.classList
+                .add(
+                  'bg-white'
                 );
 
-
-                setCell(
-                    row,
-                    10,
-                    result.count
-                );
+            });
 
 
-                setCell(
-                    row,
-                    11,
-                    result.average
-                );
-
-
-                setCell(
-                    row,
-                    12,
-                    result.diffRate
-                );
-
-
-                setCell(
-                    row,
-                    13,
-                    result.observation
-                );
-
-            }
-        );
-
-    }
-
-
-    /*
-        說明
-    */
-
-    const noteRow =
-        Math.max(
-            40,
-            35
+          $(
+            'tab-'
             +
-            activities.length
-        );
+            button.dataset.tab
+          )
+          .classList
+          .remove(
+            'hidden'
+          );
 
 
-    setCell(
-        noteRow,
-        8,
-        "資料解讀說明"
-    );
+          button.classList
+            .add(
+              'bg-emerald-700',
+              'text-white'
+            );
 
 
-    setCell(
-        noteRow + 1,
-        8,
-        "1. 同月重複兌換率僅代表本月內兌換2次以上，不代表歷史新舊會員。"
-    );
-
-
-    setCell(
-        noteRow + 2,
-        8,
-        "2. 活動日期僅比較當日與本月平均，不代表活動造成兌換增加或下降。"
-    );
-
-
-    /*
-        工作表
-    */
-
-    const worksheet =
-        XLSX.utils.aoa_to_sheet(
-            rows
-        );
-
-
-    worksheet["!cols"] = [
-
-        { wch: 14 },
-        { wch: 13 },
-        { wch: 13 },
-        { wch: 14 },
-        { wch: 17 },
-        { wch: 13 },
-        { wch: 11 },
-        { wch: 4 },
-
-        { wch: 28 },
-        { wch: 24 },
-        { wch: 14 },
-        { wch: 14 },
-        { wch: 15 },
-        { wch: 26 }
-
-    ];
-
-
-    worksheet["!merges"] = [
-
-        {
-            s: {
-                r: 0,
-                c: 0
-            },
-
-            e: {
-                r: 0,
-                c: 13
-            }
-        },
-
-        {
-            s: {
-                r: 1,
-                c: 0
-            },
-
-            e: {
-                r: 1,
-                c: 13
-            }
-        }
-
-    ];
-
-
-    /*
-        百分比格式
-    */
-
-    [
-        "D6",
-        "F6",
-        "H6",
-        "J22",
-        "K27",
-        "K28",
-        "K29",
-        "K30"
-    ]
-    .forEach(address => {
-
-        if (
-            worksheet[address]
-        ) {
-
-            worksheet[address].z =
-                "0.00%";
+          button.classList
+            .remove(
+              'bg-white'
+            );
 
         }
+
+      );
 
     });
 
-
-    /*
-        活動差異百分比
-    */
-
-    activities.forEach(
-        (_, index) => {
-
-            const excelRow =
-                35 + index;
-
-            const cell =
-                "M" + excelRow;
+}
 
 
-            if (
-                worksheet[cell]
-            ) {
+/* ===================================================
+   All
+=================================================== */
 
-                worksheet[cell].z =
-                    "0.0%";
+function renderAll() {
 
-            }
+  renderMonthSelector();
 
-        }
-    );
+  renderKpis();
+
+  renderInsights();
+
+  renderDailyChart();
+
+  renderMembers();
+
+  renderTime();
+
+  renderMonthTable();
+
+  renderMonthChart();
+
+  renderActivities();
 
 
-    return worksheet;
+  $('syncTime')
+    .textContent =
+      state.data.generatedAt;
 
 }
 
 
-/* =====================================================
-   下載 Excel
-===================================================== */
+/* ===================================================
+   Chart
+=================================================== */
 
-function downloadExcel() {
+function destroyChart_(key) {
 
-    if (
-        !workbook
-        ||
-        !analysis
-    ) {
-        return;
-    }
+  if (
+    state.charts[key]
+  ) {
 
-
-    const summaryName =
-        `${analysis.month}月兌換摘要`;
+    state.charts[key]
+      .destroy();
 
 
-    /*
-        如果原本已經有同名摘要，
-        重新建立
-    */
+    state.charts[key] =
+      null;
 
-    if (
-        workbook.Sheets[
-            summaryName
-        ]
-    ) {
-
-        delete workbook.Sheets[
-            summaryName
-        ];
-
-
-        workbook.SheetNames =
-            workbook.SheetNames.filter(
-                name =>
-                    name !== summaryName
-            );
-
-    }
-
-
-    const summarySheet =
-        createSummarySheet(
-            analysis
-        );
-
-
-    XLSX.utils.book_append_sheet(
-        workbook,
-        summarySheet,
-        summaryName
-    );
-
-
-    const baseName =
-        originalFileName
-            .replace(
-                /\.(xlsx|xls)$/i,
-                ""
-            );
-
-
-    XLSX.writeFile(
-        workbook,
-        `${baseName}_已產生${summaryName}.xlsx`
-    );
+  }
 
 }
 
 
-/* =====================================================
-   上傳 Excel
-===================================================== */
-
-document.getElementById(
-    "excelFile"
-)
-.addEventListener(
-    "change",
-    async event => {
-
-        try {
-
-            const file =
-                event.target.files[0];
-
-
-            if (!file) {
-                return;
-            }
-
-
-            originalFileName =
-                file.name;
-
-
-            activities = [];
-
-
-            showStatus(
-                "正在分析 Excel…",
-                "success"
-            );
-
-
-            const buffer =
-                await file.arrayBuffer();
-
-
-            workbook =
-                XLSX.read(
-                    buffer,
-                    {
-                        type:
-                            "array",
-
-                        cellDates:
-                            true
-                    }
-                );
-
-
-            sourceSheetName =
-                findSourceSheet(
-                    workbook
-                );
-
-
-            if (!sourceSheetName) {
-
-                throw new Error(
-                    "找不到「綠點X月兌換」頁籤。"
-                );
-
-            }
-
-
-            const sourceSheet =
-                workbook.Sheets[
-                    sourceSheetName
-                ];
-
-
-            const rows =
-                XLSX.utils.sheet_to_json(
-                    sourceSheet,
-                    {
-                        defval:
-                            null,
-
-                        raw:
-                            true
-                    }
-                );
-
-
-            analysis =
-                analyseRows(
-                    rows,
-                    sourceSheetName
-                );
-
-
-            renderDashboard(
-                analysis
-            );
-
-
-            /*
-                資料品質訊息
-            */
-
-            const warnings = [];
-
-
-            if (
-                analysis.invalidDateCount
-            ) {
-
-                warnings.push(
-                    `${analysis.invalidDateCount} 筆日期無法辨識`
-                );
-
-            }
-
-
-            if (
-                analysis.missingUserIdCount
-            ) {
-
-                warnings.push(
-                    `${analysis.missingUserIdCount} 筆缺少 user_id，會員相關指標不納入這些紀錄`
-                );
-
-            }
-
-
-            if (
-                analysis.ignoredCrossMonth
-            ) {
-
-                warnings.push(
-                    `${analysis.ignoredCrossMonth} 筆非 ${analysis.year}/${analysis.month} 資料已排除`
-                );
-
-            }
-
-
-            if (warnings.length) {
-
-                showStatus(
-
-                    `分析完成：
-                    <strong>${escapeHtml(sourceSheetName)}</strong>
-                    → ${analysis.year} 年 ${analysis.month} 月。
-                    <br>
-                    資料提醒：${warnings.join("；")}。`,
-
-                    "warning"
-
-                );
-
-            }
-            else {
-
-                showStatus(
-
-                    `分析完成：
-                    <strong>${escapeHtml(sourceSheetName)}</strong>
-                    → 將產生
-                    <strong>${analysis.month}月兌換摘要</strong>。`,
-
-                    "success"
-
-                );
-
-            }
-
-        }
-        catch(error) {
-
-            console.error(
-                error
-            );
-
-
-            document.getElementById(
-                "dashboard"
-            ).style.display =
-                "none";
-
-
-            showStatus(
-                "分析失敗："
-                +
-                escapeHtml(
-                    error.message
-                ),
-                "error"
-            );
-
-        }
+/* ===================================================
+   Events
+=================================================== */
+
+$('monthSelector')
+  .addEventListener(
+    'change',
+    event => {
+
+      loadDashboard(
+        event.target.value
+      );
 
     }
-);
+  );
 
 
-/* =====================================================
-   Buttons
-===================================================== */
-
-document.getElementById(
-    "addActivityBtn"
-)
-.addEventListener(
-    "click",
-    addActivity
-);
+$('metricSelector')
+  .addEventListener(
+    'change',
+    renderMonthChart
+  );
 
 
-document.getElementById(
-    "downloadBtn"
-)
-.addEventListener(
-    "click",
-    downloadExcel
+/* ===================================================
+   Start
+=================================================== */
+
+window.addEventListener(
+  'DOMContentLoaded',
+  async () => {
+
+    setupTabs();
+
+
+    try {
+
+      await loadDashboard();
+
+    }
+    catch(error) {
+
+      console.error(error);
+
+      $('loading')
+        .innerHTML = `
+
+          <div
+            class="text-red-600 text-center p-8"
+          >
+
+            <strong>
+              資料讀取失敗
+            </strong>
+
+            <br><br>
+
+            ${error.message}
+
+          </div>
+
+        `;
+
+    }
+
+  }
 );
 
 </script>
